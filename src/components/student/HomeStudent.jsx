@@ -8,13 +8,15 @@ import Footer from "../footer/Footer";
 
 function HomeStudent(){
     return (
-        <Stack direction="column" justifyContent="space-between" sx={{ height: '100vh' }}>
+        <Stack direction="column" justifyContent="space-between" sx={{ height: '100%' }}>
             <HeaderStudent/>
-            <Routes>
-                <Route path="list-topic" element={<ListTopic />}/>
-                <Route path="grammar" element={<ListGrammar />}/>
-            </Routes>
-            <Outlet/>
+            <Stack direction="column" flexGrow={1} justifyContent="flex-start" sx={{ overflowY: 'auto' }}>
+                <Routes>
+                <Route path="list-topic" element={<ListTopic />} />
+                <Route path="grammar" element={<ListGrammar />} />
+                </Routes>
+                <Outlet />
+            </Stack>
             <Footer/>
         </Stack>
     )
