@@ -2,9 +2,9 @@ import { Stack } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import HeaderStudent from "./header/HeaderStudent";
-import ListTopic from "./vocabulary/ListTopic";
-import ListGrammar from "./grammar/ListGrammar";
+import ListTopic from "./common/ListTopic";
 import Footer from "../footer/Footer";
+import site from "./common/Pages";
 
 function HomeStudent(){
     return (
@@ -12,8 +12,12 @@ function HomeStudent(){
             <HeaderStudent/>
             <Stack direction="column" flexGrow={1} justifyContent="flex-start" sx={{ overflowY: 'auto' }}>
                 <Routes>
-                <Route path="list-topic" element={<ListTopic />} />
-                <Route path="grammar" element={<ListGrammar />} />
+                {
+                    site.map((page) => (
+                        <Route key={page.id} path={page.path} 
+                            element={<ListTopic list={page.list} bg={page.bg} title={page.title} quote={page.quote} />} />
+                    ))
+                }
                 </Routes>
                 <Outlet />
             </Stack>
