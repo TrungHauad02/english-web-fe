@@ -11,7 +11,7 @@ function MainPicture({ src, title }) {
       <img 
         src={src} 
         alt="main" 
-        style={{ width: '100%', height: 'auto', objectFit: 'cover' }} 
+        style={{ width: '100%', height: '300px', objectFit: 'cover' }} 
       />
       <Typography 
         variant="h4" 

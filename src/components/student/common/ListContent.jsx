@@ -1,17 +1,17 @@
 import { Stack, Typography, Card, CardContent, CardMedia, Grid } from "@mui/material";
 
-function ListTopicContent({ listTopic }) {
+function ListContent({ list }) {
   return (
     <Stack spacing={4} sx={{ paddingX: '5%' }}>
       <Grid container spacing={4} justifyContent="center">
-        {listTopic.map((topic, index) => (
-          <Grid item key={index} xs={12} sm={6} md={6} lg={6} sx={{overflow:'visible'}}>
+        {list.map((content) => (
+          <Grid item key={content.id} xs={12} sm={6} md={6} lg={6} sx={{overflow:'visible'}}>
             <Card sx={{ display: 'flex', height: '250px' }}>
               <CardMedia
                 component="img"
                 sx={{ width: 250, objectFit: 'cover' }}
-                image={topic.img}
-                alt={topic.title}
+                image={content.img}
+                alt={content.title}
               />
               <CardContent sx={{ 
                     flex: '1', 
@@ -22,10 +22,10 @@ function ListTopicContent({ listTopic }) {
                     height:'200px'
                     }}>
                 <Typography variant="h6" component="h3" sx={{ marginBottom: '0.5rem' }}>
-                  {topic.title}
+                  {content.title}
                 </Typography>
                 <Typography variant="body2" sx={{ paddingBottom: '1rem' }}>
-                  {topic.description}
+                  {content.description}
                 </Typography>
               </CardContent>
             </Card>
@@ -36,4 +36,4 @@ function ListTopicContent({ listTopic }) {
   );
 }
 
-export default ListTopicContent;
+export default ListContent;
