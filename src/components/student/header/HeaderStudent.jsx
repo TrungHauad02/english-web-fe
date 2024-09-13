@@ -45,6 +45,12 @@ function HeaderStudent(){
                 <SkillMenu/>
 
                 <Button
+                    color="header"
+                    component={Link} to="/student/test">
+                    <HeaderTypography>Test</HeaderTypography >
+                </Button>
+
+                <Button
                     color="header">
                     <HeaderTypography>Sign in</HeaderTypography >
                 </Button>
