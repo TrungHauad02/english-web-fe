@@ -124,7 +124,7 @@ function ListTest({list,quote, title, bg}) {
                   <Typography><strong>Score:</strong> {test.score}</Typography>
                   <DoTestButton variant="contained">Do test</DoTestButton>
                 </CardContent>
-                <Button component="a" href="link-cua-ban" style={{ padding: '' }}>
+                <Button component="a" href="link-cua-ban" sx={{padding: "6px 16px !important"}}>
                   See History
                 </Button>
              

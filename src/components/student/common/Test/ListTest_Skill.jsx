@@ -13,7 +13,7 @@ import {
 
 const ImageContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
-  width: '100%',
+
   height: 'auto',
 }));
 
@@ -125,7 +125,7 @@ function ListTest_Skill({list,quote, title, bg}) {
               <Typography><strong>Score:</strong> {test.score}</Typography>
               <DoTestButton variant="contained">Do test</DoTestButton>
             </CardContent>
-            <Button component="a" href="link-cua-ban" sx={{padding: "6px 16px !important"}}>
+            <Button component="a" href="link-cua-ban"   sx={{padding: "6px 16px !important"}}>
               See History
             </Button>
           </TestCard>
