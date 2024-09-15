@@ -8,6 +8,7 @@ import site from "./common/Pages";
 import React from "react";
 import ListTest from "./common/Test/ListTest";
 import ListTest_Skill from "./common/Test/ListTest_Skill";
+import TestReading from "./common/Test/TestReading";
 
 
 function HomeStudent(){
@@ -15,6 +16,7 @@ function HomeStudent(){
         'ListTopic': ListTopic,
         'ListTest': ListTest,
         'ListTest_Skill': ListTest_Skill,
+        'TestReading': TestReading,
        
     };
     return (

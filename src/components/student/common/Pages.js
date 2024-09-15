@@ -102,6 +102,15 @@ const site = [
         quote: "",
         list: ListTest,
         file: "ListTest_Skill"
+    },
+    {
+        id: 9,
+        title: "Test Online",
+        bg: "/bg_test.png",
+        path: "test/skilltest/reading",
+        quote: "",
+        list: ListTest,
+        file: "TestReading"
     }
 ]
 
