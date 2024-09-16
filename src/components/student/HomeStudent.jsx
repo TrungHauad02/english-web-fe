@@ -9,6 +9,9 @@ import React from "react";
 import ListTest from "./common/Test/ListTest";
 import ListTest_Skill from "./common/Test/ListTest_Skill";
 import TestReading from "./common/Test/TestReading";
+import TestListening from "./common/Test/TestListening";
+import TestWriting from "./common/Test/TestWriting";
+import TestSpeaking from "./common/Test/TestSpeaking";
 
 
 function HomeStudent(){
@@ -17,6 +20,8 @@ function HomeStudent(){
         'ListTest': ListTest,
         'ListTest_Skill': ListTest_Skill,
         'TestReading': TestReading,
+        'TestListening': TestListening,
+        'TestSpeaking': TestSpeaking,
        
     };
     return (
