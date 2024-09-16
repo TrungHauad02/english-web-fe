@@ -1,12 +1,7 @@
-import React from 'react';
-import { Box, Typography, Button, Container, Grid, Icon, Radio, RadioGroup, FormControlLabel, FormControl, Paper  } from '@mui/material';
+import React, {useState, useCallback} from 'react';
+import { Box, Typography, Button, Container, Grid, Icon, Radio, RadioGroup, FormControlLabel, FormControl, Paper, TextField  } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MainTitle  from './MainTitle';
-import ListQuestion from './ListQuestion';
-
-
-
-
 
 const DurationContainer = styled(Paper)(({ theme }) => ({
   background: '#FFF4CC',
@@ -38,10 +33,10 @@ const QuestionSection = styled(Grid)(({ theme }) => ({
   flex: '0 1 47%',
 }));
 
-function TestReading({list,quote, title, bg}) {
+function TestWriting({list,quote, title, bg}) {
   return (
     <Box >
-     <MainTitle title="Reading" bg={bg} />
+     <MainTitle title="Writing" bg={bg} />
       <DurationContainer elevation={1}>
         <Typography align="center">
           <strong>Time remaining:</strong>
@@ -65,14 +60,15 @@ function TestReading({list,quote, title, bg}) {
       <Typography variant="body1" sx={{marginTop:'2%'}}>
         These lessons include readings, vocab, quizzes and comprehension questions, as well as topics for discussion and essays. If you care about our Earth, but find it hard to express your opinions and concerns in English, these pages will help you...
       </Typography>
+      <Typography variant="body1">
+        These lessons include readings, vocab, quizzes and comprehension questions, as well as topics for discussion and essays. If you care about our Earth, but find it hard to express your opinions and concerns in English, these pages will help you...
+      </Typography>
     </QuestionSection>
   </TestContainer>
   <Partition sx={{ flex: '1 1 0.2%' }}  />
   <TestContainer sx={{ flex: '1 1 49%'}}>
-    <Box sx={{ border: '1px solid black',
-  borderRadius: '1rem',padding: '0.5rem',margin:'0.5rem' }} >
-    <ListQuestion/>
-    </Box>
+  
+   <EssayInput/>
     <Button sx={{border: '0.0001rem solid black',
   borderRadius: '1rem',background:'#FFD984',color:'black',float:'right',marginRight:'10%',marginBottom:'2%',padding:'1rem 2rem'}}>
        SUBMIT
@@ -84,4 +80,52 @@ function TestReading({list,quote, title, bg}) {
   );
 }
 
-export default TestReading;
+const StyledPaper = styled(Paper)(({ theme }) => ({
+    padding: theme.spacing(2),
+    margin: theme.spacing(2),
+    borderRadius: '8px',
+  }));
+  
+  const EssayInput = () => {
+    const [essay, setEssay] = useState('');
+    const [wordCount, setWordCount] = useState(0);
+  
+    const handleEssayChange = useCallback((event) => {
+      const text = event.target.value;
+      setEssay(text);
+      setWordCount(text.trim() === '' ? 0 : text.trim().split(/\s+/).length);
+    }, []);
+  
+    return (
+      <StyledPaper elevation={3}>
+        <TextField
+          fullWidth
+          multiline
+          rows={10}
+          variant="outlined"
+          placeholder="Type your essay here..."
+          value={essay}
+          onChange={handleEssayChange}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: 'rgba(0, 0, 0, 0.23)',
+              },
+              '&:hover fieldset': {
+                borderColor: 'rgba(0, 0, 0, 0.5)',
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: 'primary.main',
+              },
+            },
+          }}
+        />
+        <Box sx={{ mt: 1 }}>
+          <Typography variant="body2">
+            Words Count: {wordCount}
+          </Typography>
+        </Box>
+      </StyledPaper>
+    );
+  };
+export default TestWriting;
