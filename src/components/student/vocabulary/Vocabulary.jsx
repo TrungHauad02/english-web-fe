@@ -3,6 +3,7 @@ import MatchImageWithWord from "./matchImageWithWord/MatchImageWithWord";
 import listVocab from "./ListVocab";
 import Introduction from "./introduction/Introduction";
 import ListFlashcard from "./listFlashcard/ListFlashcard";
+import AnswerQuestionVocab from "./answerquestion/AnswerQuestionVocab";
 
 function Vocabulary({ topic }) {
   topic = {
@@ -16,6 +17,7 @@ function Vocabulary({ topic }) {
       <MatchImageWithWord list={listVocab} />
       <Introduction title={topic.title} />
       <ListFlashcard list={listVocab} />
+      <AnswerQuestionVocab />
     </>
   );
 }
