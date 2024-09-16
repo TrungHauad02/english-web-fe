@@ -5,6 +5,7 @@ import HeaderStudent from "./header/HeaderStudent";
 import ListTopic from "./common/ListTopic";
 import Footer from "../footer/Footer";
 import site from "./common/Pages";
+import Vocabulary from "./vocabulary/Vocabulary";
 import React from "react";
 import ListTest from "./common/Test/ListTest";
 import ListTest_Skill from "./common/Test/ListTest_Skill";
@@ -38,6 +39,7 @@ function HomeStudent(){
                         />
                     ))
                 }
+                <Route path="/list-topic/1" element={<Vocabulary/>}/>
                 </Routes>
                 <Outlet />
             </Stack>

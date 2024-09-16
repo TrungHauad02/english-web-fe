@@ -1,8 +1,9 @@
 import { Stack } from "@mui/material";
-function ListGrammar() {
+
+function Grammar() {
   return (
     <Stack spacing={2}>
-      <h4>List Grammar</h4>
+      <h4>Grammar</h4>
     </Stack>
   );
 }
