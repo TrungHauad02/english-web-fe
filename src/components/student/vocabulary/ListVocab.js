@@ -1,13 +1,14 @@
 const listVocab = [
-  { id: "1", word: "Tree", img: "/environment.png" },
-  { id: "2", word: "Flower", img: "/environment.png" },
-  { id: "3", word: "Sun", img: "/environment.png" },
-  { id: "4", word: "Cloud1", img: "/environment.png" },
-  { id: "5", word: "Cloud2", img: "/environment.png" },
-  { id: "6", word: "Cloud3", img: "/environment.png" },
-  { id: "7", word: "Cloud4", img: "/environment.png" },
-  { id: "8", word: "Cloud5", img: "/environment.png" }
+  { id: "1", word: "Tree", img: "/environment.png", phonetic: "/tree/", example: "The tree is tall. Cái cây này cao", meaning: "Cây" },
+  { id: "2", word: "Flower", img: "/environment.png", phonetic: "/flower/", example: "The flower is red.", meaning: "Bông hoa" },
+  { id: "3", word: "Sun", img: "/environment.png", phonetic: "/sun/", example: "The sun is shining.", meaning: "Mặt trời" },
+  { id: "4", word: "Cloud1", img: "/environment.png", phonetic: "/cloud/", example: "The cloud is white.", meaning: "Đám mây" },
+  { id: "5", word: "Cloud2", img: "/environment.png", phonetic: "/cloud/", example: "The cloud is dark.", meaning: "Đám mây" },
+  { id: "6", word: "Cloud3", img: "/environment.png", phonetic: "/cloud/", example: "The cloud is tall.", meaning: "Đám mây" },
+  { id: "7", word: "Cloud4", img: "/environment.png", phonetic: "/cloud/", example: "The cloud is wide.", meaning: "Đám mây" },
+  { id: "8", word: "Cloud5", img: "/environment.png", phonetic: "/cloud/", example: "The cloud is thin.", meaning: "Đám mây" }
 ];
+
 
 const stateVocab = {
   listVocab: listVocab,
