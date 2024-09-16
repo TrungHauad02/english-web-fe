@@ -5,6 +5,7 @@ import HeaderStudent from "./header/HeaderStudent";
 import ListTopic from "./common/ListTopic";
 import Footer from "../footer/Footer";
 import site from "./common/Pages";
+import Vocabulary from "./vocabulary/Vocabulary";
 
 function HomeStudent(){
     return (
@@ -18,6 +19,7 @@ function HomeStudent(){
                             element={<ListTopic list={page.list} bg={page.bg} title={page.title} quote={page.quote} />} />
                     ))
                 }
+                <Route path="/list-topic/1" element={<Vocabulary/>}/>
                 </Routes>
                 <Outlet />
             </Stack>
