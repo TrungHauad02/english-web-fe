@@ -11,7 +11,13 @@ function HeaderStudent(){
             sx={{
                 backgroundColor: '#4A475C',
                 color: '#fff',
-                padding: '0.5rem'
+                padding: '0.5rem',
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                zIndex: 1100, 
+                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)'
             }}
             >
             <Stack direction={'row'} alignItems={'center'} spacing={5}>

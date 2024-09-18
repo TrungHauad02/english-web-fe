@@ -14,6 +14,8 @@ import TestListening from "./common/Test/TestListening";
 import TestWriting from "./common/Test/TestWriting";
 import TestSpeaking from "./common/Test/TestSpeaking";
 import Grammar from "./grammar/Grammar";
+import HomePageStudent from "./content/HomePageStudent";
+
 
 function HomeStudent() {
   const componentMap = {
@@ -28,7 +30,7 @@ function HomeStudent() {
     <Stack
       direction="column"
       justifyContent="space-between"
-      sx={{ height: "100%" }}
+      sx={{ height: "100%", pt: '4rem', marginBottom: '-5px'}}
     >
       <HeaderStudent />
       <Stack
@@ -52,6 +54,7 @@ function HomeStudent() {
           ))}
           <Route path="/list-topic/1" element={<Vocabulary />} />
           <Route path="/grammar/1" element={<Grammar />} />
+          <Route path="/" element={<HomePageStudent />} />
         </Routes>
         <Outlet />
       </Stack>
