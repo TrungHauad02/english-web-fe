@@ -1,7 +1,6 @@
 import { Box, Card, Grid2, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import ProcessBar from "./ProcessBar";
-import { listQuestion } from "./ListQuestion";
 import { useState } from "react";
 import PrevNextSubmitButton from "../../../common/button/PrevNextSubmitButton";
 import ListOptions from "./ListOptions";
@@ -30,7 +29,7 @@ function Question({ index, content }) {
   );
 }
 
-function AnswerQuestionVocab() {
+function AnswerQuestion({listQuestion}) {
   const [curIndex, setCurIndex] = useState(0);
   const question = listQuestion[curIndex];
   const [userAnswer, setUserAnswer] = useState(null);
@@ -116,4 +115,4 @@ function AnswerQuestionVocab() {
   );
 }
 
-export default AnswerQuestionVocab;
+export default AnswerQuestion;

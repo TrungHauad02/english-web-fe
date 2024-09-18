@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import HeaderStudent from "./header/HeaderStudent";
-import ListTopic from "./common/ListTopic";
+import ListTopic from "./common/listTopic/ListTopic";
 import Footer from "../footer/Footer";
 import site from "./common/Pages";
 import Vocabulary from "./vocabulary/Vocabulary";
@@ -14,6 +14,7 @@ import TestListening from "./common/Test/TestListening";
 import TestWriting from "./common/Test/TestWriting";
 import TestSpeaking from "./common/Test/TestSpeaking";
 import Grammar from "./grammar/Grammar";
+import Reading from "./skill/reading/Reading";
 
 function HomeStudent() {
   const componentMap = {
@@ -52,6 +53,7 @@ function HomeStudent() {
           ))}
           <Route path="/list-topic/1" element={<Vocabulary />} />
           <Route path="/grammar/1" element={<Grammar />} />
+          <Route path="/skill/reading/1" element={<Reading />} />
         </Routes>
         <Outlet />
       </Stack>
