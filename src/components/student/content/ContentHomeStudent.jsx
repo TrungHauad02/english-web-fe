@@ -8,9 +8,12 @@ import 'aos/dist/aos.css';
 const HomePageStudent = () => {
   useEffect(() => {
     AOS.init({
-      duration: 2500, // Tăng thời gian hiệu ứng lên 2.5 giây
-      delay: 200,     // Thêm độ trễ trước khi hiệu ứng bắt đầu
+      duration: 1500,
+      delay: 100,
+      once: false, // Đảm bảo hiệu ứng chạy mỗi khi phần tử xuất hiện
     });
+    
+
   }, []);
 
   const sections = [
@@ -48,22 +51,21 @@ const HomePageStudent = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '2rem 0', // Thay đổi padding để thêm không gian
+            padding: '1.5rem 0',
             overflow: 'hidden',
           }}
         >
           <Box
             sx={{
-              backgroundColor: 'tranparent',
-              borderTopRightRadius: '1rem',
-              borderBottomRightRadius: '1rem',
-              width: '70%',
-              transform: index % 2 === 0 ? 'translateX(-100px)' : 'translateX(100px)', // Điều chỉnh khoảng cách di chuyển
-              transition: 'transform 2s ease-out', // Thay đổi thời gian di chuyển
+              backgroundColor: 'transparent',
+              borderRadius: '1rem',
+              width: '80%',
+              transform: index % 2 === 0 ? 'translateX(-80px)' : 'translateX(80px)',
+              transition: 'transform 1.5s ease-out',
             }}
             data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'}
           >
-            <Grid container spacing={4}> {/* Tăng khoảng cách giữa các phần tử */}
+            <Grid container spacing={3}>
               {index % 2 === 0 ? (
                 <>
                   <Grid item xs={12} md={6}>
@@ -88,14 +90,14 @@ const HomePageStudent = () => {
                         flexDirection: 'column',
                         justifyContent: 'center',
                         height: '100%',
-                        padding: '0 2rem',
+                        padding: '0 1.5rem',
                       }}
                     >
                       <Box
                         sx={{
-                          fontSize: '2rem',
+                          fontSize: '1.8rem',
                           fontWeight: 'bold',
-                          marginBottom: '1rem',
+                          marginBottom: '0.8rem',
                           textAlign: { xs: 'center', md: 'left' },
                           fontFamily: 'Roboto',
                         }}
@@ -105,7 +107,6 @@ const HomePageStudent = () => {
                       <Box
                         sx={{
                           fontSize: '1rem',
-                          textAlign: { xs: 'center', md: 'left' },
                           textAlign: 'justify',
                           fontFamily: 'Roboto',
                         }}
@@ -123,7 +124,11 @@ const HomePageStudent = () => {
                           fontSize: '1rem',
                         }}
                       >
-                        {section.title === 'TEST' ? 'Take Test' : `Learn ${section.title}`}
+                        {section.title === 'TEST'
+                        ? 'Take Test'
+                        : section.title === 'SKILLS'
+                        ? 'Improve English Skills'
+                        : `Learn ${section.title}`}
                       </Button>
                     </Box>
                   </Grid>
@@ -137,14 +142,14 @@ const HomePageStudent = () => {
                         flexDirection: 'column',
                         justifyContent: 'center',
                         height: '100%',
-                        padding: '0 2rem',
+                        padding: '0 1.5rem',
                       }}
                     >
                       <Box
                         sx={{
-                          fontSize: '2rem',
+                          fontSize: '1.8rem',
                           fontWeight: 'bold',
-                          marginBottom: '1rem',
+                          marginBottom: '0.8rem',
                           textAlign: { xs: 'center', md: 'left' },
                           fontFamily: 'Roboto',
                         }}
@@ -154,7 +159,6 @@ const HomePageStudent = () => {
                       <Box
                         sx={{
                           fontSize: '1rem',
-                          textAlign: { xs: 'center', md: 'left' },
                           textAlign: 'justify',
                           fontFamily: 'Roboto',
                         }}

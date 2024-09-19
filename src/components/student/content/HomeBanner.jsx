@@ -30,7 +30,7 @@ const ImageSlider = () => {
             alt={`Slide ${index}`}
             sx={{
               width: "100%",     
-              maxHeight: "35rem", 
+              maxHeight: "40rem", 
               objectFit: "cover" 
             }}
           />
