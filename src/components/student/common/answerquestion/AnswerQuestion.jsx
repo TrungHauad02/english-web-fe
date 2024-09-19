@@ -1,9 +1,10 @@
-import { Box, Card, Grid2, Typography } from "@mui/material";
+import { Button, Card, Grid2, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import ProcessBar from "./ProcessBar";
 import { useState } from "react";
 import PrevNextSubmitButton from "../../../common/button/PrevNextSubmitButton";
 import ListOptions from "./ListOptions";
+import Explaination from "./Explaination";
 
 const Title = styled("h4")({
   fontSize: "1.5rem",
@@ -29,10 +30,12 @@ function Question({ index, content }) {
   );
 }
 
-function AnswerQuestion({listQuestion}) {
+function AnswerQuestion({ listQuestion }) {
   const [curIndex, setCurIndex] = useState(0);
   const question = listQuestion[curIndex];
   const [userAnswer, setUserAnswer] = useState(null);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [isShowExplain, setIsShowExplain] = useState(false);
 
   const handleChange = (e) => {
     const answer = {
@@ -89,6 +92,7 @@ function AnswerQuestion({listQuestion}) {
         marginY: "2rem",
         padding: "1rem",
         backgroundColor: "#F0F6D4",
+        position: "relative",
       }}
     >
       <Title>Answer Question</Title>
@@ -96,20 +100,47 @@ function AnswerQuestion({listQuestion}) {
         questionNumber={curIndex + 1}
         totalQuestions={listQuestion.length}
       />
-      <Box>
+      <Grid2 container direction={"column"}>
         <Question index={curIndex + 1} content={question.content} />
-        <ListOptions
-          listAnswer={question.options}
-          value={getUserAnwser(question.id)}
-          sx={{ marginY: "1rem", marginX: "1rem" }}
-          onChange={handleChange}
-        />
-      </Box>
+        <Grid2 container direction={"row"} justifyContent={"space-between"}>
+          <ListOptions
+            listAnswer={question.options}
+            value={getUserAnwser(question.id)}
+            sx={{ marginY: "1rem", marginX: "1rem" }}
+            onChange={handleChange}
+          />
+          {isShowExplain && (
+            <Explaination
+              explaination={question.explaination}
+              sx={{
+                marginRight: "1rem",
+                backgroundColor: "#DAE995",
+              }}
+            />
+          )}
+        </Grid2>
+        {isSubmit && (
+          <Button
+            variant="contained"
+            onClick={() => setIsShowExplain(!isShowExplain)}
+            sx={{
+              margin: "1rem",
+              width: "12rem",
+              backgroundColor: "#ACCD0A",
+              position: "absolute",
+              bottom: "0",
+            }}
+          >
+            {isShowExplain ? "Hide" : "Show"} explaination
+          </Button>
+        )}
+      </Grid2>
       <PrevNextSubmitButton
         handleNext={handleNext}
         handlePrevious={handlePrevious}
         submitConent={getSubmitContent()}
         scoreContent={getScoreContent()}
+        onSubmit={() => setIsSubmit(true)}
       />
     </Card>
   );
