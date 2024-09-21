@@ -1,5 +1,5 @@
 import { Card, Stack } from "@mui/material";
-import MarkedViewer from "../../common/markedViewer/MarkedViewer";
+import MarkedViewer from "../../../common/markedViewer/MarkedViewer";
 
 const Image = (props) => (
   <img
