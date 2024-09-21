@@ -1,8 +1,9 @@
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import SoundViewer from "../../../common/soundViewer/SoundViewer";
 import { useState } from "react";
 import { listListeningWriteWord } from "./listListening";
 import PrevNextSubmitButton from "../../../common/button/PrevNextSubmitButton";
+import Explaination from "../../common/answerquestion/Explaination";
 
 export default function ListenAndWriteWord({ questions }) {
   questions = listListeningWriteWord;
@@ -12,6 +13,8 @@ export default function ListenAndWriteWord({ questions }) {
   const curQuestion = questions.find((q) => q.serial === curSerial);
 
   const [userAnswer, setUserAnswer] = useState(null);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [isShowExplain, setIsShowExplain] = useState(false);
 
   const onChange = (e) => {
     setUserAnswer((prevAnswers) => ({
@@ -52,10 +55,12 @@ export default function ListenAndWriteWord({ questions }) {
     return `Your Score: ${score}/${total}`;
   };
 
-  const onSubmit = () => {};
+  const onSubmit = () => {
+    setIsSubmit(true);
+  };
 
   return (
-    <Box>
+    <Box sx={{ position: "relative" }}>
       <Typography variant="h5" sx={{ marginBottom: "1rem" }}>
         Listen carefully and write the word you hear
       </Typography>
@@ -80,6 +85,30 @@ export default function ListenAndWriteWord({ questions }) {
               </span>
             ))}
           </Typography>
+          {isShowExplain && (
+            <Explaination
+              explaination={curQuestion.content}
+              sx={{
+                marginRight: "1rem",
+                backgroundColor: "#DAE995",
+              }}
+            />
+          )}
+          {isSubmit && (
+            <Button
+              variant="contained"
+              onClick={() => setIsShowExplain(!isShowExplain)}
+              sx={{
+                margin: "1rem",
+                width: "12rem",
+                backgroundColor: "#ACCD0A",
+                position: "absolute",
+                bottom: "-1",
+              }}
+            >
+              {isShowExplain ? "Hide" : "Show"} explaination
+            </Button>
+          )}
         </>
       )}
       <PrevNextSubmitButton
