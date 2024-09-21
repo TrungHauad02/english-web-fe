@@ -4,6 +4,7 @@ import { Tab } from "@mui/material";
 import { Box, Card } from "@mui/material";
 import { useState } from "react";
 import ListenAndWriteWord from "./ListenAndWriteWord";
+import ListenAndAnswerQuestion from "./ListenAndAnswerQuestion";
 
 function PraticeListening() {
   const [value, setValue] = useState("1");
@@ -47,7 +48,9 @@ function PraticeListening() {
         <TabPanel value="1" sx={{ backgroundColor: "#F9FCEE" }}>
           <ListenAndWriteWord />
         </TabPanel>
-        <TabPanel value="2">Item Two</TabPanel>
+        <TabPanel value="2">
+          <ListenAndAnswerQuestion />
+        </TabPanel>
       </TabContext>
     </Card>
   );
