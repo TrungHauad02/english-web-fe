@@ -8,6 +8,7 @@ export const listQuestion = [
         { id: "as3", content: "flower", isCorrect: false },
         { id: "as4", content: "sky", isCorrect: false },
       ],
+      explaination: "The word 'environment' is the word for 'môi trường' in Vietnamese."
     },
     {
       id: "qs2",
@@ -18,6 +19,7 @@ export const listQuestion = [
         { id: "as8", content: "environment", isCorrect: false },
         { id: "as9", content: "sky", isCorrect: false },
       ],
+      explaination: "The word 'tree' is the word for 'cây' in Vietnamese."
     },
     {
       id: "qs3",
@@ -28,6 +30,7 @@ export const listQuestion = [
         { id: "as12", content: "environment", isCorrect: false },
         { id: "as13", content: "sky", isCorrect: false },
       ],
+      explaination: "The word 'flower' is the word for 'hoa' in Vietnamese."
     },
     {
       id: "qs4",
@@ -38,5 +41,6 @@ export const listQuestion = [
         { id: "as16", content: "environment", isCorrect: false },
         { id: "as17", content: "sky", isCorrect: true },
       ],
+      explaination: "The word 'sky' is the word for 'bầu trời' in Vietnamese."
     },
   ];
