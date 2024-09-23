@@ -57,13 +57,15 @@ function HeaderStudent(){
                 </Button>
 
                 <Button
-                    color="header">
+                    color="header"
+                    component={Link} to="/student/account">
                     <HeaderTypography>Sign in</HeaderTypography >
                 </Button>
-                <Button 
-                    color="header">
+                {/* <Button 
+                    color="header"
+                    component={Link} to="/student/account">
                     <HeaderTypography>Sign up</HeaderTypography >
-                </Button>
+                </Button> */}
             </Stack>
         </Stack>
     )

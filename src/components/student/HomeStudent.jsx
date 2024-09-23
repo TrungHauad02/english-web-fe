@@ -15,6 +15,7 @@ import TestWriting from "./common/Test/TestWriting";
 import TestSpeaking from "./common/Test/TestSpeaking";
 import Grammar from "./grammar/Grammar";
 import HomePageStudent from "./content/HomePageStudent";
+import Account from "./account/Account";
 
 
 function HomeStudent() {
@@ -54,6 +55,7 @@ function HomeStudent() {
           ))}
           <Route path="/list-topic/1" element={<Vocabulary />} />
           <Route path="/grammar/1" element={<Grammar />} />
+          <Route path="/account" element={<Account/>} />
           <Route path="/" element={<HomePageStudent />} />
         </Routes>
         <Outlet />

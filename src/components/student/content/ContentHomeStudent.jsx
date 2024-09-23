@@ -1,43 +1,36 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { useNavigate } from 'react-router-dom'; 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import {sections} from "./SectionContentHomeStudent.js"
 
 const HomePageStudent = () => {
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null); 
+
   useEffect(() => {
     AOS.init({
       duration: 1500,
       delay: 100,
-      once: false, // Đảm bảo hiệu ứng chạy mỗi khi phần tử xuất hiện
+      once: false,
     });
-    
-
   }, []);
 
-  const sections = [
-    {
-      title: 'VOCABULARY',
-      description: 'Start learning new words today to improve your communication skills. Our vocabulary lessons are tailored to help you in mastering new words in no time.',
-      imgSrc: '/img_home_vocabulary.png',
-    },
-    {
-      title: 'GRAMMAR',
-      description: 'Master the rules of grammar to write and speak more effectively. Our grammar lessons are designed to help you understand the intricacies of the English language.',
-      imgSrc: '/img_home_grammar.png',
-    },
-    {
-      title: 'SKILLS',
-      description: 'Enhance your listening skills to understand native speakers more clearly. Our listening exercises focus on real-life conversations.',
-      imgSrc: '/img_home_skills.png',
-    },
-    {
-      title: 'TEST',
-      description: 'Develop your speaking skills to communicate more fluently. Practice with interactive lessons to improve your confidence.',
-      imgSrc: '/img_home_test.png',
-    },
-  ];
+  const handleSkillsClick = (event) => {
+    setAnchorEl(event.currentTarget); 
+  };
+
+  const handleMenuClose = (skill) => {
+    setAnchorEl(null); 
+    if (skill) {
+      navigate(`/skills/${skill.toLowerCase()}`); 
+    }
+  };
 
   return (
     <>
@@ -113,23 +106,53 @@ const HomePageStudent = () => {
                       >
                         {section.description}
                       </Box>
-                      <Button
-                        variant="contained"
-                        disableElevation
-                        sx={{
-                          margin: '1rem 0',
-                          width: '50%',
-                          background: '#4a475c',
-                          borderRadius: '1rem',
-                          fontSize: '1rem',
-                        }}
-                      >
-                        {section.title === 'TEST'
-                        ? 'Take Test'
-                        : section.title === 'SKILLS'
-                        ? 'Improve English Skills'
-                        : `Learn ${section.title}`}
-                      </Button>
+
+                      {section.title === 'SKILLS' ? (
+                        <>
+                          <Button
+                            variant="contained"
+                            disableElevation
+                            sx={{
+                              margin: '1rem 0',
+                              width: '50%',
+                              background: '#4a475c',
+                              borderRadius: '1rem',
+                              fontSize: '1rem',
+                            }}
+                            onClick={handleSkillsClick}
+                          >
+                            Improve English Skills
+                          </Button>
+                          <Menu
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={() => handleMenuClose()}
+                          >
+                            {['Reading', 'Speaking', 'Writing', 'Listening'].map((skill) => (
+                              <MenuItem key={skill} onClick={() => handleMenuClose(skill)}>
+                                {skill}
+                              </MenuItem>
+                            ))}
+                          </Menu>
+                        </>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          disableElevation
+                          sx={{
+                            margin: '1rem 0',
+                            width: '50%',
+                            background: '#4a475c',
+                            borderRadius: '1rem',
+                            fontSize: '1rem',
+                          }}
+                          onClick={() => navigate(section.link)}
+                        >
+                          {section.title === 'TEST'
+                            ? 'Take Test'
+                            : `Learn ${section.title}`}
+                        </Button>
+                      )}
                     </Box>
                   </Grid>
                 </>
@@ -165,19 +188,52 @@ const HomePageStudent = () => {
                       >
                         {section.description}
                       </Box>
-                      <Button
-                        variant="contained"
-                        disableElevation
-                        sx={{
-                          margin: '1rem 0',
-                          width: '50%',
-                          background: '#4a475c',
-                          borderRadius: '1rem',
-                          fontSize: '1rem',
-                        }}
-                      >
-                        {section.title === 'TEST' ? 'Take Test' : `Learn ${section.title}`}
-                      </Button>
+                      {section.title === 'SKILLS' ? (
+                        <>
+                          <Button
+                            variant="contained"
+                            disableElevation
+                            sx={{
+                              margin: '1rem 0',
+                              width: '50%',
+                              background: '#4a475c',
+                              borderRadius: '1rem',
+                              fontSize: '1rem',
+                            }}
+                            onClick={handleSkillsClick}
+                          >
+                            Improve English Skills
+                          </Button>
+                          <Menu
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={() => handleMenuClose()}
+                          >
+                            {['Reading', 'Speaking', 'Writing', 'Listening'].map((skill) => (
+                              <MenuItem key={skill} onClick={() => handleMenuClose(skill)}>
+                                {skill}
+                              </MenuItem>
+                            ))}
+                          </Menu>
+                        </>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          disableElevation
+                          sx={{
+                            margin: '1rem 0',
+                            width: '50%',
+                            background: '#4a475c',
+                            borderRadius: '1rem',
+                            fontSize: '1rem',
+                          }}
+                          onClick={() => navigate(section.link)}
+                        >
+                          {section.title === 'TEST'
+                            ? 'Take Test'
+                            : `Learn ${section.title}`}
+                        </Button>
+                      )}
                     </Box>
                   </Grid>
 
