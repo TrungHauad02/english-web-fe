@@ -1,7 +1,8 @@
-import { Stack } from "@mui/material";
-import MainPicture from "../common/MainPicture";
+import MainPicture from "../common/listTopic/MainPicture";
 import GrammarInfo from "./GrammarInfo";
 import GrammarDocument from "./GrammarDocument";
+import { listQuestion } from "./ListQuestion";
+import AnswerQuestion from "../common/answerquestion/AnswerQuestion";
 
 function Grammar({ topic }) {
   topic = {
@@ -24,6 +25,7 @@ function Grammar({ topic }) {
       <MainPicture title={topic.title} src={topic.img} />
       <GrammarInfo grammar={grammar} />
       <GrammarDocument file={grammar.file} title={grammar.title} />
+      <AnswerQuestion listQuestion={listQuestion} />
     </>
   );
 }

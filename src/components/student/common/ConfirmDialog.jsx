@@ -33,15 +33,17 @@ export default function ConfirmDialog({
         <p id="confirm-dialog-description">{content}</p>
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={onClose}
-          sx={{
-            backgroundColor: "#F0FAC1",
-            color: "#000000",
-          }}
-        >
-          {cancelText}
-        </Button>
+        {cancelText && (
+          <Button
+            onClick={onClose}
+            sx={{
+              backgroundColor: "#F0FAC1",
+              color: "#000000",
+            }}
+          >
+            {cancelText}
+          </Button>
+        )}
         {agreeText && (
           <Button
             onClick={onAgree}

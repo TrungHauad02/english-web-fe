@@ -9,6 +9,7 @@ function PrevNextSubmitButton({
   handleNext,
   submitConent,
   scoreContent,
+  onSubmit,
   sx = { marginTop: "1rem", justifyContent: "flex-end", paddingRight: "1rem" },
 }) {
   return (
@@ -28,6 +29,7 @@ function PrevNextSubmitButton({
       <ConfirmAndSubmit
         submitConent={submitConent}
         scoreContent={scoreContent}
+        onSubmit={onSubmit}
         sx={{ color: "#fff", backgroundColor: "#ACCD0A" }}
       />
     </Grid2>

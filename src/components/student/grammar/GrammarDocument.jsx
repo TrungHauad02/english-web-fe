@@ -1,5 +1,5 @@
 import { Stack, Typography } from "@mui/material";
-import PDFViewer from "../common/pdfViewer/PDFViewer";
+import PDFViewer from "../../common/pdfViewer/PDFViewer";
 
 function GrammarDocument({ file, title }) {
   return (

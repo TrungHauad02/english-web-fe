@@ -2,21 +2,24 @@ import { Stack } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import HeaderStudent from "./header/HeaderStudent";
-import ListTopic from "./common/ListTopic";
+import ListTopic from "./common/listTopic/ListTopic";
 import Footer from "../footer/Footer";
 import site from "./common/Pages";
 import Vocabulary from "./vocabulary/Vocabulary";
 import React from "react";
-import ListTest from "./common/Test/ListTest";
-import ListTest_Skill from "./common/Test/ListTest_Skill";
-import TestReading from "./common/Test/TestReading";
-import TestListening from "./common/Test/TestListening";
-import TestWriting from "./common/Test/TestWriting";
-import TestSpeaking from "./common/Test/TestSpeaking";
+import ListTest from "./Test/ListTest";
+import ListTest_Skill from "./Test/ListTest_Skill";
+import TestReading from "./Test/TestReading";
+import TestListening from "./Test/TestListening";
+import TestWriting from "./Test/TestWriting";
+import TestSpeaking from "./Test/TestSpeaking";
+
 import Grammar from "./grammar/Grammar";
 import HomePageStudent from "./content/HomePageStudent";
 import Account from "./account/Account";
-
+import Reading from "./skill/reading/Reading";
+import Listening from "./skill/listening/Listening";
+import Speaking from "./skill/speaking/Speaking";
 
 function HomeStudent() {
   const componentMap = {
@@ -26,6 +29,7 @@ function HomeStudent() {
     TestReading: TestReading,
     TestListening: TestListening,
     TestSpeaking: TestSpeaking,
+    TestWriting: TestWriting,
   };
   return (
     <Stack
@@ -54,15 +58,19 @@ function HomeStudent() {
             />
           ))}
           <Route path="/list-topic/1" element={<Vocabulary />} />
-          <Route path="/grammar/1" element={<Grammar />} />
+          <Route path="/grammar/1" element={<Grammar />} /
           <Route path="/account" element={<Account/>} />
           <Route path="/" element={<HomePageStudent />} />
+          <Route path="/skill/reading/1" element={<Reading />} />
+          <Route path="/skill/listening/1" element={<Listening />} />
+          <Route path="/skill/speaking/1" element={<Speaking />} />
         </Routes>
         <Outlet />
       </Stack>
       <Footer />
     </Stack>
   );
+
 }
 
 export default HomeStudent;
