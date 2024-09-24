@@ -58,7 +58,7 @@ function HomeStudent() {
             />
           ))}
           <Route path="/list-topic/1" element={<Vocabulary />} />
-          <Route path="/grammar/1" element={<Grammar />} /
+          <Route path="/grammar/1" element={<Grammar />} />
           <Route path="/account" element={<Account/>} />
           <Route path="/" element={<HomePageStudent />} />
           <Route path="/skill/reading/1" element={<Reading />} />

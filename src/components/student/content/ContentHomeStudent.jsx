@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import {sections} from "./SectionContentHomeStudent.js"
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { sections } from "./SectionContentHomeStudent.js";
 
-const HomePageStudent = () => {
+const ContentHomeStudent = () => {
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null); 
+  const [requiredLoginDialog, setrequiredLoginDialog] = useState(false); // Trạng thái modal
 
   useEffect(() => {
     AOS.init({
@@ -21,15 +20,19 @@ const HomePageStudent = () => {
     });
   }, []);
 
-  const handleSkillsClick = (event) => {
-    setAnchorEl(event.currentTarget); 
+  const handleButtonClick = (link) => {
+    const isLoggedIn = localStorage.getItem('isSignIn') === 'true';
+
+    if (isLoggedIn) {
+      navigate(link); // Chuyển đến link mong muốn nếu đã đăng nhập
+    } else {
+      setrequiredLoginDialog(true); // Mở modal nếu chưa đăng nhập
+    }
   };
 
-  const handleMenuClose = (skill) => {
-    setAnchorEl(null); 
-    if (skill) {
-      navigate(`/skills/${skill.toLowerCase()}`); 
-    }
+  const handleCloseDialog = () => {
+    setrequiredLoginDialog(false); // Đóng modal
+    navigate('/student/account'); // Chuyển đến trang đăng nhập
   };
 
   return (
@@ -107,52 +110,24 @@ const HomePageStudent = () => {
                         {section.description}
                       </Box>
 
-                      {section.title === 'SKILLS' ? (
-                        <>
-                          <Button
-                            variant="contained"
-                            disableElevation
-                            sx={{
-                              margin: '1rem 0',
-                              width: '50%',
-                              background: '#4a475c',
-                              borderRadius: '1rem',
-                              fontSize: '1rem',
-                            }}
-                            onClick={handleSkillsClick}
-                          >
-                            Improve English Skills
-                          </Button>
-                          <Menu
-                            anchorEl={anchorEl}
-                            open={Boolean(anchorEl)}
-                            onClose={() => handleMenuClose()}
-                          >
-                            {['Reading', 'Speaking', 'Writing', 'Listening'].map((skill) => (
-                              <MenuItem key={skill} onClick={() => handleMenuClose(skill)}>
-                                {skill}
-                              </MenuItem>
-                            ))}
-                          </Menu>
-                        </>
-                      ) : (
-                        <Button
-                          variant="contained"
-                          disableElevation
-                          sx={{
-                            margin: '1rem 0',
-                            width: '50%',
-                            background: '#4a475c',
-                            borderRadius: '1rem',
-                            fontSize: '1rem',
-                          }}
-                          onClick={() => navigate(section.link)}
-                        >
-                          {section.title === 'TEST'
-                            ? 'Take Test'
-                            : `Learn ${section.title}`}
-                        </Button>
-                      )}
+                      <Button
+                        variant="contained"
+                        disableElevation
+                        sx={{
+                          margin: '1rem 0',
+                          width: '50%',
+                          background: '#4a475c',
+                          borderRadius: '1rem',
+                          fontSize: '1rem',
+                        }}
+                        onClick={() => handleButtonClick(section.link)} // Sử dụng hàm handleButtonClick
+                      >
+                        {section.title === 'TEST'
+                          ? 'Take Test'
+                          : section.title === 'SKILLS'
+                          ? 'Improve Your Skills'
+                          : `Learn ${section.title}`}
+                      </Button>
                     </Box>
                   </Grid>
                 </>
@@ -188,52 +163,25 @@ const HomePageStudent = () => {
                       >
                         {section.description}
                       </Box>
-                      {section.title === 'SKILLS' ? (
-                        <>
-                          <Button
-                            variant="contained"
-                            disableElevation
-                            sx={{
-                              margin: '1rem 0',
-                              width: '50%',
-                              background: '#4a475c',
-                              borderRadius: '1rem',
-                              fontSize: '1rem',
-                            }}
-                            onClick={handleSkillsClick}
-                          >
-                            Improve English Skills
-                          </Button>
-                          <Menu
-                            anchorEl={anchorEl}
-                            open={Boolean(anchorEl)}
-                            onClose={() => handleMenuClose()}
-                          >
-                            {['Reading', 'Speaking', 'Writing', 'Listening'].map((skill) => (
-                              <MenuItem key={skill} onClick={() => handleMenuClose(skill)}>
-                                {skill}
-                              </MenuItem>
-                            ))}
-                          </Menu>
-                        </>
-                      ) : (
-                        <Button
-                          variant="contained"
-                          disableElevation
-                          sx={{
-                            margin: '1rem 0',
-                            width: '50%',
-                            background: '#4a475c',
-                            borderRadius: '1rem',
-                            fontSize: '1rem',
-                          }}
-                          onClick={() => navigate(section.link)}
-                        >
-                          {section.title === 'TEST'
-                            ? 'Take Test'
-                            : `Learn ${section.title}`}
-                        </Button>
-                      )}
+
+                      <Button
+                        variant="contained"
+                        disableElevation
+                        sx={{
+                          margin: '1rem 0',
+                          width: '50%',
+                          background: '#4a475c',
+                          borderRadius: '1rem',
+                          fontSize: '1rem',
+                        }}
+                        onClick={() => handleButtonClick(section.link)} // Sử dụng hàm handleButtonClick
+                      >
+                        {section.title === 'TEST'
+                          ? 'Take Test'
+                          : section.title === 'SKILLS'
+                          ? 'Improve Your Skills'
+                          : `Learn ${section.title}`}
+                      </Button>
                     </Box>
                   </Grid>
 
@@ -257,8 +205,26 @@ const HomePageStudent = () => {
           </Box>
         </Box>
       ))}
+
+      {/* Modal yêu cầu đăng nhập */}
+      <Dialog open={requiredLoginDialog} onClose={() => setrequiredLoginDialog(false)}>
+        <DialogTitle>Remind</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+          You need to sign in to continue. Please sign in to access this page.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setrequiredLoginDialog(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleCloseDialog} color="primary">
+            Sign in
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
 
-export default HomePageStudent;
+export default ContentHomeStudent;
