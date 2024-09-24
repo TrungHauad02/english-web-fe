@@ -15,6 +15,8 @@ import TestWriting from "./Test/TestWriting";
 import TestSpeaking from "./Test/TestSpeaking";
 
 import Grammar from "./grammar/Grammar";
+import HomePageStudent from "./content/HomePageStudent";
+import Account from "./account/Account";
 import Reading from "./skill/reading/Reading";
 import Listening from "./skill/listening/Listening";
 import Speaking from "./skill/speaking/Speaking";
@@ -33,7 +35,7 @@ function HomeStudent() {
     <Stack
       direction="column"
       justifyContent="space-between"
-      sx={{ height: "100%" }}
+      sx={{ height: "100%", pt: '4rem', marginBottom: '-5px'}}
     >
       <HeaderStudent />
       <Stack
@@ -56,7 +58,9 @@ function HomeStudent() {
             />
           ))}
           <Route path="/list-topic/1" element={<Vocabulary />} />
-          <Route path="/grammar/1" element={<Grammar />} />
+          <Route path="/grammar/1" element={<Grammar />} /
+          <Route path="/account" element={<Account/>} />
+          <Route path="/" element={<HomePageStudent />} />
           <Route path="/skill/reading/1" element={<Reading />} />
           <Route path="/skill/listening/1" element={<Listening />} />
           <Route path="/skill/speaking/1" element={<Speaking />} />
