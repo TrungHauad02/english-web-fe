@@ -1,7 +1,6 @@
 import MainPicture from "../../common/listTopic/MainPicture";
 import Introduction from "./Introduction";
-import PraticeListening from "./PraticeListening";
-import { listListeningWriteWord } from "./listListening";
+import PracticeListening from "./PracticeListening";
 
 function Listening({ topic }) {
   topic = {
@@ -16,7 +15,7 @@ function Listening({ topic }) {
     <>
       <MainPicture src={topic.img} title={topic.title} />
       <Introduction content={content} />
-      <PraticeListening />
+      <PracticeListening />
     </>
   );
 }
