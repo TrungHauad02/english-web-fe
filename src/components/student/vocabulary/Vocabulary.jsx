@@ -1,4 +1,4 @@
-import MatchImageWithWord from "./matchImageWithWord/MatchImageWithWord";
+import MatchImageWithWord from "./MatchImageWithWord/MatchImageWithWord";
 import listVocab from "./ListVocab";
 import Introduction from "./introduction/Introduction";
 import ListFlashcard from "./listFlashcard/ListFlashcard";
