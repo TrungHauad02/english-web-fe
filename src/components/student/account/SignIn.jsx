@@ -3,15 +3,15 @@ import { Box, Button, TextField, Typography, Divider, IconButton, InputAdornment
 import GoogleIcon from '@mui/icons-material/Google'; 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
-const SignIn = ({ toggleForm }) => {
+const SignIn = ({ toggleForm, onLogin }) => { // Đảm bảo onLogin được truyền vào
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const navigate = useNavigate(); // Khởi tạo điều hướng
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -20,10 +20,11 @@ const SignIn = ({ toggleForm }) => {
   const handleSignIn = () => {
     // Kiểm tra thông tin đăng nhập
     if (email === 'web@gmail.com' && password === '123') {
-      localStorage.setItem('isLoggedIn', 'true'); // Lưu trạng thái đăng nhập
-      navigate('/student'); // Điều hướng về trang chủ
+        localStorage.setItem('isSignIn', 'true');
+        navigate('/student'); 
+        window.location.reload(); 
     } else {
-      setError('Incorrect email or password');
+        setError('Incorrect email or password');
     }
   };
 
@@ -75,7 +76,7 @@ const SignIn = ({ toggleForm }) => {
         variant="contained"
         color="primary"
         style={{ marginTop: 16, marginBottom: 16 }}
-        onClick={handleSignIn} // Thêm sự kiện click
+        onClick={handleSignIn}
       >
         Sign In
       </Button>

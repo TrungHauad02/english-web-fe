@@ -15,11 +15,12 @@ export const sections = [
       title: 'SKILLS',
       description: 'Enhance your listening skills to understand native speakers more clearly. Our listening exercises focus on real-life conversations.',
       imgSrc: '/img_home_skills.png',
+      link: 'skill'
     },
     {
       title: 'TEST',
       description: 'Develop your speaking skills to communicate more fluently. Practice with interactive lessons to improve your confidence.',
       imgSrc: '/img_home_test.png',
-      link: '../common/Test/ListTest_Skill' , 
+      link: 'test' , 
     },
   ];

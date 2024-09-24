@@ -8,6 +8,7 @@ function PageStudent(){
             <HomeBanner/>
             <ContentHomeStudent/>
             <PracticeTestSlider/>
+            
         </>
     );
 }
