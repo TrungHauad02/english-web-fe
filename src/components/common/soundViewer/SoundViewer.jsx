@@ -24,7 +24,10 @@ function SoundViewer({ audioSrc }) {
   };
 
   const handleLoadedMetadata = () => {
-    setDuration(audioRef.current.duration);
+    const audioDuration = audioRef.current.duration;
+    if (!isNaN(audioDuration)) {
+      setDuration(audioDuration);
+    }
   };
 
   const handleSliderChange = (event, newValue) => {
@@ -34,6 +37,7 @@ function SoundViewer({ audioSrc }) {
   };
 
   const formatTime = (seconds) => {
+    if (isNaN(seconds) || seconds === Infinity) return "00:00";
     const minutes = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(

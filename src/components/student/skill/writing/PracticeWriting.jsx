@@ -2,10 +2,9 @@ import { TabContext, TabPanel, TabList } from "@mui/lab";
 import { Tab } from "@mui/material";
 import { Box, Card } from "@mui/material";
 import { useState } from "react";
-import SpeakingInConversation from "./SpeakingInConversation";
-import SpeakingInTopic from "./SpeakingInTopic";
+import WritingAboutTopic from "./WritingAboutTopic";
 
-export default function PracticeSpeaking() {
+export default function PracticeWriting() {
   const [value, setValue] = useState("1");
 
   const handleChange = (event, newValue) => {
@@ -17,7 +16,7 @@ export default function PracticeSpeaking() {
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab
-              label="Speaking in a conversation"
+              label="Write a paragraph in topic"
               value="1"
               sx={{
                 color: "#000!important",
@@ -31,6 +30,7 @@ export default function PracticeSpeaking() {
             <Tab
               label="Speaking in topic"
               value="2"
+              disabled
               sx={{
                 color: "#000!important",
                 backgroundColor: value === "2" ? "#AFCC2B" : "#DCEA99",
@@ -45,10 +45,7 @@ export default function PracticeSpeaking() {
           </TabList>
         </Box>
         <TabPanel value="1" sx={{ backgroundColor: "#F9FCEE" }}>
-          <SpeakingInConversation />
-        </TabPanel>
-        <TabPanel value="2" sx={{ backgroundColor: "#F9FCEE" }}>
-          <SpeakingInTopic />
+          <WritingAboutTopic />
         </TabPanel>
       </TabContext>
     </Card>
