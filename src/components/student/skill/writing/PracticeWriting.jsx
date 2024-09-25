@@ -2,6 +2,7 @@ import { TabContext, TabPanel, TabList } from "@mui/lab";
 import { Tab } from "@mui/material";
 import { Box, Card } from "@mui/material";
 import { useState } from "react";
+import WritingAboutTopic from "./WritingAboutTopic";
 
 export default function PracticeWriting() {
   const [value, setValue] = useState("1");
@@ -29,6 +30,7 @@ export default function PracticeWriting() {
             <Tab
               label="Speaking in topic"
               value="2"
+              disabled
               sx={{
                 color: "#000!important",
                 backgroundColor: value === "2" ? "#AFCC2B" : "#DCEA99",
@@ -43,9 +45,8 @@ export default function PracticeWriting() {
           </TabList>
         </Box>
         <TabPanel value="1" sx={{ backgroundColor: "#F9FCEE" }}>
-          A
+          <WritingAboutTopic />
         </TabPanel>
-        <TabPanel value="2">B</TabPanel>
       </TabContext>
     </Card>
   );

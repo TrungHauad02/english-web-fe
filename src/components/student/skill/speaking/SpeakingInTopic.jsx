@@ -5,7 +5,7 @@ import MicIcon from "@mui/icons-material/Mic";
 import BasicButton from "../../../common/button/BasicButton";
 import SoundViewer from "../../../common/soundViewer/SoundViewer";
 
-const writing = {
+const speaking = {
   content:
     "The best way to travel is in a group led by a tour guide. Do you agree or disagree with this statement?",
   timeLimit: 120,
@@ -16,7 +16,7 @@ export default function SpeakingInTopic() {
   const [permissionChecked, setPermissionChecked] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [audioSrc, setAudioSrc] = useState(null);
-  const [timer, setTimer] = useState(writing.timeLimit);
+  const [timer, setTimer] = useState(speaking.timeLimit);
   const timerRef = useRef(null);
 
   const handleStartRecording = () => {
@@ -38,7 +38,7 @@ export default function SpeakingInTopic() {
   const handleStopRecording = () => {
     setIsRecording(false);
     clearInterval(timerRef.current);
-    setTimer(writing.timeLimit);
+    setTimer(speaking.timeLimit);
   };
 
   const handleStop = (recordedBlob) => {
@@ -73,7 +73,7 @@ export default function SpeakingInTopic() {
       </Grid2>
       <Grid2 item xs={12} sx={{ width: "100%" }}>
         <Typography variant="body1" textAlign={"left"} fontWeight={"bold"}>
-          Topic: {writing.content}
+          Topic: {speaking.content}
         </Typography>
       </Grid2>
 
