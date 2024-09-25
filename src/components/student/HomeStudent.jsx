@@ -21,6 +21,7 @@ import Reading from "./skill/reading/Reading";
 import Listening from "./skill/listening/Listening";
 import Speaking from "./skill/speaking/Speaking";
 import Writing from "./skill/writing/Writing";
+import Skills from "./skill/Skills";
 
 function HomeStudent() {
   const componentMap = {
@@ -58,6 +59,7 @@ function HomeStudent() {
               })}
             />
           ))}
+          <Route path="/skill" element={<Skills />} />
           <Route path="/list-topic/1" element={<Vocabulary />} />
           <Route path="/grammar/1" element={<Grammar />} />
           <Route path="/account" element={<Account/>} />
