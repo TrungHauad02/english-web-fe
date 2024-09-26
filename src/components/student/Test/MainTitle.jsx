@@ -23,7 +23,7 @@ const MainTitleContainer = styled(Box)(({ theme }) => ({
     fontSize: '24px',
     marginTop: '5%',
     marginLeft: '2%',
-    borderRadius: '40px',
+    borderRadius: '4rem',
   }));
   function MainTitle({title,bg}){
     return(

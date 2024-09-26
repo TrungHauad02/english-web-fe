@@ -1,14 +1,15 @@
 import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl ,Button } from '@mui/material';
 import { useEffect, useState } from 'react';
+import ListQuestion from './common/ListQuestion'
 
-function OneListeningTest({ onelistening, audioRef, status, onAudioEnd ,onAnswerChange}) {
+function OneListeningTest({ onelistening, audioRef, status, onAudioEnd ,onAnswerChange,focusId}) {
   const [selectedAnswers, setSelectedAnswers] = useState({});
 
 
 
   useEffect(() => {
     if (status === "Testing") {
-      localStorage.removeItem('selectedAnswers'); // Xóa localStorage khi trạng thái là "Testing"
+      localStorage.removeItem('selectedAnswers'); 
       setSelectedAnswers({}); 
     }
   }, [status]);
@@ -54,7 +55,12 @@ function OneListeningTest({ onelistening, audioRef, status, onAudioEnd ,onAnswer
       )}
           </Box>
       }
-      <FormControl component="fieldset">
+      <ListQuestion status={status} dataTest={onelistening}
+      onAnswerChange = {handleAnswerChange} focusId={focusId}   />
+
+
+
+      {/* <FormControl component="fieldset">
         {onelistening.questions.map((questionNumber) => (
           <Box key={questionNumber.id} sx={{ mb: 3, marginTop: '2%' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -85,7 +91,7 @@ function OneListeningTest({ onelistening, audioRef, status, onAudioEnd ,onAnswer
               
             >
               {questionNumber.options.map((option) => {
-                const isCorrect = option.isCorrect; // Giả định bạn có thuộc tính này trong option
+                const isCorrect = option.isCorrect; 
                 const isSelected = selectedAnswers[questionNumber.id] === option.content;
 
                 return (
@@ -107,7 +113,7 @@ function OneListeningTest({ onelistening, audioRef, status, onAudioEnd ,onAnswer
             </RadioGroup>
           </Box>
         ))}
-      </FormControl>
+      </FormControl> */}
     </>
   );
 }

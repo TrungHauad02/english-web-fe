@@ -65,6 +65,7 @@ function TestingListening({ audioRef, status, setStatus}) {
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [score, setScore] = useState(0); // Thêm state để lưu điểm số
   const [gridData, setGridData] = useState([]); // Thêm state để lưu gridData
+  const [focusId,setfocusId] = useState();
 
 
   const handleAnswerChange = (questionId, answer) => {
@@ -115,7 +116,7 @@ function TestingListening({ audioRef, status, setStatus}) {
     const score = calculateScore();
     console.log(`Your score is: ${score}`);
     setScore(score); // Cập nhật điểm số
-    setGridData(generateGridData()); // Cập nhật dữ liệu cho ScoreGrid
+    setGridData(generateGridData()); 
     console.log(`Your score is: ${generateGridData()}`);
   };
 
@@ -145,6 +146,7 @@ function TestingListening({ audioRef, status, setStatus}) {
       data.questions.map(question => {
         const correctAnswer = question.options.find(option => option.isCorrect);
         const selectedAnswer = selectedAnswers[question.id];
+    
    
         if (selectedAnswer === undefined) {
 
@@ -179,11 +181,15 @@ function TestingListening({ audioRef, status, setStatus}) {
 //     }
 // };
 const onItemClick = useCallback((serial) => {
+  setfocusId(serial);
   const newIndex = Math.floor((serial-1) / 3);
+
   if (newIndex !== indexVisible) {
     setIndexVisible(newIndex);
   }
 }, [indexVisible]);
+
+
 
 const onClickTestAgain = () => {
 
@@ -194,17 +200,20 @@ const onClickTestAgain = () => {
 
   return (
     <>
-      <Box sx={{
-        background: '#FFF4CC',
-        borderRadius: '1rem',
-        fontSize: '1rem',
-        float: 'right',
-        marginRight: '5%',
-        width: '10%',
-        padding: '0.5rem 1rem'
-      }}>
-        <CountdownTimer/>
-      </Box>
+     {status === 'Testing' && (
+         <Box sx={{
+          background: '#FFF4CC',
+          borderRadius: '1rem',
+          fontSize: '1rem',
+          float: 'right',
+          marginRight: '5%',
+          width: '10%',
+          padding: '0.5rem 1rem'
+        }}>
+          <CountdownTimer/>
+        </Box>
+     )}
+   
     
       <Box sx={{ marginTop: '5%', marginBottom: '1rem', padding: '0.5rem 1rem', display: 'flex', justifyContent: 'center', marginLeft: '5%', marginRight: status === 'Submit' ? '25%' : '5%', }}>
         <Box sx={{ display: 'flex', mt: 5, marginLeft: '5%', width: '45%', justifyContent: 'center' }}>
@@ -229,6 +238,7 @@ const onClickTestAgain = () => {
                 status={status} 
                 onAudioEnd={onAudioEnd} 
                 onAnswerChange={handleAnswerChange} 
+                focusId={focusId}
             />
         </Box>
         </Box>
