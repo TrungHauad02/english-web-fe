@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Stack, Menu, MenuItem, IconButton } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import HeaderTypography from '../common/HeaderTypography';
 import SkillMenu from './SkillMenu';
-import Profile from './Profile'; // Import Profile component
+import Profile from './Profile'; 
 
 function HeaderStudent() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [openProfileDialog, setOpenProfileDialog] = useState(false);
+    const [openHistoryTest, setOpenHistoryTest] = useState(false);
+    const [openStudySchedule, setOpenStudySchedule] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -49,6 +51,18 @@ function HeaderStudent() {
         setOpenProfileDialog(false);
     };
 
+    const handleHistoryTestOpen = () => {
+        setOpenHistoryTest(true);
+        navigate('/student/history-test')
+        handleMenuClose();
+    }
+
+    const handleStudyScheduleOpen = () => {
+        setOpenStudySchedule(true);
+        navigate('/student/study-schedule')
+        handleMenuClose();
+    }
+
     return (
         <Stack
             direction={'row'}
@@ -78,21 +92,90 @@ function HeaderStudent() {
                 </HeaderTypography>
             </Stack>
             <Stack direction={'row'} alignItems={'center'} spacing={2}>
-                <Button color="header" href="/student">
+                <Button 
+                    component={NavLink} 
+                    to="/student" 
+                    sx={{
+                        backgroundColor: 'transparent',
+                        color: 'white',
+                        textDecoration: 'none',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '0.5rem',
+                        '&:hover': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                        },
+                        '&.active': {
+                            backgroundColor: 'white',
+                            color: 'black',
+                        }
+                    }}
+                >
                     <HeaderTypography>Home</HeaderTypography>
                 </Button>
+
                 {isLoggedIn ? (
                     <>
-                        <Button color="header" component={Link} to="/student/list-topic">
+                        <Button
+                            component={NavLink}
+                            to="/student/list-topic"
+                            sx={{
+                                backgroundColor: 'transparent',
+                                color: 'white',
+                                textDecoration: 'none',
+                                padding: '0.5rem 1rem',
+                                borderRadius: '0.5rem',
+                                '&:hover': {
+                                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                                },
+                                '&.active': {
+                                    backgroundColor: 'white',
+                                    color: 'black',
+                                }
+                            }}
+                        >
                             <HeaderTypography>Vocabulary</HeaderTypography>
                         </Button>
-                        <Button color="header" component={Link} to="/student/grammar">
+                        <Button
+                            component={NavLink}
+                            to="/student/grammar"
+                            sx={{
+                                backgroundColor: 'transparent',
+                                color: 'white',
+                                textDecoration: 'none',
+                                padding: '0.5rem 1rem',
+                                borderRadius: '0.5rem',
+                                '&:hover': {
+                                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                                },
+                                '&.active': {
+                                    backgroundColor: 'white',
+                                    color: 'black',
+                                }
+                            }}
+                        >
                             <HeaderTypography>Grammar</HeaderTypography>
                         </Button>
 
                         <SkillMenu />
 
-                        <Button color="header" component={Link} to="/student/test">
+                        <Button
+                            component={NavLink}
+                            to="/student/test"
+                            sx={{
+                                backgroundColor: 'transparent',
+                                color: 'white',
+                                textDecoration: 'none',
+                                padding: '0.5rem 1rem',
+                                borderRadius: '0.5rem',
+                                '&:hover': {
+                                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                                },
+                                '&.active': {
+                                    backgroundColor: 'white',
+                                    color: 'black',
+                                }
+                            }}
+                        >
                             <HeaderTypography>Test</HeaderTypography>
                         </Button>
 
@@ -118,7 +201,7 @@ function HeaderStudent() {
                                 }}>
                                 Profile
                             </MenuItem>
-                            <MenuItem onClick={handleMenuClose} 
+                            <MenuItem onClick={handleStudyScheduleOpen} 
                                 sx={{
                                     borderBottom: '1px solid rgba(255, 255, 255, 0.5)',
                                     color: 'white'
@@ -126,7 +209,7 @@ function HeaderStudent() {
                                 Study Schedule
                             </MenuItem>
                             <MenuItem 
-                                onClick={handleMenuClose} 
+                                onClick={handleHistoryTestOpen} 
                                 sx={{
                                     borderBottom: '3px solid #ffff',
                                     color: 'white'
@@ -145,13 +228,29 @@ function HeaderStudent() {
                         </Menu>
                     </>
                 ) : (
-                    <Button color="header" component={Link} to="/student/account">
+                    <Button
+                        component={NavLink}
+                        to="/student/account"
+                        sx={{
+                            backgroundColor: 'transparent',
+                            color: 'white',
+                            textDecoration: 'none',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '0.5rem',
+                            '&:hover': {
+                                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                            },
+                            '&.active': {
+                                backgroundColor: 'white',
+                                color: 'black',
+                            }
+                        }}
+                    >
                         <HeaderTypography>Sign In</HeaderTypography>
                     </Button>
                 )}
             </Stack>
 
-            {/* Sử dụng Profile component */}
             <Profile open={openProfileDialog} handleClose={handleProfileClose} />
         </Stack>
     );

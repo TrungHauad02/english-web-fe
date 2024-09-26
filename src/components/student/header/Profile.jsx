@@ -85,7 +85,7 @@ const Profile = ({ open, handleClose }) => {
                         </Box>
 
                         {/* Chuyển đổi giữa chế độ xem và chỉnh sửa */}
-                        <Box sx={{ bgcolor: 'grey.300', p: 2, borderRadius: 2 }}>
+                        <Box sx={{ bgcolor: 'grey.300', p: 2, borderRadius: 2, transition: 'opacity .5s ease-in-out' }}>
                             <Stack spacing={1}>
                                 {editMode ? (
                                     <>
@@ -94,12 +94,14 @@ const Profile = ({ open, handleClose }) => {
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
                                             fullWidth
+                                            sx={{padding:'0 0 .5rem 0'}}
                                         />
                                         <TextField
                                             label="Email"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             fullWidth
+                                            sx={{padding:'0 0 .5rem 0'}}
                                         />
                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                             <TextField
@@ -108,6 +110,7 @@ const Profile = ({ open, handleClose }) => {
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 fullWidth
+                                                sx={{padding:'0 0 .5rem 0'}}
                                             />
                                             <IconButton onClick={handleTogglePasswordVisibility} aria-label="toggle password visibility">
                                                 {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}

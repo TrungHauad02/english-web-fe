@@ -16,12 +16,14 @@ import TestSpeaking from "./Test/TestSpeaking";
 
 import Grammar from "./grammar/Grammar";
 import HomePageStudent from "./content/HomePageStudent";
-import Account from "./account/Account";
+import Account from "../account/Account";
 import Reading from "./skill/reading/Reading";
 import Listening from "./skill/listening/Listening";
 import Speaking from "./skill/speaking/Speaking";
 import Writing from "./skill/writing/Writing";
 import Skills from "./skill/Skills";
+import HistoryTest from "./header/HistoryTest";
+import StudySchedule from "./header/studyschedule/StudySchedule";
 
 function HomeStudent() {
   const componentMap = {
@@ -68,6 +70,8 @@ function HomeStudent() {
           <Route path="/skill/listening/1" element={<Listening />} />
           <Route path="/skill/speaking/1" element={<Speaking />} />
           <Route path="/skill/writing/1" element={<Writing />} />
+          <Route path="/history-test" element={<HistoryTest />} />
+          <Route path="/study-schedule" element={<StudySchedule/>} />
         </Routes>
         <Outlet />
       </Stack>
