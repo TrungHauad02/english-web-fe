@@ -13,6 +13,7 @@ import TestReading from "./Test/TestReading/TestReading";
 import TestListening from "./Test/TestListening";
 import TestWriting from "./Test/TestWriting";
 import TestSpeaking from "./Test/TestSpeaking";
+import TestMixing from "./Test/TestMixing/TestMixing"
 
 import Grammar from "./grammar/Grammar";
 import HomePageStudent from "./content/HomePageStudent";
@@ -32,6 +33,7 @@ function HomeStudent() {
     TestListening: TestListening,
     TestSpeaking: TestSpeaking,
     TestWriting: TestWriting,
+    TestMixing: TestMixing,
   };
   return (
     <Stack

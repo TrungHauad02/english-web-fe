@@ -3,11 +3,7 @@ import { Box, Typography, Button, Paper, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 
 
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2),
-  textAlign: 'center',
-  borderRadius: '1rem',
-}));
+
 
 const GridItem = styled(Paper)(({ theme, color }) => ({
   padding: theme.spacing(1),
@@ -22,16 +18,16 @@ const GridItem = styled(Paper)(({ theme, color }) => ({
   },
 }));
 
-const ScoreGrid = ({ score, gridData = [],serials=[] ,onItemClick,onClickTestAgain}) => { 
+const ItemSerialTest = ({ gridData = [],serials=[] ,onItemClick,title}) => { 
   return (
-    <StyledPaper elevation={3}>
-      <Typography variant="h5" gutterBottom>
-        Score: {score}
+    <>
+    <Typography variant="h5" gutterBottom>
+      {title}
       </Typography>
       
       <Grid container spacing={1} sx={{ marginBottom: 2 }}>
-        {gridData.length > 0 ? (
-          gridData.map((item, index) => (
+        {serials.length > 0 ? (
+          serials.map((item, index) => (
             <Grid item xs={2} key={index}>
               <GridItem color={item === 0 ? 'red' : item === 1 ? 'green' : 'white'}
               onClick={() => onItemClick(serials[index])}
@@ -46,24 +42,9 @@ const ScoreGrid = ({ score, gridData = [],serials=[] ,onItemClick,onClickTestAga
           </Grid>
         )}
       </Grid>
-      
-      <Button 
-        variant="contained" 
-        sx={{ 
-          backgroundColor: '#ffd54f', 
-          color: 'black',
-          '&:hover': {
-            backgroundColor: '#ffca28',
-          
-          },
-            borderRadius:"0.5rem",
-        }}
-        onClick={onClickTestAgain}
-      >
-        TEST AGAIN
-      </Button>
-    </StyledPaper>
+    </>
+
   );
 };
 
-export default ScoreGrid;
+export default ItemSerialTest;
