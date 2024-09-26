@@ -9,7 +9,7 @@ import Vocabulary from "./vocabulary/Vocabulary";
 import React from "react";
 import ListTest from "./Test/ListTest";
 import ListTest_Skill from "./Test/ListTest_Skill";
-import TestReading from "./Test/TestReading";
+import TestReading from "./Test/TestReading/TestReading";
 import TestListening from "./Test/TestListening";
 import TestWriting from "./Test/TestWriting";
 import TestSpeaking from "./Test/TestSpeaking";

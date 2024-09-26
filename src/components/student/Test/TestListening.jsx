@@ -194,17 +194,20 @@ const onClickTestAgain = () => {
 
   return (
     <>
-      <Box sx={{
-        background: '#FFF4CC',
-        borderRadius: '1rem',
-        fontSize: '1rem',
-        float: 'right',
-        marginRight: '5%',
-        width: '10%',
-        padding: '0.5rem 1rem'
-      }}>
-        <CountdownTimer/>
-      </Box>
+     {status === 'Testing' && (
+         <Box sx={{
+          background: '#FFF4CC',
+          borderRadius: '1rem',
+          fontSize: '1rem',
+          float: 'right',
+          marginRight: '5%',
+          width: '10%',
+          padding: '0.5rem 1rem'
+        }}>
+          <CountdownTimer/>
+        </Box>
+     )}
+   
     
       <Box sx={{ marginTop: '5%', marginBottom: '1rem', padding: '0.5rem 1rem', display: 'flex', justifyContent: 'center', marginLeft: '5%', marginRight: status === 'Submit' ? '25%' : '5%', }}>
         <Box sx={{ display: 'flex', mt: 5, marginLeft: '5%', width: '45%', justifyContent: 'center' }}>
