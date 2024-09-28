@@ -2,25 +2,35 @@ import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl ,Butt
 import { useEffect, useState,useRef } from 'react';
 
 
-function ListQuestion({dataTest,status,onAnswerChange,focusId}){
+function ListQuestion({dataTest,status,focusId,title,onAnswerChange}){
 
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const questionRefs = useRef({}); 
     const [isFocused, setIsFocused] = useState({});
+    const [isFirstRender, setIsFirstRender] = useState(true); 
 
-  useEffect(() => {
-    if (status === "Testing") {
-      localStorage.removeItem('selectedAnswers'); 
-      setSelectedAnswers({}); 
-    }
-  }, [status]);
+
+    useEffect(() => {
+      const savedAnswers = localStorage.getItem('selectedAnswers'+title);
+      if (savedAnswers) {
+          setSelectedAnswers(JSON.parse(savedAnswers));
+      }
+    }, [status]);
+
+
   const handleAnswerChange = (questionId, answer) => {
     const updatedAnswers = { ...selectedAnswers, [questionId]: answer };
     setSelectedAnswers(updatedAnswers);
-    localStorage.setItem('selectedAnswers', JSON.stringify(updatedAnswers));
-    onAnswerChange(questionId, answer); 
-    
+    localStorage.setItem('selectedAnswers'+title, JSON.stringify(updatedAnswers));
+    if (typeof onAnswerChange === 'function') 
+    {
+      onAnswerChange();
+    }
   };
+
+
+  
+
     useEffect(() => {
         if (focusId && questionRefs.current[focusId]) {
             questionRefs.current[focusId].focus();
@@ -67,8 +77,11 @@ function ListQuestion({dataTest,status,onAnswerChange,focusId}){
     <RadioGroup
       sx={{ marginLeft: '1.5rem' }}
       value={selectedAnswers[questionNumber.id] || ''}
-      onChange={(e) => status !== 'Submit' && handleAnswerChange(questionNumber.id, e.target.value)}
-      
+      onChange={(e) => status !== 'Submit' && handleAnswerChange(questionNumber.id, e.target.value)
+  
+
+      }
+ 
     >
       {questionNumber.options.map((option) => {
         const isCorrect = option.isCorrect; 

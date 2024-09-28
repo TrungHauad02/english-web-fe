@@ -2,30 +2,8 @@ import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl ,Butt
 import { useEffect, useState } from 'react';
 import ListQuestion from './common/ListQuestion'
 
-function OneListeningTest({ onelistening, audioRef, status, onAudioEnd ,onAnswerChange,focusId}) {
-  const [selectedAnswers, setSelectedAnswers] = useState({});
+function OneListeningTest({ onelistening, audioRef, status, onAudioEnd ,title,focusId}) {
 
-
-
-  useEffect(() => {
-    if (status === "Testing") {
-      localStorage.removeItem('selectedAnswers'); 
-      setSelectedAnswers({}); 
-    }
-  }, [status]);
-  
-  useEffect(() => {
-    const storedAnswers = JSON.parse(localStorage.getItem('selectedAnswers')) || {};
-    setSelectedAnswers(storedAnswers);
-  }, []);
-
-  const handleAnswerChange = (questionId, answer) => {
-    const updatedAnswers = { ...selectedAnswers, [questionId]: answer };
-    setSelectedAnswers(updatedAnswers);
-    localStorage.setItem('selectedAnswers', JSON.stringify(updatedAnswers));
-
-    onAnswerChange(questionId, answer); 
-  };
   const [showTranscript, setShowTranscript] = useState(false);
   const handleClick = () => {
     setShowTranscript(!showTranscript); 
@@ -56,64 +34,9 @@ function OneListeningTest({ onelistening, audioRef, status, onAudioEnd ,onAnswer
           </Box>
       }
       <ListQuestion status={status} dataTest={onelistening}
-      onAnswerChange = {handleAnswerChange} focusId={focusId}   />
+      title = {title} focusId={focusId}   />
 
 
-
-      {/* <FormControl component="fieldset">
-        {onelistening.questions.map((questionNumber) => (
-          <Box key={questionNumber.id} sx={{ mb: 3, marginTop: '2%' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box
-                sx={{
-                  padding: '0.5rem 1rem',
-                  borderRadius: '50%',
-                  backgroundColor: '#ACCD0A',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff',
-                  fontWeight: '500',
-                }}
-              >
-                <Typography variant="body1" sx={{ fontSize: '1rem' }}>
-                  {questionNumber.serial}
-                </Typography>
-              </Box>
-              <Typography variant="body1" gutterBottom sx={{ ml: 1 }}>
-                {questionNumber.content}
-              </Typography>
-            </Box>
-            <RadioGroup
-              sx={{ marginLeft: '1.5rem' }}
-              value={selectedAnswers[questionNumber.id] || ''}
-              onChange={(e) => status !== 'Submit' && handleAnswerChange(questionNumber.id, e.target.value)}
-              
-            >
-              {questionNumber.options.map((option) => {
-                const isCorrect = option.isCorrect; 
-                const isSelected = selectedAnswers[questionNumber.id] === option.content;
-
-                return (
-                  <FormControlLabel
-                    key={option.id}
-                    value={option.content}
-                    control={<Radio />}
-                    label={`${option.id}. ${option.content}`}
-                    sx={{
-                      color: status === 'Submit' 
-                        ? (isSelected ? (isCorrect ? 'green' : 'red') : (isCorrect ? 'green' : 'inherit')) 
-                        : 'inherit', 
-                      fontWeight: isSelected ? 'bold' : 'normal', 
-                    }}
-                
-                  />
-                );
-              })}
-            </RadioGroup>
-          </Box>
-        ))}
-      </FormControl> */}
     </>
   );
 }

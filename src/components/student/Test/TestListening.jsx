@@ -8,6 +8,14 @@ import ScoreGrid from "./ScoreGrid";
 
 function TestListening({ list, quote, title, bg }) {
   const [status, setStatus] = useState('Begin');
+  const [renderKey, setRenderKey] = useState(0);
+  const onClickTestAgain = () => {
+    localStorage.removeItem('selectedAnswers' + title);
+
+    setStatus('Testing');
+
+    setRenderKey(renderKey + 1);
+};
 
   const audioRef = useRef(null);
 
@@ -16,7 +24,9 @@ function TestListening({ list, quote, title, bg }) {
       <MainTitle title={title} bg={bg} />
       {status === 'Begin'
         ? <IntroduceTest setStatus={setStatus} />
-        : <TestingListening audioRef={audioRef} status={status} setStatus={setStatus} />
+        : <TestingListening key={renderKey} audioRef={audioRef} status={status} setStatus={setStatus} title={title}
+        onClickTestAgain ={onClickTestAgain}
+        />
       }
    
     </Box>
@@ -60,20 +70,17 @@ function IntroduceTest({ setStatus }) {
   );
 }
 
-function TestingListening({ audioRef, status, setStatus}) {
+function TestingListening({ audioRef, status, setStatus,title,onClickTestAgain}) {
   const [indexVisible, setIndexVisible] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [score, setScore] = useState(0); // Thêm state để lưu điểm số
-  const [gridData, setGridData] = useState([]); // Thêm state để lưu gridData
+  const [score, setScore] = useState(0); 
+  const [gridData, setGridData] = useState([]); 
   const [focusId,setfocusId] = useState();
 
+  
 
-  const handleAnswerChange = (questionId, answer) => {
-    setSelectedAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [questionId]: answer,
-    }));
-  };
+
+
 
   const onAudioEnd = () => {
     if (DataListQuestion.length > indexVisible + 1) {
@@ -110,15 +117,46 @@ function TestingListening({ audioRef, status, setStatus}) {
       audioRef.current.currentTime = 0;
     }
   }, [status]);
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    // Đặt trạng thái là 'Submit'
     setStatus('Submit');
+
+    // Lấy câu trả lời đã lưu từ local storage
+    const savedAnswers = localStorage.getItem('selectedAnswers' + title);
+
+    if (savedAnswers) {
+        setSelectedAnswers(JSON.parse(savedAnswers));
+    }
+
+
+
+
+ 
+};
+useEffect(() => {
+  if(status==="Submit")
+  {
     const score = calculateScore();
-    console.log(`Your score is: ${score}`);
-    setScore(score); // Cập nhật điểm số
+    setScore(score);
     setGridData(generateGridData()); 
-    console.log(`Your score is: ${generateGridData()}`);
-  };
+  }
+
+
+  
+}, [selectedAnswers]); 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const calculateScore = () => {
     let score = 0;
@@ -153,33 +191,22 @@ function TestingListening({ audioRef, status, setStatus}) {
           return -1; // Chưa chọn
           
         }
-  
         return selectedAnswer === correctAnswer.content ? 1 : 0; 
       })
     );
   };
   const getListSerialQuestion = () => {
-    const serials = []; // Mảng để lưu số thứ tự
-    console.log(serials+"tan");
-    DataListQuestion.flatMap(data => 
+    const serials = []; 
+
+    DataListQuestion.map(data => 
       data.questions.map(question => {
-        serials.push(question.serial); 
-      
-        
+        serials.push(question.serial);
         return question.serial; 
       })
     );
-
-  
     return serials; 
   };
 
-//   const onItemClick = (serial) => {
-//     const newIndex = Math.floor((serial-1) / 3) ;
-//     if (newIndex !== indexVisible) {
-//         setIndexVisible(newIndex);
-//     }
-// };
 const onItemClick = useCallback((serial) => {
   setfocusId(serial);
   const newIndex = Math.floor((serial-1) / 3);
@@ -191,10 +218,6 @@ const onItemClick = useCallback((serial) => {
 
 
 
-const onClickTestAgain = () => {
-
-  setStatus("Testing")
-};
   
   
 
@@ -237,14 +260,14 @@ const onClickTestAgain = () => {
                 audioRef={audioRef} 
                 status={status} 
                 onAudioEnd={onAudioEnd} 
-                onAnswerChange={handleAnswerChange} 
+                title ={title}
                 focusId={focusId}
             />
         </Box>
         </Box>
         {status === 'Submit' && (
             <Box sx={{ marginLeft:"2rem" }}> 
-                <ScoreGrid score={score} gridData={gridData} serials ={getListSerialQuestion() } 
+                <ScoreGrid score={score} gridData={gridData} serials ={getListSerialQuestion()} 
                 onItemClick ={onItemClick}  onClickTestAgain={onClickTestAgain}/> 
             </Box>
         )}
