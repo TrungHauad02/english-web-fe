@@ -1,11 +1,11 @@
 import ListQuestion from "../common/ListQuestion";
 
-function Grammar({status,dataTest,onAnswerChange,focusId}) 
+function Grammar({status,dataTest,onAnswerChange,focusId,title}) 
 {
     return(
         <>
         <ListQuestion status = {status} dataTest={dataTest} onAnswerChange={onAnswerChange}
-        focusId ={focusId}
+        focusId ={focusId} title= {title} 
         />
         </>
     );

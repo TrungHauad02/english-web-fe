@@ -30,10 +30,10 @@ const ScoreGrid = ({ score, gridData = [],serials=[] ,onItemClick,onClickTestAga
       </Typography>
       
       <Grid container spacing={1} sx={{ marginBottom: 2 }}>
-        {gridData.length > 0 ? (
-          gridData.map((item, index) => (
+        {serials.length > 0 ? (
+          serials.map((item, index) => (
             <Grid item xs={2} key={index}>
-              <GridItem color={item === 0 ? 'red' : item === 1 ? 'green' : 'white'}
+              <GridItem color={gridData[serials[index]-1] === 0 ? 'red' : gridData[serials[index]-1] === 1 ? 'green' : 'white'}
               onClick={() => onItemClick(serials[index])}
               >
                 <Typography variant="body2">{ serials[index]}</Typography>
