@@ -1,12 +1,10 @@
-import ListQuestion from "../common/ListQuestion";
-
-function Writing({status,dataTest,onAnswerChange,focusId}) 
+import ContentWritingMixing from './ContentWritingMixing'
+function Writing({status,dataTest,onAnswerChange,focusId,title}) 
 {
     return(
         <>
-        <ListQuestion status = {status} dataTest={dataTest} onAnswerChange={onAnswerChange} 
-        focusId ={focusId}
-        />
+        <ContentWritingMixing onAnswerChange={onAnswerChange} datatest={dataTest.dataitem[0]} title={title}/>
+ 
         </>
     );
 }
