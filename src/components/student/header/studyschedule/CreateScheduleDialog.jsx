@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, Box, Button, TextField, IconButton, ToggleButtonGroup, ToggleButton, MenuItem, Select, Typography } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Box, Button, TextField, IconButton, ToggleButtonGroup, ToggleButton, MenuItem, Select, Typography, FormControl, InputLabel, OutlinedInput, } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import GoogleIcon from '@mui/icons-material/Google';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import InputAdornment from '@mui/material/InputAdornment';
 
 const CreateScheduleDialog = ({ open, onClose }) => {
-  const [step, setStep] = useState(1); // State to track the current step
-  const [frequency, setFrequency] = useState('once'); // Example state for frequency
+  const [step, setStep] = useState(1);
+  const [frequency, setFrequency] = useState('once');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [time, setTime] = useState('12:00');
   const [reminder, setReminder] = useState(30);
   const [endDate, setEndDate] = useState('');
+  const [selectedDays, setSelectedDays] = useState([]);
+  const [duration, setDuration] = useState('');
+  const [noteDates, setNoteDates] = useState([]);
 
   const handleNext = () => {
     setStep((prev) => prev + 1);
@@ -25,6 +28,22 @@ const CreateScheduleDialog = ({ open, onClose }) => {
 
   const handleFrequencyChange = (event, newFrequency) => {
     setFrequency(newFrequency);
+    if (newFrequency !== 'weekly') {
+      setSelectedDays([]);
+    }
+    if (newFrequency !== 'daily' && newFrequency !== 'weekly' && newFrequency !== 'monthly') {
+      setDuration('');
+    }
+    if (newFrequency !== 'monthly') {
+      setNoteDates([]);
+    }
+  };
+
+  const handleNoteDateChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setNoteDates(typeof value === 'string' ? value.split(',') : value);
   };
 
   return (
@@ -42,7 +61,7 @@ const CreateScheduleDialog = ({ open, onClose }) => {
       <DialogContent>
         {/* Step 1 */}
         {step === 1 && (
-          <Box>
+          <Box sx={{ paddingRight: 0 }}>
             <TextField
               fullWidth
               label="Title"
@@ -65,252 +84,243 @@ const CreateScheduleDialog = ({ open, onClose }) => {
 
         {/* Step 2 */}
         {step === 2 && (
-        <Box>
+          <Box sx={{ paddingRight: 0 }}>
             {/* Frequency selection */}
             <ToggleButtonGroup
-            value={frequency}
-            exclusive
-            onChange={handleFrequencyChange}
-            fullWidth
-            sx={{ mb: 2 }}
+              value={frequency}
+              exclusive
+              onChange={handleFrequencyChange}
+              fullWidth
+              sx={{ mb: 2 }}
             >
-            <ToggleButton value="daily">Daily</ToggleButton>
-            <ToggleButton value="weekly">Weekly</ToggleButton>
-            <ToggleButton value="monthly">Monthly</ToggleButton>
+              <ToggleButton value="daily">Daily</ToggleButton>
+              <ToggleButton value="weekly">Weekly</ToggleButton>
+              <ToggleButton value="monthly">Monthly</ToggleButton>
             </ToggleButtonGroup>
 
-            {/* Custom UI for Daily */}
-            {frequency === 'daily' && (
-            <>
-                <TextField
-                label="Duration"
-                type="number"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-                InputProps={{
-                    endAdornment: (
-                    <Select defaultValue="minutes">
-                        <MenuItem value="minutes">Minutes</MenuItem>
-                        <MenuItem value="hours">Hours</MenuItem>
-                    </Select>
-                    ),
-                }}
-                />
-                <TextField
-                label="Time"
-                type="time"
-                fullWidth
-                variant="outlined"
-                sx={{ mb: 2 }}
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-                />
-                <TextField
-                label="Reminder"
-                type="number"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-                value={reminder}
-                onChange={(e) => setReminder(e.target.value)}
-                InputProps={{
-                    endAdornment: (
-                    <Select defaultValue="minutes-ago">
-                        <MenuItem value="minutes-ago">Minutes ago</MenuItem>
-                        <MenuItem value="hours-ago">Hours ago</MenuItem>
-                    </Select>
-                    ),
-                }}
-                />
-                <TextField
-                label="End date"
-                type="date"
-                fullWidth
-                variant="outlined"
-                sx={{ mb: 2 }}
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                />
-            </>
-            )}
-
             {/* Custom UI for Weekly */}
+
             {frequency === 'weekly' && (
-            <>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                {['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'].map((day) => (
-                    <ToggleButton key={day} value={day}>
-                    {day}
-                    </ToggleButton>
-                ))}
-                </Box>
+              <>
                 <TextField
-                label="Duration"
-                type="number"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-                InputProps={{
-                    endAdornment: (
-                    <Select defaultValue="minutes">
-                        <MenuItem value="minutes">Minutes</MenuItem>
-                        <MenuItem value="hours">Hours</MenuItem>
-                    </Select>
-                    ),
-                }}
+                  label="Duration"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  sx={{ mb: 2 }}
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">minutes</InputAdornment>,
+                  }}
                 />
                 <TextField
-                label="Time"
-                type="time"
-                fullWidth
-                variant="outlined"
-                sx={{ mb: 2 }}
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
+                  label="Time"
+                  type="time"
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mb: 2 }}
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
                 />
                 <TextField
-                label="Reminder"
-                type="number"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-                value={reminder}
-                onChange={(e) => setReminder(e.target.value)}
-                InputProps={{
-                    endAdornment: (
-                    <Select defaultValue="minutes-ago">
-                        <MenuItem value="minutes-ago">Minutes ago</MenuItem>
-                        <MenuItem value="hours-ago">Hours ago</MenuItem>
-                    </Select>
-                    ),
-                }}
+                  label="Reminder"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  sx={{ mb: 2 }}
+                  value={reminder}
+                  onChange={(e) => setReminder(e.target.value)}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">minutes</InputAdornment>,
+                  }}
                 />
                 <TextField
-                label="End date"
-                type="date"
-                fullWidth
-                variant="outlined"
-                sx={{ mb: 2 }}
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
+                  label="End date"
+                  type="date"
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mb: 2 }}
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
                 />
-            </>
+              </>
             )}
 
-            {/* Custom UI for Monthly */}
+            {frequency === 'daily' && (
+              <>
+                <TextField
+                  label="Duration"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  sx={{ mb: 2 }}
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">minutes</InputAdornment>,
+                  }}
+                />
+                <TextField
+                  label="Time"
+                  type="time"
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mb: 2 }}
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                />
+                <TextField
+                  label="Reminder"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  sx={{ mb: 2 }}
+                  value={reminder}
+                  onChange={(e) => setReminder(e.target.value)}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">minutes</InputAdornment>,
+                  }}
+                />
+                <TextField
+                  label="End date"
+                  type="date"
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mb: 2 }}
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </>
+            )}
+
             {frequency === 'monthly' && (
-            <>
+              <>
+                <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
+                  <InputLabel id="note-date-label">Note Dates</InputLabel>
+                  <Select
+                    labelId="note-date-label"
+                    id="note-date-select"
+                    multiple
+                    value={noteDates}
+                    onChange={handleNoteDateChange}
+                    input={<OutlinedInput label="Note Dates" />}
+                  >
+                    {Array.from({ length: 31 }, (_, i) => i + 1).map((date) => (
+                      <MenuItem key={date} value={date}>
+                        {date}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
                 <TextField
-                label="Note date"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-                placeholder="Enter specific dates (e.g., 2, 5, 10)"
+                  label="Duration"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  sx={{ mb: 2 }}
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">minutes</InputAdornment>,
+                  }}
                 />
                 <TextField
-                label="Duration"
-                type="number"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-                InputProps={{
-                    endAdornment: (
-                    <Select defaultValue="minutes">
-                        <MenuItem value="minutes">Minutes</MenuItem>
-                        <MenuItem value="hours">Hours</MenuItem>
-                    </Select>
-                    ),
-                }}
+                  label="Time"
+                  type="time"
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mb: 2 }}
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
                 />
                 <TextField
-                label="Time"
-                type="time"
-                fullWidth
-                variant="outlined"
-                sx={{ mb: 2 }}
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
+                  label="Reminder"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  sx={{ mb: 2 }}
+                  value={reminder}
+                  onChange={(e) => setReminder(e.target.value)}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">minutes</InputAdornment>,
+                  }}
                 />
                 <TextField
-                label="Reminder"
-                type="number"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-                value={reminder}
-                onChange={(e) => setReminder(e.target.value)}
-                InputProps={{
-                    endAdornment: (
-                    <Select defaultValue="minutes-ago">
-                        <MenuItem value="minutes-ago">Minutes ago</MenuItem>
-                        <MenuItem value="hours-ago">Hours ago</MenuItem>
-                    </Select>
-                    ),
-                }}
+                  label="End date"
+                  type="date"
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mb: 2 }}
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
                 />
-                <TextField
-                label="End date"
-                type="date"
-                fullWidth
-                variant="outlined"
-                sx={{ mb: 2 }}
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                />
-            </>
+              </>
             )}
-        </Box>
-        )}
 
+
+          </Box>
+        )}
 
         {/* Step 3 */}
         {step === 3 && (
-          <Box>
-            <Box sx={{ backgroundColor: '#f0f0f0', p: 2, mb: 2 }}>
+          <Box sx={{ paddingRight: 0, background: '#f5f5f5', padding: 2 }}>
+            <Typography variant="body2">
+              <strong>Title:</strong> {title}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Description:</strong> {description}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Frequency:</strong> {frequency}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Duration:</strong> {duration} minutes
+            </Typography>
+            {frequency === 'weekly' && (
               <Typography variant="body2">
-                Time: {new Date().toLocaleDateString()}
+                <strong>Days:</strong> {selectedDays.length > 0 ? selectedDays.join(', ') : 'None'}
               </Typography>
+            )}
+            {frequency === 'monthly' && (
               <Typography variant="body2">
-                Reminder {reminder} minutes in advance
+                <strong>Note Dates:</strong> {noteDates.length > 0 ? noteDates.join(', ') : 'None'}
               </Typography>
-              <Typography variant="body2">
-                5 minutes notice at {time}
-              </Typography>
-              <Typography variant="body2">
-                Until {endDate || 'No end date set'}
-              </Typography>
-            </Box>
+            )}
+            <Typography variant="body2">
+              <strong>Time:</strong> {time}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Reminder:</strong> {reminder} minutes ago
+            </Typography>
+            <Typography variant="body2">
+              <strong>End Date:</strong> {endDate}
+            </Typography>
+          </Box>
+        )}
 
-            {/* Google Sign-in */}
+        {/* Navigation buttons */}
+        <Box display="flex" justifyContent="space-between" sx={{ mt: 2 }}>
+          <Button onClick={handlePrevious} disabled={step === 1}>
+            <ArrowBackIosIcon />
+            Back
+          </Button>
+          {step < 3 ? (
+            <Button onClick={handleNext}>
+              Next
+              <ArrowForwardIosIcon />
+            </Button>
+          ) : (
             <Button
               variant="outlined"
               startIcon={<GoogleIcon />}
-              sx={{ width: '100%', mb: 2 }}
+              sx={{ width: '50%', mb: 2, background: '#f44336', color: '#fff' }}
             >
               Sign in with Google
             </Button>
-          </Box>
-        )}
+          )}
+        </Box>
       </DialogContent>
-
-      {/* Navigation Buttons */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}>
-        <Button
-          startIcon={<ArrowBackIosIcon />}
-          onClick={handlePrevious}
-          disabled={step === 1}
-        >
-          Previous
-        </Button>
-        <Button
-          endIcon={<ArrowForwardIosIcon />}
-          onClick={handleNext}
-          disabled={step === 3} // Adjust for final step
-        >
-          Next
-        </Button>
-      </Box>
     </Dialog>
   );
 };
