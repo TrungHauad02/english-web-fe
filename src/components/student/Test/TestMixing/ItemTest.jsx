@@ -8,6 +8,7 @@
     import Grammar from './Grammar';
     import Reading from './Reading';
     import Listening from './Listening';
+    import Writing from './Writing';
     import SerialGrid from './SerialGrid/SerialGrid';
 
 
@@ -45,9 +46,20 @@
             serialsForCurrentTitle.push(question.serial);
         });
         });
+        
        
         TitleAndSerials.serials.push(serialsForCurrentTitle);
     }
+     if (data.title === "Writing"
+  
+        ) {
+          TitleAndSerials.title.push(data.title);
+
+          const serialsForCurrentTitle = [];
+          serialsForCurrentTitle.push(data.dataitem[0].serial)
+          TitleAndSerials.serials.push(serialsForCurrentTitle);
+        }
+        
     });
       return TitleAndSerials; 
   };
@@ -103,7 +115,20 @@
               return selectedAnswer === correctAnswer.content ? 1 : 0; 
             });
           });
-        } else {
+        } else  if (data.title === "Writing"
+       ) {
+   
+            const selectedAnswer = selectedAnswers[data.dataitem[0].id].essay;
+
+            
+             if(selectedAnswer===undefined || selectedAnswer==='')
+            { 
+              return [-1]; 
+            }
+            return [0];
+
+       }
+       else {
           return [];
         }
       });
@@ -134,15 +159,8 @@
       localStorage.removeItem('selectedAnswers' + title);
       setSelectedAnswers([]);
       setStatus('Testing');
-  
       setRenderKey(renderKey + 1);
   };
-
-
-   
-  
-  
-  
     const handlebtnSubmit = () => {
       setStatus('Submit');
       const savedAnswers = localStorage.getItem('selectedAnswers'+title);
@@ -156,8 +174,6 @@
           const correctAnswer = question.options.find(option => option.isCorrect);
           if (correctAnswer && selectedAnswers[question.id] === correctAnswer.content) {
             temscore += 1;
-          
-            
           }
         });
       });
@@ -165,9 +181,6 @@
 
       
     };
-
-
-    
 
     return (
     
@@ -194,9 +207,10 @@
         {activeTab === 1 && <Grammar key= {renderKey}  status={status} dataTest={DataTestMixing[activeTab]}onAnswerChange = {handleAnswerChange}  focusId={focusId} title= {title}   />}
         {activeTab === 2 && <Reading key= {renderKey}  status={status} dataTest={DataTestMixing[activeTab]} onAnswerChange = {handleAnswerChange}  focusId={focusId} title= {title}   />}
         {activeTab === 3 && <Listening key= {renderKey}  status={status} dataTest={DataTestMixing[activeTab]} onAnswerChange = {handleAnswerChange}  focusId={focusId} title= {title}   />}
+        {activeTab === 4 && <Writing key= {renderKey}  status={status} dataTest={DataTestMixing[activeTab]} onAnswerChange = {handleAnswerChange}  focusId={focusId} title= {title}   />}
         </Box>
         <Box sx={{width:'25%'}}>
-        <SerialGrid  title={DataTestMixing[activeTab].title} TitleAndSerials = {getListSerialTest()} gridData= {gridData} onItemClick={onItemClick} 
+        <SerialGrid  title={DataTestMixing[activeTab].title} TitleAndSerials = {TitleAndSerials} gridData= {gridData} onItemClick={onItemClick} 
         status = {status} handlebtnSubmit ={handlebtnSubmit} 
         onClickTestAgain={onClickTestAgain} 
         score ={score}
