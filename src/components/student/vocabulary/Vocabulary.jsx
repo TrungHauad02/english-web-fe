@@ -1,5 +1,5 @@
 // import MainPicture from "../common/MainPicture";
-import MatchImageWithWord from "./MatchImageWithWord/MatchImageWithWord";
+import MatchImageWithWord from "./matchImageWithWord/MatchImageWithWord";
 import listVocab from "./ListVocab";
 import Introduction from "./introduction/Introduction";
 import ListFlashcard from "./listFlashcard/ListFlashcard";
@@ -19,7 +19,7 @@ function Vocabulary({ topic }) {
       <MatchImageWithWord list={listVocab} />
       <Introduction title={topic.title} />
       <ListFlashcard list={listVocab} />
-      <AnswerQuestion listQuestion={listQuestion}/>
+      <AnswerQuestion listQuestion={listQuestion} />
     </>
   );
 }

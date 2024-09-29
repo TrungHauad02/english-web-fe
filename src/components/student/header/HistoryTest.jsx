@@ -1,46 +1,80 @@
-import React, { useState } from 'react';
-import { TextField, Box, Grid, Typography, Card, Button, IconButton, MenuItem } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { styled } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import MainPicture from '../common/listTopic/MainPicture';
+import React, { useState } from "react";
+import {
+  TextField,
+  Box,
+  Grid,
+  Typography,
+  Card,
+  Button,
+  IconButton,
+  MenuItem,
+} from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { styled } from "@mui/material/styles";
+import SearchIcon from "@mui/icons-material/Search";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import MainPicture from "../common/listTopic/MainPicture";
 
 const Dropdown = styled(TextField)({
   minWidth: 120,
 });
 
 const CardStyled = styled(Card)({
-  backgroundColor: '#f5f5f5',
-  padding: '10px',
-  marginBottom: '10px',
+  backgroundColor: "#f5f5f5",
+  padding: "10px",
+  marginBottom: "10px",
 });
 
 const DetailsButton = styled(Button)({
-  textDecoration: 'underline',
+  textDecoration: "underline",
 });
 
 const ScrollContainer = styled(Box)({
-  maxHeight: '300px',
-  overflowY: 'auto',
-  border: '1px solid #ccc',
-  padding: '10px',
-  marginTop: '20px',
+  maxHeight: "300px",
+  overflowY: "auto",
+  border: "1px solid #ccc",
+  padding: "10px",
+  marginTop: "20px",
 });
 
 const tests = [
-  { name: 'Reading Test 1', date: '12/2/2024, 12:20', time: '12 minutes', score: '80/100' },
-  { name: 'Speaking Test 1', date: '12/2/2024, 12:20', time: '12 minutes', score: '60/100' },
-  { name: 'Writing Test 1', date: '12/2/2024, 12:20', time: '12 minutes', score: '70/100' },
-  { name: 'Writing Test 2', date: '12/3/2024, 14:30', time: '10 minutes', score: '75/100' },
-  { name: 'Writing Test 3', date: '12/4/2024, 16:00', time: '15 minutes', score: '65/100' },
+  {
+    name: "Reading Test 1",
+    date: "12/2/2024, 12:20",
+    time: "12 minutes",
+    score: "80/100",
+  },
+  {
+    name: "Speaking Test 1",
+    date: "12/2/2024, 12:20",
+    time: "12 minutes",
+    score: "60/100",
+  },
+  {
+    name: "Writing Test 1",
+    date: "12/2/2024, 12:20",
+    time: "12 minutes",
+    score: "70/100",
+  },
+  {
+    name: "Writing Test 2",
+    date: "12/3/2024, 14:30",
+    time: "10 minutes",
+    score: "75/100",
+  },
+  {
+    name: "Writing Test 3",
+    date: "12/4/2024, 16:00",
+    time: "15 minutes",
+    score: "65/100",
+  },
 ];
 
 const HistoryTest = () => {
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState("All");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -64,7 +98,7 @@ const HistoryTest = () => {
 
   return (
     <>
-      <MainPicture src={"/bg_history_test.png"} title={"History Test"}/>
+      <MainPicture src={"/bg_history_test.png"} title={"History Test"} />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Box p={3} mx={"auto"}>
           <Grid container spacing={2} mb={2}>
@@ -83,7 +117,13 @@ const HistoryTest = () => {
               />
             </Grid>
           </Grid>
-          <Grid container spacing={2} mb={2} alignItems="center" justifyContent="center">
+          <Grid
+            container
+            spacing={2}
+            mb={2}
+            alignItems="center"
+            justifyContent="center"
+          >
             {/* Filter dropdown */}
             <Grid item xs={12} sm={3}>
               <Dropdown
@@ -159,7 +199,11 @@ const HistoryTest = () => {
               <Box key={index} mb={2}>
                 <Typography variant="h6">{test.name}</Typography>
                 <CardStyled variant="outlined">
-                  <Grid container justifyContent="space-between" alignItems="center">
+                  <Grid
+                    container
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
                     <Grid item>
                       <Typography>Date: {test.date}</Typography>
                       <Typography>Time: {test.time}</Typography>

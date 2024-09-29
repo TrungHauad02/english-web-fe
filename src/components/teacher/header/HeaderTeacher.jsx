@@ -5,12 +5,10 @@ import HeaderTypography from "../../common/header/HeaderTypography";
 import SkillMenu from "./SkillMenu";
 import Profile from "./Profile";
 
-function HeaderStudent() {
+function HeaderTeacher() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
-  const [openHistoryTest, setOpenHistoryTest] = useState(false);
-  const [openStudySchedule, setOpenStudySchedule] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,18 +47,6 @@ function HeaderStudent() {
 
   const handleProfileClose = () => {
     setOpenProfileDialog(false);
-  };
-
-  const handleHistoryTestOpen = () => {
-    setOpenHistoryTest(true);
-    navigate("/student/history-test");
-    handleMenuClose();
-  };
-
-  const handleStudyScheduleOpen = () => {
-    setOpenStudySchedule(true);
-    navigate("/student/study-schedule");
-    handleMenuClose();
   };
 
   return (
@@ -213,24 +199,6 @@ function HeaderStudent() {
                 Profile
               </MenuItem>
               <MenuItem
-                onClick={handleStudyScheduleOpen}
-                sx={{
-                  borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-                  color: "white",
-                }}
-              >
-                Study Schedule
-              </MenuItem>
-              <MenuItem
-                onClick={handleHistoryTestOpen}
-                sx={{
-                  borderBottom: "3px solid #ffff",
-                  color: "white",
-                }}
-              >
-                History Test
-              </MenuItem>
-              <MenuItem
                 onClick={handleLogout}
                 sx={{
                   color: "red",
@@ -270,4 +238,4 @@ function HeaderStudent() {
   );
 }
 
-export default HeaderStudent;
+export default HeaderTeacher;
