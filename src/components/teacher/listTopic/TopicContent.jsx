@@ -1,8 +1,10 @@
 import { Button, CardMedia, Grid2, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-export default function TopicContent({ topic }) {
+export default function TopicContent({ topic, path }) {
+  const navigate = useNavigate();
   function handleDetailsClick() {
-    console.log("Details clicked: ", topic.id);
+    navigate(`/${path}/${topic.id}`);
   }
   return (
     <Grid2 container alignItems={"center"}>

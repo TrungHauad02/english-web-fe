@@ -55,7 +55,7 @@ export default function TopicList({ listTopic, title }) {
         </Grid2>
         {displayList.map((topic) => (
           <>
-            <TopicContent key={topic.id} topic={topic} />
+            <TopicContent key={topic.id} topic={topic} path={title} />
             <Divider />
           </>
         ))}
