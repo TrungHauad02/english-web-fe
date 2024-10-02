@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Divider, IconButton, InputAdornment, Link } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google'; 
+import GoogleIcon from '@mui/icons-material/Google';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
@@ -20,11 +20,17 @@ const SignIn = ({ toggleForm, onLogin }) => { // Đảm bảo onLogin được t
   const handleSignIn = () => {
     // Kiểm tra thông tin đăng nhập
     if (email === 'web@gmail.com' && password === '123') {
-        localStorage.setItem('isSignIn', 'true');
-        navigate('/student'); 
-        window.location.reload(); 
+      localStorage.setItem('isSignIn', 'true');
+      navigate('/student');
+      window.location.reload();
+      
+    }
+    if (email === 'admin@gmail.com' && password === '123') {
+      localStorage.setItem('isSignIn', 'true');
+      navigate('/admin/teacher');
+      window.location.reload();
     } else {
-        setError('Incorrect email or password');
+      setError('Incorrect email or password');
     }
   };
 

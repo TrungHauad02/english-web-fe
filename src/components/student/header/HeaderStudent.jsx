@@ -109,10 +109,10 @@ function HeaderStudent() {
             "&:hover": {
               backgroundColor: "rgba(255, 255, 255, 0.2)",
             },
-            "&.active": {
-              backgroundColor: "white",
-              color: "black",
-            },
+            // "&.active": {
+            //   backgroundColor: "white",
+            //   color: "black",
+            // },
           }}
         >
           <HeaderTypography>Home</HeaderTypography>

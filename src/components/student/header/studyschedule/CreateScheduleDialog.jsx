@@ -102,6 +102,23 @@ const CreateScheduleDialog = ({ open, onClose }) => {
 
             {frequency === 'weekly' && (
               <>
+                <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
+                  <InputLabel id="week-day-label">Select Days</InputLabel>
+                  <Select
+                    labelId="week-day-label"
+                    id="week-day-select"
+                    multiple
+                    value={selectedDays}
+                    onChange={(e) => setSelectedDays(e.target.value)}
+                    input={<OutlinedInput label="Select Days" />}
+                  >
+                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
+                      <MenuItem key={day} value={day}>
+                        {day}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
                 <TextField
                   label="Duration"
                   type="number"
@@ -146,6 +163,7 @@ const CreateScheduleDialog = ({ open, onClose }) => {
                 />
               </>
             )}
+
 
             {frequency === 'daily' && (
               <>
