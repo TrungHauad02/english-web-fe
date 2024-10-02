@@ -3,6 +3,7 @@ import { getTopicDetail } from "../../../../api/teacher/detailManagerment";
 import { Grid2 } from "@mui/material";
 import TopicInfo from "./TopicInfo";
 import AnswerQuestionManagerment from "../common/answerquestion/AnswerQuestionManagerment";
+import VocabularyManagerment from "./vocabulary/VocabularyManagerment";
 
 export default function TopicDetail({ path }) {
   const { id } = useParams();
@@ -11,7 +12,7 @@ export default function TopicDetail({ path }) {
     <Grid2
       container
       direction={"column"}
-      spacing={2}
+      spacing={4}
       sx={{ margin: "2rem 1% 2rem 2%" }}
     >
       <Grid2 container direction={"row"}>
@@ -45,7 +46,9 @@ export default function TopicDetail({ path }) {
           <AnswerQuestionManagerment />
         </Grid2>
       </Grid2>
-      <Grid2 item direction={"row"}></Grid2>
+      <Grid2 item direction={"row"}>
+        <VocabularyManagerment />
+      </Grid2>
     </Grid2>
   );
 }

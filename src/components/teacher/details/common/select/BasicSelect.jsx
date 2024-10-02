@@ -4,7 +4,14 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Stack, Typography } from "@mui/material";
 
-export default function BasicSelect({ value, onChange, label, options }) {
+export default function BasicSelect({
+  value,
+  onChange,
+  label,
+  options,
+  sx,
+  disabled,
+}) {
   return (
     <Stack spacing={1}>
       <Typography
@@ -21,6 +28,8 @@ export default function BasicSelect({ value, onChange, label, options }) {
           id="demo-simple-select"
           value={value}
           onChange={onChange}
+          disabled={disabled}
+          sx={sx}
         >
           {options.map((option) => (
             <MenuItem key={option} value={option}>

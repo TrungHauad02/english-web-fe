@@ -1,5 +1,5 @@
 import { Button, Grid2, Stack, Typography } from "@mui/material";
-import SearchBar from "./SearchBar";
+import SearchBar from "../common/searchbar/SearchBar";
 import TopicContent from "./TopicContent";
 import Divider from "@mui/material/Divider";
 import { useState } from "react";

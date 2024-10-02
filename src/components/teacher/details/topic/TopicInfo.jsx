@@ -21,19 +21,19 @@ export default function TopicInfo({ data, path }) {
   const [topic, setTopic] = useState(data);
 
   const onChangeTitle = (e) => {
-    setTopic({ ...topic, ["title"]: e.target.value });
+    setTopic({ ...topic, title: e.target.value });
   };
   const onChangeSerial = (e) => {
     if (e.target.value <= 0) return;
-    setTopic({ ...topic, ["serial"]: e.target.value });
+    setTopic({ ...topic, serial: e.target.value });
   };
 
   const onChangeStatus = (e) => {
-    setTopic({ ...topic, ["status"]: e.target.value });
+    setTopic({ ...topic, status: e.target.value });
   };
 
   const onChangeDescription = (e) => {
-    setTopic({ ...topic, ["description"]: e.target.value });
+    setTopic({ ...topic, description: e.target.value });
   };
 
   const onChangeImage = (e) => {
