@@ -5,10 +5,12 @@ export default function BasicTextField({
   value,
   onChange,
   type,
-  sx = { color: "#828282" },
+  sx,
+  disabled,
 }) {
   const combinedSx = {
     ...sx,
+    color: "#828282",
   };
   return (
     <Stack direction={"column"} spacing={1}>
@@ -27,6 +29,7 @@ export default function BasicTextField({
         type={type}
         variant="outlined"
         fullWidth
+        disabled={disabled}
       />
     </Stack>
   );

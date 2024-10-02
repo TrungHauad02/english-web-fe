@@ -2,7 +2,6 @@ import { Button, Stack, Typography } from "@mui/material";
 import Question from "./Question";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Save } from "@mui/icons-material";
 import SaveButton from "../button/SaveButton";
 
 export default function AnswerQuestionManagerment() {
@@ -90,7 +89,6 @@ export default function AnswerQuestionManagerment() {
           backgroundColor: "#FFF4CC",
           padding: "0.5rem 0",
           zIndex: 3,
-          padding: "1rem",
           boxShadow: "0 0 0.5rem 0.1rem #00000050",
         }}
       >

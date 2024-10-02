@@ -4,9 +4,15 @@ export default function MultiLineTextField({
   label,
   value,
   onChange,
+  disabled,
   type,
-  sx = { color: "#828282" },
+  sx,
+  rows = 3,
 }) {
+  const complexSx = {
+    ...sx,
+    color: "#828282",
+  };
   return (
     <Stack direction={"column"} spacing={1}>
       <Typography
@@ -20,12 +26,13 @@ export default function MultiLineTextField({
       <TextField
         value={value}
         onChange={onChange}
-        sx={sx}
+        sx={complexSx}
         type={type}
         variant="outlined"
         fullWidth
         multiline
-        rows={3}
+        disabled={disabled}
+        rows={rows}
       />
     </Stack>
   );

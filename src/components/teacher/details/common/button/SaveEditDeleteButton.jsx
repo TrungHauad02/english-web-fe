@@ -7,12 +7,13 @@ export default function SaveEditDeleteButton({
   onsave,
   showText,
   size,
+  spacing = 1,
 }) {
   return (
     <Grid2
       container
       direction="row"
-      spacing={1}
+      spacing={spacing}
       justifyContent="space-evenly"
       alignItems="center"
     >

@@ -187,7 +187,7 @@ export default function Question({ data, onDelQuestion }) {
               >
                 <CustomTextField
                   value={answer.content}
-                  minWidth={"26rem"}
+                  minWidth={"25rem"}
                   disabled={!isEditing}
                   onChange={(e) => onChangeAnswerContent(e, index)}
                 />
