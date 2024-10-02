@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function TopicContent({ topic, path }) {
   const navigate = useNavigate();
   function handleDetailsClick() {
-    navigate(`/${path}/${topic.id}`);
+    navigate(`/teacher/${path}/${topic.id}`);
   }
   return (
     <Grid2 container alignItems={"center"}>

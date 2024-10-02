@@ -100,7 +100,7 @@ export default function AnswerQuestionManagerment() {
         >
           Answer Question
         </Typography>
-        <Stack direction={"row"} spacing={2}>
+        <Stack direction={"row"} spacing={2} sx={{ paddingX: "1rem" }}>
           <SaveButton showText={true} size={"large"} />
           <Button
             variant="contained"

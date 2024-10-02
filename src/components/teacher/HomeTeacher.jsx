@@ -10,7 +10,7 @@ import ListeningDetail from "./details/listening/ListeningDetail";
 import WritingDetail from "./details/writing/WritingDetail";
 import SpeakingDetail from "./details/speaking/SpeakingDetail";
 import Mixing from "./test/Mixing/Mixing";
-import HomeTest from "./test/HomeTest"
+import HomeTest from "./test/HomeTest";
 
 export default function HomeTeacher() {
   const sites = [
