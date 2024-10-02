@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Button, Typography, AppBar, Toolbar, Stack } from "@mui/material";
-import { ArrowBack, ArrowForward, Download  } from "@mui/icons-material";
-import 'react-pdf/dist/esm/Page/TextLayer.css';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
+import { ArrowBack, ArrowForward, Download } from "@mui/icons-material";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import { he } from "date-fns/locale";
 
 // Set up the PDF worker.
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -11,9 +12,17 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-const PDFViewer = ({ file, title }) => {
+const PDFViewer = ({ file, title, height = "100%" }) => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+
+  const complexSx = {
+    height: "100%",
+    overflow: "auto",
+    margin: "1rem",
+    maxWidth: "100%",
+    border: "1px solid #D9D9D9",
+  };
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
@@ -25,18 +34,9 @@ const PDFViewer = ({ file, title }) => {
     setPageNumber(pageNumber + 1 >= numPages ? numPages : pageNumber + 1);
 
   return (
-    <Stack
-      spacing={1}
-      sx={{
-        height: "100%",
-        margin: "1rem",
-        maxWidth: "50%",
-        overflow: "hidden",
-        border: "1px solid #D9D9D9",
-      }}
-    >
+    <Stack spacing={1} sx={complexSx}>
       <AppBar position="static" sx={{ width: "100%", background: "#D9D9D9" }}>
-        <Toolbar sx={{justifyContent:"space-between"}}>
+        <Toolbar sx={{ justifyContent: "space-between" }}>
           <Typography variant="h6" sx={{ color: "#000", fontWeight: "bold" }}>
             {title}
           </Typography>
@@ -51,14 +51,14 @@ const PDFViewer = ({ file, title }) => {
               color: "#000",
               paddingLeft: "1rem",
             }}
-          > 
-          </Button>
+          ></Button>
         </Toolbar>
       </AppBar>
       <Stack
         direction="column"
         sx={{
-          overflow: "hidden",
+          height: { height },
+          overflow: "auto",
           justifyContent: "center",
           alignItems: "center",
         }}

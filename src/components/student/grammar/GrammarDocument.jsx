@@ -7,7 +7,9 @@ function GrammarDocument({ file, title }) {
       <Typography variant="h6" sx={{ fontSize: "1.5rem", fontWeight: "bold" }}>
         {title} document
       </Typography>
-      <PDFViewer file={file} title={title} />
+      <Stack sx={{ width: "60%" }}>
+        <PDFViewer file={file} title={title} />
+      </Stack>
     </Stack>
   );
 }
