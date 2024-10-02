@@ -46,11 +46,7 @@ const Grammar = {
       options: [
         { id: "as1", content: "Readings and quizzes", isCorrect: true },
         { id: "as2", content: "Videos and interviews", isCorrect: false },
-        {
-          id: "as3",
-          content: "Group projects and exams",
-          isCorrect: false,
-        },
+        { id: "as3", content: "Group projects and exams", isCorrect: false },
         {
           id: "as19",
           content: "Lab experiments and presentations",
