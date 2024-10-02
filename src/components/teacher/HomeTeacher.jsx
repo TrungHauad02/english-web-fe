@@ -10,7 +10,7 @@ import ListeningDetail from "./details/listening/ListeningDetail";
 import WritingDetail from "./details/writing/WritingDetail";
 import SpeakingDetail from "./details/speaking/SpeakingDetail";
 
-export default function HomeTeacher() {
+export default function HomeTeacher() { 
   const sites = [
     {
       path: "topic",
