@@ -3,7 +3,6 @@ import { getReadingDetail } from "../../../../api/teacher/detailManagerment";
 import { Grid2 } from "@mui/material";
 import ReadingInfo from "./ReadingInfo";
 import AnswerQuestionManagerment from "../common/answerquestion/AnswerQuestionManagerment";
-import PDFViewer from "../../../common/pdfViewer/PDFViewer";
 import { useState } from "react";
 import MarkedViewer from "../../../common/markedViewer/MarkedViewer";
 

@@ -96,3 +96,32 @@ export function getReadingDetail(id) {
   };
   return data[id];
 }
+export function getListeningDetail(id) {
+  const data = {
+    1: {
+      id: "1",
+      serial: 1,
+      description: "Listening Description 1",
+      title: "Listening Detail 1",
+      img: "/environment.png",
+      status: "active",
+    },
+    2: {
+      id: "2",
+      serial: 2,
+      description: "Listening Description 2",
+      title: "Listening Detail 2",
+      img: "/environment.png",
+      status: "active",
+    },
+    3: {
+      id: "3",
+      serial: 3,
+      description: "Listening Description 3",
+      title: "Listening Detail 3",
+      img: "/environment.png",
+      status: "inactive",
+    },
+  };
+  return data[id];
+}
