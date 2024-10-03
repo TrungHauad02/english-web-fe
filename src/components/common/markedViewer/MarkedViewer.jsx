@@ -1,8 +1,9 @@
-import { Box } from "@mui/material";
+import { Download } from "@mui/icons-material";
+import { AppBar, Box, Button, Toolbar } from "@mui/material";
 import { marked } from "marked";
 import { useEffect, useState } from "react";
 
-export default function MarkedViewer({ path }) {
+export default function MarkedViewer({ path, displayAppBar }) {
   const [data, setData] = useState("");
 
   useEffect(() => {
@@ -17,8 +18,32 @@ export default function MarkedViewer({ path }) {
   }, [path]);
 
   return (
-    <Box sx={{ margin: "1rem" }}>
-      <article dangerouslySetInnerHTML={{ __html: data }} />
+    <Box sx={{ margin: "1rem", width: "100%" }}>
+      {displayAppBar && (
+        <AppBar
+          position="static"
+          sx={{ width: "100%", background: "#D9D9D9", marginBottom: "1rem" }}
+        >
+          <Toolbar sx={{ justifyContent: "flex-end" }}>
+            <Button
+              variant="text"
+              color="primary"
+              startIcon={<Download />}
+              component="a"
+              href={path}
+              download
+              sx={{
+                color: "#000",
+                paddingLeft: "1rem",
+              }}
+            ></Button>
+          </Toolbar>
+        </AppBar>
+      )}
+      <article
+        style={{ padding: "1rem", fontSize: "1.25rem" }}
+        dangerouslySetInnerHTML={{ __html: data }}
+      />
     </Box>
   );
 }
