@@ -12,7 +12,7 @@ import SpeakingDetail from "./details/speaking/SpeakingDetail";
 import Mixing from "./test/Mixing/Mixing";
 import HomeTest from "./test/HomeTest";
 
-export default function HomeTeacher() { 
+export default function HomeTeacher() {
   const sites = [
     {
       path: "topic",
@@ -52,7 +52,12 @@ export default function HomeTeacher() {
     <Stack
       direction="column"
       justifyContent="space-between"
-      sx={{ height: "100%", pt: "4rem", marginBottom: "-5px" }}
+      sx={{
+        height: "100%",
+        pt: "4rem",
+        marginBottom: "-5px",
+        minHeight: "90vh",
+      }}
     >
       <HeaderTeacher />
       <Routes>

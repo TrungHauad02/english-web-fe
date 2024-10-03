@@ -1,3 +1,5 @@
+import { duration } from "@mui/material";
+
 export function getGrammarDetail(id) {
   const data = {
     1: {
@@ -122,6 +124,80 @@ export function getListeningDetail(id) {
       img: "/environment.png",
       status: "inactive",
     },
+  };
+  return data[id];
+}
+
+export function getSpeakingDetail(id) {
+  const data = {
+    1: {
+      id: "1",
+      serial: 1,
+      description: "Speaking Description 1",
+      title: "Speaking Detail 1",
+      topic: "Speaking Topic 1",
+      duration: "200",
+      img: "/environment.png",
+      status: "active",
+    },
+    2: {
+      id: "2",
+      serial: 2,
+      description: "Speaking Description 2",
+      title: "Speaking Detail 2",
+      topic: "Speaking Topic 1",
+      duration: "400",
+      img: "/environment.png",
+      status: "active",
+    },
+    3: {
+      id: "3",
+      serial: 3,
+      description: "Speaking Description 3",
+      title: "Speaking Detail 3",
+      topic: "Speaking Topic 1",
+      duration: "300",
+      img: "/environment.png",
+      status: "inactive",
+    },
+  };
+  return data[id];
+}
+
+export function getConversationDetail(id) {
+  const data = {
+    1: [
+      {
+        id: "1",
+        serial: 1,
+        name: "John",
+        content: "Hello",
+      },
+      {
+        id: "2",
+        serial: 2,
+        name: "Dutch",
+        content: "Hi",
+      },
+      {
+        id: "3",
+        serial: 3,
+        name: "Mica",
+        content: "How are you?",
+      },
+      {
+        id: "4",
+        serial: 4,
+        name: "Jenny",
+        content: "I'm fine",
+      },
+      {
+        id: "5",
+        serial: 5,
+        name: "Linda",
+        content: "Goodbye",
+      },
+    ],
   };
   return data[id];
 }

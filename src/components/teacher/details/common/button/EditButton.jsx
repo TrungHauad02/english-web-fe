@@ -1,7 +1,7 @@
-import { Delete } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import { Button, Grid2 } from "@mui/material";
 
-export default function DeleteButton({ ondel, showText, size, disabled }) {
+export default function EditButton({ onedit, showText, size }) {
   return (
     <Grid2
       container
@@ -12,13 +12,12 @@ export default function DeleteButton({ ondel, showText, size, disabled }) {
     >
       <Grid2 item>
         <Button
-          onClick={ondel}
-          disabled={disabled}
+          onClick={onedit}
           variant="contained"
           size={size}
-          sx={{ backgroundColor: "#FF6655", color: "#000" }}
+          sx={{ backgroundColor: "#FFD014", color: "#000" }}
         >
-          {showText ? "Delete" : <Delete />}
+          {showText ? "Edit" : <Edit />}
         </Button>
       </Grid2>
     </Grid2>
