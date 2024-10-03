@@ -69,11 +69,11 @@ export default function ListenAndWriteWord({ questions }) {
           <SoundViewer audioSrc={curQuestion.audioSrc} />
           <Typography variant="h6" component={"p"} sx={{ marginTop: "1rem" }}>
             Question {curSerial}:{" "}
-            {curQuestion.question.content.split("$$$").map((part, index) => (
+            {curQuestion.question.content.split("___").map((part, index) => (
               <span key={index}>
                 {part}
                 {index <
-                  curQuestion.question.content.split("$$$").length - 1 && (
+                  curQuestion.question.content.split("___").length - 1 && (
                   <TextField
                     id="standard-basic"
                     variant="standard"

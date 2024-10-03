@@ -6,7 +6,7 @@ export const listListeningWriteWord = [
     serial: 1,
     question: {
       id: "qs1",
-      content: "This is the $$$ question",
+      content: "This is the ___ question",
       explaination: "This is the explaination",
       answer: "content",
     },
@@ -18,7 +18,7 @@ export const listListeningWriteWord = [
     serial: 2,
     question: {
       id: "qs2",
-      content: "This is the $$$ question",
+      content: "This is the ___ question",
       explaination: "This is the explaination",
       answer: "content",
     },
@@ -30,7 +30,7 @@ export const listListeningWriteWord = [
     serial: 3,
     question: {
       id: "qs3",
-      content: "This is the $$$ question",
+      content: "This is the ___ question",
       explaination: "This is the explaination",
       answer: "content",
     },
@@ -42,7 +42,7 @@ export const listListeningWriteWord = [
     serial: 4,
     question: {
       id: "qs4",
-      content: "This is the $$$ question",
+      content: "This is the ___ question",
       explaination: "This is the explaination",
       answer: "content",
     },

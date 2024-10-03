@@ -1,10 +1,30 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Grid2, Stack, Typography } from "@mui/material";
 import Question from "./Question";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import SaveButton from "../button/SaveButton";
+import { styled } from "@mui/material/styles";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import SoundViewer from "../../../../common/soundViewer/SoundViewer";
+import { Grid } from "lucide-react";
 
-export default function AnswerQuestionManagerment() {
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
+
+export default function AnswerQuestionManagerment({
+  isListening,
+  file,
+  onChangeFile,
+}) {
   const fakeData = [
     {
       id: "1",
@@ -112,6 +132,39 @@ export default function AnswerQuestionManagerment() {
         </Stack>
       </Stack>
       <Stack sx={{ padding: "1rem" }}>
+        {isListening && (
+          <Grid2 container direction={"row"} alignItems="center" spacing={1}>
+            <Grid2 item size={2}>
+              <Typography variant="h6">Audio file:</Typography>
+            </Grid2>
+            <Grid2 item size={8}>
+              <SoundViewer audioSrc={file} />
+            </Grid2>
+            <Grid2 item size={2}>
+              <Button
+                component="label"
+                role={undefined}
+                variant="text"
+                sx={{
+                  color: "#000",
+                  backgroundColor: "#D7ED6D",
+                  width: "fit-content",
+                  padding: "0.5rem 2rem",
+                }}
+                tabIndex={-1}
+                startIcon={<CloudUploadIcon />}
+              >
+                Upload file
+                <VisuallyHiddenInput
+                  type="file"
+                  multiple
+                  accept="audio/*"
+                  onChange={onChangeFile}
+                />
+              </Button>
+            </Grid2>
+          </Grid2>
+        )}
         {data.map((question) => (
           <Question
             key={question.id}
