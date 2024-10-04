@@ -118,7 +118,9 @@
         } else  if (data.title === "Writing"
        ) {
    
-            const selectedAnswer = selectedAnswers[data.dataitem[0].id].essay;
+            const selectedAnswer = selectedAnswers[data.dataitem[0].id];
+            console.log(selectedAnswer);
+            
 
             
              if(selectedAnswer===undefined || selectedAnswer==='')
