@@ -12,19 +12,19 @@ export default function TopicDetail({ path }) {
     <Grid2
       container
       direction={"column"}
-      spacing={4}
-      sx={{ margin: "2rem 1% 2rem 2%" }}
+      spacing={2}
+      sx={{ margin: "2rem 4% 2rem 4%" }}
     >
-      <Grid2 container direction={"row"}>
-        <Grid2 container size={5} direction={"column"}>
+      <Grid2 container direction={"row"} justifyContent={"space-between"}>
+        <Grid2 container direction={"column"}>
           <TopicInfo data={data} path={path} />
         </Grid2>
         <Grid2
           item
-          size={7}
           borderRadius={"0.5rem"}
           backgroundColor={"#FFF4CC"}
           boxShadow={"0 0 0.5rem 0.1rem #00000040"}
+          width={"60%"}
           sx={{
             maxHeight: "500px",
             overflowY: "auto",

@@ -74,7 +74,12 @@ const PDFViewer = ({ file, title, height = "100%" }) => {
       <Stack
         direction="row"
         spacing={2}
-        sx={{ justifyContent: "center", mb: 2, paddingBottom: "1rem" }}
+        sx={{
+          justifyContent: "center",
+          mb: 2,
+          paddingBottom: "1rem",
+          alignItems: "center",
+        }}
       >
         <Button
           variant="contained"
@@ -82,11 +87,12 @@ const PDFViewer = ({ file, title, height = "100%" }) => {
           startIcon={<ArrowBack />}
           onClick={goToPrevPage}
           disabled={pageNumber <= 1}
+          size="small"
         >
           Prev
         </Button>
-        <Typography variant="h6" component="span">
-          Page {pageNumber} of {numPages}
+        <Typography variant="body" component="span" fontSize={"1.25rem"}>
+          {pageNumber} / {numPages}
         </Typography>
         <Button
           variant="contained"
@@ -94,6 +100,7 @@ const PDFViewer = ({ file, title, height = "100%" }) => {
           endIcon={<ArrowForward />}
           onClick={goToNextPage}
           disabled={pageNumber >= numPages}
+          size="small"
         >
           Next
         </Button>

@@ -46,7 +46,7 @@ export default function WriteAWordManagerment() {
           position: "sticky",
           top: 0,
           backgroundColor: "#FFF4CC",
-          padding: "0.5rem 0",
+          padding: "1rem 0",
           zIndex: 3,
           boxShadow: "0 0 0.5rem 0.1rem #00000050",
         }}

@@ -22,7 +22,8 @@ export default function ConfirmDialog({
       aria-describedby="confirm-dialog-description"
       sx={{
         "& .MuiDialog-paper": {
-          backgroundColor: "#C8DD66",
+          backgroundColor: "#fff",
+          boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
           textAlign: "center",
           padding: "1rem",
         },
@@ -37,7 +38,8 @@ export default function ConfirmDialog({
           <Button
             onClick={onClose}
             sx={{
-              backgroundColor: "#F0FAC1",
+              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              backgroundColor: "#D9D9D9",
               color: "#000000",
             }}
           >
@@ -48,8 +50,9 @@ export default function ConfirmDialog({
           <Button
             onClick={onAgree}
             sx={{
-              backgroundColor: "#ACCD0A",
-              color: "#FFFFFF",
+              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              backgroundColor: "#0ee870",
+              color: "#000",
             }}
           >
             {agreeText}

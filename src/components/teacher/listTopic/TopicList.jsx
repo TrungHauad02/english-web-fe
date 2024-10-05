@@ -16,8 +16,8 @@ export default function TopicList({ listTopic, title }) {
 
   return (
     <Stack direction={"column"} spacing={4} sx={{ marginY: "2rem" }}>
-      <Stack direction={"row"} justifyContent={"space-between"}>
-        <Stack direction={"column"} spacing={2}>
+      <Stack direction={"row"} justifyContent={"space-between"} spacing={2}>
+        <Stack direction={"column"}>
           <SearchBar title={title} onHandleSearch={handleSearch} />
         </Stack>
 
@@ -35,22 +35,40 @@ export default function TopicList({ listTopic, title }) {
           </Button>
         </Stack>
       </Stack>
-      <Stack direction={"column"} spacing={2}>
+      <Stack
+        direction={"column"}
+        spacing={2}
+        sx={{
+          padding: "2rem",
+          borderLeft: "1px solid #00000040",
+          borderRight: "1px solid #00000040",
+        }}
+      >
         <Grid2 container spacing={2}>
           <Grid2 item size={2}>
-            <Typography variant={"h6"}>Serial</Typography>
+            <Typography variant={"h6"} textAlign={"center"}>
+              Serial
+            </Typography>
           </Grid2>
           <Grid2 item size={3}>
-            <Typography variant={"h6"}>Title</Typography>
+            <Typography variant={"h6"} textAlign={"center"}>
+              Title
+            </Typography>
           </Grid2>
           <Grid2 item size={3}>
-            <Typography variant={"h6"}>Image</Typography>
+            <Typography variant={"h6"} textAlign={"center"}>
+              Image
+            </Typography>
           </Grid2>
           <Grid2 item size={2}>
-            <Typography variant={"h6"}>Status</Typography>
+            <Typography variant={"h6"} textAlign={"center"}>
+              Status
+            </Typography>
           </Grid2>
           <Grid2 item size={2}>
-            <Typography variant={"h6"}>Details</Typography>
+            <Typography variant={"h6"} textAlign={"center"}>
+              Details
+            </Typography>
           </Grid2>
         </Grid2>
         {displayList.map((topic) => (

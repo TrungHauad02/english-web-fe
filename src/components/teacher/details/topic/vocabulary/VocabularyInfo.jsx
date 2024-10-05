@@ -88,7 +88,7 @@ export default function VocabularyInfo({ curVocab, onSaveVocab }) {
           {/* Image Example */}
           <CardMedia
             image={localVocab.img}
-            sx={{ height: "250px", width: "250px" }}
+            sx={{ height: "250px", width: "320px" }}
           />
           <Button
             component="label"

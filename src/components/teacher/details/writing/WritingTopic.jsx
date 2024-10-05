@@ -20,11 +20,6 @@ export default function WritingTopic({
     setData(topic);
   };
 
-  const onChangeStatus = (e) => {
-    if (!isEditing) return;
-    setTopic({ ...topic, status: e.target.value });
-  };
-
   const onChangeDescription = (e) => {
     if (!isEditing) return;
     setTopic({ ...topic, description: e.target.value });
@@ -36,7 +31,12 @@ export default function WritingTopic({
   };
 
   return (
-    <Grid2 container direction={"column"} spacing={4}>
+    <Grid2
+      container
+      direction={"column"}
+      spacing={4}
+      sx={{ marginTop: "4.25rem" }}
+    >
       <Grid2 container size={6} direction={"column"} sx={{ width: "70%" }}>
         <MultiLineTextField
           label={"Description"}

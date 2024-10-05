@@ -18,7 +18,13 @@ export default function MarkedViewer({ path, displayAppBar }) {
   }, [path]);
 
   return (
-    <Box sx={{ margin: "1rem", width: "100%" }}>
+    <Box
+      sx={{
+        marginTop: "1rem",
+        width: "100%",
+        boxShadow: "0 0 0.5rem 0.1rem #00000020",
+      }}
+    >
       {displayAppBar && (
         <AppBar
           position="static"
@@ -41,7 +47,10 @@ export default function MarkedViewer({ path, displayAppBar }) {
         </AppBar>
       )}
       <article
-        style={{ padding: "1rem", fontSize: "1.25rem" }}
+        style={{
+          padding: "1rem",
+          fontSize: "1.25rem",
+        }}
         dangerouslySetInnerHTML={{ __html: data }}
       />
     </Box>

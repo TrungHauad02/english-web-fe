@@ -11,12 +11,17 @@ export default function ReadingDetail() {
   const data = getReadingDetail(id);
   const [localData, setLocalData] = useState(data);
   return (
-    <Grid2 container direction={"row"} sx={{ margin: "2rem 1% 2rem 2%" }}>
-      <Grid2 item size={5}>
+    <Grid2
+      container
+      direction={"row"}
+      sx={{ margin: "2rem 4%" }}
+      justifyContent={"space-between"}
+    >
+      <Grid2 item>
         {/** Reading info*/}
         <ReadingInfo data={localData} setData={setLocalData} />
       </Grid2>
-      <Grid2 container size={7} direction={"column"} spacing={4}>
+      <Grid2 container direction={"column"} spacing={2}>
         <Grid2
           item
           size={6}

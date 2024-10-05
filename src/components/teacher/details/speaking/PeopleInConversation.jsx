@@ -61,7 +61,7 @@ export default function PeopleInConversation({ listPeople, setListPeople }) {
         container
         direction={"column"}
         spacing={2}
-        sx={{ padding: "0rem 1rem", marginBottom: "1rem" }}
+        sx={{ padding: "0.5rem", marginBottom: "1rem" }}
       >
         {peopleRows.map((row, rowIndex) => (
           <Grid2 container item key={rowIndex} justifyContent={"flex-start"}>
@@ -99,7 +99,7 @@ function People({ name, onDelete, onAdd, disabled }) {
       spacing={2}
       sx={{
         backgroundColor: "#fff",
-        padding: "0.5rem",
+        padding: "0.35rem",
         borderRadius: "0.5rem",
         height: "100%",
       }}
@@ -114,7 +114,7 @@ function People({ name, onDelete, onAdd, disabled }) {
             />
           </Grid2>
           <Grid2 item>
-            <DeleteButton disabled={disabled} ondel={onDelete} />
+            <DeleteButton disabled={disabled} ondel={onDelete} size="medium" />
           </Grid2>
         </Grid2>
       ) : isEdit ? (

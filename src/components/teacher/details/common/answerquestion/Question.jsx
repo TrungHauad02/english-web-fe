@@ -187,7 +187,7 @@ export default function Question({ data, onDelQuestion }) {
               >
                 <CustomTextField
                   value={answer.content}
-                  minWidth={"25rem"}
+                  minWidth={"28rem"}
                   disabled={!isEditing}
                   onChange={(e) => onChangeAnswerContent(e, index)}
                 />
@@ -196,13 +196,6 @@ export default function Question({ data, onDelQuestion }) {
                   value={answer.id}
                   onChange={onChangeIsCorrect}
                 />
-                <Typography
-                  variant="body"
-                  fontWeight={"bold"}
-                  fontSize={"1.5rem"}
-                >
-                  Correct
-                </Typography>
                 <DeleteButton
                   ondel={() => onDelAnswer(index)}
                   size={"small"}
@@ -221,7 +214,7 @@ export default function Question({ data, onDelQuestion }) {
           <Grid2 item size={7}>
             <CustomTextField
               disabled={!isEditing}
-              sx={{ width: "90%" }}
+              sx={{ width: "95%" }}
               value={question.explaination}
               onChange={onChangeExplaination}
             />
