@@ -29,7 +29,11 @@ export default function ListVocabulary({ listVocab, onUpdateCurVocab }) {
     >
       <Grid2 container direction={"row"} justifyContent={"space-between"}>
         <Grid2 item>
-          <SearchBar title={"Vocabulary"} onHandleSearch={handleSearch} />
+          <SearchBar
+            title={"Vocabulary"}
+            onHandleSearch={handleSearch}
+            maxWidth="18rem"
+          />
         </Grid2>
         <Grid2 item sx={{ marginTop: "0.5rem" }}>
           <Button
