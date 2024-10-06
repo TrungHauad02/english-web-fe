@@ -74,7 +74,7 @@ export default function SpeakingInfo({ data, setData }) {
   return (
     <Grid2 container direction={"column"} spacing={4}>
       <Typography variant="h4" textTransform={"uppercase"} fontWeight={"bold"}>
-        Listening Detail
+        Speaking Detail
       </Typography>
       <Grid2 container size={6} direction={"row"} sx={{ width: "100%" }}>
         <Grid2 container spacing={2} direction={"column"}>

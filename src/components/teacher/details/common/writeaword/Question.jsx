@@ -201,10 +201,10 @@ export default function Question({ data, onDelQuestion }) {
               Audio:
             </Typography>
           </Grid2>
-          <Grid2 item size={9}>
+          <Grid2 item size={8}>
             <SoundViewer audioSrc={question.audioUrl} />
           </Grid2>
-          <Grid2 item size={2}>
+          <Grid2 item size={3}>
             <Button
               component="label"
               role={undefined}

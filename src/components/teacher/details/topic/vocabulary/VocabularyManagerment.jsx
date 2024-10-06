@@ -115,7 +115,13 @@ export default function VocabularyManagerment() {
       container
       direction={"column"}
       spacing={2}
-      sx={{ backgroundColor: "#FFF4CC", borderRadius: "1rem", padding: "1rem" }}
+      sx={{
+        backgroundColor: "#FFF4CC",
+        borderRadius: "0.5rem",
+        padding: "1.5rem 2rem",
+        marginTop: "2rem",
+        boxShadow: "0 0 0.5rem 0.1rem #00000050",
+      }}
     >
       <Typography variant={"h5"} fontWeight={"bold"}>
         Vocabulary Managerment

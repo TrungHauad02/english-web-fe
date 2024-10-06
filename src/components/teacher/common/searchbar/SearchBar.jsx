@@ -2,7 +2,7 @@ import { Search } from "@mui/icons-material";
 import { Button, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 
-export default function SearchBar({ title, onHandleSearch, sx }) {
+export default function SearchBar({ title, onHandleSearch, sx, maxWidth }) {
   const [searchText, setSearchText] = useState("");
   const complexSX = {
     ...sx,
@@ -17,7 +17,16 @@ export default function SearchBar({ title, onHandleSearch, sx }) {
       <TextField
         label={`Search ${title}`}
         variant={"outlined"}
-        sx={{ color: "#828282", width: "20rem" }}
+        sx={{
+          color: "#828282",
+          width: {
+            xs: "100%",
+            sm: "25rem",
+            md: "30rem",
+            lg: "35rem",
+          },
+          maxWidth: { maxWidth },
+        }}
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
       />
