@@ -1,20 +1,66 @@
-import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, Link } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Button, TextField, Typography, Link, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const ForgotPassword = ({ toggleForm }) => {
-  const [step, setStep] = useState(1); // Bước đầu tiên là nhập email
+  const [step, setStep] = useState(1);
+  const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [rePassword, setRePassword] = useState('');
+  const [fakeDatabase, setFakeDatabase] = useState({ email: 'web@gmail.com', password: '123456' });
+  const [generatedOtp, setGeneratedOtp] = useState('');
+  const [timer, setTimer] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    let countdown;
+    if (timer > 0) {
+      countdown = setTimeout(() => {
+        setTimer(timer - 1);
+      }, 1000);
+    }
+    return () => clearTimeout(countdown);
+  }, [timer]);
 
   const handleGetOtp = () => {
-    setStep(2); // Chuyển sang bước nhập OTP
+    if (email === fakeDatabase.email) {
+      const newOtp = Math.floor(100000 + Math.random() * 900000).toString(); // Fake OTP generation
+      setGeneratedOtp(newOtp);
+      alert(`Your OTP is: ${newOtp}`);  // Hiện đỡ mã OTP, sau này sẽ xóa dòng này
+      setStep(2);
+      setTimer(60);
+      console.log('Generated OTP:', newOtp);
+    } else {
+      alert('Email not found in database.');
+    }
+  };
+
+  const handleVerifyOtp = () => {
+    if (otp === generatedOtp && timer > 0) {
+      setStep(3);
+    } else {
+      alert('Invalid or expired OTP.');
+    }
   };
 
   const handleResetPassword = () => {
-    // Logic xử lý đặt lại mật khẩu ở đây
-    console.log('OTP:', otp, 'New Password:', newPassword);
-    // Sau khi đặt lại mật khẩu thành công, chuyển về màn hình đăng nhập
-    toggleForm('signin');
+    if (newPassword === rePassword) {
+      setFakeDatabase({ ...fakeDatabase, password: newPassword });
+      console.log('Password reset successfully:', newPassword);
+      toggleForm('signin');
+      alert('Password reset successfully')
+    } else {
+      alert('Passwords do not match.');
+    }
+  };
+
+  const handleResendOtp = () => {
+    handleGetOtp();
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -35,16 +81,11 @@ const ForgotPassword = ({ toggleForm }) => {
           <TextField
             fullWidth
             variant="outlined"
-            label="Name"
-            placeholder="Your Name"
-            margin="normal"
-          />
-          <TextField
-            fullWidth
-            variant="outlined"
             label="Email"
             type="email"
             placeholder="example@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             margin="normal"
           />
           <Button
@@ -70,15 +111,70 @@ const ForgotPassword = ({ toggleForm }) => {
             onChange={(e) => setOtp(e.target.value)}
             margin="normal"
           />
+          <Typography variant="body2" color="textSecondary" align="center">
+            Time remaining: {timer} seconds
+          </Typography>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            style={{ marginTop: 16 }}
+            onClick={handleVerifyOtp}
+            disabled={timer <= 0}
+          >
+            Verify OTP
+          </Button>
+          <Button
+            fullWidth
+            variant="text"
+            color="primary"
+            style={{ marginTop: 8 }}
+            onClick={handleResendOtp}
+          >
+            Resend OTP
+          </Button>
+        </>
+      )}
+
+      {step === 3 && (
+        <>
           <TextField
             fullWidth
             variant="outlined"
             label="New Password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             placeholder="New Password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             margin="normal"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            fullWidth
+            variant="outlined"
+            label="Re-enter Password"
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Re-enter Password"
+            value={rePassword}
+            onChange={(e) => setRePassword(e.target.value)}
+            margin="normal"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <Button
             fullWidth

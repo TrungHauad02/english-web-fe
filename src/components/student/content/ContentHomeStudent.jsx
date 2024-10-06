@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { sections } from "./SectionContentHomeStudent.js";
+import { sections } from "./HomeStudent.js";
 
 const ContentHomeStudent = () => {
   const navigate = useNavigate();
@@ -31,8 +31,8 @@ const ContentHomeStudent = () => {
   };
 
   const handleCloseDialog = () => {
-    setrequiredLoginDialog(false); // Đóng modal
-    navigate('/student/account'); // Chuyển đến trang đăng nhập
+    setrequiredLoginDialog(false);
+    navigate('/student/account'); 
   };
 
   return (
@@ -120,7 +120,7 @@ const ContentHomeStudent = () => {
                           borderRadius: '1rem',
                           fontSize: '1rem',
                         }}
-                        onClick={() => handleButtonClick(section.link)} // Sử dụng hàm handleButtonClick
+                        onClick={() => handleButtonClick(section.link)} 
                       >
                         {section.title === 'TEST'
                           ? 'Take Test'
@@ -174,7 +174,7 @@ const ContentHomeStudent = () => {
                           borderRadius: '1rem',
                           fontSize: '1rem',
                         }}
-                        onClick={() => handleButtonClick(section.link)} // Sử dụng hàm handleButtonClick
+                        onClick={() => handleButtonClick(section.link)} 
                       >
                         {section.title === 'TEST'
                           ? 'Take Test'

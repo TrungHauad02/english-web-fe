@@ -47,6 +47,7 @@ function SkillMenu() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleMouseLeaveMenu}
+        disableScrollLock
         MenuListProps={{
           "aria-labelledby": "skill-button",
           onMouseEnter: handleMouseEnterMenu,
