@@ -1,9 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { Button, Stack, Menu, MenuItem, IconButton } from "@mui/material";
+import React from "react";
+import { Button, Stack } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 import HeaderTypography from "../../common/header/HeaderTypography";
 
 function HeaderAdmin() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('isSignIn');
+    navigate('/student/account');
+  };
+
   return (
     <Stack
       direction={"row"}
@@ -81,8 +88,7 @@ function HeaderAdmin() {
         </Button>
 
         <Button
-          component={NavLink}
-          to="../student/account"
+          onClick={handleLogout}
           sx={{
             backgroundColor: "transparent",
             color: "red",
@@ -97,7 +103,6 @@ function HeaderAdmin() {
           <HeaderTypography>Logout</HeaderTypography>
         </Button>
       </Stack>
-
     </Stack>
   );
 }
