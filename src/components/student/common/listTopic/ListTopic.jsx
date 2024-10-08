@@ -1,43 +1,45 @@
 import { Stack, Typography } from "@mui/material";
 import MainPicture from "./MainPicture";
-import ReactPaginate from 'react-paginate';
 import ListContent from "./ListContent";
-import { useState } from "react";
-import './ListTopic.css';
+import CustomPagination from "../../../common/pagination/CustomPagination";
+import "./ListTopic.css";
+import { getListTopic } from "../../../../api/student/listTopic";
+import { useEffect, useState } from "react";
 
-function ListTopic({list,quote, title, bg}) {
-    const topicsPerPage = 6;
-    const [currentPage, setCurrentPage] = useState(0);
-
-    const pageCount = Math.ceil(list.length / topicsPerPage);
-
-    const handlePageClick = (event) => {
-      setCurrentPage(event.selected);
+function ListTopic({ quote, title, bg }) {
+  const [page, setPage] = useState(1);
+  const [list, setList] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const topics = await getListTopic(page - 1);
+      if (topics) {
+        setList(topics);
+      } else {
+        setList([]);
+      }
     };
-  
-    const displayedList = list.slice(currentPage * topicsPerPage, (currentPage + 1) * topicsPerPage);
-  
-    return (
-        <Stack direction="column">
-            <MainPicture src={bg} title={title}/>
-            <Typography variant="h5" component="p" sx={{ padding: '1rem', marginX: '5%', marginY: '1rem' }}>
-                {quote}
-            </Typography>
-            <ListContent list={displayedList} />
 
-            <ReactPaginate
-                previousLabel={"Previous"}
-                nextLabel={"Next"}
-                breakLabel={"..."}
-                pageCount={pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={handlePageClick}
-                containerClassName={"pagination"}
-                activeClassName={"active"}
-            />
-        </Stack>
-    );
+    fetchData();
+  }, [page]);
+  const onChangePage = (event, value) => {
+    setPage(value);
+  };
+  return (
+    <Stack direction="column">
+      <MainPicture src={bg} title={title} />
+      <Typography
+        variant="h5"
+        component="p"
+        sx={{ padding: "1rem", marginX: "5%", marginY: "1rem" }}
+      >
+        {quote}
+      </Typography>
+      <ListContent list={list} />
+      <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
+        <CustomPagination count={10} onChange={onChangePage} />
+      </Stack>
+    </Stack>
+  );
 }
 
 export default ListTopic;

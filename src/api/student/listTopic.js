@@ -1,11 +1,19 @@
 export function getListTopic(page) {
-  return fetch(`http://localhost:8080/topics`, {
+  return fetch(`http://localhost:8080/topics?page=${page}`, {
     method: "GET",
-    params: {
-      page: page,
-    },
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((response) => response.json());
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data.content);
+      return data.content;
+    })
+    .catch((error) => console.error(error));
 }
