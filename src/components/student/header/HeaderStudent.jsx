@@ -61,7 +61,7 @@ function HeaderStudent() {
       direction={"row"}
       justifyContent={"space-between"}
       sx={{
-        backgroundColor: "#4A475C",
+        backgroundColor: "#6EC2F7",
         color: "#fff",
         padding: "0.5rem",
         position: "fixed",
@@ -101,9 +101,7 @@ function HeaderStudent() {
             backgroundColor: isActivePath("/student/list-topic")
               ? "#fff"
               : "transparent",
-            color: isActivePath("/student/list-topic")
-              ? "#4A475C"
-              : "white",
+            color: isActivePath("/student/list-topic") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
@@ -123,9 +121,7 @@ function HeaderStudent() {
             backgroundColor: isActivePath("/student/grammar")
               ? "#fff"
               : "transparent",
-            color: isActivePath("/student/grammar")
-              ? "#4A475C"
-              : "white",
+            color: isActivePath("/student/grammar") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
@@ -148,9 +144,7 @@ function HeaderStudent() {
             backgroundColor: isActivePath("/student/test")
               ? "#fff"
               : "transparent",
-            color: isActivePath("/student/test")
-              ? "#4A475C"
-              : "white",
+            color: isActivePath("/student/test") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
@@ -231,4 +225,3 @@ function HeaderStudent() {
 }
 
 export default HeaderStudent;
-
