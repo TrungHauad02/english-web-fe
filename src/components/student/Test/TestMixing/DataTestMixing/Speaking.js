@@ -1,34 +1,34 @@
-const DataTestSpeaking = {
-  id: "qs1-qs6",
-  duration: "60",
+const Speaking = {
+  type: "Speaking",
+  id: "qs39-qs45",
   title: "Interview",
   description:
     "In this first part, the examiner will ask you some questions about yourself  do  not give out real personal information on your answers.",
 
   questions: [
     {
-      id: "qs1",
-      serial: "1",
+      id: "qs39",
+      serial: "39",
       content: "what is your full name?",
     },
     {
-      id: "qs2",
-      serial: "2",
+      id: "qs40",
+      serial: "40",
       content: "what is your full name?",
     },
     {
-      id: "qs3",
-      serial: "3",
+      id: "qs41",
+      serial: "41",
       content: "what is your full name?",
     },
     {
-      id: "qs4",
-      serial: "4",
+      id: "qs42",
+      serial: "42",
       content: "what is your full name?",
     },
     {
-      id: "qs5",
-      serial: "5",
+      id: "qs43",
+      serial: "43",
       content: "what is your full name?",
     },
     {
@@ -38,4 +38,4 @@ const DataTestSpeaking = {
     },
   ],
 };
-export default DataTestSpeaking;
+export default Speaking;

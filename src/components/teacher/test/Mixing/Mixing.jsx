@@ -17,12 +17,16 @@ function Mixing (){
     return(
         <>
         <Box sx={{marginRight:'5%',marginLeft:'5%',marginBottom:'2%',marginTop:"2%"}}>
-        <Box sx={{display:'flex',marginBottom:'2%'}}>
-        <InformationTest data={DataTestMixing[0]}/>
-        <Box sx={{marginLeft:'2%'}}>
-        <QuestionList  data={DataTestMixing} handleRowClick={handleRowClick}/>
-        </Box>
-        </Box>
+        <Box sx={{ display: 'flex', marginBottom: '2%', alignItems: 'stretch' }}>
+    <Box sx={{ flex: 4, minHeight: 0 }}>
+        <InformationTest data={DataTestMixing[0]} />
+    </Box>
+
+    <Box sx={{ marginLeft: '2%', flex: 6, minHeight: 0 }}>
+        <QuestionList data={DataTestMixing} handleRowClick={handleRowClick}/>
+    </Box>
+</Box>
+
             {
             type === 'Vocabulary' || type === 'Grammar' ? (
                 <QuestionVocabulary question={dataitemtest} />

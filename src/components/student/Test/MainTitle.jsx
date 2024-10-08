@@ -12,9 +12,13 @@ const MainTitleContainer = styled(Box)(({ theme }) => ({
   }));
   const ImageContainer = styled(Box)(({ theme }) => ({
     position: 'relative',
-    width: '100%',
-    height: 'auto',
+    width: '100%', 
+    height: '70vh',
+    overflow: 'hidden',
   }));
+  
+  
+  
   const Title = styled(Paper)(({ theme }) => ({
     background: 'linear-gradient(to right, rgba(172, 205, 10, 1) 0%, rgba(232, 245, 168, 1) 100%)',
     textAlign: 'center',
@@ -29,7 +33,7 @@ const MainTitleContainer = styled(Box)(({ theme }) => ({
     return(
       <>
           <ImageContainer>
-        <img src={bg} alt="Test" style={{ width: '100%', height: 'auto' }} />
+          <img src={bg} alt="Test" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         <MainTitleContainer>
           <Typography variant="h4" component="h1" sx={{ margin: 2 }}>
             TEST ONLINE

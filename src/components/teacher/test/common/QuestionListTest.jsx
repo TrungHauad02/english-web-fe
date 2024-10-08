@@ -18,13 +18,19 @@ import { Trash, Edit, Save, PlusCircle } from 'lucide-react';
 import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
 
-// Styled components
+const FormContainer = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  backgroundColor: '#fff5e6',
+  borderRadius: theme.spacing(2),
+}));
+
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   marginBottom: theme.spacing(3),
+
   '& .MuiTab-root': {
     backgroundColor: '#D4E9B9',
-    margin: '0 4px',
-    borderRadius: '16px 16px 0 0',
+    margin: '0 0.2rem',
+    borderRadius: '0.5rem 0.5rem 0 0',
     color: 'black',
     '&.Mui-selected': {
       backgroundColor: '#8BC34A',
@@ -72,7 +78,6 @@ function QuestionList({data,handleRowClick}) {
             data.dataitem.forEach(item => {
               item.type = data.type;
               questions.push(item);
-              console.log(item);
               
             });
         }
@@ -93,8 +98,8 @@ function QuestionList({data,handleRowClick}) {
   );
 
   return (
-    <Box sx={{  bgcolor: '#FFF8DC', p: 3 }}>
-      <Typography variant="h3" align="center" gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>
+    <FormContainer sx={{  bgcolor: '#FFF8DC', p: 3 }}>
+      <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>
         QUESTION LIST
       </Typography>
 
@@ -142,7 +147,7 @@ function QuestionList({data,handleRowClick}) {
         >
           Add new question
         </Button>
-    </Box>
+    </FormContainer>
   );
 }
 

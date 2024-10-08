@@ -20,23 +20,12 @@ import QuestionVocabulary from "./QuestionVocabulary"
 
 
 
-const ButtonContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'center',
-  gap: theme.spacing(2),
-  marginTop: theme.spacing(4),
+const FormContainer = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  backgroundColor: '#fff5e6',
+  borderRadius: theme.spacing(2),
 }));
 
-const ColorButton = styled(Button)(({ color }) => ({
-  borderRadius: '8px',
-  padding: '8px 24px',
-  backgroundColor: color,
-  color: color === '#98FB98' ? 'black' : 'white',
-  '&:hover': {
-    backgroundColor: color,
-    opacity: 0.9,
-  },
-}));
 
 const QuestionReading = ({data}) => {
   const [imageUrl, setImageUrl] = useState(data.image);
@@ -54,13 +43,11 @@ const QuestionReading = ({data}) => {
   };
 
   const handleQuestionSelect = (id) => {
-    data.questions.forEach((item) => {
-      if (item.id === id) {
-        console.log(item);
-        
-        setSelectedQuestion(item);
-      }
-    });
+    const item = questions.find((item) => item.id === id);
+    if (item) {
+      console.log(item);
+      setSelectedQuestion(item);
+    }
     setIsEditing(false);
   };
 
@@ -70,13 +57,16 @@ const QuestionReading = ({data}) => {
 
   const handleSave = () => {
     setIsEditing(false);
+    // Implement save logic here if needed
   };
 
+  
+
   return (
-    <Box sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
+    <FormContainer sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
+      <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
         <Typography variant="h4">Reading</Typography>
-  
       </Box>
 
       <Box sx={{ display: 'flex', gap: 4 }}>
@@ -126,7 +116,7 @@ const QuestionReading = ({data}) => {
               <TableHead>
                 <TableRow>
                   <TableCell>Serial</TableCell>
-                  <TableCell align='center'>Question content</TableCell>
+                  <TableCell align="center">Question content</TableCell>
                   <TableCell>Delete</TableCell>
                 </TableRow>
               </TableHead>
@@ -150,26 +140,32 @@ const QuestionReading = ({data}) => {
             </Table>
           </TableContainer>
           <Button 
-          variant="contained" 
-          startIcon={<PlusCircle />}
-          sx={{ bgcolor: '#9dc45f', '&:hover': { bgcolor: '#8ab54e' } ,marginTop:'1rem'}}
-        >
-          Add new question
-        </Button>
+            variant="contained" 
+            startIcon={<PlusCircle />}
+            sx={{ bgcolor: '#9dc45f', '&:hover': { bgcolor: '#8ab54e' }, marginTop: '1rem' }}
+          >
+            Add new question
+          </Button>
         </Box>
 
-        <Box sx={{ flex: 1,  }}>
-  <QuestionVocabulary 
-    question={{ 
-      ...selectedQuestion, 
-      type: "Question detail" 
-    }} 
-  />
-</Box>
-
+        <Box sx={{ flex: 1 }}>
+          <QuestionVocabulary 
+            question={{ 
+              ...selectedQuestion, 
+              type: "Question detail",
+              details:"true"
+             
+            }} 
+          />
+        </Box>
       </Box>
     </Box>
+  
+    </FormContainer>
+   
   );
 };
+
+
 
 export default QuestionReading;
