@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Stack, Menu, MenuItem, IconButton } from "@mui/material";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import HeaderTypography from "../../common/header/HeaderTypography";
 import SkillMenu from "./SkillMenu";
 import Profile from "./Profile";
@@ -9,9 +9,8 @@ function HeaderStudent() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
-  const [openHistoryTest, setOpenHistoryTest] = useState(false);
-  const [openStudySchedule, setOpenStudySchedule] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Hook để lấy đường dẫn hiện tại
 
   useEffect(() => {
     const checkLoggedIn = () => {
@@ -28,7 +27,11 @@ function HeaderStudent() {
   }, []);
 
   const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    if (isLoggedIn) {
+      setAnchorEl(event.currentTarget);
+    } else {
+      navigate("/student/account");
+    }
   };
 
   const handleMenuClose = () => {
@@ -51,17 +54,7 @@ function HeaderStudent() {
     setOpenProfileDialog(false);
   };
 
-  const handleHistoryTestOpen = () => {
-    setOpenHistoryTest(true);
-    navigate("/student/history-test");
-    handleMenuClose();
-  };
-
-  const handleStudyScheduleOpen = () => {
-    setOpenStudySchedule(true);
-    navigate("/student/study-schedule");
-    handleMenuClose();
-  };
+  const isActivePath = (path) => location.pathname === path; // Kiểm tra xem đường dẫn hiện tại có phải là đường dẫn của nút không
 
   return (
     <Stack
@@ -83,7 +76,8 @@ function HeaderStudent() {
         <img
           src="icon.png"
           alt="icon"
-          style={{ width: "50px", marginLeft: "1rem" }}
+          style={{ width: "50px", marginLeft: "1rem", cursor: "pointer" }}
+          onClick={() => navigate("/student")}
         />
         <HeaderTypography
           variant="h4"
@@ -91,178 +85,144 @@ function HeaderStudent() {
           sx={{
             fontWeight: "bold",
             fontSize: "2rem",
+            cursor: "pointer",
           }}
+          onClick={() => navigate("/student")}
         >
           English Web
         </HeaderTypography>
       </Stack>
+
       <Stack direction={"row"} alignItems={"center"} spacing={2}>
         <Button
           component={NavLink}
-          to="/student"
+          to="/student/list-topic"
           sx={{
-            backgroundColor: "transparent",
-            color: "white",
+            backgroundColor: isActivePath("/student/list-topic")
+              ? "#fff"
+              : "transparent",
+            color: isActivePath("/student/list-topic")
+              ? "#4A475C"
+              : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath("/student/list-topic")
+                ? "#fff"
+                : "rgba(255, 255, 255, 0.2)",
             },
-            // "&.active": {
-            //   backgroundColor: "white",
-            //   color: "black",
-            // },
           }}
         >
-          <HeaderTypography>Home</HeaderTypography>
+          <HeaderTypography>Vocabulary</HeaderTypography>
+        </Button>
+        <Button
+          component={NavLink}
+          to="/student/grammar"
+          sx={{
+            backgroundColor: isActivePath("/student/grammar")
+              ? "#fff"
+              : "transparent",
+            color: isActivePath("/student/grammar")
+              ? "#4A475C"
+              : "white",
+            textDecoration: "none",
+            padding: "0.5rem 1rem",
+            borderRadius: "0.5rem",
+            "&:hover": {
+              backgroundColor: isActivePath("/student/grammar")
+                ? "#fff"
+                : "rgba(255, 255, 255, 0.2)",
+            },
+          }}
+        >
+          <HeaderTypography>Grammar</HeaderTypography>
         </Button>
 
-        {isLoggedIn ? (
-          <>
-            <Button
-              component={NavLink}
-              to="/student/list-topic"
-              sx={{
-                backgroundColor: "transparent",
-                color: "white",
-                textDecoration: "none",
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                },
-                "&.active": {
-                  backgroundColor: "white",
-                  color: "black",
-                },
-              }}
-            >
-              <HeaderTypography>Vocabulary</HeaderTypography>
-            </Button>
-            <Button
-              component={NavLink}
-              to="/student/grammar"
-              sx={{
-                backgroundColor: "transparent",
-                color: "white",
-                textDecoration: "none",
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                },
-                "&.active": {
-                  backgroundColor: "white",
-                  color: "black",
-                },
-              }}
-            >
-              <HeaderTypography>Grammar</HeaderTypography>
-            </Button>
+        <SkillMenu />
 
-            <SkillMenu />
+        <Button
+          component={NavLink}
+          to="/student/test"
+          sx={{
+            backgroundColor: isActivePath("/student/test")
+              ? "#fff"
+              : "transparent",
+            color: isActivePath("/student/test")
+              ? "#4A475C"
+              : "white",
+            textDecoration: "none",
+            padding: "0.5rem 1rem",
+            borderRadius: "0.5rem",
+            "&:hover": {
+              backgroundColor: isActivePath("/student/test")
+                ? "#fff"
+                : "rgba(255, 255, 255, 0.2)",
+            },
+          }}
+        >
+          <HeaderTypography>Test</HeaderTypography>
+        </Button>
 
-            <Button
-              component={NavLink}
-              to="/student/test"
-              sx={{
-                backgroundColor: "transparent",
-                color: "white",
-                textDecoration: "none",
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                },
-                "&.active": {
-                  backgroundColor: "white",
-                  color: "black",
-                },
-              }}
-            >
-              <HeaderTypography>Test</HeaderTypography>
-            </Button>
-
-            <IconButton onClick={handleMenuClick}>
-              <img
-                src="/header_user.png"
-                alt="User Icon"
-                style={{ width: "40px" }}
-              />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              sx={{
-                "& .MuiMenu-paper": {
-                  background: "#75718D",
-                  padding: ".2rem 1rem",
-                  borderRadius: "1.5rem",
-                },
-              }}
-            >
-              <MenuItem
-                onClick={handleProfileOpen}
-                sx={{
-                  borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-                  color: "white",
-                }}
-              >
-                Profile
-              </MenuItem>
-              <MenuItem
-                onClick={handleStudyScheduleOpen}
-                sx={{
-                  borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-                  color: "white",
-                }}
-              >
-                Study Schedule
-              </MenuItem>
-              <MenuItem
-                onClick={handleHistoryTestOpen}
-                sx={{
-                  borderBottom: "3px solid #ffff",
-                  color: "white",
-                }}
-              >
-                History Test
-              </MenuItem>
-              <MenuItem
-                onClick={handleLogout}
-                sx={{
-                  color: "red",
-                  fontWeight: "bold",
-                }}
-              >
-                Logout
-              </MenuItem>
-            </Menu>
-          </>
-        ) : (
-          <Button
-            component={NavLink}
-            to="/student/account"
+        <IconButton onClick={handleMenuClick}>
+          <img
+            src="/header_user.png"
+            alt="User Icon"
+            style={{ width: "40px" }}
+          />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+          disableScrollLock
+          sx={{
+            "& .MuiMenu-paper": {
+              background: "#75718D",
+              padding: ".2rem 1rem",
+              borderRadius: "1.5rem",
+            },
+          }}
+        >
+          <MenuItem
+            onClick={handleProfileOpen}
             sx={{
-              backgroundColor: "transparent",
+              borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
               color: "white",
-              textDecoration: "none",
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-              "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.2)",
-              },
-              "&.active": {
-                backgroundColor: "white",
-                color: "black",
-              },
             }}
           >
-            <HeaderTypography>Sign In</HeaderTypography>
-          </Button>
-        )}
+            Profile
+          </MenuItem>
+          <MenuItem
+            onClick={() => navigate("/student/study-schedule")}
+            sx={{
+              borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+              color: "white",
+            }}
+          >
+            Study Schedule
+          </MenuItem>
+          <MenuItem
+            onClick={() => navigate("/student/history-test")}
+            sx={{
+              borderBottom: "3px solid #ffff",
+              color: "white",
+            }}
+          >
+            History Test
+          </MenuItem>
+          {isLoggedIn && (
+            <MenuItem
+              onClick={handleLogout}
+              sx={{
+                color: "red",
+                fontWeight: "bold",
+              }}
+            >
+              Logout
+            </MenuItem>
+          )}
+        </Menu>
       </Stack>
 
       <Profile open={openProfileDialog} handleClose={handleProfileClose} />
@@ -271,3 +231,4 @@ function HeaderStudent() {
 }
 
 export default HeaderStudent;
+

@@ -5,7 +5,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
 
-const SignIn = ({ toggleForm, onLogin }) => { // Đảm bảo onLogin được truyền vào
+const SignIn = ({ toggleForm }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,21 +13,36 @@ const SignIn = ({ toggleForm, onLogin }) => { // Đảm bảo onLogin được t
 
   const navigate = useNavigate();
 
+  const fakeDatabase = [
+    { email: 'student@gmail.com', password: '123', role: 'student' },
+    { email: 'teacher@gmail.com', password: '123', role: 'teacher' },
+    { email: 'admin@gmail.com', password: '123', role: 'admin' }
+  ];
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   const handleSignIn = () => {
-    // Kiểm tra thông tin đăng nhập
-    if (email === 'web@gmail.com' && password === '123') {
+    const user = fakeDatabase.find(
+      (u) => u.email === email && u.password === password
+    );
+
+    if (user) {
       localStorage.setItem('isSignIn', 'true');
-      navigate('/student');
-      window.location.reload();
-      
-    }
-    if (email === 'admin@gmail.com' && password === '123') {
-      localStorage.setItem('isSignIn', 'true');
-      navigate('/admin/teacher');
+      switch (user.role) {
+        case 'student':
+          navigate('/student');
+          break;
+        case 'teacher':
+          navigate('/teacher');
+          break;
+        case 'admin':
+          navigate('/admin/teacher');
+          break;
+        default:
+          break;
+      }
       window.location.reload();
     } else {
       setError('Incorrect email or password');

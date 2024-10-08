@@ -4,7 +4,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MainPicture from '../../common/listTopic/MainPicture';
-import CreateScheduleDialog from './CreateScheduleDialog'; // Import popup mới
+import CreateSchedule from './CreateSchedule'; // Import popup mới
 
 const StudySchedulePage = () => {
   const [openDialog, setOpenDialog] = useState(false); // State to control dialog
@@ -96,7 +96,7 @@ const StudySchedulePage = () => {
       </Box>
 
       {/* Hiển thị Popup khi nhấn "Create Study Schedule" */}
-      <CreateScheduleDialog open={openDialog} onClose={() => setOpenDialog(false)} />
+      <CreateSchedule open={openDialog} onClose={() => setOpenDialog(false)} />
     </>
   );
 };

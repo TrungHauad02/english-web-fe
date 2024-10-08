@@ -6,7 +6,6 @@ import SaveButton from "../button/SaveButton";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import SoundViewer from "../../../../common/soundViewer/SoundViewer";
-import { Grid } from "lucide-react";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -97,7 +96,7 @@ export default function AnswerQuestionManagerment({
       direction={"column"}
       sx={{
         backgroundColor: "#FFF4CC",
-        borderRadius: "0.5rem",
+        borderRadius: "0.25rem",
       }}
     >
       <Stack
@@ -107,7 +106,7 @@ export default function AnswerQuestionManagerment({
           position: "sticky",
           top: 0,
           backgroundColor: "#FFF4CC",
-          padding: "0.5rem 0",
+          padding: "1rem 0",
           zIndex: 3,
           boxShadow: "0 0 0.5rem 0.1rem #00000050",
         }}

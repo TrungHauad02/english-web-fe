@@ -16,6 +16,7 @@ function BackCard({ vocab }) {
         sx={{
           justifyContent: "space-evenly",
           paddingTop: "1rem",
+          paddingX: "1rem",
           display: "flex",
           flexDirection: "column",
           backgroundColor: "#FFEACB",

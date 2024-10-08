@@ -1,4 +1,5 @@
-// import MainPicture from "../common/MainPicture";
+
+
 import MatchImageWithWord from "./MatchImageWithWord/MatchImageWithWord";
 import listVocab from "./ListVocab";
 import Introduction from "./introduction/Introduction";
