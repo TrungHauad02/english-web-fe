@@ -3,47 +3,50 @@ import { Box, Typography, Button, Paper, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 
 
-
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(2),
+  textAlign: 'center',
+  borderRadius: '1rem',
+}));
 
 const GridItem = styled(Paper)(({ theme, color }) => ({
-  width:'100%',
+  padding: theme.spacing(1),
   textAlign: 'center',
   color: theme.palette.text.secondary,
   backgroundColor: color === 'red' ? '#f44336' : color === 'green' ? '#4caf50' : 'white',
   border: '1px solid #000',
-  borderRadius: theme.shape.borderRadius, 
-  boxShadow: theme.shadows[2], 
-  transition: 'background-color 0.3s ease, box-shadow 0.3s ease', 
+  transition: 'background-color 0.3s ease', 
   cursor: 'pointer', 
-  '&:hover': {
+'&:hover': {
     backgroundColor: color === 'red' ? '#ff7961' : color === 'green' ? '#81c784' : '#f0f0f0',
-    boxShadow: theme.shadows[4], 
   },
 }));
 
-const GridSerials = ({ gridData = [],serials=[] ,onItemClick,title,status}) => { 
+const ScoreGrid = ({ score, gridData = [],serials=[] ,onItemClick,onClickTestAgain,status,handlebtnSubmit}) => { 
   return (
-    <>
-    <Box >
-    <Typography variant="h5" gutterBottom>
-      {title}
+    <StyledPaper elevation={3}>
+      {
+        status==="Testing" ? 
+        <Typography variant="h6" gutterBottom>
+          Time remaining: 60:00
       </Typography>
-      <Grid container spacing={2} >
+      :
+      <Typography variant="h5" gutterBottom>
+        Score: {score}
+      </Typography>
+      }
+      
+      
+      <Grid container spacing={1} sx={{ marginBottom: 2 }}>
         {serials.length > 0 ? (
           serials.map((item, index) => (
-            <Grid key={index} item xs={2} >
-            <GridItem
-            color={status === 'Testing' 
-              ? (gridData[item-1] === -1 ? 'white' : 'green') 
-              : (gridData[item-1] === -1 ? 'white' : (gridData[item-1] === 0 ? 'red' : 'green'))
-            }
-    
-            
+            <Grid item xs={4} key={index}>
+              <GridItem color={gridData[serials[index]-1] === 0 ? 'red' : gridData[serials[index]-1] === 1 ? 'green' : 'white'}
               onClick={() => onItemClick(serials[index])}
-            >
-              {serials[index]}
-            </GridItem>
-          </Grid>
+              >
+                <Typography variant="body2">{ serials[index]}</Typography>
+              </GridItem>
+            </Grid>
           ))
         ) : (
           <Grid item xs={12}>
@@ -51,10 +54,22 @@ const GridSerials = ({ gridData = [],serials=[] ,onItemClick,title,status}) => {
           </Grid>
         )}
       </Grid>
-      </Box>
-    </>
-
+      
+     
+        <Button
+          sx={{
+            borderRadius: '1rem',
+            backgroundColor: status === 'Testing' ? '#FFD984' : '#4A90E2',
+            color: 'black',
+            padding: '1rem 2rem',
+          }}
+          onClick={status === 'Testing' ? handlebtnSubmit : onClickTestAgain}
+        >
+          {status === 'Testing' ? 'SUBMIT' : 'TEST AGAIN'}
+        </Button>
+   
+    </StyledPaper>
   );
 };
 
-export default GridSerials;
+export default ScoreGrid;

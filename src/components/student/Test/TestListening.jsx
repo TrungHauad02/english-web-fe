@@ -35,13 +35,20 @@ function TestListening({ list, quote, title, bg }) {
 
 function IntroduceTest({ setStatus }) {
   return (
-    <Box
+    <Box sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    
+    }}>
+       <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '100vh',
+        height: '60vh',
+        width: '80vh',
         textAlign: 'center',
         border: '0.2rem solid ',
         padding: '20px',
@@ -67,6 +74,9 @@ function IntroduceTest({ setStatus }) {
         Bắt đầu
       </Button>
     </Box>
+
+    </Box>
+   
   );
 }
 

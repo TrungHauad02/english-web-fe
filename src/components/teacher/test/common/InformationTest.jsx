@@ -19,11 +19,19 @@ const FormContainer = styled(Paper)(({ theme }) => ({
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
-  marginBottom: theme.spacing(2),
   '& .MuiOutlinedInput-root': {
-    borderRadius: theme.spacing(3),
+    height: '3rem',
+    borderRadius: '0.5rem',
     backgroundColor: 'white',
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+    '& input': {
+      color: '#9E9E9E',
+    },
+    '& fieldset': {
+      borderColor: '#E0E0E0',
+    },
+  },
+  '& .MuiInputLabel-root': {
+    display: 'none',
   },
 }));
 
@@ -35,10 +43,10 @@ const ButtonContainer = styled(Box)(({ theme }) => ({
 }));
 
 const ColorButton = styled(Button)(({ color }) => ({
-  borderRadius: '8px',
-  padding: '8px 24px',
+  borderRadius: '1rem',
+  padding: '1rem 2rem',
   backgroundColor: color,
-  color: color === '#98FB98' ? 'black' : 'white',
+  color: 'white',
   '&:hover': {
     backgroundColor: color,
     opacity: 0.9,
@@ -63,61 +71,78 @@ function InformationTest({data}) {
           TEST DETAILS MIXED
         </Typography>
 
-        <StyledTextField
-          fullWidth
-          label="Title"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-        />
+        <Box sx={{ mb: 1 }}>
+  <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Title</Typography>
+  <StyledTextField
+    fullWidth
+    placeholder="Speaking Detail 1"
+    name="title"
+    value={formData.title}
+    onChange={handleChange}
+  />
+</Box>
 
-        <StyledTextField
-          fullWidth
-          label="Serial"
-          name="serial"
-          value={formData.serial}
-          onChange={handleChange}
-        />
+<Box sx={{ mb: 1 }}>
+  <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Serial</Typography>
+  <StyledTextField
+    fullWidth
+    placeholder="1"
+    name="serial"
+    value={formData.serial}
+    onChange={handleChange}
+  />
+</Box>
 
-        <StyledTextField
-          fullWidth
-          label="Duration"
-          name="duration"
-          value={formData.duration}
-          onChange={handleChange}
-        />
+<Box sx={{ mb: 1 }}>
+  <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Duration</Typography>
+  <StyledTextField
+    fullWidth
+    placeholder="Duration"
+    name="duration"
+    value={formData.duration}
+    onChange={handleChange}
+  />
+</Box>
 
-        <StyledTextField
-          fullWidth
-          label="Type"
-          name="type"
-          value={formData.type}
-          onChange={handleChange}
-        />
+<Box sx={{ mb: 1 }}>
+  <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Type</Typography>
+  <StyledTextField
+    fullWidth
+    placeholder="Type"
+    name="type"
+    value={formData.type}
+    onChange={handleChange}
+  />
+</Box>
 
-        {/* Select for Status with InputLabel */}
-        <FormControl fullWidth sx={{ marginBottom: 2 }}>
-          <InputLabel>Status</InputLabel>
-          <Select
-            fullWidth
-            value={formData.status}
-            onChange={handleChange}
-            name="status"
-            label="Status"
-            displayEmpty
-            sx={{
-              borderRadius: 6,
-              backgroundColor: 'white',
-              boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-            }}
-          >
-            <MenuItem value="">
-              <em>Select Status</em>
-            </MenuItem>
-            <MenuItem value="active">Active</MenuItem>
-            <MenuItem value="inactive">Inactive</MenuItem>
-          </Select>
-        </FormControl>
+<Box sx={{ mb: 1 }}>
+  <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Status</Typography>
+  <FormControl fullWidth>
+    <Select
+      value={formData.status}
+      onChange={handleChange}
+      name="status"
+      displayEmpty
+      sx={{
+        height: '3rem',
+        borderRadius: '0.5rem',
+        backgroundColor: 'white',
+        '& .MuiSelect-select': {
+          color: '#9E9E9E',
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+          borderColor: '#E0E0E0',
+        },
+      }}
+    >
+      <MenuItem value="">
+     
+      </MenuItem>
+      <MenuItem value="active">Active</MenuItem>
+      <MenuItem value="inactive">Inactive</MenuItem>
+    </Select>
+  </FormControl>
+</Box>
 
         <ButtonContainer>
           <ColorButton color="#F08080" variant="contained">

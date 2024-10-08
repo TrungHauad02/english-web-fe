@@ -9,29 +9,14 @@ import SpeakingTesting from "./SpeakingTesting";
 import DataTestSpeaking from "./DataTestSpeaking";
 
 function TestSpeaking({list, quote, title, bg}) {
+    const [status, setStatus] = useState('Testing');
     return(
         <Box>
             <MainTitle title="Speaking" bg={bg} />
-            <Box sx={{marginLeft:'5%', marginRight:'5%'}}>
-                <Box sx={{display: 'flex', justifyContent: 'center', marginTop:'1rem', marginBottom:'1rem'}}>
-                    <Box sx={{
-                        background: '#FFF4CC',
-                        borderRadius: '1rem',
-                        fontSize: '1rem',
-                        float:'center',
-                        marginRight: '5%',
-                        width:'10%',
-                        padding:'0.5rem 1rem'
-                    }}>
-                        <Typography align="center">
-                            <strong>Time remaining:</strong>
-                            <br />
-                            60:00
-                        </Typography>
-                    </Box>
-                </Box>
+            <Box sx={{marginLeft:'5%', marginRight:'5%',marginTop:'3rem'}}>
+         
             
-                <SpeakingTesting data={DataTestSpeaking}/>
+                <SpeakingTesting data={DataTestSpeaking} status={status}/>
             </Box>
         </Box>
     );

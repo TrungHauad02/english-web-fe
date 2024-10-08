@@ -43,7 +43,7 @@ const ColorButton = styled(Button)(({ color }) => ({
 
 const TestManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('Mixed'); // Trạng thái mặc định cho bộ lọc
+  const [filterType, setFilterType] = useState('Mixed');
   const [tests, setTests] = useState([
     { serial: 1, title: 'Test mixd 2024', status: 'Active', type: 'Mixed' },
     { serial: 2, title: 'Test mixd 2024', status: 'Inactive', type: 'Reading' },
@@ -59,68 +59,90 @@ const TestManagement = () => {
     setFilterType(event.target.value);
   };
 
-  // Hàm lọc bài kiểm tra
   const filteredTests = tests.filter((test) =>
     test.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (filterType === 'Mixed' || test.type === filterType)
   );
 
   return (
-    <Container maxWidth="lg">
-      <Typography variant="h4" gutterBottom align="center" sx={{ fontWeight: 'bold' }}>
-        TEST MANAGEMENT
-      </Typography>
-      
-      <SearchContainer>
-        <Select
-          value={filterType}
-          onChange={handleFilterChange}
-          variant="outlined"
-          sx={{ minWidth: 120 }}
-        >
-          <MenuItem value="Mixed">Mixed</MenuItem>
-          <MenuItem value="Reading">Reading</MenuItem>
-          <MenuItem value="Listening">Listening</MenuItem>
-          <MenuItem value="Speaking">Speaking</MenuItem>
-          <MenuItem value="Writing">Writing</MenuItem>
-        </Select>
-        <TextField
-          label="Search Test"
-          variant="outlined"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          fullWidth
-        />
-        <ColorButton color="#FFD700" variant="contained" sx={{ marginLeft: 2 }}>
-          Add new test
-        </ColorButton>
-      </SearchContainer>
+    <Container maxWidth="lg" sx={{marginTop:'4rem' ,marginBottom:'2rem'}}>
 
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Serial</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Details</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredTests.map((test) => (
-              <TableRow key={test.serial}>
-                <TableCell>{test.serial}</TableCell>
-                <TableCell>{test.title}</TableCell>
-                <TableCell>{test.status}</TableCell>
-                <TableCell>
-                  <Button variant="outlined">Detail</Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
+  <Typography 
+     
+    variant="h4" 
+    gutterBottom 
+    align="center" 
+    sx={{ fontWeight: 'bold', marginBottom: '2rem',}}
+  >
+    TEST MANAGEMENT
+  </Typography>
+
+  <Box 
+    sx={{ 
+      display: 'flex', 
+      justifyContent: 'space-between', 
+      alignItems: 'center', 
+      marginBottom: '2rem', 
+      gap: '1rem' 
+    }}
+  >
+    <Select
+      value={filterType}
+      onChange={handleFilterChange}
+      variant="outlined"
+      sx={{ minWidth: 120 }}
+    >
+      <MenuItem value="Mixed">Mixed</MenuItem>
+      <MenuItem value="Reading">Reading</MenuItem>
+      <MenuItem value="Listening">Listening</MenuItem>
+      <MenuItem value="Speaking">Speaking</MenuItem>
+      <MenuItem value="Writing">Writing</MenuItem>
+    </Select>
+    
+    <TextField
+      label="Search Test"
+      variant="outlined"
+      value={searchTerm}
+      onChange={handleSearchChange}
+      fullWidth
+      sx={{ flexGrow: 1 }} 
+    />
+    
+    <ColorButton 
+      color="#FFD700" 
+      variant="contained" 
+      sx={{ marginLeft: 2 ,   whiteSpace: 'nowrap'}}
+      
+    >
+      Add new test
+    </ColorButton>
+  </Box>
+  <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Serial</TableCell>
+          <TableCell>Title</TableCell>
+          <TableCell>Status</TableCell>
+          <TableCell align="center">Details</TableCell>  {/* Căn giữa cho cột chi tiết */}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {filteredTests.map((test) => (
+          <TableRow key={test.serial}>
+            <TableCell>{test.serial}</TableCell>
+            <TableCell>{test.title}</TableCell>
+            <TableCell>{test.status}</TableCell>
+            <TableCell align="center">
+              <Button variant="outlined">Detail</Button>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+</Container>
+
   );
 };
 

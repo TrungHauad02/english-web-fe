@@ -40,6 +40,9 @@ function TestWriting({list,quote, title, bg}) {
 
     setRenderKey(renderKey + 1);
 };
+const calculateScore = () => {
+return 0;
+};
 
 
   return (
@@ -54,8 +57,7 @@ function TestWriting({list,quote, title, bg}) {
       </DurationContainer>
 
       <BtnPreviousNextContentTest indexVisible = {indexVisible}  setIndexVisible={setIndexVisible} sumcontent = {DataTestWriting.datacontent.length}  />
-      <ContentTestWriting datatest={DataTestWriting.datacontent[indexVisible]}/>
-
+      <ContentTestWriting datatest={DataTestWriting.datacontent[indexVisible]} handlebtnSubmit={handlebtnSubmit} onClickTestAgain= {onClickTestAgain} status={status} calculateScore={calculateScore}/>
 
     </Box>
   );

@@ -119,9 +119,11 @@
        ) {
    
             const selectedAnswer = selectedAnswers[data.dataitem[0].id];
-            console.log(selectedAnswer);
             
-
+            if (selectedAnswer && selectedAnswer.essay) {
+              console.log(selectedAnswer.essay);
+            }
+            
             
              if(selectedAnswer===undefined || selectedAnswer==='')
             { 
@@ -192,7 +194,7 @@
             <Box
                 key={index}
                 sx={{
-                padding: '10px',
+                padding: '1rem 2rem',
                 borderRadius: '1rem',
                 background: activeTab === index ? '#D9D9D9' : '#d9d9d933',
                 }}
@@ -202,8 +204,8 @@
             </Box>
             ))}
         </Box>
-        <Box sx={{display:'flex',marginBottom:'2%',marginTop:'1rem'}}>
-        <Box sx={{ width:'100%',padding: '2rem', border: '1px solid #ccc', borderRadius:'1rem' , marginRight:'1rem'}}>
+        <Box sx={{display:'flex',marginBottom:'2%',marginTop:'1rem',position: 'relative'}}>
+        <Box sx={{ width:'75%',padding: '2rem', border: '1px solid #ccc', borderRadius:'1rem' , marginRight:'1rem'}}>
         <ItemTitleTest title={DataTestMixing[activeTab].title}/>
         {activeTab === 0 && <Vocabulary key= {renderKey} status={status} dataTest={DataTestMixing[activeTab]}onAnswerChange = {handleAnswerChange} focusId={focusId} title= {title} />}
         {activeTab === 1 && <Grammar key= {renderKey}  status={status} dataTest={DataTestMixing[activeTab]}onAnswerChange = {handleAnswerChange}  focusId={focusId} title= {title}   />}
@@ -211,14 +213,14 @@
         {activeTab === 3 && <Listening key= {renderKey}  status={status} dataTest={DataTestMixing[activeTab]} onAnswerChange = {handleAnswerChange}  focusId={focusId} title= {title}   />}
         {activeTab === 4 && <Writing key= {renderKey}  status={status} dataTest={DataTestMixing[activeTab]} onAnswerChange = {handleAnswerChange}  focusId={focusId} title= {title}   />}
         </Box>
-        <Box sx={{width:'25%'}}>
+        <Box sx={{width:'25%' }}>
         <SerialGrid  title={DataTestMixing[activeTab].title} TitleAndSerials = {TitleAndSerials} gridData= {gridData} onItemClick={onItemClick} 
         status = {status} handlebtnSubmit ={handlebtnSubmit} 
         onClickTestAgain={onClickTestAgain} 
         score ={score}
+       
         />
         </Box>
-   
         </Box>
         </Box>
     );

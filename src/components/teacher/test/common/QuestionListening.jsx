@@ -17,7 +17,11 @@ import {
 import { Trash, Edit, Save, Upload, PlusCircle } from 'lucide-react';
 import { styled } from '@mui/material/styles';
 import QuestionVocabulary from "./QuestionVocabulary"
-
+const FormContainer = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  backgroundColor: '#fff5e6',
+  borderRadius: theme.spacing(2),
+}));
 
 const ListeningQuiz = ({data}) => {
   const [audioUrl, setAudioUrl] = useState(data.content);
@@ -57,7 +61,7 @@ const ListeningQuiz = ({data}) => {
   };
 
   return (
-    <Box sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
+    <FormContainer sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
         <Typography variant="h4">Listening</Typography>
     
@@ -138,12 +142,13 @@ const ListeningQuiz = ({data}) => {
             question={{ 
               ...selectedQuestion, 
               type: "Question detail" ,
-              isExplain: "false"
+              isExplain: "false",
+              details: "true"
             }} 
           />
         </Box>
       </Box>
-    </Box>
+    </FormContainer>
   );
 };
 

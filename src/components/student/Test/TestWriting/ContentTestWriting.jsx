@@ -15,14 +15,14 @@ const Partition = styled(Box)(({ theme }) => ({
 }));
 
 const QuestionSection = styled(Grid)(({ theme }) => ({
-  marginRight: '2%',
+  padding:'1rem',
   flex: '0 1 47%',
 }));
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
-  margin: theme.spacing(2),
-  borderRadius: '8px',
+  margin: '1rem',
+  borderRadius: '1rem',
 }));
 
 const EssayInput = ({ value, wordCount, onChange }) => {
@@ -57,13 +57,13 @@ const EssayInput = ({ value, wordCount, onChange }) => {
         }}
       />
       <Box sx={{ mt: 1 }}>
-        <Typography variant="body2">Words Count: {wordCount}</Typography> {/* Hiển thị số từ */}
+        <Typography variant="body2">Words Count: {wordCount}</Typography>
       </Box>
     </StyledPaper>
   );
 };
 
-function ContentTestWriting({ datatest }) {
+function ContentTestWriting({ datatest,handlebtnSubmit,onClickTestAgain,status,calculateScore }) {
 
   const [answers, setAnswers] = useState({});
 
@@ -75,16 +75,14 @@ function ContentTestWriting({ datatest }) {
     }));
   };
 
-  const handleSubmit = () => {
-    console.log('Submitted answers:', answers);
-  };
+
 
   return (
     <>
       <Box sx={{  display: 'flex', marginTop: '2%' }}>
         <TestContainer sx={{ flex: '1 1 49%' }}>
           <QuestionSection item>
-          <Typography variant="h5" sx={{ marginTop: '2%', fontWeight: 'bold' }}>
+          <Typography variant="h5" sx={{  fontWeight: 'bold' }}>
             Question {datatest.serial}
             </Typography>
             <Typography variant="body1" sx={{marginTop:'1rem'}}>{datatest.content}</Typography>
@@ -98,21 +96,20 @@ function ContentTestWriting({ datatest }) {
             wordCount={answers[datatest.id]?.wordCount || 0} 
             onChange={(essay, wordCount) => handleAnswerChange(datatest.id, essay, wordCount)} 
           />
-          <Button
-            onClick={handleSubmit}
-            sx={{
-              border: '0.0001rem solid black',
-              borderRadius: '1rem',
-              background: '#FFD984',
-              color: 'black',
-              float: 'right',
-              marginRight: '10%',
-              marginBottom: '2%',
-              padding: '1rem 2rem',
-            }}
-          >
-            SUBMIT
-          </Button>
+           {
+      status === 'Submit' ?  <Box sx={{marginLeft:'1rem',float:'left',borderRadius: '1rem',border:'solid 0.02rem',padding:'1rem 2rem'}}>
+      <Typography align="center">
+          Score: {calculateScore()}
+          </Typography>
+      </Box> : null
+    }
+   
+   
+    <Button sx={{
+  borderRadius: '1rem',   backgroundColor: status === 'Testing' ? '#FFD984' : '#4A90E2',color:'black',float:'right',marginRight:'10%',marginBottom:'2%',padding:'1rem 2rem'}}  onClick={status === 'Testing' ? handlebtnSubmit : onClickTestAgain } 
+  >
+       {status === 'Testing' ? 'SUBMIT' : 'TEST AGAIN'}
+      </Button>
         </TestContainer>
       </Box>
     </>

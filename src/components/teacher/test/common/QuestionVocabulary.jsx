@@ -35,8 +35,33 @@ const findCorrectAnswerId = (answers) => {
   return correctAnswer ? correctAnswer.id : null;
 };
 
-
+const FormContainer = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  backgroundColor: '#fff5e6',
+  borderRadius: theme.spacing(2),
+}));
 const VocabularyQuiz = ({ question }) => {
+
+
+  return (
+    <>
+    {question.details ? (
+    <Box sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
+        {<ContentQuestion question={question}/>}
+    </Box>
+) : (
+    <FormContainer sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
+        {<ContentQuestion question={question}/>}
+    </FormContainer>
+)}
+
+    </>
+
+  );
+};
+
+
+const ContentQuestion = ({ question }) => {
   const [questionvoca, setQuestionvoca] = useState(question);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false); 
@@ -85,9 +110,10 @@ const VocabularyQuiz = ({ question }) => {
 
   };
 
-  return (
-    <Box sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+  
+  return(
+    <>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
         <Typography variant="h4">{question.type}</Typography>
       </Box>
 
@@ -102,7 +128,8 @@ const VocabularyQuiz = ({ question }) => {
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
-            mr: 1
+            mr: 1,
+            padding:'0.5rem'
           }}>
             {question.serial}
           </Box>
@@ -175,18 +202,22 @@ const VocabularyQuiz = ({ question }) => {
           />
         }
        
-          <Button 
-            variant="contained" 
-            onClick={handleAddAnswer} 
-            startIcon={<PlusCircle />}
-            sx={{
+            <Button 
+          variant="contained" 
+          onClick={handleAddAnswer} 
+          startIcon={<PlusCircle />}
+          sx={{
               bgcolor: '#9dc45f',
               '&:hover': { bgcolor: '#8ab54e' },
-              marginLeft: question.isExplain === "false" ? 0 : '1rem' 
-            }}
-          >
-            Add new answer
-          </Button>
+              marginLeft: question.isExplain === "false" ? 0 : '1rem',
+              whiteSpace: 'nowrap',
+              height:'auto',
+              padding:'0.1rem 1.5rem'
+          }}
+      >
+          Add new answer
+      </Button>
+
         </Box>
         
         <ButtonContainer>
@@ -201,7 +232,9 @@ const VocabularyQuiz = ({ question }) => {
           </ColorButton>
         </ButtonContainer>
       </Paper>
-    </Box>
+    </>
+
+
   );
 };
 
