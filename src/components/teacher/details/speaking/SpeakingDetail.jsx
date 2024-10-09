@@ -31,7 +31,7 @@ export default function SpeakingDetail() {
           container
           boxShadow={"0 0 0.5rem 0.1rem #00000040"}
           sx={{
-            backgroundColor: "#FFF4CC",
+            backgroundColor: "#f1f1f1",
             borderRadius: "0.5rem",
             height: "50vh",
             overflowY: "auto",
@@ -56,7 +56,7 @@ export default function SpeakingDetail() {
           container
           boxShadow={"0 0 0.5rem 0.1rem #00000040"}
           sx={{
-            backgroundColor: "#FFF4CC",
+            backgroundColor: "#f1f1f1",
             borderRadius: "0.5rem",
             height: "72vh",
             overflowY: "auto",

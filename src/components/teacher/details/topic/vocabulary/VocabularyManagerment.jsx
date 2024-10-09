@@ -116,7 +116,7 @@ export default function VocabularyManagerment() {
       direction={"column"}
       spacing={2}
       sx={{
-        backgroundColor: "#FFF4CC",
+        backgroundColor: "#f1f1f1",
         borderRadius: "0.5rem",
         padding: "1.5rem 2rem",
         marginTop: "2rem",
@@ -124,7 +124,7 @@ export default function VocabularyManagerment() {
       }}
     >
       <Typography variant={"h5"} fontWeight={"bold"}>
-        Vocabulary Managerment
+        Vocabulary Management
       </Typography>
       <Grid2 container direction={"row"}>
         <Grid2

@@ -26,9 +26,9 @@ export default function TopicList({ listTopic, title }) {
             variant={"contained"}
             color={"primary"}
             sx={{
-              backgroundColor: "#FFF4CC",
+              backgroundColor: "#6EC2F7",
               padding: "1rem 1.5rem",
-              color: "#000",
+              color: "#fff",
             }}
           >
             Add new {title}

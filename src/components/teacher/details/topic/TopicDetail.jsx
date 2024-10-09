@@ -22,7 +22,6 @@ export default function TopicDetail({ path }) {
         <Grid2
           item
           borderRadius={"0.5rem"}
-          backgroundColor={"#FFF4CC"}
           boxShadow={"0 0 0.5rem 0.1rem #00000040"}
           width={"60%"}
           sx={{
