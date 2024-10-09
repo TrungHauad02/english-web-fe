@@ -11,6 +11,7 @@ const Title = styled("h4")({
   fontWeight: "bold",
   textAlign: "center",
   margin: "1rem 0",
+  color: "#000",
 });
 
 function Question({ index, content }) {
@@ -49,7 +50,7 @@ function AnswerQuestion({ listQuestion }) {
     }));
   };
 
-  const getUserAnwser = (questionId) => {
+  const getUserAnswer = (questionId) => {
     if (!userAnswer) return null;
     return userAnswer[questionId] || null;
   };
@@ -91,7 +92,7 @@ function AnswerQuestion({ listQuestion }) {
         marginX: "5%",
         marginY: "2rem",
         padding: "1rem",
-        backgroundColor: "#F0F6D4",
+        backgroundColor: "#f1f1f1",
         position: "relative",
       }}
     >
@@ -105,7 +106,7 @@ function AnswerQuestion({ listQuestion }) {
         <Grid2 container direction={"row"} justifyContent={"space-between"}>
           <ListOptions
             listAnswer={question.options}
-            value={getUserAnwser(question.id)}
+            value={getUserAnswer(question.id)}
             sx={{ marginY: "1rem", marginX: "1rem" }}
             onChange={handleChange}
           />
@@ -114,7 +115,7 @@ function AnswerQuestion({ listQuestion }) {
               explaination={question.explaination}
               sx={{
                 marginRight: "1rem",
-                backgroundColor: "#DAE995",
+                backgroundColor: "#6ec3f77f",
               }}
             />
           )}
@@ -126,7 +127,7 @@ function AnswerQuestion({ listQuestion }) {
             sx={{
               margin: "1rem",
               width: "12rem",
-              backgroundColor: "#ACCD0A",
+              backgroundColor: "#6EC2F7",
               position: "absolute",
               bottom: "0",
             }}
@@ -138,7 +139,7 @@ function AnswerQuestion({ listQuestion }) {
       <PrevNextSubmitButton
         handleNext={handleNext}
         handlePrevious={handlePrevious}
-        submitConent={getSubmitContent()}
+        submitContent={getSubmitContent()}
         scoreContent={getScoreContent()}
         onSubmit={() => setIsSubmit(true)}
       />

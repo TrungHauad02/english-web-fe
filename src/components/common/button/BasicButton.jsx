@@ -11,7 +11,7 @@ function BasicButton({
     padding: "0.5rem 1rem",
     fontSize: "1rem",
     borderRadius: "0.25rem",
-    backgroundColor: "#ACCD0A",
+    backgroundColor: "#6EC2F7",
     color: "#000",
   },
 }) {

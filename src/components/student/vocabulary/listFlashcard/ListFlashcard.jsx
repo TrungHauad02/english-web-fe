@@ -25,7 +25,7 @@ function ListFlashcard({ list }) {
       direction={"column"}
       sx={{
         width: "100%",
-        backgroundColor: "#D6F153",
+        background: "#f1f1f1",
         padding: "1rem 0",
       }}
     >

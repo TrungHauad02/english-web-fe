@@ -11,9 +11,5 @@ export function getListTopic(page) {
       }
       return response.json();
     })
-    .then((data) => {
-      console.log(data.content);
-      return data.content;
-    })
     .catch((error) => console.error(error));
 }

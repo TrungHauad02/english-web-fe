@@ -13,6 +13,7 @@ const Title = styled("h4")({
   textAlign: "center",
   margin: "1rem 0",
   marginBottom: "2rem",
+  color: "#000",
 });
 
 const shuffleArray = (array) => {
@@ -101,7 +102,7 @@ function MatchImageWithWord() {
           marginX: "5%",
           marginY: "1%",
           padding: "1%",
-          backgroundColor: "#F0F6D4",
+          background: "#f1f1f1",
           borderRadius: "0.5rem",
         }}
       >
@@ -117,7 +118,7 @@ function MatchImageWithWord() {
         <Grid2 container justifyContent="flex-end">
           <ResetButton onClick={handleResetClick} />
           <ConfirmAndSubmit
-            submitConent={getSubmittedContent()}
+            submitContent={getSubmittedContent()}
             scoreContent={getScoreContent()}
           />
         </Grid2>

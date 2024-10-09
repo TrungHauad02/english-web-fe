@@ -6,7 +6,7 @@ function Introduction({ title }) {
       container
       direction={"row"}
       spacing={2}
-      sx={{ marginX: "5%", marginY: "1rem" }}
+      sx={{ marginX: "5%", marginY: "2rem" }}
       alignContent={"center"}
       alignItems={"center"}
     >

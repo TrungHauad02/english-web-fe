@@ -13,7 +13,7 @@ import TestReading from "./Test/TestReading/TestReading";
 import TestListening from "./Test/TestListening";
 import TestWriting from "./Test/TestWriting/TestWriting";
 import TestSpeaking from "./Test/TestSpeaking/TestSpeaking";
-import TestMixing from "./Test/TestMixing/TestMixing"
+import TestMixing from "./Test/TestMixing/TestMixing";
 
 import Grammar from "./grammar/Grammar";
 import HomePageStudent from "./content/HomePageStudent";
@@ -41,7 +41,7 @@ function HomeStudent() {
     <Stack
       direction="column"
       justifyContent="space-between"
-      sx={{ height: "100%", pt: '4rem', marginBottom: '-5px'}}
+      sx={{ height: "100%", pt: "4rem", marginBottom: "-5px" }}
     >
       <HeaderStudent />
       <Stack
@@ -64,23 +64,22 @@ function HomeStudent() {
             />
           ))}
           <Route path="/skill" element={<Skills />} />
-          <Route path="/list-topic/1" element={<Vocabulary />} />
+          <Route path="/list-topic/topic_1" element={<Vocabulary />} />
           <Route path="/grammar/1" element={<Grammar />} />
-          <Route path="/account" element={<Account/>} />
+          <Route path="/account" element={<Account />} />
           <Route path="/" element={<HomePageStudent />} />
           <Route path="/skill/reading/1" element={<Reading />} />
           <Route path="/skill/listening/1" element={<Listening />} />
           <Route path="/skill/speaking/1" element={<Speaking />} />
           <Route path="/skill/writing/1" element={<Writing />} />
           <Route path="/history-test" element={<HistoryTest />} />
-          <Route path="/study-schedule" element={<StudySchedule/>} />
+          <Route path="/study-schedule" element={<StudySchedule />} />
         </Routes>
         <Outlet />
       </Stack>
       <Footer />
     </Stack>
   );
-
 }
 
 export default HomeStudent;

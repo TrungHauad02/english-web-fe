@@ -7,7 +7,7 @@ import ConfirmAndSubmit from "../../student/common/ConfirmAndSubmit";
 function PrevNextSubmitButton({
   handlePrevious,
   handleNext,
-  submitConent,
+  submitContent,
   scoreContent,
   onSubmit,
   sx = { marginTop: "1rem", justifyContent: "flex-end", paddingRight: "1rem" },
@@ -18,19 +18,19 @@ function PrevNextSubmitButton({
         content="Previous"
         onClick={handlePrevious}
         startIcon={<ArrowBackIosNewRoundedIcon />}
-        sx={{ color: "#fff", backgroundColor: "#ACCD0A" }}
+        sx={{ color: "#fff", backgroundColor: "#6EC2F7" }}
       />
       <BasicButton
         content="Next"
         onClick={handleNext}
         endIcon={<ArrowForwardIosRoundedIcon />}
-        sx={{ color: "#fff", backgroundColor: "#ACCD0A" }}
+        sx={{ color: "#fff", backgroundColor: "#6EC2F7" }}
       />
       <ConfirmAndSubmit
-        submitConent={submitConent}
+        submitContent={submitContent}
         scoreContent={scoreContent}
         onSubmit={onSubmit}
-        sx={{ color: "#fff", backgroundColor: "#ACCD0A" }}
+        sx={{ color: "#fff", backgroundColor: "#6EC2F7" }}
       />
     </Grid2>
   );

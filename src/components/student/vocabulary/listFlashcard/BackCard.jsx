@@ -19,7 +19,7 @@ function BackCard({ vocab }) {
           paddingX: "1rem",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#FFEACB",
+          backgroundColor: "#fff",
         }}
       >
         <Typography

@@ -3,7 +3,7 @@ import ConfirmDialog from "./ConfirmDialog";
 import { Box } from "@mui/material";
 import BasicButton from "../../common/button/BasicButton";
 
-function ConfirmAndSubmit({ submitConent, scoreContent, sx, onSubmit }) {
+function ConfirmAndSubmit({ submitContent, scoreContent, sx, onSubmit }) {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [scoreDialogOpen, setScoreDialogOpen] = useState(false);
 
@@ -32,7 +32,7 @@ function ConfirmAndSubmit({ submitConent, scoreContent, sx, onSubmit }) {
         onClose={handleConfirmDialogClose}
         onAgree={handleSubmitClick}
         title="Confirmation"
-        content={submitConent}
+        content={submitContent}
         cancelText={"Cancel"}
         agreeText={"Submit"}
       />
@@ -40,7 +40,7 @@ function ConfirmAndSubmit({ submitConent, scoreContent, sx, onSubmit }) {
         open={scoreDialogOpen}
         onClose={handleScoreDialogClose}
         onAgree={handleAgreeClick}
-        title="Submition"
+        title="Submit"
         content={scoreContent}
         agreeText={"Ok"}
       />
