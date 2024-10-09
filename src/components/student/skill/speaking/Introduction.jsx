@@ -23,7 +23,7 @@ function Introduction({ content }) {
         justifyContent={"center"}
       >
         <img src="/headphone.png" alt="listening" width="200px" />
-        <Card sx={{ backgroundColor: "#DDF179" }}>
+        <Card sx={{ backgroundColor: "#6EC2F7" }}>
           <CardContent>
             <Typography textAlign={"center"} fontWeight={"bold"}>
               Time to put in your headphone and stay focus

@@ -67,7 +67,7 @@ export default function WritingAboutTopic() {
         <BasicButton
           sx={{
             color: "#fff",
-            backgroundColor: "#ACCD0A",
+            backgroundColor: "#6EC2F7",
             borderRadius: "0rem",
             paddingX: "2rem",
           }}

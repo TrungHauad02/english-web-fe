@@ -120,7 +120,7 @@ export default function SpeakingInTopic() {
             className="sound-wave"
             onStop={handleStop}
             strokeColor="#fff"
-            backgroundColor="#AFCC2B"
+            backgroundColor="#6EC2F7"
           />
           {audioSrc && (
             <Grid2 item xs={12} sx={{ width: "100%" }}>
@@ -147,7 +147,7 @@ export default function SpeakingInTopic() {
             <BasicButton
               sx={{
                 color: "#fff",
-                backgroundColor: "#CDE556",
+                backgroundColor: "#6EC2F7",
                 borderRadius: "0rem",
                 paddingX: "2rem",
               }}
@@ -158,7 +158,7 @@ export default function SpeakingInTopic() {
           <BasicButton
             sx={{
               color: "#fff",
-              backgroundColor: "#ACCD0A",
+              backgroundColor: "#6EC2F7",
               borderRadius: "0rem",
               paddingX: "2rem",
             }}
