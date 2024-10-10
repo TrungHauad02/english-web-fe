@@ -1,22 +1,33 @@
 import { Grid2 } from "@mui/material";
 import VocabularyCard from "./VocabularyCard";
-import Pagination from "@mui/material/Pagination";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import CustomPagination from "../../../common/pagination/CustomPagination";
+import { getVocabularyInTopic } from "../../../../api/student/vocabularyApi";
 
-function ListFlashcard({ list }) {
+function ListFlashcard({ topicId }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
-  const totalPages = Math.ceil(list.length / itemsPerPage);
+  const [list, setList] = useState(null);
+  const [totalPage, setTotalPage] = useState(0);
 
-  const currentItems = list.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getVocabularyInTopic(currentPage - 1, 8, topicId);
+      console.log("data", data);
+      if (data) {
+        setList(data.content);
+        setTotalPage(data.totalPages);
+      } else {
+        setList([]);
+      }
+    };
 
-  const handlePageChange = (event, value) => {
+    fetchData();
+  }, [currentPage, topicId]);
+
+  const onChangePage = (event, value) => {
     setCurrentPage(value);
   };
-
+  if (list === null) return null;
   return (
     <Grid2
       container
@@ -25,12 +36,12 @@ function ListFlashcard({ list }) {
       direction={"column"}
       sx={{
         width: "100%",
-        backgroundColor: "#D6F153",
+        background: "#f1f1f1",
         padding: "1rem 0",
       }}
     >
       <Grid2 container justifyContent={"space-evenly"} alignItems={"center"}>
-        {currentItems.map((vocab) => (
+        {list.map((vocab) => (
           <Grid2 item xs={6} sm={4} key={vocab.id} size={3}>
             <VocabularyCard vocab={vocab} />
           </Grid2>
@@ -45,16 +56,7 @@ function ListFlashcard({ list }) {
           marginY: "1rem",
         }}
       >
-        <Pagination
-          count={totalPages}
-          page={currentPage}
-          onChange={handlePageChange}
-          color="primary"
-          variant="outlined"
-          shape="rounded"
-          showFirstButton
-          showLastButton
-        />
+        <CustomPagination count={totalPage} onChange={onChangePage} />
       </Grid2>
     </Grid2>
   );

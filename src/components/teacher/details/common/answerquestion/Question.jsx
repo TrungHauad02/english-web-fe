@@ -223,7 +223,7 @@ export default function Question({ data, onDelQuestion }) {
             <Button
               onClick={handleAddNewAnswer}
               variant="contained"
-              sx={{ backgroundColor: "#ACCD0A", color: "#000" }}
+              sx={{ backgroundColor: "#000", color: "#fff" }}
             >
               Add new answer
             </Button>

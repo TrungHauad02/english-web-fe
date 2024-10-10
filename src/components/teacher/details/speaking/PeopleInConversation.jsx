@@ -43,7 +43,7 @@ export default function PeopleInConversation({ listPeople, setListPeople }) {
         sx={{
           position: "sticky",
           top: 0,
-          backgroundColor: "#FFF4CC",
+          backgroundColor: "#fff",
           padding: "1rem 1rem",
           zIndex: 3,
           boxShadow: "0 0 0.5rem 0.1rem #00000030",

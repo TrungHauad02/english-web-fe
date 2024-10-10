@@ -1,59 +1,9 @@
-const listTopic = [
-  {
-    title: "Environment1",
-    description:
-      "This lesson we will discussion about environment, pollution and global warnming",
-    img: "/environment.png",
-  },
-  {
-    title: "Environment2",
-    description:
-      "This lesson we will discussion about environment, pollution and global warnming",
-    img: "/environment.png",
-  },
-  {
-    title: "Environment3",
-    description:
-      "This lesson we will discussion about environment, pollution and global warnming",
-    img: "/environment.png",
-  },
-  {
-    title: "Environment4",
-    description:
-      "This lesson we will discussion about environment, pollution and global warnming",
-    img: "/environment.png",
-  },
-  {
-    title: "Environment5",
-    description:
-      "This lesson we will discussion about environment, pollution and global warnming",
-    img: "/environment.png",
-  },
-  {
-    title: "Environment6",
-    description:
-      "This lesson we will discussion about environment, pollution and global warnming",
-    img: "/environment.png",
-  },
-  {
-    title: "Environment7",
-    description:
-      "This lesson we will discussion about environment, pollution and global warnming",
-    img: "/environment.png",
-  },
-  {
-    title: "Environment8",
-    description:
-      "This lesson we will discussion about environment, pollution and global warnming",
-    img: "/environment.png",
-  },
-  {
-    title: "Environment9",
-    description:
-      "This lesson we will discussion about environment, pollution and global warnming",
-    img: "/environment.png",
-  },
-];
+import Vocabulary from "../vocabulary/Vocabulary";
+import Grammar from "../grammar/Grammar";
+import Reading from "../skill/reading/Reading";
+import Listening from "../skill/listening/Listening";
+import Speaking from "../skill/speaking/Speaking";
+import Writing from "../skill/writing/Writing";
 
 const ListTest = [
   {
@@ -108,8 +58,8 @@ const site = [
     path: "list-topic",
     quote:
       "Expand your knowledge and enhance your skills through our diverse vocabulary topics. Explore and learn with us!",
-    list: listTopic,
     file: "ListTopic",
+    detail: Vocabulary,
   },
   {
     id: 2,
@@ -118,8 +68,8 @@ const site = [
     path: "grammar",
     quote:
       "Master the rules of grammar to express yourself with confidence and clarity. Learn the building blocks of language with ease!",
-    list: listTopic,
     file: "ListTopic",
+    detail: Grammar,
   },
   {
     id: 3,
@@ -128,8 +78,8 @@ const site = [
     path: "skill/reading",
     quote:
       "Enhance your comprehension and analytical skills by exploring various texts. Uncover the power of reading and deepen your understanding!",
-    list: listTopic,
     file: "ListTopic",
+    detail: Reading,
   },
   {
     id: 4,
@@ -138,8 +88,8 @@ const site = [
     path: "skill/listening",
     quote:
       "Sharpen your listening skills and tune in to real-life conversations. Improve your ability to understand spoken language effectively!",
-    list: listTopic,
     file: "ListTopic",
+    detail: Listening,
   },
   {
     id: 5,
@@ -148,8 +98,8 @@ const site = [
     path: "skill/speaking",
     quote:
       "Speak with confidence and fluency in any situation. Practice your speaking skills and become a natural communicator!",
-    list: listTopic,
     file: "ListTopic",
+    detail: Speaking,
   },
   {
     id: 6,
@@ -158,8 +108,8 @@ const site = [
     path: "skill/writing",
     quote:
       "Enhance your writing abilities to express your ideas clearly and effectively. Write with precision and creativity across various styles!",
-    list: listTopic,
     file: "ListTopic",
+    detail: Writing,
   },
   {
     id: 7,

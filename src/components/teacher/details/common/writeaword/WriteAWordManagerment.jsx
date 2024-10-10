@@ -37,7 +37,7 @@ export default function WriteAWordManagerment() {
   return (
     <Stack
       direction={"column"}
-      sx={{ backgroundColor: "#FFF4CC", borderRadius: "0.5rem" }}
+      sx={{ backgroundColor: "#f1f1f1", borderRadius: "0.5rem" }}
     >
       <Stack
         direction={"row"}
@@ -45,7 +45,7 @@ export default function WriteAWordManagerment() {
         sx={{
           position: "sticky",
           top: 0,
-          backgroundColor: "#FFF4CC",
+          backgroundColor: "#fff",
           padding: "1rem 0",
           zIndex: 3,
           boxShadow: "0 0 0.5rem 0.1rem #00000050",
@@ -63,7 +63,7 @@ export default function WriteAWordManagerment() {
           <SaveButton showText={true} size={"large"} />
           <Button
             variant="contained"
-            sx={{ backgroundColor: "#ACCD0A", color: "#000" }}
+            sx={{ backgroundColor: "#fff", color: "#000" }}
             onClick={handleAddNewQuestion}
           >
             Add new question

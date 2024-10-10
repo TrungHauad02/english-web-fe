@@ -38,7 +38,7 @@ export default function ListVocabulary({ listVocab, onUpdateCurVocab }) {
         <Grid2 item sx={{ marginTop: "0.5rem" }}>
           <Button
             variant="contained"
-            sx={{ backgroundColor: "#ACCD0A", color: "#000" }}
+            sx={{ backgroundColor: "#fff", color: "#000" }}
             onClick={onHandleAddNewVocab}
           >
             Add new vocabulary

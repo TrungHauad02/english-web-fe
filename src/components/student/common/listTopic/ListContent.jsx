@@ -4,22 +4,36 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Grid,
+  Grid2,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function ListContent({ list }) {
+  const navigate = useNavigate();
+  const handleClick = (id) => {
+    navigate(`${id}`);
+  };
   return (
     <Stack spacing={4} sx={{ paddingX: "5%" }}>
-      <Grid container spacing={4} justifyContent="center">
+      <Grid2 container spacing={4} justifyContent="center">
         {list.map((content) => (
-          <Grid
-            item
+          <Grid2
             key={content.id}
             xs={12}
             sm={6}
             md={6}
             lg={6}
-            sx={{ overflow: "visible" }}
+            size={6}
+            onClick={() => handleClick(content.id)}
+            sx={{
+              overflow: "visible",
+              cursor: "pointer",
+              transition: "all 0.5s",
+              ":hover": {
+                transform: "scale(1.05)",
+                boxShadow: "0 0 10px 5px #6EC2F7",
+              },
+            }}
           >
             <Card sx={{ display: "flex", height: "250px" }}>
               <CardMedia
@@ -50,9 +64,9 @@ function ListContent({ list }) {
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
     </Stack>
   );
 }

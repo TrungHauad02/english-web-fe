@@ -2,14 +2,20 @@ import { FrontSide } from "react-flippy";
 import { VocabCard } from "./VocabularyCard";
 import { CardContent, CardMedia, styled, Typography } from "@mui/material";
 
-const VocabWordCard = styled(CardContent)(({ theme }) => ({
+const VocabWordCard = styled(CardContent)(() => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   width: "100%",
-  backgroundColor: "rgba(255,255,255,0.5)",
+  paddingTop: "2rem",
+  backgroundColor: "#dfdfdf",
   position: "absolute",
-  bottom: 0,
+  transition: "all 0.5s",
+  bottom: "-22%",
+  ":hover": {
+    backgroundColor: "#dfdfdf7f",
+    bottom: "0",
+  },
 }));
 
 function FrontCard({ vocab }) {
@@ -18,14 +24,14 @@ function FrontCard({ vocab }) {
       <VocabCard>
         <CardMedia
           component="img"
-          image={vocab.img}
+          image={vocab.image}
           alt={vocab.word}
           sx={{ height: "100%", width: "100%" }}
         />
         <VocabWordCard>
           <Typography
             variant="body1"
-            sx={{ color: "text.primary", fontWeight: "bold" }}
+            sx={{ color: "#000", fontWeight: "bold" }}
           >
             {vocab.word}
           </Typography>

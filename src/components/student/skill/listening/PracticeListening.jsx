@@ -22,7 +22,7 @@ function PracticeListening() {
               value="1"
               sx={{
                 color: "#000!important",
-                backgroundColor: value === "1" ? "#AFCC2B" : "#DCEA99",
+                backgroundColor: value === "1" ? "#6EC2F7" : "#bee6ff",
                 borderTopRightRadius: "999px",
                 borderBottom: value === "1" ? "none" : "1px solid white",
                 padding: "0.5rem 2.5rem",
@@ -34,7 +34,7 @@ function PracticeListening() {
               value="2"
               sx={{
                 color: "#000!important",
-                backgroundColor: value === "2" ? "#AFCC2B" : "#DCEA99",
+                backgroundColor: value === "2" ? "#6EC2F7" : "#bee6ff",
                 borderTopRightRadius: "999px",
                 borderBottom: value === "2" ? "none" : "1px solid white",
                 padding: "0.5rem 2.5rem",
@@ -45,7 +45,7 @@ function PracticeListening() {
             />
           </TabList>
         </Box>
-        <TabPanel value="1" sx={{ backgroundColor: "#F9FCEE" }}>
+        <TabPanel value="1" sx={{ backgroundColor: "#f1f1f1" }}>
           <ListenAndWriteWord />
         </TabPanel>
         <TabPanel value="2">

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import VocabularyList from "./VocabularyList";
 import VocabularyContainer from "./VocabularyContainer";
-import { stateVocab } from "../ListVocab";
 import { Card, Grid2, styled } from "@mui/material";
 import ResetButton from "../../../common/button/ResetButton";
 import ConfirmAndSubmit from "../../common/ConfirmAndSubmit";
@@ -13,6 +12,7 @@ const Title = styled("h4")({
   textAlign: "center",
   margin: "1rem 0",
   marginBottom: "2rem",
+  color: "#000",
 });
 
 const shuffleArray = (array) => {
@@ -24,15 +24,17 @@ const shuffleArray = (array) => {
   return shuffledArray;
 };
 
-function MatchImageWithWord() {
+function MatchImageWithWord({ stateVocab }) {
   const [state, setState] = useState(stateVocab);
 
   useEffect(() => {
-    setState((prevState) => ({
-      ...prevState,
-      listVocabOrder: shuffleArray(prevState.listVocabOrder),
-    }));
-  }, []);
+    if (stateVocab) {
+      setState({
+        ...stateVocab,
+        listVocabOrder: shuffleArray(stateVocab.listVocabOrder),
+      });
+    }
+  }, [stateVocab]);
 
   const onDragEnd = (result) => {
     const { source, destination, draggableId } = result;
@@ -60,11 +62,11 @@ function MatchImageWithWord() {
       },
     };
 
-    setState({
-      ...state,
+    setState((prevState) => ({
+      ...prevState,
       listVocabOrder: newListVocabOrder,
       listContainer: newListContainer,
-    });
+    }));
   };
 
   const handleResetClick = () => {
@@ -87,7 +89,10 @@ function MatchImageWithWord() {
     const total = state.listVocab.length;
 
     Object.values(state.listContainer).forEach((container) => {
-      if (container.contain === container.id) {
+      if (
+        container.contain ===
+        state.listVocab.find((vocab) => vocab.id === container.id)?.id
+      ) {
         score++;
       }
     });
@@ -101,7 +106,7 @@ function MatchImageWithWord() {
           marginX: "5%",
           marginY: "1%",
           padding: "1%",
-          backgroundColor: "#F0F6D4",
+          background: "#f1f1f1",
           borderRadius: "0.5rem",
         }}
       >
@@ -117,7 +122,7 @@ function MatchImageWithWord() {
         <Grid2 container justifyContent="flex-end">
           <ResetButton onClick={handleResetClick} />
           <ConfirmAndSubmit
-            submitConent={getSubmittedContent()}
+            submitContent={getSubmittedContent()}
             scoreContent={getScoreContent()}
           />
         </Grid2>

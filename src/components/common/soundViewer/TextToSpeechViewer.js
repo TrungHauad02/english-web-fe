@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SoundViewer from "./SoundViewer";
-import { handleTextToSpeech } from "../../../api/handleTextToSpeech";
+import { handleTextToSpeech } from "../../../api/feature/handleTextToSpeech";
 
 const TextToSpeechViewer = ({ text }) => {
   const [audioSrc, setAudioSrc] = useState("");

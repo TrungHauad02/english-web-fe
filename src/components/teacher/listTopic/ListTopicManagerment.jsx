@@ -1,8 +1,8 @@
 import { Stack, Typography } from "@mui/material";
-import { getListTopic } from "../../../api/teacher/listTopicManagerment";
+import { getListTopic } from "../../../api/teacher/listTopicManagement";
 import TopicList from "./TopicList";
 
-export default function ListTopicManagerment({ title }) {
+export default function ListTopicManagement({ title }) {
   const listTopic = getListTopic(title);
   return (
     <Stack
@@ -15,7 +15,7 @@ export default function ListTopicManagerment({ title }) {
         textTransform={"capitalize"}
         fontWeight={"bold"}
       >
-        {title} Managerment
+        {title} Management
       </Typography>
       <TopicList listTopic={listTopic} title={title} />
     </Stack>

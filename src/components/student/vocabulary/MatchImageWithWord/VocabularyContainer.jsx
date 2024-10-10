@@ -17,7 +17,7 @@ function VocabularyContainer({ listContainer, listVocab }) {
         const vocab = listVocab.find((v) => v.id === container.id);
         return (
           <Grid2 item size={1} key={key}>
-            <ItemImage src={vocab.img} alt={vocab.word} />
+            <ItemImage src={vocab.image} alt={vocab.word} />
             <Droppable droppableId={container.id}>
               {(provided, snapshot) => (
                 <Box
@@ -30,7 +30,13 @@ function VocabularyContainer({ listContainer, listVocab }) {
                     width: "100%",
                     minWidth: "4rem",
                     borderRadius: "0.25rem",
-                    background: snapshot.isDraggingOver ? "skyblue" : "#ffffff",
+                    transition: "all 0.25s",
+                    boxShadow: snapshot.isDraggingOver
+                      ? "0 0 5px 1px #00000050"
+                      : null,
+                    background: snapshot.isDraggingOver ? "#6EC2F7" : "#ffffff",
+                    paddingX: snapshot.isDraggingOver ? "0.75rem" : "0",
+                    marginX: snapshot.isDraggingOver ? "-0.75rem" : "0",
                   }}
                 >
                   {provided.placeholder}

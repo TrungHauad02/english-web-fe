@@ -3,15 +3,19 @@ import MainPicture from "./MainPicture";
 import ListContent from "./ListContent";
 import CustomPagination from "../../../common/pagination/CustomPagination";
 import "./ListTopic.css";
-import { getListTopic } from "../../../../api/student/listTopic";
+import { getListTopic } from "../../../../api/student/listTopicApi";
 import { useEffect, useState } from "react";
 
 function ListTopic({ quote, title, bg }) {
   const [page, setPage] = useState(1);
   const [list, setList] = useState([]);
+  const [totalPage, setTotalPage] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
-      const topics = await getListTopic(page - 1);
+      const data = await getListTopic(page - 1);
+      const topics = data.content;
+      setTotalPage(data.totalPages);
       if (topics) {
         setList(topics);
       } else {
@@ -27,16 +31,18 @@ function ListTopic({ quote, title, bg }) {
   return (
     <Stack direction="column">
       <MainPicture src={bg} title={title} />
-      <Typography
-        variant="h5"
-        component="p"
-        sx={{ padding: "1rem", marginX: "5%", marginY: "1rem" }}
-      >
-        {quote}
-      </Typography>
-      <ListContent list={list} />
-      <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
-        <CustomPagination count={10} onChange={onChangePage} />
+      <Stack direction={"column"}>
+        <Typography
+          variant="h5"
+          component="p"
+          sx={{ padding: "1rem", marginX: "5%", marginY: "1rem" }}
+        >
+          {quote}
+        </Typography>
+        <ListContent list={list} />
+        <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
+          <CustomPagination count={totalPage} onChange={onChangePage} />
+        </Stack>
       </Stack>
     </Stack>
   );

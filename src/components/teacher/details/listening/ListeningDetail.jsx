@@ -59,7 +59,30 @@ export default function ListeningDetail() {
         >
           <WriteAWordManagerment />
         </Grid2>
-        <Grid2 container sx={{ width: "100%" }}>
+        <Grid2
+          container
+          borderRadius={"0.5rem"}
+          backgroundColor={"#FFF4CC"}
+          boxShadow={"0 0 0.5rem 0.1rem #00000040"}
+          width={"100%"}
+          sx={{
+            maxHeight: "600px",
+            overflowY: "auto",
+            "&::-webkit-scrollbar": {
+              width: "0.5rem",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#e0e0e0",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#888",
+              borderRadius: "10px",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "#555",
+            },
+          }}
+        >
           <AnswerQuestionManagerment
             isListening
             file={file}

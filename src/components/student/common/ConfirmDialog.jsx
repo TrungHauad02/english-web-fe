@@ -51,7 +51,7 @@ export default function ConfirmDialog({
             onClick={onAgree}
             sx={{
               boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-              backgroundColor: "#0ee870",
+              backgroundColor: "#6EC2F7",
               color: "#000",
             }}
           >
