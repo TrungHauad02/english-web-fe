@@ -24,7 +24,7 @@ function FrontCard({ vocab }) {
       <VocabCard>
         <CardMedia
           component="img"
-          image={vocab.img}
+          image={vocab.image}
           alt={vocab.word}
           sx={{ height: "100%", width: "100%" }}
         />

@@ -3,7 +3,7 @@ import MainPicture from "./MainPicture";
 import ListContent from "./ListContent";
 import CustomPagination from "../../../common/pagination/CustomPagination";
 import "./ListTopic.css";
-import { getListTopic } from "../../../../api/student/listTopic";
+import { getListTopic } from "../../../../api/student/listTopicApi";
 import { useEffect, useState } from "react";
 
 function ListTopic({ quote, title, bg }) {

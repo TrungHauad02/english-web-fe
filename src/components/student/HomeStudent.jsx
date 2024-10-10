@@ -5,7 +5,6 @@ import HeaderStudent from "./header/HeaderStudent";
 import ListTopic from "./common/listTopic/ListTopic";
 import Footer from "../footer/Footer";
 import site from "./common/Pages";
-import Vocabulary from "./vocabulary/Vocabulary";
 import React from "react";
 import ListTest from "./Test/ListTest";
 import ListTest_Skill from "./Test/ListTest_Skill";
@@ -15,13 +14,8 @@ import TestWriting from "./Test/TestWriting/TestWriting";
 import TestSpeaking from "./Test/TestSpeaking/TestSpeaking";
 import TestMixing from "./Test/TestMixing/TestMixing";
 
-import Grammar from "./grammar/Grammar";
 import HomePageStudent from "./content/HomePageStudent";
 import Account from "../account/Account";
-import Reading from "./skill/reading/Reading";
-import Listening from "./skill/listening/Listening";
-import Speaking from "./skill/speaking/Speaking";
-import Writing from "./skill/writing/Writing";
 import Skills from "./skill/Skills";
 import HistoryTest from "./header/HistoryTest";
 import StudySchedule from "./header/studyschedule/StudySchedule";
@@ -63,15 +57,16 @@ function HomeStudent() {
               })}
             />
           ))}
+          {site.map((page) => (
+            <Route
+              key={page.id}
+              path={`/${page.path}/:id`}
+              element={<page.detail />}
+            />
+          ))}
           <Route path="/skill" element={<Skills />} />
-          <Route path="/list-topic/topic_1" element={<Vocabulary />} />
-          <Route path="/grammar/1" element={<Grammar />} />
           <Route path="/account" element={<Account />} />
           <Route path="/" element={<HomePageStudent />} />
-          <Route path="/skill/reading/1" element={<Reading />} />
-          <Route path="/skill/listening/1" element={<Listening />} />
-          <Route path="/skill/speaking/1" element={<Speaking />} />
-          <Route path="/skill/writing/1" element={<Writing />} />
           <Route path="/history-test" element={<HistoryTest />} />
           <Route path="/study-schedule" element={<StudySchedule />} />
         </Routes>

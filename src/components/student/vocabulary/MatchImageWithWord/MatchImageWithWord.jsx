@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import VocabularyList from "./VocabularyList";
 import VocabularyContainer from "./VocabularyContainer";
-import { stateVocab } from "../ListVocab";
 import { Card, Grid2, styled } from "@mui/material";
 import ResetButton from "../../../common/button/ResetButton";
 import ConfirmAndSubmit from "../../common/ConfirmAndSubmit";
@@ -25,15 +24,17 @@ const shuffleArray = (array) => {
   return shuffledArray;
 };
 
-function MatchImageWithWord() {
+function MatchImageWithWord({ stateVocab }) {
   const [state, setState] = useState(stateVocab);
 
   useEffect(() => {
-    setState((prevState) => ({
-      ...prevState,
-      listVocabOrder: shuffleArray(prevState.listVocabOrder),
-    }));
-  }, []);
+    if (stateVocab) {
+      setState({
+        ...stateVocab,
+        listVocabOrder: shuffleArray(stateVocab.listVocabOrder),
+      });
+    }
+  }, [stateVocab]);
 
   const onDragEnd = (result) => {
     const { source, destination, draggableId } = result;
@@ -61,11 +62,11 @@ function MatchImageWithWord() {
       },
     };
 
-    setState({
-      ...state,
+    setState((prevState) => ({
+      ...prevState,
       listVocabOrder: newListVocabOrder,
       listContainer: newListContainer,
-    });
+    }));
   };
 
   const handleResetClick = () => {
@@ -88,7 +89,10 @@ function MatchImageWithWord() {
     const total = state.listVocab.length;
 
     Object.values(state.listContainer).forEach((container) => {
-      if (container.contain === container.id) {
+      if (
+        container.contain ===
+        state.listVocab.find((vocab) => vocab.id === container.id)?.id
+      ) {
         score++;
       }
     });

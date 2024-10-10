@@ -1,25 +1,6 @@
-import { Stack, Typography } from "@mui/material";
-import { useState } from "react";
-import TruckLoader from "./truck/TruckLoader";
+import { CardMedia, Stack, Typography } from "@mui/material";
 
 function MainPicture({ src, title }) {
-  const [showLoader, setShowLoader] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const handleMouseEnter = () => {
-    setShowLoader(true);
-    setTimeout(() => {
-      setIsAnimating(true);
-    }, 50);
-  };
-
-  const handleMouseLeave = () => {
-    setIsAnimating(false);
-    setTimeout(() => {
-      setShowLoader(false);
-    }, 3000);
-  };
-
   return (
     <Stack
       direction="column"
@@ -27,24 +8,11 @@ function MainPicture({ src, title }) {
       justifyContent="center"
       sx={{ position: "relative", height: "100%", width: "100%" }}
     >
-      <img
-        src={src}
+      <CardMedia
+        image={src}
         alt="main"
-        style={{ width: "100%", height: "300px", objectFit: "cover" }}
+        sx={{ width: "100%", height: "300px", objectFit: "cover" }}
       />
-      {showLoader && (
-        <div
-          style={{
-            position: "absolute",
-            bottom: "25%",
-            left: isAnimating ? "200px" : "-200px",
-            transition: "left 3s ease-in-out",
-            width: "100%",
-          }}
-        >
-          <TruckLoader />
-        </div>
-      )}
       <Typography
         variant="h4"
         component="h2"
@@ -65,8 +33,6 @@ function MainPicture({ src, title }) {
             color: "#000",
           },
         }}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
       >
         {title}
       </Typography>
