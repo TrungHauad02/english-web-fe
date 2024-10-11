@@ -9,12 +9,9 @@ function Home() {
     <Stack>
       <BrowserRouter>
         <Routes>
-          <Route path="/student/*" element={<HomeStudent />}>
-            <Route path="list-topic" />
-            <Route path="grammar" />
-          </Route>
+          <Route path="/student/*" element={<HomeStudent />}></Route>
           <Route path="/teacher/*" element={<HomeTeacher />}></Route>
-          <Route path="/admin/*" element={<HomeAdmin/>}></Route>
+          <Route path="/admin/*" element={<HomeAdmin />}></Route>
           <Route path="/" element={<Navigate to="/student" />} />
         </Routes>
       </BrowserRouter>
