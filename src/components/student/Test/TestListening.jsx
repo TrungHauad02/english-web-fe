@@ -226,9 +226,6 @@ const onItemClick = useCallback((serial) => {
   }
 }, [indexVisible]);
 
-
-
-  
   
 
   return (

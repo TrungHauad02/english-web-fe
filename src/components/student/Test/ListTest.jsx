@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { getListTest } from "../../../api/student/test/listTestApi"
+import CustomPagination from "../../common/pagination/CustomPagination";
+import ListTestContent from "./ListTestContent"
+
 import { 
   Box, 
   Typography, 
-  Button, 
-  Card, 
-  CardContent, 
-  Grid, 
-  Pagination,
+  Tabs, 
+  Tab, 
+  Stack,
   styled
 } from '@mui/material';
 
 const ImageContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
-  width: '100%',
-  height: 'auto',
+  width: '100%', 
+  height: '70vh',
+  overflow: 'hidden',
 }));
 
 const MainTitleContainer = styled(Box)(({ theme }) => ({
@@ -28,57 +31,87 @@ const MainTitleContainer = styled(Box)(({ theme }) => ({
   borderRadius: '0 20px 0 0',
 }));
 
-const MenuTest = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(12),
-  width: '75%',
-  display: 'flex',
-  paddingLeft: theme.spacing(2),
-  marginLeft: '5%',
-}));
-
-const MenuButton = styled(Button)(({ theme }) => ({
+const TabItem = styled(Tab)(({ theme }) => ({
   flex: 1,
-  backgroundColor: '#E2F392',
-  color: 'black',
-  borderRadius: '30px 30px 0 0',
+  backgroundColor: '#E3F2FD', 
+
+  borderRadius: '2rem 2rem 0 0', 
+  fontWeight: 'bold',
+  fontSize: '1rem', 
+  transition: 'all 0.3s ease-in-out', 
   '&:hover': {
-    backgroundColor: '#B3D02A',
+    backgroundColor: '#90CAF9', 
+    boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)', 
+    transform: 'scale(1.02)', 
+  },
+  '&.Mui-selected': {
+    backgroundColor: '#6EC2F7', 
+    color: '#FFFFFF', 
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', 
+  },
+  '&.Mui-focusVisible': {
+    backgroundColor: '#6EC2F7',
+
   },
 }));
 
-const ListTestContainer = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(12),
-  width: '75%',
-  paddingLeft: theme.spacing(2),
-  marginLeft: '5%',
-}));
 
-const TestCard = styled(Card)(({ theme }) => ({
-  backgroundColor: '#FFF4CC',
-  marginBottom: theme.spacing(4),
-  position: 'relative',
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-}));
-
-const DoTestButton = styled(Button)(({ theme }) => ({
-  backgroundColor: '#ACCD0A',
-  position: 'absolute',
-  bottom: '5%',
-  right: '5%',
-  borderRadius: theme.shape.borderRadius,
-}));
-
-function ListTest({list,quote, title, bg}) {
-  const testsPerPage = 6;
-  const [currentPage, setCurrentPage] = useState(1);
-  const list_test=[...list];
+function ListTest({quote, title, bg}) {
+  const [page, setPage] = useState(1);
+  const [list, setList] = useState([]);
+  const [totalPage, setTotalPage] = useState(0);
+  const type = {
+    mixed: 'MIXED',
+    skills:{
+    reading: 'READING',
+    listening: 'LISTENING',
+    speaking: 'SPEAKING',
+    writing: 'WRITING',
+    }
+};
+const [currtype, setCurrtype] = useState(type.mixed);
+const [mainTab, setMainTab] = useState(0); 
+const [skillTab, setSkillTab] = useState(0); 
 
 
+const handleMainTabChange = (event, newValue) => {
+  setMainTab(newValue);
+  setPage(1);
+  if(newValue===0)
+  {
+    setCurrtype(type.mixed);
+  }
+  else{
+    setCurrtype(type.skills.reading)
+    setSkillTab(0);
+  }
+};
 
-  const pageCount = Math.ceil(list_test.length / testsPerPage);
+// Hàm thay đổi tab con trong Skills
+const handleSkillTabChange = (event, newValue) => {
+  setSkillTab(newValue);
+  const skillKeys = Object.keys(type.skills);
+  setCurrtype(type.skills[skillKeys[newValue]]);
+  setPage(1);
+};
 
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getListTest(page - 1,currtype);
+      const tests = data.content;
+      setTotalPage(data.totalPages);
+      if (tests) {
+        setList(tests);
+      } else {
+        setList([]);
+      }
+    };
+
+    fetchData();
+  }, [page,currtype]);
+  const onChangePage = (event, value) => {
+    setPage(value);
   };
 
   const location = useLocation();
@@ -89,59 +122,37 @@ function ListTest({list,quote, title, bg}) {
     const newPath = `${currentPath}/skilltest`;
     navigate(newPath);
   };
-
-  const displayedtests = list_test.slice(
-    (currentPage - 1) * testsPerPage,
-    currentPage * testsPerPage
-  );
-
   return (
     <Box>
       <ImageContainer>
-        <img src="/bg_test.png" alt="Test" style={{ width: '100%', height: 'auto' }} />
+      <img src={bg} alt="Test" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         <MainTitleContainer>
           <Typography variant="h4" component="h1" sx={{ margin: 2 }}>
             TEST ONLINE
           </Typography>
         </MainTitleContainer>
       </ImageContainer>
-
-      <MenuTest>
-        <MenuButton onClick={toListTestSkillTest}>TEST SKILL</MenuButton>
-        <MenuButton>TEST MIXED</MenuButton>
-        <MenuButton>COMPETITION</MenuButton>
-      </MenuTest>
-
-      <ListTestContainer>
-        <Grid container spacing={4}>
-          {displayedtests.map((test, index) => (
-            <Grid item xs={12} sm={6} key={index}>
-              <TestCard>
-                <CardContent>
-                  <Typography variant="h6" component="h4">{test.title}</Typography>
-                  <Typography><strong>Duration:</strong> {test.duration}</Typography>
-                  <Typography><strong>Number of Questions:</strong> {test.questions}</Typography>
-                  <Typography><strong>Score:</strong> {test.score}</Typography>
-                  <DoTestButton variant="contained">Do test</DoTestButton>
-                </CardContent>
-                <Button component="a" href="link-cua-ban" sx={{padding: "6px 16px !important"}}>
-                  See History
-                </Button>
-             
-
-              </TestCard>
-            </Grid>
-          ))}
-        </Grid>
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 4 }}>
-          <Pagination
-            count={pageCount}
-            page={currentPage}
-            onChange={handlePageChange}
-            color="primary"
-          />
+    <Box sx={{marginLeft:'5%',marginRight:'5%',marginTop:'2%'}}>
+    <Tabs value={mainTab} onChange={handleMainTabChange} sx={{display:'flex'}}
+       indicatorColor="none">
+        <TabItem label="Mixed" />
+        <TabItem label="Skills" />
+      </Tabs>
+      {mainTab === 1 && (
+        <Box sx={{marginTop:'1rem'}} >
+          <Tabs value={skillTab} onChange={handleSkillTabChange} sx={{display:'flex'}}    indicatorColor="none">
+            {Object.keys(type.skills).map((key, index) => (
+              <TabItem key={key} label={type.skills[key]} />
+            ))}
+          </Tabs>
         </Box>
-      </ListTestContainer>
+      )}
+      <ListTestContent list={list}/>
+      <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
+          <CustomPagination count={totalPage} onChange={onChangePage} key={currtype} />
+        </Stack>
+    </Box>
+      
     </Box>
   );
 }
