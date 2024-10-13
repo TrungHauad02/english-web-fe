@@ -1,17 +1,23 @@
 import MainTitle from "./MainTitle";
 import OneListeningTest from "./OneListeningTest";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, duration } from "@mui/material";
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import DataListQuestion from "./TestListening/DataListQuestion";
 import ScoreGrid from "./ScoreGrid";
+import { useLocation } from 'react-router-dom';
+import { getTestListeningbySerial } from "../../../api/student/test/TestListeningApi"
 
-function TestListening({ list, quote, title, bg }) {
+function TestListening() {
+  const location = useLocation();
+    const { state } = location; 
+    const datatest = state;
+    const title = datatest.type;
+
   const [status, setStatus] = useState('Begin');
   const [renderKey, setRenderKey] = useState(0);
+  const [testvisiable, setTestvisiable] = useState(0);
   const onClickTestAgain = () => {
-    localStorage.removeItem('selectedAnswers' + title);
-
+    localStorage.removeItem('selectedAnswers' + datatest.type);
     setStatus('Testing');
 
     setRenderKey(renderKey + 1);
@@ -19,21 +25,37 @@ function TestListening({ list, quote, title, bg }) {
 
   const audioRef = useRef(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getTestListeningbySerial(datatest.id);
+      const test = data;
+      console.log(data);
+           
+      if (test) {
+        setTestvisiable(test);
+      } else {
+          
+      }
+    };
+
+    fetchData();
+  }, [testvisiable]);
+
   return (
     <Box>
-      <MainTitle title={title} bg={bg} />
+      <MainTitle title={datatest.type} bg="/bg_test.png" />
       {status === 'Begin'
-        ? <IntroduceTest setStatus={setStatus} />
+        ? <IntroduceTest setStatus={setStatus} datatest= {datatest}/>
         : <TestingListening key={renderKey} audioRef={audioRef} status={status} setStatus={setStatus} title={title}
-        onClickTestAgain ={onClickTestAgain}
+        onClickTestAgain ={onClickTestAgain} data ={testvisiable} duration={datatest.duration}
         />
+        
       }
-   
     </Box>
   );
 }
 
-function IntroduceTest({ setStatus }) {
+function IntroduceTest({ setStatus,datatest }) {
   return (
     <Box sx={{
       display: 'flex',
@@ -61,7 +83,7 @@ function IntroduceTest({ setStatus }) {
         Bài test 1
       </Typography>
       <Typography variant="body1" gutterBottom>
-        Thời gian làm bài: 60 phút
+        Thời gian làm bài:  {datatest.duration} phút
       </Typography>
       <Button
         variant="contained"
@@ -71,7 +93,7 @@ function IntroduceTest({ setStatus }) {
         }}
         onClick={() => setStatus('Testing')}
       >
-        Bắt đầu
+        Bắt đầu {datatest.question}
       </Button>
     </Box>
 
@@ -80,20 +102,18 @@ function IntroduceTest({ setStatus }) {
   );
 }
 
-function TestingListening({ audioRef, status, setStatus,title,onClickTestAgain}) {
+function TestingListening({ audioRef, status, setStatus,title,onClickTestAgain,data,duration}) {
   const [indexVisible, setIndexVisible] = useState(0);
+
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [score, setScore] = useState(0); 
   const [gridData, setGridData] = useState([]); 
   const [focusId,setfocusId] = useState();
 
-  
-
-
 
 
   const onAudioEnd = () => {
-    if (DataListQuestion.length > indexVisible + 1) {
+    if (data.length > indexVisible + 1) {
       setIndexVisible(indexVisible + 1);
     }
   };
@@ -109,7 +129,7 @@ function TestingListening({ audioRef, status, setStatus,title,onClickTestAgain})
 
   const handlebtnNext = () => {
     setIndexVisible((prevIndex) => {
-      if (DataListQuestion.length > prevIndex + 1) {
+      if (data.length > prevIndex + 1) {
         return prevIndex + 1;
       }
       return prevIndex;
@@ -138,10 +158,6 @@ function TestingListening({ audioRef, status, setStatus,title,onClickTestAgain})
         setSelectedAnswers(JSON.parse(savedAnswers));
     }
 
-
-
-
- 
 };
 useEffect(() => {
   if(status==="Submit")
@@ -155,30 +171,17 @@ useEffect(() => {
   
 }, [selectedAnswers]); 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   const calculateScore = () => {
     let score = 0;
 
-    if (!Array.isArray(DataListQuestion)) {
+    if (!Array.isArray(data)) {
       console.error("DataListQuestion is not an array");
       return score;
     }
 
-    DataListQuestion.forEach((data) => {
-      data.questions.forEach((question) => {
-        const correctAnswer = question.options.find(option => option.isCorrect);
+    data.forEach((dataitem) => {
+      dataitem.questions.forEach((question) => {
+        const correctAnswer = question.answers.find(answer => answer.isCorrect);
         if (correctAnswer && selectedAnswers[question.id] === correctAnswer.content) {
           score += 1;
         }
@@ -190,26 +193,27 @@ useEffect(() => {
 
   const generateGridData = () => {
    
-    return DataListQuestion.flatMap(data =>
-      data.questions.map(question => {
-        const correctAnswer = question.options.find(option => option.isCorrect);
+    return data.flatMap(dataitem =>
+      dataitem.questions.map(question => {
+        const correctAnswer = question.answers.find(answer => answer.isCorrect);
         const selectedAnswer = selectedAnswers[question.id];
     
    
         if (selectedAnswer === undefined) {
 
-          return -1; // Chưa chọn
+          return -1; 
           
         }
         return selectedAnswer === correctAnswer.content ? 1 : 0; 
       })
     );
   };
+  
   const getListSerialQuestion = () => {
     const serials = []; 
 
-    DataListQuestion.map(data => 
-      data.questions.map(question => {
+    data.map(dataitem => 
+      dataitem.questions.map(question => {
         serials.push(question.serial);
         return question.serial; 
       })
@@ -226,8 +230,6 @@ const onItemClick = useCallback((serial) => {
   }
 }, [indexVisible]);
 
-  
-
   return (
     <>
      {status === 'Testing' && (
@@ -240,7 +242,7 @@ const onItemClick = useCallback((serial) => {
           width: '10%',
           padding: '0.5rem 1rem'
         }}>
-          <CountdownTimer/>
+          <CountdownTimer duration={duration} setStatus={setStatus}/>
         </Box>
      )}
    
@@ -251,7 +253,7 @@ const onItemClick = useCallback((serial) => {
             ? <Button variant="contained" sx={{ background: '#ACCD0A', padding: '0.5rem', width: '7rem', fontSize: '1rem', fontFamily: 'Roboto', fontWeight: '500' }}
               startIcon={<img src="/btn_previous.png" alt="Previous" style={{ width: '1rem', height: '1rem' }} />} onClick={handlebtnPrevious}  >Previous</Button>
             : null}
-          <Box variant="body1" sx={{ mx: 2, background: '#FFF4CC', padding: '0.5rem 2rem', textAlign: 'center', alignContent: 'center', fontSize: '1rem', fontFamily: 'Roboto', fontWeight: '500' }}>{(indexVisible + 1)}/{DataListQuestion.length}</Box>
+          <Box variant="body1" sx={{ mx: 2, background: '#FFF4CC', padding: '0.5rem 2rem', textAlign: 'center', alignContent: 'center', fontSize: '1rem', fontFamily: 'Roboto', fontWeight: '500' }}>{(indexVisible + 1)}/{data.length}</Box>
           {status === 'Submit'
             ? <Button variant="contained" sx={{ background: '#ACCD0A', padding: '0.5rem 1rem', width: '7rem', fontSize: '1rem', fontFamily: 'Roboto', fontWeight: '500' }}
               endIcon={<img src="/btn_next.png" alt="Next" style={{ width: '1rem', height: '1rem' }}  />} onClick={handlebtnNext}>Next</Button> : null}
@@ -263,7 +265,7 @@ const onItemClick = useCallback((serial) => {
       <Box sx={{  width: '100%' }}>
         <Box sx={{ border: '1px solid black', borderRadius: '1rem', padding: '0.5rem',  width: '100%' }}>
             <OneListeningTest 
-                onelistening={DataListQuestion[indexVisible]} 
+                onelistening={data[indexVisible]} 
                 audioRef={audioRef} 
                 status={status} 
                 onAudioEnd={onAudioEnd} 
@@ -306,22 +308,23 @@ const onItemClick = useCallback((serial) => {
   );
 }
 
-function CountdownTimer({setStatus}) {
-  const [timeLeft, setTimeLeft] = useState(2*60); 
-
+function CountdownTimer({ setStatus, duration }) {
+  const [timeLeft, setTimeLeft] = useState(() => duration); // Khởi tạo với giá trị 
+ (
+  console.log(duration)
+  
+ )
   useEffect(() => {
-    
     const timer = setInterval(() => {
       setTimeLeft(prevTime => {
         if (prevTime <= 0) {
-          clearInterval(timer);
-          setStatus("Submit");
-          return 0;
+          clearInterval(timer); 
+          setStatus("Submit"); 
+          return 0; 
         }
-        return prevTime - 1; 
+        return prevTime - 1;
       });
     }, 1000); 
-
 
     return () => clearInterval(timer);
   }, []);
@@ -331,17 +334,14 @@ function CountdownTimer({setStatus}) {
 
   return (
     <>
-   
-    <Typography align="center">
-    <strong>Time remaining:</strong>
-    <br />
-    {minutes} : {seconds < 10 ? `0${seconds}` : seconds} 
-  </Typography>
+      <Typography align="center">
+        <strong>Time remaining:</strong>
+        <br />
+        {minutes} : {seconds < 10 ? `0${seconds}` : seconds} 
+      </Typography>
     </>
   );
 }
-
-
 
 
 
