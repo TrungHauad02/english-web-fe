@@ -22,6 +22,8 @@ import WritingDetail from "../../components/teacher/details/writing/WritingDetai
 import SpeakingDetail from "../../components/teacher/details/speaking/SpeakingDetail";
 import Mixing from "../../components/teacher/test/Mixing/Mixing";
 import HomeTest from "../../components/teacher/test/HomeTest";
+import ListTest from "../../components/student/Test/ListTest";
+import TestListening from "../../components/student/Test/TestListening"
 
 export default function AppRoutes() {
   const router = createBrowserRouter([
@@ -38,7 +40,8 @@ export default function AppRoutes() {
         { path: "account", element: <Account /> },
         { path: "history-test", element: <HistoryTest /> },
         { path: "study-schedule", element: <StudySchedulePage /> },
-
+        { path: "tests", element: <ListTest /> },
+        { path: "tests/listening", element: <TestListening /> },
         ...site.map((page) => ({
           path: page.path,
           element: React.createElement(
