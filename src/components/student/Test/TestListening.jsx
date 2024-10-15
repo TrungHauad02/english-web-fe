@@ -5,7 +5,7 @@ import { Box, Typography, Button, duration } from "@mui/material";
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ScoreGrid from "./ScoreGrid";
 import { useLocation } from 'react-router-dom';
-import { getTestListeningbySerial } from "../../../api/student/test/TestListeningApi"
+
 
 function TestListening() {
   const location = useLocation();
@@ -15,7 +15,7 @@ function TestListening() {
 
   const [status, setStatus] = useState('Begin');
   const [renderKey, setRenderKey] = useState(0);
-  const [testvisiable, setTestvisiable] = useState(0);
+
   const onClickTestAgain = () => {
     localStorage.removeItem('selectedAnswers' + datatest.type);
     setStatus('Testing');
@@ -25,21 +25,7 @@ function TestListening() {
 
   const audioRef = useRef(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getTestListeningbySerial(datatest.id);
-      const test = data;
-      console.log(data);
-           
-      if (test) {
-        setTestvisiable(test);
-      } else {
-          
-      }
-    };
-
-    fetchData();
-  }, [testvisiable]);
+  
 
   return (
     <Box>
@@ -47,7 +33,7 @@ function TestListening() {
       {status === 'Begin'
         ? <IntroduceTest setStatus={setStatus} datatest= {datatest}/>
         : <TestingListening key={renderKey} audioRef={audioRef} status={status} setStatus={setStatus} title={title}
-        onClickTestAgain ={onClickTestAgain} data ={testvisiable} duration={datatest.duration}
+        onClickTestAgain ={onClickTestAgain} data ={datatest.testListenings} duration={datatest.duration}
         />
         
       }

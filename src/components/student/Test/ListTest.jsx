@@ -60,7 +60,7 @@ function ListTest() {
   const [list, setList] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
   const type = {
-    mixed: 'MIXED',
+    mixed: 'MIXING',
     skills:{
     reading: 'READING',
     listening: 'LISTENING',
@@ -103,6 +103,8 @@ const handleSkillTabChange = (event, newValue) => {
     const fetchData = async () => {
       const data = await getListTest(page - 1,currtype);
       const tests = data.content;
+      console.log(tests);
+      
       setTotalPage(data.totalPages);
       if (tests) {
         setList(tests);

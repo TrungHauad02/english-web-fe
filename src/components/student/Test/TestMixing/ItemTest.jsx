@@ -1,6 +1,6 @@
     import React, { useState ,useCallback,useEffect} from 'react';
     import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl,Button,Grid,styled   } from '@mui/material';
-    import DataTestMixing from './DataTestMixing/DataTestMixing'
+    
     import ItemTitleTest from './ItemTitleTest'
 
 
@@ -12,60 +12,86 @@
     import SerialGrid from './SerialGrid/SerialGrid';
 
 
-    const getListSerialTest = () => {
-      const TitleAndSerials = {
-          title: [],
-          serials: [],
-      }; 
-      DataTestMixing.forEach(data => {
-    
-        if (data.title === "Vocabulary" 
-          || data.title === "Grammar" 
 
+  
+    const ItemTest = ({title,datatest}) => {
+      const DataTestMixing = [
+        {
+          title: "Vocabulary",
+          questions:datatest.testVocabularyQuestions,  
+        },
+        {
+          title: "Grammar",
+          questions:datatest.testGrammarQuestions,  
+        },
+        {
+          title: "Reading",
+          dataitem: datatest.testReadings, 
+        },
+        {
+          title: "Listening",
+          dataitem: datatest.testListenings, 
+        },
+       
+        {
+          title: "Writing",
+          dataitem: datatest.testWritings, 
+        },
+      ];
+      const getListSerialTest = () => {
+        const TitleAndSerials = {
+            title: [],
+            serials: [],
+        }; 
+        console.log(DataTestMixing);
+        
+        DataTestMixing.forEach(data => {
+      
+          if (data.title === "Vocabulary" 
+            || data.title === "Grammar" 
+  
+          ) {
+            TitleAndSerials.title.push(data.title);
+    
+            const serialsForCurrentTitle = [];
+          
+            data.questions.forEach(question => {
+                serialsForCurrentTitle.push(question.serial);
+            });
+    
+            TitleAndSerials.serials.push(serialsForCurrentTitle);
+        }
+        if (data.title === "Reading" 
+          || data.title === "Listening" 
+  
         ) {
           TitleAndSerials.title.push(data.title);
   
           const serialsForCurrentTitle = [];
         
-          data.questions.forEach(question => {
+          data.dataitem.forEach(item => {
+            item.questions.forEach(question => {
               serialsForCurrentTitle.push(question.serial);
           });
-  
+          });
+          
+         
           TitleAndSerials.serials.push(serialsForCurrentTitle);
       }
-      if (data.title === "Reading" 
-        || data.title === "Listening" 
-
-      ) {
-        TitleAndSerials.title.push(data.title);
-
-        const serialsForCurrentTitle = [];
-      
-        data.dataitem.forEach(item => {
-          item.questions.forEach(question => {
-            serialsForCurrentTitle.push(question.serial);
-        });
-        });
-        
-       
-        TitleAndSerials.serials.push(serialsForCurrentTitle);
-    }
-     if (data.title === "Writing"
+       if (data.title === "Writing"
+    
+          ) {
+            TitleAndSerials.title.push(data.title);
   
-        ) {
-          TitleAndSerials.title.push(data.title);
-
-          const serialsForCurrentTitle = [];
-          serialsForCurrentTitle.push(data.dataitem[0].serial)
-          TitleAndSerials.serials.push(serialsForCurrentTitle);
-        }
-        
-    });
-      return TitleAndSerials; 
-  };
-
+            const serialsForCurrentTitle = [];
+            serialsForCurrentTitle.push(data.dataitem[0].serial)
+            TitleAndSerials.serials.push(serialsForCurrentTitle);
+          }
+          
+      });
+        return TitleAndSerials; 
+    };
   
-    const ItemTest = (title) => {
     const [focusId,setfocusId] = useState();
     const [activeTab, setActiveTab] = useState(0);
     const TitleAndSerials = getListSerialTest();
@@ -93,7 +119,7 @@
            || data.title === "Grammar"
         ) {
           return data.questions.map(question => {
-            const correctAnswer = question.options.find(option => option.isCorrect);
+            const correctAnswer = question.answers.find(answer => answer.isCorrect);
             const selectedAnswer = selectedAnswers[question.id];
     
             if (selectedAnswer === undefined) {
@@ -106,7 +132,7 @@
        )  {
           return data.dataitem.flatMap(item => {
             return item.questions.map(question => {
-              const correctAnswer = question.options.find(option => option.isCorrect);
+              const correctAnswer = question.answers.find(answer => answer.isCorrect);
               const selectedAnswer = selectedAnswers[question.id];
     
               if (selectedAnswer === undefined) {

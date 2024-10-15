@@ -5,6 +5,7 @@ import OneReadingTest from './OneReadingTest';
 import DataTestReading from './DataTestReading';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import BtnPreviousNextContentTest from '../common/BtnPreviousNextContentTest'
+import { useLocation } from 'react-router-dom';
 
 
 
@@ -18,12 +19,18 @@ const DurationContainer = styled(Paper)(({ theme }) => ({
 }));
 
 
-function TestReading({list,quote, title, bg}) {
+function TestReading() {
   const [status, setStatus] = useState('Testing');
   const [indexVisible, setIndexVisible] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [score, setScore] = useState(0); 
   const [renderKey, setRenderKey] = useState(0);
+  const location = useLocation();
+  const { state } = location; 
+  const datatest = state;
+  const title = datatest.type;
+  console.log(datatest);
+  
   
   const onClickTestAgain = () => {
     localStorage.removeItem('selectedAnswers' + title);
@@ -45,12 +52,11 @@ function TestReading({list,quote, title, bg}) {
   const calculateScore = () => {
     let score = 0;
 
-    DataTestReading.datacontent.forEach((data) => {
+    datatest.testReadings.forEach((data) => {
       data.questions.forEach((question) => {
-        const correctAnswer = question.options.find(option => option.isCorrect);
+        const correctAnswer = question.answers.find(answer => answer.isCorrect);
         if (correctAnswer && selectedAnswers[question.id] === correctAnswer.content) {
           score += 1;
-        
           
         }
       });
@@ -61,7 +67,7 @@ function TestReading({list,quote, title, bg}) {
 
   return (
     <Box >
-     <MainTitle title="Reading" bg={bg} />
+     <MainTitle title="Reading" bg={"/bg_test.png"} />
       <DurationContainer sx={{marginRight:  '5%'}} elevation={1}>
       <Typography align="center">
           <strong>Time remaining:</strong>
@@ -70,9 +76,9 @@ function TestReading({list,quote, title, bg}) {
         </Typography>
        
       </DurationContainer>
-      <BtnPreviousNextContentTest indexVisible = {indexVisible}  setIndexVisible={setIndexVisible} sumcontent = {DataTestReading.datacontent.length}  />
+      <BtnPreviousNextContentTest indexVisible = {indexVisible}  setIndexVisible={setIndexVisible} sumcontent = { datatest.testReadings.length}  />
       <Box sx={{marginRight: '5%', marginLeft: '5%', display: 'flex' , marginTop:'2%'}}>
-          <OneReadingTest key= {renderKey} status={status} onereading={DataTestReading.datacontent[indexVisible]} handlebtnSubmit={handlebtnSubmit} 
+          <OneReadingTest key= {renderKey} status={status} onereading={ datatest.testReadings[indexVisible]} handlebtnSubmit={handlebtnSubmit} 
           title = {title}
           onClickTestAgain ={onClickTestAgain}
           calculateScore = {calculateScore}

@@ -10,7 +10,7 @@ import {
   } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 const type = {
-    mixed: 'MIXED',
+    mixing: 'MIXING',
     skills: {
         reading: 'READING',
         listening: 'LISTENING',
@@ -51,8 +51,8 @@ function ListTestContent({list}){
         let newPath = '';
 
         switch (datatest.type) {
-            case type.mixed:
-                newPath = `${currentPath}mixed`; 
+            case type.mixing:
+                newPath = `${currentPath}mixing`; 
                 break;
             case type.skills.reading:
                 newPath = `${currentPath}reading`; 

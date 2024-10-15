@@ -7,16 +7,21 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SpeakingTesting from "./SpeakingTesting";
 import DataTestSpeaking from "./DataTestSpeaking";
+import { useLocation } from 'react-router-dom';
 
-function TestSpeaking({list, quote, title, bg}) {
+function TestSpeaking() {
+    const location = useLocation();
+    const { state } = location; 
+    const datatest = state;
+    const title = datatest.type;
     const [status, setStatus] = useState('Testing');
     return(
         <Box>
-            <MainTitle title="Speaking" bg={bg} />
+            <MainTitle title={title} bg={"/bg_test.png"} />
             <Box sx={{marginLeft:'5%', marginRight:'5%',marginTop:'3rem'}}>
          
             
-                <SpeakingTesting data={DataTestSpeaking} status={status}/>
+                <SpeakingTesting data={datatest.testSpeaking} status={status}/>
             </Box>
         </Box>
     );
