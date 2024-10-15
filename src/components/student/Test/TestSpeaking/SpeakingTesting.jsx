@@ -3,11 +3,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useState } from 'react';
 import GridSerials from './GridSerials';
 import MicIcon from '@mui/icons-material/Mic';
-import { styled } from '@mui/material/styles';
 
-const FormContainer = styled(Paper)(({ theme }) => ({
-  borderRadius: theme.spacing(2),
-}));
 export default function InterviewInstruction({data,status}) {
   const [isStart, setisStart] = useState(false);
   const [indexquestion,setindexquestion] = useState(0);

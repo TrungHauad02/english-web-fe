@@ -28,7 +28,7 @@ function OneReadingTest({onereading,status,onAnswerChange,handlebtnSubmit,title,
     <TestContainer sx={{ flex: '1 1 49%'  }}>
     <QuestionSection item >
       <Typography variant="body1" sx={{padding:"1rem"}}>
-        These lessons include readings, vocab, quizzes and comprehension questions, as well as topics for discussion and essays. If you care about our Earth, but find it hard to express your opinions and concerns in English, these pages will help you...
+       {onereading.content}
       </Typography>
     </QuestionSection>
   </TestContainer>

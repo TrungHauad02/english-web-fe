@@ -24,6 +24,11 @@ import Mixing from "../../components/teacher/test/Mixing/Mixing";
 import HomeTest from "../../components/teacher/test/HomeTest";
 import ListTest from "../../components/student/Test/ListTest";
 import TestListening from "../../components/student/Test/TestListening"
+import TestReading from "../../components/student/Test/TestReading/TestReading";
+import TestWriting from "../../components/student/Test/TestWriting/TestWriting"
+import TestSpeaking from "../../components/student/Test/TestSpeaking/TestSpeaking"
+import TestMixing from "../../components/student/Test/TestMixing/TestMixing"
+
 
 export default function AppRoutes() {
   const router = createBrowserRouter([
@@ -42,6 +47,10 @@ export default function AppRoutes() {
         { path: "study-schedule", element: <StudySchedulePage /> },
         { path: "tests", element: <ListTest /> },
         { path: "tests/listening", element: <TestListening /> },
+        { path: "tests/speaking", element: <TestSpeaking /> },
+        { path: "tests/reading", element: <TestReading /> },
+        { path: "tests/writing", element: <TestWriting /> },
+        { path: "tests/mixing", element: <TestMixing /> },
         ...site.map((page) => ({
           path: page.path,
           element: React.createElement(

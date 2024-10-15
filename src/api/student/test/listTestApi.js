@@ -4,7 +4,11 @@ export function getListTest(page, type) {
   return apiClient
     .get("/tests?page=" + page + "&type=" + type)
     .then((response) => {
-      return response.data;
+      let data = response.data;
+      if (typeof data === "string") {
+        data = JSON.parse(data); // Parse JSON string thành object nếu cần
+      }
+      return data;
     });
 }
 
