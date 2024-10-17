@@ -1,18 +1,19 @@
-import { Button, Grid2, Stack, Typography } from "@mui/material";
+import { Button, Grid2, Stack, Typography, Box } from "@mui/material";
 import SearchBar from "../common/searchbar/SearchBar";
 import TopicContent from "./TopicContent";
 import Divider from "@mui/material/Divider";
-import { useState } from "react";
+import DotLoader from "../../../shared/component/loader/DotLoader";
+import useTopicList from "./useTopicList";
 
-export default function TopicList({ listTopic, title }) {
-  const [displayList, setDisplayList] = useState(listTopic);
-
-  function handleSearch(text) {
-    const newList = listTopic.filter((topic) =>
-      topic.title.toLowerCase().includes(text.toLowerCase())
-    );
-    setDisplayList(newList);
-  }
+export default function TopicList({ title }) {
+  const {
+    displayList,
+    handleSearch,
+    handleLoadMore,
+    isLoading,
+    listTopic,
+    totalElements,
+  } = useTopicList(title);
 
   return (
     <Stack direction={"column"} spacing={4} sx={{ marginY: "2rem" }}>
@@ -71,12 +72,39 @@ export default function TopicList({ listTopic, title }) {
             </Typography>
           </Grid2>
         </Grid2>
-        {displayList.map((topic) => (
-          <>
-            <TopicContent key={topic.id} topic={topic} path={title} />
-            <Divider />
-          </>
-        ))}
+        {displayList &&
+          displayList.map((topic) => (
+            <Stack key={topic.id}>
+              <TopicContent topic={topic} />
+              <Divider />
+            </Stack>
+          ))}
+        <Stack justifyContent="center" alignItems={"center"}>
+          {listTopic.length < totalElements && (
+            <Box display="flex" justifyContent="center">
+              <Button
+                variant={"text"}
+                sx={{
+                  backgroundColor: "#ffffffff",
+                  padding: "1rem 1.5rem",
+                  color: "#6EC2F7",
+                  fontSize: "1.05rem",
+                  textDecoration: "underline",
+                }}
+                onClick={handleLoadMore}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Stack justifyContent="center" alignItems={"center"}>
+                    <DotLoader />
+                  </Stack>
+                ) : (
+                  "Load more"
+                )}
+              </Button>
+            </Box>
+          )}
+        </Stack>
       </Stack>
     </Stack>
   );
