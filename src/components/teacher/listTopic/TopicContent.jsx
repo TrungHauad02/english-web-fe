@@ -7,7 +7,7 @@ export default function TopicContent({ topic, path }) {
     navigate(`/teacher/${path}/${topic.id}`);
   }
   return (
-    <Grid2 container alignItems={"center"}>
+    <Grid2 container alignItems={"center"} sx={{ paddingY: "0.5rem" }}>
       <Grid2 size={2} textAlign={"center"}>
         <Typography variant="body" fontSize={"1.5rem"}>
           {topic.serial}
@@ -40,7 +40,7 @@ export default function TopicContent({ topic, path }) {
           textTransform={"capitalize"}
           sx={{
             color: "#000",
-            backgroundColor: topic.status === "active" ? "#05FF00" : "#FFF500",
+            backgroundColor: topic.status === "ACTIVE" ? "#05FF00" : "#FFF500",
             padding: "0.5rem 1rem",
             borderRadius: "1rem",
           }}

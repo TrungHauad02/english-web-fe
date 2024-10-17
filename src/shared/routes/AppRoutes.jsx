@@ -76,32 +76,32 @@ export default function AppRoutes() {
       children: [
         {
           path: "topic",
-          element: <ListTopicManagement title="Topic" />,
+          element: <ListTopicManagement title="topics" />,
           children: [{ path: ":id", element: <TopicDetail /> }],
         },
         {
           path: "grammar",
-          element: <ListTopicManagement title="Grammar" />,
+          element: <ListTopicManagement title="grammars" />,
           children: [{ path: ":id", element: <GrammarDetail /> }],
         },
         {
           path: "reading",
-          element: <ListTopicManagement title="Reading" />,
+          element: <ListTopicManagement title="readings" />,
           children: [{ path: ":id", element: <ReadingDetail /> }],
         },
         {
           path: "listening",
-          element: <ListTopicManagement title="Listening" />,
+          element: <ListTopicManagement title="listening" />,
           children: [{ path: ":id", element: <ListeningDetail /> }],
         },
         {
           path: "writing",
-          element: <ListTopicManagement title="Writing" />,
+          element: <ListTopicManagement title="writings" />,
           children: [{ path: ":id", element: <WritingDetail /> }],
         },
         {
           path: "speaking",
-          element: <ListTopicManagement title="Speaking" />,
+          element: <ListTopicManagement title="speakings" />,
           children: [{ path: ":id", element: <SpeakingDetail /> }],
         },
         {

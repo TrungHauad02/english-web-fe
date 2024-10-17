@@ -1,9 +1,8 @@
 import { Stack, Typography } from "@mui/material";
-import { getListTopic } from "../../../api/teacher/listTopicManagement";
 import TopicList from "./TopicList";
 
 export default function ListTopicManagement({ title }) {
-  const listTopic = getListTopic(title);
+  console.log(title);
   return (
     <Stack
       direction={"column"}
@@ -17,7 +16,7 @@ export default function ListTopicManagement({ title }) {
       >
         {title} Management
       </Typography>
-      <TopicList listTopic={listTopic} title={title} />
+      <TopicList title={title} />
     </Stack>
   );
 }
