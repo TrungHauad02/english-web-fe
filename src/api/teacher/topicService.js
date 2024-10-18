@@ -10,3 +10,13 @@ export async function getTopicDetail(id) {
     throw err;
   }
 }
+
+export async function updateTopic(data) {
+  try {
+    const res = await apiClient.put(`/topics`, data);
+    return res.data;
+  } catch (err) {
+    console.error("Error updating topic:", err);
+    throw err;
+  }
+}

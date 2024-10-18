@@ -7,6 +7,7 @@ import useTopicInfo from "./useTopicInfo";
 import SaveButton from "../common/button/SaveButton";
 import EditButton from "../common/button/EditButton";
 import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
+import ErrorComponent from "../../../../shared/component/error/ErrorComponent";
 
 export default function TopicInfo({ data }) {
   const {
@@ -19,10 +20,16 @@ export default function TopicInfo({ data }) {
     isEditing,
     handleEditClick,
     handleSaveClick,
+    error,
+    handleCloseError,
   } = useTopicInfo(data);
 
   return (
     <Stack direction={"column"} spacing={4}>
+      {/**Hiển thị khi có lỗi */}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
+      )}
       {/**Tiêu đề */}
       <Typography variant="h4" textTransform={"uppercase"} fontWeight={"bold"}>
         Topics Detail
