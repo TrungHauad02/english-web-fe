@@ -7,6 +7,7 @@ export default function useTopicList(title) {
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [totalElements, setTotalElements] = useState(0);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     loadTopics();
@@ -14,6 +15,7 @@ export default function useTopicList(title) {
 
   const loadTopics = async () => {
     setIsLoading(true);
+    setError(null);
     try {
       const data = await getListTopic(title, page, 10, "serial");
 
@@ -24,9 +26,14 @@ export default function useTopicList(title) {
       setTotalElements(data.totalElements);
     } catch (error) {
       console.error("Error loading topics:", error);
+      setError(error.response?.data?.message || "Error fetching data");
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCloseError = () => {
+    setError(null);
   };
 
   function handleSearch(text) {
@@ -47,5 +54,7 @@ export default function useTopicList(title) {
     handleLoadMore,
     isLoading,
     totalElements,
+    error,
+    handleCloseError,
   };
 }

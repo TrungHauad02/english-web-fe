@@ -4,6 +4,7 @@ import TopicContent from "./TopicContent";
 import Divider from "@mui/material/Divider";
 import DotLoader from "../../../shared/component/loader/DotLoader";
 import useTopicList from "./useTopicList";
+import ErrorComponent from "../../../shared/component/error/ErrorComponent";
 
 export default function TopicList({ title }) {
   const {
@@ -13,10 +14,17 @@ export default function TopicList({ title }) {
     isLoading,
     listTopic,
     totalElements,
+    error,
+    handleCloseError,
   } = useTopicList(title);
 
   return (
     <Stack direction={"column"} spacing={4} sx={{ marginY: "2rem" }}>
+      {/**Hiển thị khi có lỗi */}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
+      )}
+      {/** Thanh tìm kiếm và nút thêm topic */}
       <Stack direction={"row"} justifyContent={"space-between"} spacing={2}>
         <Stack direction={"column"}>
           <SearchBar title={title} onHandleSearch={handleSearch} />
@@ -36,6 +44,7 @@ export default function TopicList({ title }) {
           </Button>
         </Stack>
       </Stack>
+      {/**Bảng list topic */}
       <Stack
         direction={"column"}
         spacing={2}

@@ -6,6 +6,7 @@ export const getListTopic = async (title, page, size, sortBy) => {
     const response = await apiClient.get(path);
     return response.data;
   } catch (error) {
+    console.error(error.response.data.message);
     throw error;
   }
 };
