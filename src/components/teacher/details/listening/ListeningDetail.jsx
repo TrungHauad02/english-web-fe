@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import { getListeningDetail } from "../../../../api/teacher/detailManagerment";
+import { getListeningDetail } from "../../../../api/teacher/detailManagement";
 import { Grid2 } from "@mui/material";
 import ListeningInfo from "./ListeningInfo";
 import WriteAWordManagerment from "../common/writeaword/WriteAWordManagerment";
-import AnswerQuestionManagerment from "../common/answerquestion/AnswerQuestionManagerment";
+import AnswerQuestionManagerment from "../common/answerQuestion/AnswerQuestionManagement";
 import { useState } from "react";
 
 export default function ListeningDetail() {

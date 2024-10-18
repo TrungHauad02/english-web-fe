@@ -17,7 +17,7 @@ const VisuallyHiddenInput = styled("input")({
   whiteSpace: "nowrap",
   width: 1,
 });
-export default function TopicInfo({ data, path }) {
+export default function TopicInfo({ data }) {
   const [topic, setTopic] = useState(data);
 
   const onChangeTitle = (e) => {
@@ -47,7 +47,7 @@ export default function TopicInfo({ data, path }) {
   return (
     <Stack direction={"column"} spacing={4}>
       <Typography variant="h4" textTransform={"uppercase"} fontWeight={"bold"}>
-        {path} Detail
+        Topics Detail
       </Typography>
       <Grid2 container direction={"row"} spacing={3}>
         <Grid2 container direction={"column"} spacing={2}>

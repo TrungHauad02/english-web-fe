@@ -84,7 +84,7 @@ export default function TopicList({ title }) {
         {displayList &&
           displayList.map((topic) => (
             <Stack key={topic.id}>
-              <TopicContent topic={topic} />
+              <TopicContent topic={topic} path={title} />
               <Divider />
             </Stack>
           ))}

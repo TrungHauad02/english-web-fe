@@ -1,5 +1,3 @@
-import { duration } from "@mui/material";
-
 export function getGrammarDetail(id) {
   const data = {
     1: {
@@ -38,8 +36,8 @@ export function getGrammarDetail(id) {
 
 export function getTopicDetail(id) {
   const data = {
-    1: {
-      id: "1",
+    Topic_1729225092570: {
+      id: "Topic_1729225092570",
       serial: 1,
       title: "Topic Detail 1",
       img: "/environment.png",

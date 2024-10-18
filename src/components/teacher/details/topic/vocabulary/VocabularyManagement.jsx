@@ -4,7 +4,7 @@ import { useState } from "react";
 import VocabularyInfo from "./VocabularyInfo";
 import { v4 as uuidv4 } from "uuid";
 
-export default function VocabularyManagerment() {
+export default function VocabularyManagement() {
   const fakeData = [
     {
       id: "1",

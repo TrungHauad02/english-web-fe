@@ -1,12 +1,13 @@
 import { useParams } from "react-router-dom";
-import { getTopicDetail } from "../../../../api/teacher/detailManagerment";
+import { getTopicDetail } from "../../../../api/teacher/detailManagement";
 import { Grid2 } from "@mui/material";
 import TopicInfo from "./TopicInfo";
-import AnswerQuestionManagerment from "../common/answerquestion/AnswerQuestionManagerment";
-import VocabularyManagerment from "./vocabulary/VocabularyManagerment";
+import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
+import VocabularyManagement from "./vocabulary/VocabularyManagement";
 
-export default function TopicDetail({ path }) {
+export default function TopicDetail() {
   const { id } = useParams();
+  console.log(id);
   const data = getTopicDetail(id);
   return (
     <Grid2
@@ -17,7 +18,7 @@ export default function TopicDetail({ path }) {
     >
       <Grid2 container direction={"row"} justifyContent={"space-between"}>
         <Grid2 container direction={"column"}>
-          <TopicInfo data={data} path={path} />
+          <TopicInfo data={data} />
         </Grid2>
         <Grid2
           item
@@ -42,11 +43,11 @@ export default function TopicDetail({ path }) {
             },
           }}
         >
-          <AnswerQuestionManagerment />
+          <AnswerQuestionManagement />
         </Grid2>
       </Grid2>
       <Grid2 item direction={"row"}>
-        <VocabularyManagerment />
+        <VocabularyManagement />
       </Grid2>
     </Grid2>
   );

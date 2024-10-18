@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { getSpeakingDetail } from "../../../../api/teacher/detailManagerment";
+import { getSpeakingDetail } from "../../../../api/teacher/detailManagement";
 import { Grid2 } from "@mui/material";
 import WritingInfo from "./WritingInfo";
 import { useState } from "react";
