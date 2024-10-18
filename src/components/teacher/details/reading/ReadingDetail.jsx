@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import { getReadingDetail } from "../../../../api/teacher/detailManagerment";
+import { getReadingDetail } from "../../../../api/teacher/detailManagement";
 import { Grid2 } from "@mui/material";
 import ReadingInfo from "./ReadingInfo";
-import AnswerQuestionManagerment from "../common/answerquestion/AnswerQuestionManagerment";
+import AnswerQuestionManagerment from "../common/answerQuestion/AnswerQuestionManagement";
 import { useState } from "react";
 import MarkedViewer from "../../../common/markedViewer/MarkedViewer";
 

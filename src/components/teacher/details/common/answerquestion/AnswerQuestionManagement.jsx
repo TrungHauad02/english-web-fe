@@ -19,7 +19,7 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export default function AnswerQuestionManagerment({
+export default function AnswerQuestionManagement({
   isListening,
   file,
   onChangeFile,

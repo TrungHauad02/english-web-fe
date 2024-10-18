@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import { getGrammarDetail } from "../../../../api/teacher/detailManagerment";
+import { getGrammarDetail } from "../../../../api/teacher/detailManagement";
 import { Grid2 } from "@mui/material";
 import GrammarInfo from "./GrammarInfo";
-import AnswerQuestionManagerment from "../common/answerquestion/AnswerQuestionManagerment";
+import AnswerQuestionManagerment from "../common/answerQuestion/AnswerQuestionManagement";
 import PDFViewer from "../../../common/pdfViewer/PDFViewer";
 import { useState } from "react";
 
