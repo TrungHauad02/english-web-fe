@@ -53,8 +53,8 @@ export default function PeopleInConversation({ listPeople, setListPeople }) {
           <Typography variant="h6">People talks in the conversation</Typography>
         </Grid2>
         <Grid2 container direction={"row"} spacing={4}>
-          <EditButton showText onedit={() => setIsEditing(true)} />
-          <SaveButton showText ondel={() => setIsEditing(false)} />
+          <EditButton showText onEdit={() => setIsEditing(true)} />
+          <SaveButton showText onSave={() => setIsEditing(false)} />
         </Grid2>
       </Grid2>
       <Grid2

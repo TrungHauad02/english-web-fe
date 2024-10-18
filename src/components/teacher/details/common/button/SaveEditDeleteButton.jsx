@@ -2,9 +2,9 @@ import { Button, Grid2 } from "@mui/material";
 import { Save, Edit, Delete } from "@mui/icons-material";
 
 export default function SaveEditDeleteButton({
-  ondel,
-  onedit,
-  onsave,
+  onDel,
+  onEdit,
+  onSave,
   showText,
   size,
   spacing = 1,
@@ -19,7 +19,7 @@ export default function SaveEditDeleteButton({
     >
       <Grid2 item>
         <Button
-          onClick={ondel}
+          onClick={onDel}
           variant="contained"
           size={size}
           sx={{ backgroundColor: "#FF6655", color: "#000" }}
@@ -29,7 +29,7 @@ export default function SaveEditDeleteButton({
       </Grid2>
       <Grid2 item>
         <Button
-          onClick={onedit}
+          onClick={onEdit}
           variant="contained"
           size={size}
           sx={{ backgroundColor: "#FFD014", color: "#000" }}
@@ -39,7 +39,7 @@ export default function SaveEditDeleteButton({
       </Grid2>
       <Grid2 item>
         <Button
-          onClick={onsave}
+          onClick={onSave}
           variant="contained"
           size={size}
           sx={{ backgroundColor: "#64FF64", color: "#000" }}

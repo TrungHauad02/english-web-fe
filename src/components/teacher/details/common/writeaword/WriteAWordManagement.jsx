@@ -4,7 +4,7 @@ import Question from "./Question";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export default function WriteAWordManagerment() {
+export default function WriteAWordManagement() {
   const fakeData = [
     {
       id: "1",

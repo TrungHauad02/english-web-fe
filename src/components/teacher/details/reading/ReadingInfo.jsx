@@ -1,28 +1,17 @@
 import { Button, CardMedia, Grid2, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useState } from "react";
 import BasicTextField from "../common/textField/BasicTextField";
 import BasicSelect from "../common/select/BasicSelect";
 import MultiLineTextField from "../common/textField/MultiLineTextField";
 import SaveEditDeleteButton from "../common/button/SaveEditDeleteButton";
+import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
 export default function ReadingInfo({ data, setData }) {
   const [topic, setTopic] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
 
-  const hanleEditing = () => {
+  const handleEditing = () => {
     setIsEditing(true);
   };
 
@@ -156,8 +145,8 @@ export default function ReadingInfo({ data, setData }) {
           </Button>
           <SaveEditDeleteButton
             showText
-            onedit={hanleEditing}
-            onsave={handleSave}
+            onEdit={handleEditing}
+            onSave={handleSave}
           />
         </Grid2>
       </Grid2>

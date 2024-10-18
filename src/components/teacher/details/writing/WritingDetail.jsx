@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { getSpeakingDetail } from "../../../../api/teacher/detailManagement";
+import { getWritingDetail } from "../../../../api/teacher/writingService";
 import { Grid2 } from "@mui/material";
 import WritingInfo from "./WritingInfo";
 import { useState } from "react";
@@ -7,7 +7,7 @@ import WritingTopic from "./WritingTopic";
 
 export default function WritingDetail() {
   const { id } = useParams();
-  const data = getSpeakingDetail(id);
+  const data = getWritingDetail(id);
   const [localData, setLocalData] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
   return (

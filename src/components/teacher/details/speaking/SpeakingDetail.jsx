@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import {
   getSpeakingDetail,
   getConversationDetail,
-} from "../../../../api/teacher/detailManagement";
+} from "../../../../api/teacher/speakingService";
 import { Grid2 } from "@mui/material";
 import SpeakingInfo from "./SpeakingInfo";
 import { useState } from "react";

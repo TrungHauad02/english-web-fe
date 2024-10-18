@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import { getListeningDetail } from "../../../../api/teacher/detailManagement";
+import { getListeningDetail } from "../../../../api/teacher/listeningService";
 import { Grid2 } from "@mui/material";
 import ListeningInfo from "./ListeningInfo";
-import WriteAWordManagerment from "../common/writeaword/WriteAWordManagerment";
-import AnswerQuestionManagerment from "../common/answerQuestion/AnswerQuestionManagement";
+import WriteAWordManagement from "../common/writeAWord/WriteAWordManagement";
+import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
 import { useState } from "react";
 
 export default function ListeningDetail() {
@@ -57,7 +57,7 @@ export default function ListeningDetail() {
             },
           }}
         >
-          <WriteAWordManagerment />
+          <WriteAWordManagement />
         </Grid2>
         <Grid2
           container
@@ -83,7 +83,7 @@ export default function ListeningDetail() {
             },
           }}
         >
-          <AnswerQuestionManagerment
+          <AnswerQuestionManagement
             isListening
             file={file}
             onChangeFile={onChangeFile}

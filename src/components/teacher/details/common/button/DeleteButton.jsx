@@ -1,7 +1,7 @@
 import { Delete } from "@mui/icons-material";
 import { Button, Grid2 } from "@mui/material";
 
-export default function DeleteButton({ ondel, showText, size, disabled }) {
+export default function DeleteButton({ onDel, showText, size, disabled }) {
   return (
     <Grid2
       container
@@ -12,7 +12,7 @@ export default function DeleteButton({ ondel, showText, size, disabled }) {
     >
       <Grid2 item>
         <Button
-          onClick={ondel}
+          onClick={onDel}
           disabled={disabled}
           variant="contained"
           size={size}

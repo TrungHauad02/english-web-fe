@@ -1,14 +1,22 @@
-import { useParams } from "react-router-dom";
-import { getTopicDetail } from "../../../../api/teacher/detailManagement";
-import { Grid2 } from "@mui/material";
+import { Grid2, Stack } from "@mui/material";
 import TopicInfo from "./TopicInfo";
 import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
 import VocabularyManagement from "./vocabulary/VocabularyManagement";
+import useTopicDetail from "./useTopicDetail";
+import DotLoader from "../../../../shared/component/loader/DotLoader";
 
 export default function TopicDetail() {
-  const { id } = useParams();
-  console.log(id);
-  const data = getTopicDetail(id);
+  const { data } = useTopicDetail();
+  if (data === null)
+    return (
+      <Stack
+        justifyContent="center"
+        alignItems={"center"}
+        sx={{ height: "90vh" }}
+      >
+        <DotLoader />
+      </Stack>
+    );
   return (
     <Grid2
       container
