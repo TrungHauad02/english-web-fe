@@ -1,25 +1,18 @@
-import { Button, Grid2, Typography } from "@mui/material";
+import { Button, Grid2, Stack, Typography } from "@mui/material";
 import SearchBar from "../../../common/searchbar/SearchBar";
 import Divider from "@mui/material/Divider";
-import { useEffect, useState } from "react";
+import useListVocabulary from "./useListVocabulary";
+import DotLoader from "../../../../../shared/component/loader/DotLoader";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
-export default function ListVocabulary({ listVocab, onUpdateCurVocab }) {
-  const [displayVocab, setDisplayVocab] = useState(listVocab);
-
-  useEffect(() => {
-    setDisplayVocab(listVocab);
-  }, [listVocab]);
-
-  function handleSearch(text) {
-    const newList = listVocab.filter((vocab) =>
-      vocab.word.toLowerCase().includes(text.toLowerCase())
-    );
-    setDisplayVocab(newList);
-  }
-
-  function onHandleAddNewVocab() {
-    onUpdateCurVocab("-1");
-  }
+export default function ListVocabulary({ listVocab, setCurVocab, fetchData }) {
+  const {
+    displayVocab,
+    handleSearch,
+    onHandleAddNewVocab,
+    onUpdateCurVocab,
+    onReLoad,
+  } = useListVocabulary(listVocab, setCurVocab, fetchData);
 
   return (
     <Grid2
@@ -32,10 +25,13 @@ export default function ListVocabulary({ listVocab, onUpdateCurVocab }) {
           <SearchBar
             title={"Vocabulary"}
             onHandleSearch={handleSearch}
-            maxWidth="18rem"
+            maxWidth="15rem"
           />
         </Grid2>
         <Grid2 item sx={{ marginTop: "0.5rem" }}>
+          <Button sx={{ color: "#000", marginX: "0.25rem" }} onClick={onReLoad}>
+            <RefreshIcon />
+          </Button>
           <Button
             variant="contained"
             sx={{ backgroundColor: "#fff", color: "#000" }}
@@ -45,10 +41,20 @@ export default function ListVocabulary({ listVocab, onUpdateCurVocab }) {
           </Button>
         </Grid2>
       </Grid2>
-      <Grid2 container direction={"column"} sx={{ marginTop: "1rem" }}>
+      <Grid2
+        container
+        direction={"column"}
+        sx={{
+          marginTop: "1rem",
+        }}
+      >
         <Grid2 container direction={"row"} sx={{ padding: "0.5rem" }}>
-          <Grid2 item size={8} sx={{ paddingLeft: "5%" }}>
-            <Typography variant={"h6"} fontWeight={"bold"}>
+          <Grid2 item size={8}>
+            <Typography
+              variant={"h6"}
+              fontWeight={"bold"}
+              sx={{ paddingLeft: "5%" }}
+            >
               Word
             </Typography>
           </Grid2>
@@ -58,35 +64,37 @@ export default function ListVocabulary({ listVocab, onUpdateCurVocab }) {
             </Typography>
           </Grid2>
         </Grid2>
-        {displayVocab.map((vocab) => (
-          <>
-            <Grid2
-              key={vocab.id}
-              container
-              direction={"row"}
-              sx={{
-                padding: "0.5rem",
-                backgroundColor: "#fff",
-                borderRadius: "0.5rem",
-                marginTop: "0.5rem",
-              }}
-            >
-              <Grid2 item size={8} sx={{ paddingLeft: "5%" }}>
-                <Typography variant={"body1"}>{vocab.word}</Typography>
+        {!displayVocab && (
+          <Stack justifyContent="center" alignItems={"center"}>
+            <DotLoader />
+          </Stack>
+        )}
+        <Grid2
+          container
+          spacing={2}
+          sx={{ height: "400px", overflowY: "auto", padding: "0.5rem" }}
+        >
+          {displayVocab &&
+            displayVocab.map((vocab) => (
+              <Grid2 container direction={"column"} sx={{ width: "100%" }}>
+                <Grid2 key={vocab.id} container direction={"row"}>
+                  <Grid2 item size={8} sx={{ paddingLeft: "5%" }}>
+                    <Typography variant={"body1"}>{vocab.word}</Typography>
+                  </Grid2>
+                  <Grid2 item size={4} textAlign={"center"}>
+                    <Button
+                      variant="contained"
+                      sx={{ backgroundColor: "#000", color: "#fff" }}
+                      onClick={() => onUpdateCurVocab(vocab.id)}
+                    >
+                      Details
+                    </Button>
+                  </Grid2>
+                </Grid2>
+                <Divider />
               </Grid2>
-              <Grid2 item size={4} textAlign={"center"}>
-                <Button
-                  variant="contained"
-                  sx={{ backgroundColor: "#000", color: "#fff" }}
-                  onClick={() => onUpdateCurVocab(vocab.id)}
-                >
-                  Details
-                </Button>
-              </Grid2>
-            </Grid2>
-            <Divider />
-          </>
-        ))}
+            ))}
+        </Grid2>
       </Grid2>
     </Grid2>
   );

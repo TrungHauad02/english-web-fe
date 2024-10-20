@@ -1,82 +1,100 @@
 import { useEffect, useState } from "react";
+import {
+  createVocab,
+  deleteVocab,
+  updateVocab,
+} from "../../../../../api/teacher/vocabularyService";
+import { useParams } from "react-router-dom";
 
-export default function useVocabularyInfo(curVocab, onSaveVocab) {
-  const wordType = ["noun", "verb", "adjective", "adverb"];
-  const status = ["active", "inactive"];
+export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
+  const { id } = useParams();
+  const wordType = ["NOUN", "VERB", "ADJECTIVE", "ADVERB"];
+  const status = ["ACTIVE", "INACTIVE"];
   const [isEditing, setIsEditing] = useState(false);
-  const [localVocab, setLocalVocab] = useState(curVocab);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     setIsEditing(curVocab.id === "-1");
-    setLocalVocab(curVocab);
   }, [curVocab]);
 
-  function onChangeImage(e) {
-    if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setLocalVocab({ ...localVocab, img: imageUrl });
-    }
+  function handleInputChange(field) {
+    return (e) => {
+      if (!isEditing) return;
+      const value =
+        field === "image"
+          ? URL.createObjectURL(e.target.files[0])
+          : e.target.value;
+      setCurVocab({ ...curVocab, [field]: value });
+    };
   }
 
-  function onChangeExample(e) {
-    if (!isEditing) return;
-    setLocalVocab({ ...localVocab, example: e.target.value });
-  }
-
-  function onChangeWord(e) {
-    if (!isEditing) return;
-    setLocalVocab({ ...localVocab, word: e.target.value });
-  }
-
-  function onChangeMeaning(e) {
-    if (!isEditing) return;
-    setLocalVocab({ ...localVocab, meaning: e.target.value });
-  }
-
-  function onChangeWordType(e) {
-    if (!isEditing) return;
-    setLocalVocab({ ...localVocab, wordType: e.target.value });
-  }
-
-  function onChangePhonetic(e) {
-    if (!isEditing) return;
-    setLocalVocab({ ...localVocab, phonetic: e.target.value });
-  }
-
-  function onChangeStatus(e) {
-    if (!isEditing) return;
-    setLocalVocab({ ...localVocab, status: e.target.value });
+  function handleCloseError() {
+    setError(null);
   }
 
   function onHandleEdit() {
     setIsEditing(true);
   }
 
-  function onHandleDelete() {
-    onSaveVocab(localVocab, true);
+  function handleError(err) {
+    if (err.response?.data?.details) {
+      const details = err.response.data.details;
+      const errorMessages = Object.values(details).filter(Boolean).join(".\n");
+      setError(errorMessages);
+    } else {
+      setError("An unexpected error occurred.");
+    }
   }
 
-  function onHandleSave() {
-    setIsEditing(false);
-    onSaveVocab(localVocab);
+  async function onHandleDelete() {
+    try {
+      await deleteVocab(curVocab.id);
+      await fetchData();
+      setCurVocab({
+        id: "-1",
+        word: "",
+        img: "",
+        meaning: "",
+        wordType: "NOUN",
+        phonetic: "",
+        example: "",
+        status: "ACTIVE",
+      });
+    } catch (err) {
+      handleError(err);
+    }
+  }
+
+  async function onHandleSave() {
+    try {
+      setIsEditing(false);
+      const vocab = { ...curVocab, topicId: id };
+      if (curVocab.id === "-1") {
+        await createVocab(vocab);
+      } else {
+        await updateVocab(vocab);
+      }
+      await fetchData();
+    } catch (err) {
+      handleError(err);
+    }
   }
 
   return {
     wordType,
     status,
     isEditing,
-    localVocab,
-    onChangeImage,
-    onChangeExample,
-    onChangeWord,
-    onChangeMeaning,
-    onChangeWordType,
-    onChangePhonetic,
-    onChangeStatus,
+    onChangeImage: handleInputChange("image"),
+    onChangeExample: handleInputChange("example"),
+    onChangeWord: handleInputChange("word"),
+    onChangeMeaning: handleInputChange("meaning"),
+    onChangeWordType: handleInputChange("wordType"),
+    onChangePhonetic: handleInputChange("phonetic"),
+    onChangeStatus: handleInputChange("status"),
     onHandleEdit,
     onHandleDelete,
     onHandleSave,
+    error,
+    handleCloseError,
   };
 }

@@ -6,13 +6,13 @@ import BasicSelect from "../../common/select/BasicSelect";
 import SaveEditDeleteButton from "../../common/button/SaveEditDeleteButton";
 import { VisuallyHiddenInput } from "../../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useVocabularyInfo from "./useVocabularyInfo";
+import ErrorComponent from "../../../../../shared/component/error/ErrorComponent";
 
-export default function VocabularyInfo({ curVocab, onSaveVocab }) {
+export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
   const {
     wordType,
     status,
     isEditing,
-    localVocab,
     onChangeImage,
     onChangeExample,
     onChangeWord,
@@ -23,7 +23,9 @@ export default function VocabularyInfo({ curVocab, onSaveVocab }) {
     onHandleEdit,
     onHandleDelete,
     onHandleSave,
-  } = useVocabularyInfo(curVocab, onSaveVocab);
+    error,
+    handleCloseError,
+  } = useVocabularyInfo(curVocab, setCurVocab, fetchData);
 
   return (
     <Grid2 container direction={"column"} sx={{ width: "100%" }} spacing={2}>
@@ -31,7 +33,7 @@ export default function VocabularyInfo({ curVocab, onSaveVocab }) {
         <Grid2 container direction={"column"} size={6}>
           {/* Image Example */}
           <CardMedia
-            image={localVocab.img}
+            image={curVocab.image}
             sx={{ height: "250px", width: "320px" }}
           />
           <Button
@@ -51,7 +53,7 @@ export default function VocabularyInfo({ curVocab, onSaveVocab }) {
             />
           </Button>
           <MultiLineTextField
-            value={localVocab.example}
+            value={curVocab.example}
             onChange={onChangeExample}
             label={"Example"}
             rows={5}
@@ -63,14 +65,14 @@ export default function VocabularyInfo({ curVocab, onSaveVocab }) {
           {/* Word Meaning */}
           <BasicTextField
             label={"Word"}
-            value={localVocab.word}
+            value={curVocab.word}
             onChange={onChangeWord}
             disabled={!isEditing}
             sx={{ backgroundColor: "#fff" }}
           />
           <BasicTextField
             label={"Meaning"}
-            value={localVocab.meaning}
+            value={curVocab.meaning}
             onChange={onChangeMeaning}
             disabled={!isEditing}
             sx={{ backgroundColor: "#fff" }}
@@ -78,7 +80,7 @@ export default function VocabularyInfo({ curVocab, onSaveVocab }) {
           <BasicSelect
             label={"Word Type"}
             options={wordType}
-            value={localVocab.wordType}
+            value={curVocab.wordType}
             onChange={onChangeWordType}
             disabled={!isEditing}
             sx={{ backgroundColor: "#fff" }}
@@ -86,14 +88,14 @@ export default function VocabularyInfo({ curVocab, onSaveVocab }) {
           <BasicTextField
             disabled={!isEditing}
             label={"Phonetic"}
-            value={localVocab.phonetic}
+            value={curVocab.phonetic}
             onChange={onChangePhonetic}
             sx={{ backgroundColor: "#fff" }}
           />
           <BasicSelect
             label={"Status"}
             options={status}
-            value={localVocab.status}
+            value={curVocab.status}
             onChange={onChangeStatus}
             disabled={!isEditing}
             sx={{ backgroundColor: "#fff" }}
@@ -114,6 +116,10 @@ export default function VocabularyInfo({ curVocab, onSaveVocab }) {
           onSave={onHandleSave}
         />
       </Grid2>
+      {/**Hiển thị khi có lỗi */}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
+      )}
     </Grid2>
   );
 }
