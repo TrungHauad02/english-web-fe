@@ -20,3 +20,13 @@ export async function updateTopic(data) {
     throw err;
   }
 }
+
+export async function getVocabByTopicId(topicId) {
+  try {
+    const res = await apiClient.get(`/vocabulary/topics/${topicId}`);
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching vocab:", err);
+    throw err;
+  }
+}

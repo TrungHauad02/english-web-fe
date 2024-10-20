@@ -26,10 +26,6 @@ export default function TopicInfo({ data }) {
 
   return (
     <Stack direction={"column"} spacing={4}>
-      {/**Hiển thị khi có lỗi */}
-      {error && (
-        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
-      )}
       {/**Tiêu đề */}
       <Typography variant="h4" textTransform={"uppercase"} fontWeight={"bold"}>
         Topics Detail
@@ -114,6 +110,10 @@ export default function TopicInfo({ data }) {
           />
         </Grid2>
       </Grid2>
+      {/**Hiển thị khi có lỗi */}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
+      )}
     </Stack>
   );
 }
