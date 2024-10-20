@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { deleteTopicQuestion } from "../../../../../api/teacher/topicAnswerQuestionService";
 
 export default function useAnswerQuestion(data, fetchData) {
   const [localData, setLocalData] = useState(data);
   const { id } = useParams();
+
+  useEffect(() => {
+    setLocalData(data);
+  }, [data]);
 
   function handleAddNewQuestion() {
     const newQuestion = {
@@ -29,7 +33,7 @@ export default function useAnswerQuestion(data, fetchData) {
 
   async function onDelQuestion(id) {
     await deleteTopicQuestion(id);
-    fetchData();
+    await fetchData();
   }
 
   return {

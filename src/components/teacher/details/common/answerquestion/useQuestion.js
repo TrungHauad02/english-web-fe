@@ -30,16 +30,20 @@ export default function useQuestion(data, fetchData) {
   }
 
   async function handleSave() {
-    setIsEditing(false);
-    if (question.id === "-1") {
-      const newQuestion = await createTopicQuestion(question);
-      setQuestion(newQuestion);
+    try {
+      setIsEditing(false);
+      let newQuestion;
+      if (question.id === "-1") {
+        newQuestion = await createTopicQuestion(question);
+      } else {
+        await updateTopicQuestion(question);
+        newQuestion = question;
+      }
       await updateAnswer(newQuestion);
-    } else {
-      await updateTopicQuestion(question);
-      await updateAnswer(question);
+      await fetchData();
+    } catch (error) {
+      console.error(error);
     }
-    fetchData();
   }
 
   function handleAddNewAnswer() {
