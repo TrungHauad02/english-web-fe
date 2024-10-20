@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import { getReadingDetail } from "../../../../api/teacher/detailManagement";
+import { getReadingDetail } from "../../../../api/teacher/readingService";
 import { Grid2 } from "@mui/material";
 import ReadingInfo from "./ReadingInfo";
-import AnswerQuestionManagerment from "../common/answerQuestion/AnswerQuestionManagement";
+import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
 import { useState } from "react";
 import MarkedViewer from "../../../common/markedViewer/MarkedViewer";
 
@@ -47,7 +47,7 @@ export default function ReadingDetail() {
             },
           }}
         >
-          <AnswerQuestionManagerment />
+          <AnswerQuestionManagement />
         </Grid2>
         <Grid2 container sx={{ width: "100%" }}>
           {/* Preview File*/}

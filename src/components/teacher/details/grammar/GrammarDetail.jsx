@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import { getGrammarDetail } from "../../../../api/teacher/detailManagement";
+import { getGrammarDetail } from "../../../../api/teacher/grammarService";
 import { Grid2 } from "@mui/material";
 import GrammarInfo from "./GrammarInfo";
-import AnswerQuestionManagerment from "../common/answerQuestion/AnswerQuestionManagement";
+import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
 import PDFViewer from "../../../common/pdfViewer/PDFViewer";
 import { useState } from "react";
 
@@ -42,7 +42,7 @@ export default function GrammarDetail() {
             },
           }}
         >
-          <AnswerQuestionManagerment />
+          <AnswerQuestionManagement />
         </Grid2>
         <Grid2 container sx={{ width: "100%" }}>
           {/* Preview File*/}

@@ -1,7 +1,7 @@
 import { Edit } from "@mui/icons-material";
 import { Button, Grid2 } from "@mui/material";
 
-export default function EditButton({ onedit, showText, size }) {
+export default function EditButton({ onEdit, showText, size, disabled }) {
   return (
     <Grid2
       container
@@ -12,9 +12,10 @@ export default function EditButton({ onedit, showText, size }) {
     >
       <Grid2 item>
         <Button
-          onClick={onedit}
+          onClick={onEdit}
           variant="contained"
           size={size}
+          disabled={disabled}
           sx={{ backgroundColor: "#FFD014", color: "#000" }}
         >
           {showText ? "Edit" : <Edit />}

@@ -1,95 +1,21 @@
 import { Button, Grid2, Stack, Typography } from "@mui/material";
 import Question from "./Question";
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import SaveButton from "../button/SaveButton";
-import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import SoundViewer from "../../../../common/soundViewer/SoundViewer";
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+import { VisuallyHiddenInput } from "../../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
+import useAnswerQuestion from "./useAnswerQuestion";
 
 export default function AnswerQuestionManagement({
   isListening,
   file,
   onChangeFile,
+  data,
+  fetchData,
 }) {
-  const fakeData = [
-    {
-      id: "1",
-      serial: 1,
-      content: "What is the capital of France?",
-      explaination: "Paris is the capital of France",
-      answers: [
-        {
-          id: "1",
-          content: "Paris",
-          isCorrect: true,
-        },
-        {
-          id: "2",
-          content: "London",
-          isCorrect: false,
-        },
-        {
-          id: "3",
-          content: "Berlin",
-          isCorrect: false,
-        },
-      ],
-    },
-    {
-      id: "2",
-      serial: 2,
-      content: "What is the capital of Germany?",
-      explaination: "Berlin is the capital of Germany",
-      answers: [
-        {
-          id: "1",
-          content: "Paris",
-          isCorrect: false,
-        },
-        {
-          id: "2",
-          content: "London",
-          isCorrect: false,
-        },
-        {
-          id: "3",
-          content: "Berlin",
-          isCorrect: true,
-        },
-      ],
-    },
-  ];
-
-  const [data, setData] = useState(fakeData);
-
-  function handleAddNewQuestion() {
-    const newQuestion = {
-      id: uuidv4(),
-      serial: data.length + 1,
-      content: "",
-      explaination: "",
-      answers: [{ id: uuidv4(), content: "", isCorrect: true }],
-    };
-    setData([...data, newQuestion]);
-  }
-
-  function onDelQuestion(id) {
-    const newData = data.filter((question) => question.id !== id);
-    setData(newData);
-  }
+  const { localData, handleAddNewQuestion, onDelQuestion } = useAnswerQuestion(
+    data,
+    fetchData
+  );
 
   return (
     <Stack
@@ -120,7 +46,6 @@ export default function AnswerQuestionManagement({
           Answer Question
         </Typography>
         <Stack direction={"row"} spacing={2} sx={{ paddingX: "1rem" }}>
-          <SaveButton showText={true} size={"large"} />
           <Button
             variant="contained"
             sx={{ backgroundColor: "#fff", color: "#000" }}
@@ -131,6 +56,7 @@ export default function AnswerQuestionManagement({
         </Stack>
       </Stack>
       <Stack sx={{ padding: "1rem" }}>
+        {/** Audio file */}
         {isListening && (
           <Grid2 container direction={"row"} alignItems="center" spacing={1}>
             <Grid2 item size={2}>
@@ -164,10 +90,12 @@ export default function AnswerQuestionManagement({
             </Grid2>
           </Grid2>
         )}
-        {data.map((question) => (
+        {/** Questions */}
+        {localData.map((question) => (
           <Question
             key={question.id}
             data={question}
+            fetchData={fetchData}
             onDelQuestion={() => onDelQuestion(question.id)}
           />
         ))}

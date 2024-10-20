@@ -99,11 +99,11 @@ export default function AppRoutes() {
           element: <ReadingDetail />,
         },
         {
-          path: "listening",
-          element: <ListTopicManagement title="listening" />,
+          path: "listenings",
+          element: <ListTopicManagement title="listenings" />,
         },
         {
-          path: "listening/:id",
+          path: "listenings/:id",
           element: <ListeningDetail />,
         },
         {

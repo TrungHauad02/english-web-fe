@@ -20,7 +20,7 @@ export default function Conversation({
 }) {
   const [isEditing, setIsEditing] = useState(false);
 
-  const hanleAddNewLine = () => {
+  const handleAddNewLine = () => {
     const newConversation = [
       ...conversation,
       {
@@ -52,8 +52,8 @@ export default function Conversation({
           <Typography variant="h6">Conversation</Typography>
         </Grid2>
         <Grid2 container direction={"row"} spacing={4}>
-          <EditButton showText onedit={() => setIsEditing(true)} />
-          <SaveButton showText ondel={() => setIsEditing(false)} />
+          <EditButton showText onEdit={() => setIsEditing(true)} />
+          <SaveButton showText onSave={() => setIsEditing(false)} />
         </Grid2>
       </Grid2>
       <Grid2
@@ -76,7 +76,7 @@ export default function Conversation({
           />
         ))}
         <Button
-          onClick={hanleAddNewLine}
+          onClick={handleAddNewLine}
           disabled={!isEditing}
           sx={{
             textDecoration: "underline",
@@ -149,7 +149,7 @@ function Line({ listPeople, line, disabled, conversation, setConversation }) {
           />
         </Grid2>
         <Grid2 item size={2}>
-          <DeleteButton ondel={onDeleteLine} disabled={disabled} />
+          <DeleteButton onDel={onDeleteLine} disabled={disabled} />
         </Grid2>
       </Grid2>
     </Grid2>
