@@ -1,36 +1,21 @@
 import { Button, Grid2, Stack, Typography } from "@mui/material";
 import Question from "./Question";
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import SaveButton from "../button/SaveButton";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import SoundViewer from "../../../../common/soundViewer/SoundViewer";
 import { VisuallyHiddenInput } from "../../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
+import useAnswerQuestion from "./useAnswerQuestion";
 
 export default function AnswerQuestionManagement({
   isListening,
   file,
   onChangeFile,
   data,
+  fetchData,
 }) {
-  const [localData, setLocalData] = useState(data);
-  console.log(data);
-
-  function handleAddNewQuestion() {
-    const newQuestion = {
-      id: uuidv4(),
-      serial: localData.length + 1,
-      content: "",
-      explanation: "",
-      answers: [{ id: uuidv4(), content: "", isCorrect: true }],
-    };
-    setLocalData([...localData, newQuestion]);
-  }
-
-  function onDelQuestion(id) {
-    const newData = localData.filter((question) => question.id !== id);
-    setLocalData(newData);
-  }
+  const { localData, handleAddNewQuestion, onDelQuestion } = useAnswerQuestion(
+    data,
+    fetchData
+  );
 
   return (
     <Stack
@@ -61,7 +46,6 @@ export default function AnswerQuestionManagement({
           Answer Question
         </Typography>
         <Stack direction={"row"} spacing={2} sx={{ paddingX: "1rem" }}>
-          <SaveButton showText={true} size={"large"} />
           <Button
             variant="contained"
             sx={{ backgroundColor: "#fff", color: "#000" }}
@@ -111,6 +95,7 @@ export default function AnswerQuestionManagement({
           <Question
             key={question.id}
             data={question}
+            fetchData={fetchData}
             onDelQuestion={() => onDelQuestion(question.id)}
           />
         ))}
