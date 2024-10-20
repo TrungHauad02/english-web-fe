@@ -6,7 +6,7 @@ import useTopicDetail from "./useTopicDetail";
 import DotLoader from "../../../../shared/component/loader/DotLoader";
 
 export default function TopicDetail() {
-  const { data } = useTopicDetail();
+  const { data, answerQuestion } = useTopicDetail();
   if (data === null)
     return (
       <Stack
@@ -51,7 +51,7 @@ export default function TopicDetail() {
             },
           }}
         >
-          <AnswerQuestionManagement />
+          <AnswerQuestionManagement data={answerQuestion} />
         </Grid2>
       </Grid2>
       <Grid2 item direction={"row"}>

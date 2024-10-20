@@ -20,7 +20,6 @@ export default function useVocabularyManagement() {
 
   const fetchData = async () => {
     const data = await getVocabByTopicId(id);
-    console.log("re-fetch data");
     setListVocab(data);
   };
 

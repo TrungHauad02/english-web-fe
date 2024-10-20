@@ -54,7 +54,7 @@ export default function Question({ data, onDelQuestion }) {
       {
         id: uuidv4(),
         content: "",
-        isCorrect: false,
+        correct: false,
       },
     ];
     setQuestion({ ...question, answers: newAnswers });
@@ -65,9 +65,9 @@ export default function Question({ data, onDelQuestion }) {
     const newAnswers = [...question.answers];
     newAnswers.forEach((answer) => {
       if (answer.id === e.target.value) {
-        answer.isCorrect = true;
+        answer.correct = true;
       } else {
-        answer.isCorrect = false;
+        answer.correct = false;
       }
     });
     setQuestion({ ...question, answers: newAnswers });
@@ -91,9 +91,9 @@ export default function Question({ data, onDelQuestion }) {
     setQuestion({ ...question, serial: e.target.value });
   }
 
-  function onChangeExplaination(e) {
+  function onChangeExplanation(e) {
     if (!isEditing) return;
-    setQuestion({ ...question, explaination: e.target.value });
+    setQuestion({ ...question, explanation: e.target.value });
   }
 
   function onDelAnswer(index) {
@@ -150,9 +150,9 @@ export default function Question({ data, onDelQuestion }) {
         </Grid2>
         <Grid2 item>
           <SaveEditDeleteButton
-            ondel={onDelQuestion}
-            onedit={handleEdit}
-            onsave={handleSave}
+            onDel={onDelQuestion}
+            onEdit={handleEdit}
+            onSave={handleSave}
             showText={false}
             size={"small"}
           />
@@ -192,12 +192,12 @@ export default function Question({ data, onDelQuestion }) {
                   onChange={(e) => onChangeAnswerContent(e, index)}
                 />
                 <Radio
-                  checked={answer.isCorrect}
+                  checked={answer.correct}
                   value={answer.id}
                   onChange={onChangeIsCorrect}
                 />
                 <DeleteButton
-                  ondel={() => onDelAnswer(index)}
+                  onDel={() => onDelAnswer(index)}
                   size={"small"}
                   showText={false}
                 />
@@ -215,8 +215,8 @@ export default function Question({ data, onDelQuestion }) {
             <CustomTextField
               disabled={!isEditing}
               sx={{ width: "95%" }}
-              value={question.explaination}
-              onChange={onChangeExplaination}
+              value={question.explanation}
+              onChange={onChangeExplanation}
             />
           </Grid2>
           <Grid2 item size={3}>
