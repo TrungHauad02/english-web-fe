@@ -4,7 +4,7 @@ import ProcessBar from "./ProcessBar";
 import { useState } from "react";
 import PrevNextSubmitButton from "../../../common/button/PrevNextSubmitButton";
 import ListOptions from "./ListOptions";
-import Explaination from "./Explaination";
+import Explanation from "./Explanation";
 
 const Title = styled("h4")({
   fontSize: "1.5rem",
@@ -76,8 +76,8 @@ function AnswerQuestion({ listQuestion }) {
     Object.entries(userAnswer || {}).forEach(([questionId, answerId]) => {
       const question = listQuestion.find((q) => q.id === questionId);
       if (question) {
-        const selectedOption = question.options.find((o) => o.id === answerId);
-        if (selectedOption && selectedOption.isCorrect) {
+        const selectedOption = question.answers.find((o) => o.id === answerId);
+        if (selectedOption && selectedOption.correct) {
           score++;
         }
       }
@@ -105,14 +105,14 @@ function AnswerQuestion({ listQuestion }) {
         <Question index={curIndex + 1} content={question.content} />
         <Grid2 container direction={"row"} justifyContent={"space-between"}>
           <ListOptions
-            listAnswer={question.options}
+            listAnswer={question.answers}
             value={getUserAnswer(question.id)}
             sx={{ marginY: "1rem", marginX: "1rem" }}
             onChange={handleChange}
           />
           {isShowExplain && (
-            <Explaination
-              explaination={question.explaination}
+            <Explanation
+              explanation={question.explanation}
               sx={{
                 marginRight: "1rem",
                 backgroundColor: "#6ec3f77f",
@@ -132,7 +132,7 @@ function AnswerQuestion({ listQuestion }) {
               bottom: "0",
             }}
           >
-            {isShowExplain ? "Hide" : "Show"} explaination
+            {isShowExplain ? "Hide" : "Show"} explanation
           </Button>
         )}
       </Grid2>

@@ -1,14 +1,13 @@
 import apiClient from "../apiClient";
 
-export const getVocabularyInTopic = async (page, pageSize, topicId) => {
-  const response = await apiClient.get(
-    "/topics/vocabulary?page=" +
-      page +
-      "&pageSize=" +
-      pageSize +
-      "&topicId=" +
-      topicId
-  );
-
-  return response.data;
+export const getVocabularyInTopic = async (page, size, topicId) => {
+  try {
+    const res = await apiClient.get(
+      `/vocabulary?page=${page}&size=${size}&topicId=${topicId}`
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching vocab:", err);
+    throw err;
+  }
 };

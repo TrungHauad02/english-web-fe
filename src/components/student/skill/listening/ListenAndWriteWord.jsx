@@ -3,7 +3,7 @@ import SoundViewer from "../../../common/soundViewer/SoundViewer";
 import { useState } from "react";
 import { listListeningWriteWord } from "./listListening";
 import PrevNextSubmitButton from "../../../common/button/PrevNextSubmitButton";
-import Explaination from "../../common/answerquestion/Explaination";
+import Explanation from "../../common/answerquestion/Explanation";
 
 export default function ListenAndWriteWord({ questions }) {
   questions = listListeningWriteWord;
@@ -86,8 +86,8 @@ export default function ListenAndWriteWord({ questions }) {
             ))}
           </Typography>
           {isShowExplain && (
-            <Explaination
-              explaination={curQuestion.content}
+            <Explanation
+              explanation={curQuestion.content}
               sx={{
                 marginRight: "1rem",
                 backgroundColor: "#DAE995",
@@ -106,7 +106,7 @@ export default function ListenAndWriteWord({ questions }) {
                 bottom: "-1",
               }}
             >
-              {isShowExplain ? "Hide" : "Show"} explaination
+              {isShowExplain ? "Hide" : "Show"} explanation
             </Button>
           )}
         </>
@@ -114,7 +114,7 @@ export default function ListenAndWriteWord({ questions }) {
       <PrevNextSubmitButton
         handlePrevious={handlePrevious}
         handleNext={handleNext}
-        submitConent={getSubmitContent()}
+        submitContent={getSubmitContent()}
         scoreContent={getScoreContent()}
         onSubmit={onSubmit}
       />

@@ -12,7 +12,6 @@ function ListFlashcard({ topicId }) {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getVocabularyInTopic(currentPage - 1, 8, topicId);
-      console.log("data", data);
       if (data) {
         setList(data.content);
         setTotalPage(data.totalPages);

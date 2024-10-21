@@ -23,7 +23,7 @@ export async function getVocabByTopicId(topicId) {
 export async function getVocabByPageAndTopicId(topicId, page, size) {
   try {
     const res = await apiClient.get(
-      `/topics/${topicId}/vocabulary?page=${page}&size=${size}`
+      `/vocabulary?page=${page}&size=${size}&topicId=${topicId}`
     );
     return res.data;
   } catch (err) {
