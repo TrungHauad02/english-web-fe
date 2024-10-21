@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   createTopicAnswer,
   createTopicQuestion,
+  deleteTopicAnswer,
   updateTopicAnswer,
   updateTopicQuestion,
 } from "../../../../../api/teacher/topicAnswerQuestionService";
@@ -9,6 +10,10 @@ import {
 export default function useQuestion(data, fetchData) {
   const [question, setQuestion] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    setQuestion(data);
+  }, [data]);
 
   function handleEdit() {
     setIsEditing(true);
@@ -85,10 +90,14 @@ export default function useQuestion(data, fetchData) {
     setQuestion({ ...question, answers: newAnswers });
   }
 
-  function onDeleteAnswer(id) {
+  async function onDeleteAnswer(id) {
     if (!isEditing) return;
-    const newAnswers = question.answers.filter((answer) => answer.id !== id);
-    setQuestion({ ...question, answers: newAnswers });
+    try {
+      await deleteTopicAnswer(id);
+      await fetchData();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function onChangeQuestionContent(e) {

@@ -55,7 +55,7 @@ export const updateTopicAnswer = async (answer) => {
 
 export const deleteTopicAnswer = async (id) => {
   try {
-    await apiClient.delete(`/topics-answer/${id}`);
+    apiClient.delete(`/topics-answer/${id}`);
   } catch (error) {
     throw error;
   }
