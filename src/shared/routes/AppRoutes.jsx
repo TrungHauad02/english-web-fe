@@ -7,7 +7,6 @@ import Skills from "../../components/student/skill/Skills";
 import Account from "../../components/account/Account";
 import HistoryTest from "../../components/student/header/HistoryTest";
 import StudySchedulePage from "../../components/student/header/studyschedule/StudySchedule";
-import ListTopic from "../../components/student/common/listTopic/ListTopic";
 import site from "../../components/student/common/Pages";
 import HomeTeacher from "../../components/teacher/HomeTeacher";
 import HomeAdmin from "../../components/admin/HomeAdmin";
@@ -41,14 +40,8 @@ export default function AppRoutes() {
 
         ...site.map((page) => ({
           path: page.path,
-          element: React.createElement(
-            page.file === "ListTopic" ? ListTopic : page.detail,
-            {
-              list: page.list,
-              bg: page.bg,
-              title: page.title,
-              quote: page.quote,
-            }
+          element: (
+            <page.file bg={page.bg} title={page.title} quote={page.quote} />
           ),
         })),
 
