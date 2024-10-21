@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Grid, Card, Typography, Select, MenuItem, FormControl, InputLabel, Avatar } from '@mui/material';
-import ProfileTeacher from './ProfileTeacher';
+import ProfileTeacher from './components/ProfileTeacher';
 import SearchPanel from './../components/SearchPanel';
 import StudentTeacherList from './../components/StudentTeacherList';
 import DeleteConfirmationDialog from './../components/DeleteConfirmationDialog';
+import TeacherInfo from './components/TeacherInfo'; 
 
 function ManageTeacher() {
     const [selectedTeacher, setSelectedTeacher] = useState({
@@ -20,6 +21,7 @@ function ManageTeacher() {
     const [openProfile, setOpenProfile] = useState(false);
     const [searchName, setSearchName] = useState('');
     const [searchStartDate, setSearchStartDate] = useState('');
+    const [searchEndDate, setSearchEndDate] = useState('');
     const [searchLevel, setSearchLevel] = useState('All');
     const [teachers, setTeachers] = useState([]);
     const [filteredTeachers, setFilteredTeachers] = useState([]);
@@ -159,29 +161,37 @@ function ManageTeacher() {
     };
 
     const handleSearch = () => {
-        const currentDate = new Date().toISOString().split('T')[0];
-
-        // Chỉ chuyển đổi `searchStartDate` nếu nó không rỗng và hợp lệ
-        let formattedSearchStartDate = '';
-        if (searchStartDate) {
-            try {
-                formattedSearchStartDate = new Date(searchStartDate).toISOString().split('T')[0];
-            } catch (error) {
-                console.error('Invalid searchStartDate', error);
-            }
-        }
-
-        const filtered = teachers.filter(teacher =>
-            (searchName === '' || teacher.name.toLowerCase().includes(searchName.toLowerCase())) &&
-            (searchStartDate === '' ||
-                (formattedSearchStartDate &&
-                    new Date(teacher.startDate) >= new Date(formattedSearchStartDate) &&
-                    new Date(teacher.startDate) <= new Date(currentDate))) &&
-            (searchLevel === 'All' || teacher.level.toLowerCase().includes(searchLevel.toLowerCase()))
-        );
-
+        const filtered = teachers.filter(teacher => {
+            const isNameMatch = searchName === '' || teacher.name.toLowerCase().includes(searchName.toLowerCase());
+            const isLevelMatch = searchLevel === 'All' || !searchLevel || teacher.level === searchLevel; // Check if level matches or is 'All'
+    
+            const teacherStartDate = new Date(teacher.startDate);
+            const teacherEndDate = teacher.endDate ? new Date(teacher.endDate) : null;
+            const searchStart = searchStartDate ? new Date(searchStartDate) : null;
+            const searchEnd = searchEndDate ? new Date(searchEndDate) : null;
+            const today = new Date();  // Current date
+    
+            // Logic for date search
+            const isDateMatch = (
+                // 1. If only searchStart is provided: search from searchStart to the current date
+                (searchStart && !searchEnd && teacherStartDate >= searchStart && (!teacherEndDate || teacherEndDate >= today)) ||
+    
+                // 2. If only searchEnd is provided: search before searchEnd
+                (!searchStart && searchEnd && teacherStartDate <= searchEnd) ||
+    
+                // 3. If both searchStart and searchEnd are provided: search between them
+                (searchStart && searchEnd && teacherStartDate >= searchStart && teacherStartDate <= searchEnd) ||
+    
+                // 4. If neither searchStart nor searchEnd are provided: include all
+                (!searchStart && !searchEnd)
+            );
+    
+            return isNameMatch && isLevelMatch && isDateMatch; // Return combined conditions
+        });
+    
         setFilteredTeachers(filtered);
     };
+           
 
     const handleClear = () => {
         setSearchName('');
@@ -227,7 +237,7 @@ function ManageTeacher() {
     };
 
     return (
-        <Grid container spacing={2} style={{ padding: 20 }}>
+        <Grid container spacing={2} style={{ paddingTop: '3rem', paddingRight: '5%', paddingLeft: '5%', paddingBottom: '3rem' }}>
             <Grid container spacing={2} alignItems="center" justifyContent="flex-start">
                 <Grid item xs={3} sx={{ marginLeft: '1rem' }}>
                     <FormControl fullWidth margin="none">
@@ -264,119 +274,28 @@ function ManageTeacher() {
                         setSearchName={setSearchName}
                         searchStartDate={searchStartDate}
                         setSearchStartDate={setSearchStartDate}
+                        searchEndDate={searchEndDate}
+                        setSearchEndDate={setSearchEndDate}
                         handleSearch={handleSearch}
                     />
                 </Grid>
             </Grid>
 
-
-
             {/* Left Panel: Teacher Form */}
-            <Grid item xs={12} md={4}>
-                <Card sx={{ height: 500, padding: 2, bgcolor: "#F5F5F5" }}>
-                    {/* Avatar */}
-                    <Grid item xs={12} textAlign="center">
-                        <Avatar
-                            alt={selectedTeacher?.name || 'Teacher Avatar'}
-                            src={selectedTeacher?.avatar || '/header_user.png'}
-                            sx={{ width: 100, height: 100, margin: '0 auto' }}
-                        />
-                    </Grid>
-                    <TextField
-                        fullWidth
-                        label="Name"
-                        margin="normal"
-                        value={selectedTeacher.name}
-                        onChange={(e) => setSelectedTeacher({ ...selectedTeacher, name: e.target.value })}
-                        disabled={!isEditing && !isNew}
-                    />
-                    <TextField
-                        fullWidth
-                        label="Email"
-                        margin="normal"
-                        value={selectedTeacher.email}
-                        onChange={(e) => setSelectedTeacher({ ...selectedTeacher, email: e.target.value })}
-                        disabled={!isNew}
-                    />
-                    <FormControl fullWidth margin="normal" disabled={!isEditing && !isNew}>
-                        <InputLabel>Level</InputLabel>
-                        <Select
-                            value={selectedTeacher.level}
-                            onChange={(e) => setSelectedTeacher({ ...selectedTeacher, level: e.target.value })}
-                            disablePortal
-                            MenuProps={{
-                                PaperProps: {
-                                    style: {
-                                        maxHeight: 200,
-                                    },
-                                },
-                                disableScrollLock: true,
-                            }}
-                        >
-                            {levelsForForm.map((level) => (
-                                <MenuItem key={level} value={level}>{level}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-
-                    <Typography sx={{ fontWeight: 'bold', pb: 0 }}>
-                        Avatar:
-                    </Typography>
-                    <input
-                        accept="image/*"
-                        id="upload-button"
-                        type="file"
-                        sx={{ marginBottom: 2 }}
-                        onChange={handleImageChange}
-                        disabled={!isEditing && !isNew}
-                    />
-                    <Button component="span" sx={{ pb: 5 }} />
-
-                    <Grid container spacing={2}>
-                        <Grid item xs={3}>
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                color="error"
-                                sx={{ bgcolor: '#FF6655' }}
-                                onClick={() => setConfirmDeleteOpen(true)} // Mở dialog xác nhận xóa
-                                disabled={!selectedTeacher.id || !selectedTeacher.name.trim() || selectedTeacher.status !== 'Active'}
-                            >
-                                Delete
-                            </Button>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                color="warning"
-                                sx={{ bgcolor: '#FFD014' }}
-                                onClick={isEditing ? handleSaveEdit : handleEditToggle}
-                                disabled={!selectedTeacher.id || !selectedTeacher.name.trim() || selectedTeacher.status !== 'Active'}
-                            >
-                                {isEditing ? 'Save Edit' : 'Edit'}
-                            </Button>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                color="success"
-                                sx={{ bgcolor: '#64FF64' }}
-                                onClick={isNew ? handleAddTeacher : handleNewToggle}
-                            >
-                                {isNew ? 'Save' : 'New'}
-                            </Button>
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <Button variant="outlined" onClick={handleClear} fullWidth>
-                                Clear
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Card>
-            </Grid>
+            <TeacherInfo
+                selectedTeacher={selectedTeacher}
+                setSelectedTeacher={setSelectedTeacher}
+                isEditing={isEditing}
+                isNew={isNew}
+                levelsForForm={levelsForForm}
+                handleImageChange={handleImageChange}
+                setConfirmDeleteOpen={setConfirmDeleteOpen}
+                handleEditToggle={handleEditToggle}
+                handleSaveEdit={handleSaveEdit}
+                handleAddTeacher={handleAddTeacher}
+                handleNewToggle={handleNewToggle}
+                handleClear={handleClear}
+            />
 
             {/* Right Panel: List of Teachers */}
             <Grid item xs={12} md={8}>

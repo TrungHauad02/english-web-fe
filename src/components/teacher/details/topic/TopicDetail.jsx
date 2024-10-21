@@ -1,6 +1,6 @@
 import { Grid2, Stack } from "@mui/material";
 import TopicInfo from "./TopicInfo";
-import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
+import AnswerQuestionManagement from "../common/answerquestion/AnswerQuestionManagement";
 import VocabularyManagement from "./vocabulary/VocabularyManagement";
 import useTopicDetail from "./useTopicDetail";
 import DotLoader from "../../../../shared/component/loader/DotLoader";
@@ -33,7 +33,7 @@ export default function TopicDetail() {
           boxShadow={"0 0 0.5rem 0.1rem #00000040"}
           sx={{
             height: "500px",
-            width: "50%",
+            width: "53.5rem",
             overflowY: "auto",
             "&::-webkit-scrollbar": {
               width: "0.5rem",

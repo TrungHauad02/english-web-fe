@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\components",
+    "\\src\\components\\account",
+    "\\src\\components\\admin"
+  ],
+  "SelectedNode": "\\src\\components\\account\\SignIn.jsx",
+  "PreviewInSolutionExplorer": false
+}

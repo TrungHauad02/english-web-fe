@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Grid, Button, Typography, TextField, Card, Avatar } from '@mui/material';
-import ProfileStudent from './ProfileStudent';
+import { Grid} from '@mui/material';
+import ProfileStudent from './components/ProfileStudent';
 import SearchPanel from './../components/SearchPanel';
 import StudentTeacherList from './../components/StudentTeacherList';
 import DeleteConfirmationDialog from './../components/DeleteConfirmationDialog';
+import StudentInfo from './components/StudentInfo';
+import { handleSearch, handleDeleteStudent, handleClearSelection } from '../student/components/studentFunctions';
 
 function ManageStudent() {
     const initialStudents = [
@@ -38,135 +40,35 @@ function ManageStudent() {
 
     const [students, setStudents] = useState(initialStudents);
     const [filteredStudents, setFilteredStudents] = useState(initialStudents);
-    const [selectedStudent, setSelectedStudent] = useState(initialStudents[0]);  // Hiển thị thông tin sinh viên đầu tiên
+    const [selectedStudent, setSelectedStudent] = useState(initialStudents[0]);
     const [searchName, setSearchName] = useState('');
     const [searchStartDate, setSearchStartDate] = useState('');
+    const [searchEndDate, setSearchEndDate] = useState('');
     const [openProfile, setOpenProfile] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
-    // Xử lý tìm kiếm
-    const handleSearch = () => {
-        const filtered = students.filter(student =>
-            (searchName === '' || student.name.toLowerCase().includes(searchName.toLowerCase())) &&
-            (searchStartDate === '' || student.startDate >= searchStartDate)
-        );
-        setFilteredStudents(filtered);
-    };
-
-    // Xử lý xóa sinh viên
-    const handleDeleteStudent = () => {
-        const updatedStudents = students.map(student =>
-            student.id === selectedStudent.id ? { ...student, status: 'Inactive', endDate: new Date().toISOString().split('T')[0] } : student
-        );
-        setStudents(updatedStudents);
-        setFilteredStudents(updatedStudents);
-        setConfirmDeleteOpen(false);
-        setSelectedStudent(null);
-    };
-
-    // Xử lý nút Clear để bỏ chọn sinh viên
-    const handleClearSelection = () => {
-        setSelectedStudent(null);
-    };
-
     return (
-        <Grid container spacing={2} style={{ padding: 20 }}>
+        <Grid container spacing={2} style={{ paddingTop: '2rem', paddingRight: '5%', paddingLeft: '5%', paddingBottom: '3rem' }}>
             <Grid item xs={12}>
                 <SearchPanel
                     searchName={searchName}
                     setSearchName={setSearchName}
                     searchStartDate={searchStartDate}
                     setSearchStartDate={setSearchStartDate}
-                    handleSearch={handleSearch}
+                    searchEndDate={searchEndDate}
+                    setSearchEndDate={setSearchEndDate}
+                    handleSearch={() => handleSearch(students, searchName, searchStartDate, searchEndDate, setFilteredStudents)}
                 />
             </Grid>
 
-            {/* Left Panel: Hiển thị thông tin sinh viên */}
             <Grid item xs={12} md={4}>
-                <Card sx={{ height: 500, padding: 2, bgcolor: "#F5F5F5" }}>
-                    <Grid container spacing={2} style={{ marginTop: '10px' }}>
-                        {/* Avatar */}
-                        <Grid item xs={12} textAlign="center">
-                            <Avatar
-                                alt={selectedStudent?.name || 'Student Avatar'}
-                                src={selectedStudent?.avatar || '/icon.png'}
-                                sx={{ width: 100, height: 100, margin: '0 auto' }}
-                            />
-                        </Grid>
-
-                        {/* Name */}
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Name"
-                                value={selectedStudent?.name || ''}
-                                variant="outlined"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                            />
-                        </Grid>
-
-                        {/* Email */}
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Email"
-                                value={selectedStudent?.email || ''}
-                                variant="outlined"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                            />
-                        </Grid>
-
-                        {/* Start Date */}
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Start Date"
-                                type="date"
-                                value={selectedStudent?.startDate || ''}
-                                variant="outlined"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                            />
-                        </Grid>
-
-                        {/* Status */}
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Status"
-                                value={selectedStudent?.status || ''}
-                                variant="outlined"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                            />
-                        </Grid>
-
-                        {/* Nút Delete và Clear */}
-                        <Grid item xs={12} textAlign="center">
-                            <Button
-                                variant="contained"
-                                color="error"
-                                style={{ marginRight: '10px' }}
-                                onClick={() => setConfirmDeleteOpen(true)}
-                                disabled={!selectedStudent}
-                            >
-                                Delete
-                            </Button>
-                            <Button variant="outlined" onClick={handleClearSelection}>
-                                Clear
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Card>
+                <StudentInfo
+                    selectedStudent={selectedStudent}
+                    handleClearSelection={() => handleClearSelection(setSelectedStudent)}
+                    setConfirmDeleteOpen={setConfirmDeleteOpen}
+                />
             </Grid>
 
-            {/* Right Panel: Danh sách sinh viên */}
             <Grid item xs={12} md={8}>
                 <StudentTeacherList
                     listData={filteredStudents}
@@ -179,16 +81,14 @@ function ManageStudent() {
                 />
             </Grid>
 
-            {/* Dialog hiển thị chi tiết sinh viên */}
             {selectedStudent && (
                 <ProfileStudent open={openProfile} handleClose={() => setOpenProfile(false)} student={selectedStudent} />
             )}
 
-            {/* Dialog xác nhận xóa */}
             <DeleteConfirmationDialog
                 open={confirmDeleteOpen}
                 handleClose={() => setConfirmDeleteOpen(false)}
-                handleDelete={handleDeleteStudent}
+                handleDelete={() => handleDeleteStudent(students, selectedStudent, setStudents, setFilteredStudents, setConfirmDeleteOpen, setSelectedStudent)}
             />
         </Grid>
     );

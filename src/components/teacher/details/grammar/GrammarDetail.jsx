@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { getGrammarDetail } from "../../../../api/teacher/grammarService";
 import { Grid2 } from "@mui/material";
 import GrammarInfo from "./GrammarInfo";
-import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
+import AnswerQuestionManagement from "../common/answerquestion/AnswerQuestionManagement";
 import PDFViewer from "../../../common/pdfViewer/PDFViewer";
 import { useState } from "react";
 

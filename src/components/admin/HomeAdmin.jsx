@@ -13,6 +13,7 @@ function HomeAdmin() {
         >
             <HeaderAdmin />
             <Routes>
+                <Route path="/" element={<ManageTeacher />} />
                 <Route path="teacher" element={<ManageTeacher />} />
                 <Route path="student" element={<ManageStudent />} />
             </Routes>
