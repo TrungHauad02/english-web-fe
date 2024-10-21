@@ -24,17 +24,14 @@ export default function TopicDetail() {
       spacing={2}
       sx={{ margin: "2rem 4% 2rem 4%" }}
     >
-      <Grid2 container direction={"row"} justifyContent={"space-between"}>
-        <Grid2 container direction={"column"}>
-          <TopicInfo data={data} />
-        </Grid2>
-        <Grid2
-          item
+      <Stack container direction={"row"} justifyContent={"space-between"}>
+        <TopicInfo data={data} />
+        <Stack
           borderRadius={"0.5rem"}
           boxShadow={"0 0 0.5rem 0.1rem #00000040"}
-          width={"60%"}
           sx={{
             maxHeight: "500px",
+            width: "60%",
             overflowY: "auto",
             "&::-webkit-scrollbar": {
               width: "0.5rem",
@@ -55,8 +52,8 @@ export default function TopicDetail() {
             data={answerQuestion}
             fetchData={fetchData}
           />
-        </Grid2>
-      </Grid2>
+        </Stack>
+      </Stack>
       <Grid2 item direction={"row"}>
         <VocabularyManagement />
       </Grid2>

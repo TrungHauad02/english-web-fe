@@ -19,3 +19,21 @@ export async function updateTopic(data) {
     throw err;
   }
 }
+
+export async function createTopic(data) {
+  try {
+    const res = await apiClient.post(`/topics`, data);
+    return res.data;
+  } catch (err) {
+    console.error("Error updating topic:", err);
+    throw err;
+  }
+}
+
+export async function deleteTopic(id) {
+  try {
+    await apiClient.delete(`/topics/${id}`);
+  } catch (error) {
+    throw error;
+  }
+}

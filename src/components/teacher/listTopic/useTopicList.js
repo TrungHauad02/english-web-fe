@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getListTopic } from "../../../api/teacher/listTopicService";
+import { useNavigate } from "react-router-dom";
 
 export default function useTopicList(title) {
   const [listTopic, setListTopic] = useState([]);
@@ -8,6 +9,7 @@ export default function useTopicList(title) {
   const [isLoading, setIsLoading] = useState(false);
   const [totalElements, setTotalElements] = useState(0);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadTopics = async () => {
@@ -46,6 +48,10 @@ export default function useTopicList(title) {
     setPage((prevPage) => prevPage + 1);
   }
 
+  function handleAddNewTopic() {
+    navigate(`-1`);
+  }
+
   return {
     listTopic,
     displayList,
@@ -53,6 +59,7 @@ export default function useTopicList(title) {
     handleLoadMore,
     isLoading,
     totalElements,
+    handleAddNewTopic,
     error,
     handleCloseError,
   };

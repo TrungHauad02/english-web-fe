@@ -2,7 +2,6 @@ import { Stack, Typography } from "@mui/material";
 import TopicList from "./TopicList";
 
 export default function ListTopicManagement({ title }) {
-  console.log(title);
   return (
     <Stack
       direction={"column"}

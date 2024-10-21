@@ -12,6 +12,7 @@ export default function useAnswerQuestion(data, fetchData) {
   }, [data]);
 
   function handleAddNewQuestion() {
+    console.log("topic id: ", id);
     const newQuestion = {
       id: "-1",
       serial: localData.length + 1,

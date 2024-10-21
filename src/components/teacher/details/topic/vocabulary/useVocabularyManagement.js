@@ -19,6 +19,10 @@ export default function useVocabularyManagement() {
   const [listVocab, setListVocab] = useState(null);
 
   const fetchData = async () => {
+    if (id === "-1") {
+      setListVocab([]);
+      return;
+    }
     const data = await getVocabByTopicId(id);
     setListVocab(data);
   };

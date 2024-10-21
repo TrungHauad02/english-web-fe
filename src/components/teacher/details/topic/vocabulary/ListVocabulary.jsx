@@ -70,13 +70,17 @@ export default function ListVocabulary({ listVocab, setCurVocab, fetchData }) {
           </Stack>
         )}
         <Grid2
-          container
-          spacing={2}
+          spacing={1}
           sx={{ height: "400px", overflowY: "auto", padding: "0.5rem" }}
         >
           {displayVocab &&
+            displayVocab.length !== 0 &&
             displayVocab.map((vocab) => (
-              <Grid2 container direction={"column"} sx={{ width: "100%" }}>
+              <Grid2
+                container
+                direction={"column"}
+                sx={{ width: "100%", maxHeight: "55px", marginY: "0.5rem" }}
+              >
                 <Grid2 key={vocab.id} container direction={"row"}>
                   <Grid2 item size={8} sx={{ paddingLeft: "5%" }}>
                     <Typography variant={"body1"}>{vocab.word}</Typography>

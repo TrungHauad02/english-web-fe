@@ -1,13 +1,34 @@
 import { useState } from "react";
-import { updateTopic } from "../../../../api/teacher/topicService";
+import {
+  createTopic,
+  deleteTopic,
+  updateTopic,
+} from "../../../../api/teacher/topicService";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function useTopicInfo(data) {
+  const { id } = useParams();
   const [topic, setTopic] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleCloseError = () => {
     setError("");
+  };
+
+  const handleDelete = async () => {
+    if (id === "-1") {
+      setError("Cannot delete a topic that does not exist yet");
+      return;
+    }
+
+    try {
+      await deleteTopic(id);
+      navigate("/teacher/topics");
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   const handleEditClick = () => {
@@ -17,6 +38,11 @@ export default function useTopicInfo(data) {
   const handleSaveClick = async () => {
     try {
       setIsEditing(false);
+      if (topic.id === "-1") {
+        const res = await createTopic(topic);
+        navigate(`/teacher/topics/${res.id}`);
+        return;
+      }
       const res = await updateTopic(topic);
       setTopic(res);
       setError("");
@@ -71,6 +97,7 @@ export default function useTopicInfo(data) {
     isEditing,
     handleEditClick,
     handleSaveClick,
+    handleDelete,
     error,
     handleCloseError,
   };

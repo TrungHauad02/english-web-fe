@@ -7,7 +7,7 @@ import useAnswerQuestion from "./useAnswerQuestion";
 import ErrorComponent from "../../../../../shared/component/error/ErrorComponent";
 
 export default function AnswerQuestionManagement({
-  isListening,
+  isListening = false,
   file,
   onChangeFile,
   data,
@@ -90,15 +90,17 @@ export default function AnswerQuestionManagement({
           </Grid2>
         )}
         {/** Questions */}
-        {localData.map((question) => (
-          <Question
-            key={question.id}
-            data={question}
-            fetchData={fetchData}
-            onDelQuestion={() => onDelQuestion(question.id)}
-            setError={setError}
-          />
-        ))}
+        {localData &&
+          localData.length !== 0 &&
+          localData.map((question) => (
+            <Question
+              key={question.id}
+              data={question}
+              fetchData={fetchData}
+              onDelQuestion={() => onDelQuestion(question.id)}
+              setError={setError}
+            />
+          ))}
       </Stack>
       {/**Hiển thị khi có lỗi */}
       {error && (
