@@ -64,17 +64,29 @@ export const handleAddTeacher = (selectedTeacher, teachers, setTeachers, setFilt
     setIsNew(false);
 };
 
-export const handleDeleteTeacher = (selectedTeacher, teachers, setTeachers, setFilteredTeachers, setConfirmDeleteOpen, handleClear) => {
+export const handleDeleteTeacher = (selectedTeacher, teachers, setTeachers, setFilteredTeachers, setConfirmDeleteOpen, setSelectedTeacher, handleClear) => {
+    if (!Array.isArray(teachers)) {
+        console.error("Teachers is not an array:", teachers);
+        return; // Stop execution if teachers is not an array
+    }
+
     const updatedTeachers = teachers.map(teacher =>
-        teacher.id === selectedTeacher.id ? { ...teacher, status: 'Inactive', endDate: new Date().toISOString().split('T')[0] } : teacher
+        teacher.id === selectedTeacher.id ? {
+            ...teacher,
+            status: 'Inactive',
+            endDate: new Date().toISOString().split('T')[0]
+        } : teacher
     );
+
     setTeachers(updatedTeachers);
     setFilteredTeachers(updatedTeachers);
     setConfirmDeleteOpen(false);
-    handleClear();
+
+    // Call handleClear after deletion
+    handleClear(setSelectedTeacher); // Reset selected teacher
 };
 
-export const handleSearch = (teachers, searchName, searchStartDate, searchEndDate, setFilteredTeachers) => {
+export const handleSearch = (teachers, searchName, searchStartDate, searchEndDate, searchLevel, setFilteredTeachers) => {
     const filtered = teachers.filter(teacher => {
         const isNameMatch = searchName === '' || teacher.name.toLowerCase().includes(searchName.toLowerCase());
         const isLevelMatch = searchLevel === 'All' || !searchLevel || teacher.level === searchLevel; // Check if level matches or is 'All'
@@ -106,15 +118,18 @@ export const handleSearch = (teachers, searchName, searchStartDate, searchEndDat
     setFilteredTeachers(filtered);
 };
 
-export const handleClear = (setSearchName, setSearchStartDate, setSearchLevel, setSelectedTeacher, setIsEditing, setIsNew, teachers, setFilteredTeachers, setAvatar) => {
-    setSearchName('');
-    setSearchStartDate('');
-    setSearchLevel('');
-    setSelectedTeacher({ name: '', email: '', level: '', startDate: '', endDate: '', avatar: null, status: '' });
-    setIsEditing(false);
-    setIsNew(false);
-    setFilteredTeachers(teachers);
-    setAvatar(null);
+export const handleClear = (setSelectedTeacher) => {
+    setSelectedTeacher({
+        name: '',
+        email: '',
+        password: '',
+        level: '',
+        startDate: '',
+        endDate: '',
+        avatar: '', // Initialize avatar to an empty string
+        status: 'Active', // Default status
+        id: null, // Resetting the id
+    });
 };
 
 export const handleEditToggle = (selectedTeacher, setIsEditing) => {
@@ -129,22 +144,25 @@ export const handleNewToggle = (setIsNew, setSelectedTeacher, setAvatarFile) => 
     setAvatarFile(null);
 };
 
-export const handleSaveEdit = (selectedTeacher, teachers, setTeachers, setFilteredTeachers, setIsEditing, setAvatarFile) => {
+export const handleSaveEdit = (selectedTeacher, teachers, setTeachers, setFilteredTeachers, setIsEditing, avatarFile) => {
     if (selectedTeacher.name.trim() === '' || selectedTeacher.level.trim() === '') {
         alert('Please fill in all required fields.');
         return;
     }
 
     const updatedTeachers = teachers.map(teacher =>
-        teacher.id === selectedTeacher.id ? {
-            ...selectedTeacher,
-            avatar: setAvatarFile ? URL.createObjectURL(setAvatarFile) : teacher.avatar, // Update avatar if file is new
-        } : teacher
+        teacher.id === selectedTeacher.id
+            ? {
+                ...selectedTeacher,
+                avatar: avatarFile ? URL.createObjectURL(avatarFile) : teacher.avatar, // Use avatarFile if available
+            }
+            : teacher
     );
 
     setTeachers(updatedTeachers);
     setFilteredTeachers(updatedTeachers);
     alert('Teacher information updated successfully!');
     setIsEditing(false);
-    setAvatarFile(null);
 };
+
+

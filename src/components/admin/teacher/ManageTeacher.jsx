@@ -4,236 +4,96 @@ import ProfileTeacher from './components/ProfileTeacher';
 import SearchPanel from './../components/SearchPanel';
 import StudentTeacherList from './../components/StudentTeacherList';
 import DeleteConfirmationDialog from './../components/DeleteConfirmationDialog';
-import TeacherInfo from './components/TeacherInfo'; 
+import TeacherInfo from './components/TeacherInfo';
+import {
+    handleAddTeacher,
+    handleClear,
+    handleDeleteTeacher,
+    handleDetailClick,
+    handleEditToggle,
+    handleImageChange,
+    handleNewToggle,
+    handleSaveEdit,
+    handleSearch,
+    handleTeacherClick,
+} from './components/teacherFunctions';
 
 function ManageTeacher() {
-    const [selectedTeacher, setSelectedTeacher] = useState({
-        name: '',
-        email: '',
-        password: '',
-        level: '',
-        startDate: '',
-        endDate: '',
-        avatar: '',
-        status: '',
-    });
+    const initialTeachers = [
+        {
+            id: 1,
+            name: 'Dr. John Doe',
+            email: 'johndoe@example.com',
+            password: 'password123',
+            level: 'PhD',
+            startDate: '2021-09-01',
+            endDate: '',
+            status: 'Active',
+            avatar: '/header_user.png',
+        },
+        {
+            id: 2,
+            name: 'Ms. Jane Smith',
+            email: 'janesmith@example.com',
+            password: 'password456',
+            level: 'Master',
+            startDate: '2022-02-15',
+            endDate: '',
+            status: 'Active',
+            avatar: '/icon.png',
+        },
+        {
+            id: 3,
+            name: 'Mr. Chris Evans',
+            email: 'chrisevans@example.com',
+            password: 'password789',
+            level: 'Bachelor',
+            startDate: '2020-08-10',
+            endDate: '',
+            status: 'Inactive',
+            avatar: '/header_icon.png',
+        },
+    ];
 
-    const [openProfile, setOpenProfile] = useState(false);
+    const [teachers, setTeachers] = useState(initialTeachers);
+    const [filteredTeachers, setFilteredTeachers] = useState(initialTeachers);
+    const [selectedTeacher, setSelectedTeacher] = useState(initialTeachers[0]);
     const [searchName, setSearchName] = useState('');
     const [searchStartDate, setSearchStartDate] = useState('');
     const [searchEndDate, setSearchEndDate] = useState('');
     const [searchLevel, setSearchLevel] = useState('All');
-    const [teachers, setTeachers] = useState([]);
-    const [filteredTeachers, setFilteredTeachers] = useState([]);
+    const [openProfile, setOpenProfile] = useState(false);
+    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [isNew, setIsNew] = useState(false);
-    const [avatar, setAvatar] = useState('/header_user.png'); // Default avatar
-    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const [avatar, setAvatar] = useState('/header_user.png');
+    const [avatarFile, setAvatarFile] = useState(null);
     const levelsForSearch = ['All', 'PhD', 'Master', 'Bachelor'];
     const levelsForForm = ['PhD', 'Master', 'Bachelor'];
-    const [avatarFile, setAvatarFile] = useState(null);
 
-    // Fake data cho danh sách giáo viên
     useEffect(() => {
-        const fakeTeachers = [
-            {
-                id: 1,
-                name: 'Dr. John Doe',
-                email: 'johndoe@example.com',
-                password: 'password123',
-                level: 'PhD',
-                startDate: '2021-09-01',
-                avatar: '/header_user.png',
-                status: 'Active',
-            },
-            {
-                id: 2,
-                name: 'Ms. Jane Smith',
-                email: 'janesmith@example.com',
-                password: 'password456',
-                level: 'Master',
-                startDate: '2022-02-15',
-                avatar: '/icon.png',
-                status: 'Active',
-            },
-            {
-                id: 3,
-                name: 'Mr. Chris Evans',
-                email: 'chrisevans@example.com',
-                password: 'password789',
-                level: 'Bachelor',
-                startDate: '2020-08-10',
-                avatar: '/header_icon.png',
-                status: 'Active',
-            },
-            {
-                id: 4,
-                name: 'Dr. Tony Stark',
-                email: 'tonystark@example.com',
-                password: 'ironman123',
-                level: 'PhD',
-                startDate: '2019-05-10',
-                avatar: '/icon.png',
-                status: 'Inactive',
-                endDate: '2023-04-10',
-            },
-        ];
+        setFilteredTeachers(teachers);
+    }, [teachers]);
 
-        setTeachers(fakeTeachers);
-        setFilteredTeachers(fakeTeachers);
-    }, []);
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setSelectedTeacher({ ...selectedTeacher, avatar: event.target.result }); // Update avatar in selectedTeacher
-                setAvatarFile(file); // Store the file to update later
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const handleTeacherClick = (teacher) => {
+    const handleClearSelection = () => {
         setSelectedTeacher({
-            name: teacher.name,
-            email: teacher.email,
-            password: teacher.password,
-            level: teacher.level,
-            startDate: teacher.startDate,
-            endDate: teacher.status === 'Inactive' ? teacher.endDate : '',
-            avatar: teacher.avatar,
-            status: teacher.status,
-            id: teacher.id,
-        });
-        setAvatar(teacher.avatar); // Set the avatar when clicking on a teacher
-    };
-
-    const handleDetailClick = (teacher) => {
-        handleTeacherClick(teacher);
-        setOpenProfile(true);
-    };
-
-    const generatePassword = () => {
-        const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
-        let password = '';
-        for (let i = 0; i < 8; i++) {
-            password += characters.charAt(Math.floor(Math.random() * characters.length));
-        }
-        return password;
-    };
-
-    const handleAddTeacher = () => {
-        if (selectedTeacher.name.trim() === '' || selectedTeacher.email.trim() === '' || selectedTeacher.level.trim() === '') {
-            alert('Please fill in all required fields: Name, Email, and Level.');
-            return;
-        }
-
-        const newTeacher = {
-            id: teachers.length + 1,
-            name: selectedTeacher.name,
-            password: generatePassword(),
-            startDate: new Date().toISOString().split('T')[0],
-            status: 'Active',
-            level: selectedTeacher.level,
-            email: selectedTeacher.email,
-            avatar: selectedTeacher.avatar ? selectedTeacher.avatar : '/header_user.png',
+            name: '',
+            email: '',
+            password: '',
+            level: '',
+            startDate: '',
             endDate: '',
-        };
-
-        setTeachers([...teachers, newTeacher]);
-        setFilteredTeachers([...teachers, newTeacher]);
-        setSelectedTeacher({ name: '', email: '', level: '', startDate: '', endDate: '', avatar: '', status: '' });
-        setAvatarFile(null);
-
-        setIsNew(false);
-    };
-
-    const handleDeleteTeacher = () => {
-        const updatedTeachers = teachers.map(teacher =>
-            teacher.id === selectedTeacher.id ? { ...teacher, status: 'Inactive', endDate: new Date().toISOString().split('T')[0] } : teacher
-        );
-        setTeachers(updatedTeachers);
-        setFilteredTeachers(updatedTeachers);
-        setConfirmDeleteOpen(false);
-        handleClear();
-    };
-
-    const handleSearch = () => {
-        const filtered = teachers.filter(teacher => {
-            const isNameMatch = searchName === '' || teacher.name.toLowerCase().includes(searchName.toLowerCase());
-            const isLevelMatch = searchLevel === 'All' || !searchLevel || teacher.level === searchLevel; // Check if level matches or is 'All'
-    
-            const teacherStartDate = new Date(teacher.startDate);
-            const teacherEndDate = teacher.endDate ? new Date(teacher.endDate) : null;
-            const searchStart = searchStartDate ? new Date(searchStartDate) : null;
-            const searchEnd = searchEndDate ? new Date(searchEndDate) : null;
-            const today = new Date();  // Current date
-    
-            // Logic for date search
-            const isDateMatch = (
-                // 1. If only searchStart is provided: search from searchStart to the current date
-                (searchStart && !searchEnd && teacherStartDate >= searchStart && (!teacherEndDate || teacherEndDate >= today)) ||
-    
-                // 2. If only searchEnd is provided: search before searchEnd
-                (!searchStart && searchEnd && teacherStartDate <= searchEnd) ||
-    
-                // 3. If both searchStart and searchEnd are provided: search between them
-                (searchStart && searchEnd && teacherStartDate >= searchStart && teacherStartDate <= searchEnd) ||
-    
-                // 4. If neither searchStart nor searchEnd are provided: include all
-                (!searchStart && !searchEnd)
-            );
-    
-            return isNameMatch && isLevelMatch && isDateMatch; // Return combined conditions
+            avatar: '',
+            status: 'Active', // Assuming default status is 'Active'
+            id: null, // Resetting the id as well
         });
-    
-        setFilteredTeachers(filtered);
-    };
-           
-
-    const handleClear = () => {
+        setAvatarFile(null); // Reset avatar file
         setSearchName('');
         setSearchStartDate('');
-        setSearchLevel('');
-        setSelectedTeacher({ name: '', email: '', level: '', startDate: '', endDate: '', avatar: null, status: '' });
-        setIsEditing(false);
-        setIsNew(false);
-        setFilteredTeachers(teachers);
-        setAvatar(null);
-    };
-
-    const handleEditToggle = () => {
-        if (selectedTeacher.id && selectedTeacher.name.trim() && selectedTeacher.level.trim()) {
-            setIsEditing(!isEditing);
-        }
-    };
-
-    const handleNewToggle = () => {
-        setIsNew(true);
-        setSelectedTeacher({ name: '', email: '', level: '', startDate: '', endDate: '', avatar: '', status: '' });
-        setAvatarFile(null);
-    };
-
-    const handleSaveEdit = () => {
-        if (selectedTeacher.name.trim() === '' || selectedTeacher.level.trim() === '') {
-            alert('Please fill in all required fields.');
-            return;
-        }
-
-        const updatedTeachers = teachers.map(teacher =>
-            teacher.id === selectedTeacher.id ? {
-                ...selectedTeacher,
-                avatar: avatarFile ? URL.createObjectURL(avatarFile) : teacher.avatar, // Update avatar if file is new
-            } : teacher
-        );
-
-        setTeachers(updatedTeachers);
-        setFilteredTeachers(updatedTeachers);
-        alert('Teacher information updated successfully!');
-        setIsEditing(false);
-        setAvatarFile(null);
+        setSearchEndDate('');
+        setSearchLevel('All'); // Resetting search level to default
+        setIsEditing(false); // Resetting edit mode
+        setIsNew(false); // Resetting new mode
     };
 
     return (
@@ -248,7 +108,7 @@ function ManageTeacher() {
                             disableScrollLock
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
-                                    handleSearch();
+                                    handleSearch(teachers, searchName, searchStartDate, searchEndDate, searchLevel, setFilteredTeachers);
                                 }
                             }}
                             label="Search by Level"
@@ -276,7 +136,7 @@ function ManageTeacher() {
                         setSearchStartDate={setSearchStartDate}
                         searchEndDate={searchEndDate}
                         setSearchEndDate={setSearchEndDate}
-                        handleSearch={handleSearch}
+                        handleSearch={() => handleSearch(teachers, searchName, searchStartDate, searchEndDate, searchLevel, setFilteredTeachers)}
                     />
                 </Grid>
             </Grid>
@@ -288,21 +148,22 @@ function ManageTeacher() {
                 isEditing={isEditing}
                 isNew={isNew}
                 levelsForForm={levelsForForm}
-                handleImageChange={handleImageChange}
+                handleImageChange={(e) => handleImageChange(e, selectedTeacher, setSelectedTeacher, setAvatarFile)}
                 setConfirmDeleteOpen={setConfirmDeleteOpen}
-                handleEditToggle={handleEditToggle}
-                handleSaveEdit={handleSaveEdit}
-                handleAddTeacher={handleAddTeacher}
-                handleNewToggle={handleNewToggle}
-                handleClear={handleClear}
+                handleEditToggle={() => handleEditToggle(selectedTeacher, setIsEditing)}
+                handleSaveEdit={() => handleSaveEdit(selectedTeacher, teachers, setTeachers, setFilteredTeachers, setIsEditing, avatarFile)}
+                handleAddTeacher={() => handleAddTeacher(selectedTeacher, teachers, setTeachers, setFilteredTeachers, setSelectedTeacher, setAvatarFile, setIsNew)}
+                handleNewToggle={() => handleNewToggle(setIsNew, setSelectedTeacher, setAvatarFile)}
+                handleClear={() => handleClear(setSelectedTeacher)} // Keep this line as is
+                handleDeleteTeacher={() => handleDeleteTeacher(selectedTeacher, teachers, setTeachers, setFilteredTeachers, setConfirmDeleteOpen, setSelectedTeacher)}
             />
 
             {/* Right Panel: List of Teachers */}
             <Grid item xs={12} md={8}>
                 <StudentTeacherList
                     listData={filteredTeachers}
-                    handleClick={handleTeacherClick}
-                    handleDetailClick={handleDetailClick}
+                    handleClick={(teacher) => handleTeacherClick(teacher, setSelectedTeacher, setAvatar)}
+                    handleDetailClick={(teacher) => handleDetailClick(teacher, setOpenProfile, (t) => handleTeacherClick(t, setSelectedTeacher, setAvatar))}
                     role="teacher"
                 />
             </Grid>
@@ -311,7 +172,15 @@ function ManageTeacher() {
             <DeleteConfirmationDialog
                 open={confirmDeleteOpen}
                 handleClose={() => setConfirmDeleteOpen(false)}
-                handleDelete={handleDeleteTeacher}
+                handleDelete={() => handleDeleteTeacher(
+                    selectedTeacher,
+                    teachers,
+                    setTeachers,
+                    setFilteredTeachers,
+                    setConfirmDeleteOpen,
+                    setSelectedTeacher,
+                    handleClear // Pass handleClear here
+                )}
             />
         </Grid>
     );
