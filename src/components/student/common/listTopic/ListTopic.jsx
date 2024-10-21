@@ -13,19 +13,24 @@ function ListTopic({ quote, title, bg }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getListTopic(page - 1);
-      const topics = data.content;
-      setTotalPage(data.totalPages);
-      if (topics) {
-        setList(topics);
-      } else {
-        setList([]);
+      try {
+        const data = await getListTopic(page - 1, 10);
+        console.log(data);
+        const topics = data.content;
+        setTotalPage(data.totalPages);
+        if (topics) {
+          setList(topics);
+        } else {
+          setList([]);
+        }
+      } catch (error) {
+        console.error(error);
       }
     };
 
     fetchData();
   }, [page]);
-  const onChangePage = (event, value) => {
+  const onChangePage = (value) => {
     setPage(value);
   };
   return (

@@ -1,13 +1,19 @@
 import apiClient from "../apiClient";
 
-export function getListTopic(page) {
-  return apiClient.get("/topics?page=" + page).then((response) => {
+export async function getListTopic(page, size) {
+  try {
+    const response = await apiClient.get(`/topics?page=${page}&size=${size}`);
     return response.data;
-  });
+  } catch (error) {
+    throw error;
+  }
 }
 
-export function getTopicById(topicId) {
-  return apiClient.get("/topics/" + topicId).then((response) => {
+export async function getTopicById(topicId) {
+  try {
+    const response = await apiClient.get(`/topics/${topicId}`);
     return response.data;
-  });
+  } catch (error) {
+    throw error;
+  }
 }

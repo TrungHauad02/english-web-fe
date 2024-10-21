@@ -24,17 +24,16 @@ export default function TopicDetail() {
       spacing={2}
       sx={{ margin: "2rem 4% 2rem 4%" }}
     >
-      <Grid2 container direction={"row"} justifyContent={"space-between"}>
-        <Grid2 container direction={"column"}>
+      <Grid2 container direction={"row"}>
+        <Grid2 item>
           <TopicInfo data={data} />
         </Grid2>
         <Grid2
-          item
           borderRadius={"0.5rem"}
           boxShadow={"0 0 0.5rem 0.1rem #00000040"}
-          width={"60%"}
           sx={{
-            maxHeight: "500px",
+            height: "500px",
+            width: "50%",
             overflowY: "auto",
             "&::-webkit-scrollbar": {
               width: "0.5rem",

@@ -4,6 +4,7 @@ import { deleteTopicQuestion } from "../../../../../api/teacher/topicAnswerQuest
 
 export default function useAnswerQuestion(data, fetchData) {
   const [localData, setLocalData] = useState(data);
+  const [error, setError] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
@@ -11,6 +12,7 @@ export default function useAnswerQuestion(data, fetchData) {
   }, [data]);
 
   function handleAddNewQuestion() {
+    console.log("topic id: ", id);
     const newQuestion = {
       id: "-1",
       serial: localData.length + 1,
@@ -32,13 +34,19 @@ export default function useAnswerQuestion(data, fetchData) {
   }
 
   async function onDelQuestion(id) {
-    await deleteTopicQuestion(id);
-    await fetchData();
+    try {
+      await deleteTopicQuestion(id);
+      await fetchData();
+    } catch (error) {
+      setError(error.response.data.message);
+    }
   }
 
   return {
     localData,
     handleAddNewQuestion,
     onDelQuestion,
+    error,
+    setError,
   };
 }

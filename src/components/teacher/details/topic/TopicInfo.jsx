@@ -8,6 +8,7 @@ import SaveButton from "../common/button/SaveButton";
 import EditButton from "../common/button/EditButton";
 import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import ErrorComponent from "../../../../shared/component/error/ErrorComponent";
+import DeleteButton from "../common/button/DeleteButton";
 
 export default function TopicInfo({ data }) {
   const {
@@ -20,6 +21,7 @@ export default function TopicInfo({ data }) {
     isEditing,
     handleEditClick,
     handleSaveClick,
+    handleDelete,
     error,
     handleCloseError,
   } = useTopicInfo(data);
@@ -67,6 +69,13 @@ export default function TopicInfo({ data }) {
                 disabled={isEditing}
                 showText
                 onEdit={handleEditClick}
+              />
+            </Grid2>
+            <Grid2 item>
+              <DeleteButton
+                disabled={!isEditing}
+                showText
+                onDel={handleDelete}
               />
             </Grid2>
             <Grid2 item>

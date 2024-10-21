@@ -14,6 +14,7 @@ export default function TopicList({ title }) {
     isLoading,
     listTopic,
     totalElements,
+    handleAddNewTopic,
     error,
     handleCloseError,
   } = useTopicList(title);
@@ -34,6 +35,7 @@ export default function TopicList({ title }) {
           <Button
             variant={"contained"}
             color={"primary"}
+            onClick={handleAddNewTopic}
             sx={{
               backgroundColor: "#6EC2F7",
               padding: "1rem 1.5rem",
