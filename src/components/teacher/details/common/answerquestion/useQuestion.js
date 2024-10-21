@@ -7,7 +7,7 @@ import {
   updateTopicQuestion,
 } from "../../../../../api/teacher/topicAnswerQuestionService";
 
-export default function useQuestion(data, fetchData) {
+export default function useQuestion(data, fetchData, setError) {
   const [question, setQuestion] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -18,7 +18,15 @@ export default function useQuestion(data, fetchData) {
   function handleEdit() {
     setIsEditing(true);
   }
-
+  function handleError(err) {
+    if (err.response?.data?.details) {
+      const details = err.response.data.details;
+      const errorMessages = Object.values(details).filter(Boolean).join(".\n");
+      setError(errorMessages);
+    } else {
+      setError("An unexpected error occurred.");
+    }
+  }
   async function updateAnswer(newQuestion) {
     const updatedAnswers = question.answers.map((answer) => {
       return { ...answer, topicQuestionId: newQuestion.id };
@@ -31,12 +39,15 @@ export default function useQuestion(data, fetchData) {
         return updateTopicAnswer(answer);
       }
     });
-    await Promise.all(promises);
+    try {
+      await Promise.all(promises);
+    } catch (error) {
+      handleError(error);
+    }
   }
 
   async function handleSave() {
     try {
-      setIsEditing(false);
       let newQuestion;
       if (question.id === "-1") {
         newQuestion = await createTopicQuestion(question);
@@ -46,8 +57,9 @@ export default function useQuestion(data, fetchData) {
       }
       await updateAnswer(newQuestion);
       await fetchData();
+      setIsEditing(false);
     } catch (error) {
-      console.error(error);
+      handleError(error);
     }
   }
 
@@ -96,7 +108,7 @@ export default function useQuestion(data, fetchData) {
       await deleteTopicAnswer(id);
       await fetchData();
     } catch (error) {
-      console.error(error);
+      handleError(error);
     }
   }
 

@@ -4,6 +4,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import SoundViewer from "../../../../common/soundViewer/SoundViewer";
 import { VisuallyHiddenInput } from "../../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useAnswerQuestion from "./useAnswerQuestion";
+import ErrorComponent from "../../../../../shared/component/error/ErrorComponent";
 
 export default function AnswerQuestionManagement({
   isListening,
@@ -12,10 +13,8 @@ export default function AnswerQuestionManagement({
   data,
   fetchData,
 }) {
-  const { localData, handleAddNewQuestion, onDelQuestion } = useAnswerQuestion(
-    data,
-    fetchData
-  );
+  const { localData, handleAddNewQuestion, onDelQuestion, error, setError } =
+    useAnswerQuestion(data, fetchData);
 
   return (
     <Stack
@@ -97,9 +96,14 @@ export default function AnswerQuestionManagement({
             data={question}
             fetchData={fetchData}
             onDelQuestion={() => onDelQuestion(question.id)}
+            setError={setError}
           />
         ))}
       </Stack>
+      {/**Hiển thị khi có lỗi */}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={() => setError("")} />
+      )}
     </Stack>
   );
 }
