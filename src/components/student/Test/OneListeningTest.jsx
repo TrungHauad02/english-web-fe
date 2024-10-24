@@ -9,11 +9,15 @@ function OneListeningTest({ onelistening, audioRef, status, onAudioEnd ,title,fo
     setShowTranscript(!showTranscript); 
   };
 
-
   return (
     <>
+    {
+      console.log(onelistening.content+onelistening.id)
+      
+    }
       {status === 'Testing' 
         ? <audio ref={audioRef} src={onelistening.content} onEnded={onAudioEnd} autoPlay style={{ display: 'none' }} /> 
+        
         : <Box>
             <audio ref={audioRef} src={onelistening.content} controls style={{ width: '100%', marginTop: '1rem' }} />
             <Button
@@ -35,8 +39,6 @@ function OneListeningTest({ onelistening, audioRef, status, onAudioEnd ,title,fo
       }
       <ListQuestion status={status} dataTest={onelistening}
       title = {title} focusId={focusId}   />
-
-
     </>
   );
 }

@@ -12,6 +12,8 @@ function ListQuestion({dataTest,status,focusId,title,onAnswerChange}){
 
     useEffect(() => {
       const savedAnswers = localStorage.getItem('selectedAnswers'+title);
+
+      
       if (savedAnswers) {
           setSelectedAnswers(JSON.parse(savedAnswers));
       }
@@ -83,16 +85,16 @@ function ListQuestion({dataTest,status,focusId,title,onAnswerChange}){
       }
  
     >
-      {questionNumber.options.map((option) => {
-        const isCorrect = option.isCorrect; 
-        const isSelected = selectedAnswers[questionNumber.id] === option.content;
+      {questionNumber.answers.map((answer) => {
+        const isCorrect = answer.isCorrect; 
+        const isSelected = selectedAnswers[questionNumber.id] === answer.content;
 
         return (
           <FormControlLabel
-            key={option.id}
-            value={option.content}
+            key={answer.id}
+            value={answer.content}
             control={<Radio />}
-            label={`${option.id}. ${option.content}`}
+            label={`${answer.id}. ${answer.content}`}
             sx={{
               color: status === 'Submit' 
                 ? (isSelected ? (isCorrect ? 'green' : 'red') : (isCorrect ? 'green' : 'inherit')) 

@@ -1,14 +1,16 @@
+// ProfileCard.jsx
 import React from 'react';
 import { Dialog, DialogContent, Button, Stack, Box, Typography } from '@mui/material';
 
-const ProfileTeacher = ({ open, handleClose, teacher }) => {
+const Profile = ({ open, handleClose, type, data }) => {
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
             <DialogContent>
                 <Stack direction="row" spacing={2} divider={<Box sx={{ width: 2, bgcolor: 'grey.300' }} />}>
+
                     <Stack spacing={1} alignItems="center" sx={{ width: '40%', justifyContent: 'center' }}>
                         <img
-                            src={teacher.avatar || '/header_user.png'}
+                            src={data.avatar || '/header_user.png'}
                             alt="User"
                             style={{ width: 180, height: 180, borderRadius: '50%' }}
                         />
@@ -16,24 +18,36 @@ const ProfileTeacher = ({ open, handleClose, teacher }) => {
 
                     <Stack spacing={1} sx={{ width: '60%', pt: 2 }}>
                         <Typography sx={{ fontSize: 40, fontWeight: 'bold' }}>
-                            Teacher
+                            {type}
                         </Typography>
                         <Box sx={{ position: 'relative', mt: 1, mb: 2 }}>
                             <img src="/bg_name_profile.png" alt="Name Background" style={{ width: '100%' }} />
                             <Box sx={{ position: 'absolute', top: '35%', left: '10%', fontSize: 24, fontWeight: 'bold' }}>
-                                {teacher.name}
+                                {data.name}
                             </Box>
                         </Box>
 
                         <Box sx={{ bgcolor: 'grey.300', p: 2, borderRadius: 2, transition: 'opacity .5s ease-in-out' }}>
                             <Stack spacing={1}>
-                                <Box><span style={{ fontWeight: 'bold' }}>Name:</span> {teacher.name}</Box>
-                                <Box><span style={{ fontWeight: 'bold' }}>Email:</span> {teacher.email}</Box>
-                                <Box><span style={{ fontWeight: 'bold' }}>Password:</span> {teacher.password}</Box>
-                                <Box><span style={{ fontWeight: 'bold' }}>Level:</span> {teacher.level}</Box>
-                                <Box><span style={{ fontWeight: 'bold' }}>Start Date:</span> {teacher.startDate}</Box>
-                                {teacher.endDate && (
-                                    <Box><span style={{ fontWeight: 'bold' }}>End Date:</span> {teacher.endDate}</Box>
+                                <Box><span style={{ fontWeight: 'bold' }}>Name:</span> {data.name}</Box>
+                                <Box><span style={{ fontWeight: 'bold' }}>Email:</span> {data.email}</Box>
+                                {type === 'Student' ? (
+                                    <>
+                                        <Box><span style={{ fontWeight: 'bold' }}>Start Date:</span> {data.startDate}</Box>
+                                        {data.status === 'Inactive' && (
+                                            <Box><span style={{ fontWeight: 'bold' }}>End Date:</span> {data.endDate}</Box>
+                                        )}
+                                        <Box><span style={{ fontWeight: 'bold' }}>Status:</span> {data.status}</Box>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Box><span style={{ fontWeight: 'bold' }}>Password:</span> {data.password}</Box>
+                                        <Box><span style={{ fontWeight: 'bold' }}>Level:</span> {data.level}</Box>
+                                        <Box><span style={{ fontWeight: 'bold' }}>Start Date:</span> {data.startDate}</Box>
+                                        {data.endDate && (
+                                            <Box><span style={{ fontWeight: 'bold' }}>End Date:</span> {data.endDate}</Box>
+                                        )}
+                                    </>
                                 )}
                             </Stack>
                         </Box>
@@ -48,4 +62,4 @@ const ProfileTeacher = ({ open, handleClose, teacher }) => {
     );
 };
 
-export default ProfileTeacher;
+export default Profile;

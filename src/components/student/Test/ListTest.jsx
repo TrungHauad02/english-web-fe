@@ -1,5 +1,4 @@
 import React, { useState,useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { getListTest } from "../../../api/student/test/listTestApi"
 import CustomPagination from "../../common/pagination/CustomPagination";
 import ListTestContent from "./ListTestContent"
@@ -56,12 +55,12 @@ const TabItem = styled(Tab)(({ theme }) => ({
 }));
 
 
-function ListTest({quote, title, bg}) {
+function ListTest() {
   const [page, setPage] = useState(1);
   const [list, setList] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
   const type = {
-    mixed: 'MIXED',
+    mixed: 'MIXING',
     skills:{
     reading: 'READING',
     listening: 'LISTENING',
@@ -69,6 +68,7 @@ function ListTest({quote, title, bg}) {
     writing: 'WRITING',
     }
 };
+
 const [currtype, setCurrtype] = useState(type.mixed);
 const [mainTab, setMainTab] = useState(0); 
 const [skillTab, setSkillTab] = useState(0); 
@@ -80,14 +80,17 @@ const handleMainTabChange = (event, newValue) => {
   if(newValue===0)
   {
     setCurrtype(type.mixed);
+
   }
   else{
     setCurrtype(type.skills.reading)
     setSkillTab(0);
   }
+
+  
 };
 
-// Hàm thay đổi tab con trong Skills
+
 const handleSkillTabChange = (event, newValue) => {
   setSkillTab(newValue);
   const skillKeys = Object.keys(type.skills);
@@ -100,6 +103,8 @@ const handleSkillTabChange = (event, newValue) => {
     const fetchData = async () => {
       const data = await getListTest(page - 1,currtype);
       const tests = data.content;
+      console.log(tests);
+      
       setTotalPage(data.totalPages);
       if (tests) {
         setList(tests);
@@ -113,19 +118,10 @@ const handleSkillTabChange = (event, newValue) => {
   const onChangePage = (event, value) => {
     setPage(value);
   };
-
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const toListTestSkillTest = () => {
-    const currentPath = location.pathname;
-    const newPath = `${currentPath}/skilltest`;
-    navigate(newPath);
-  };
   return (
     <Box>
       <ImageContainer>
-      <img src={bg} alt="Test" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      <img src={"/bg_test.png"} alt="Test" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         <MainTitleContainer>
           <Typography variant="h4" component="h1" sx={{ margin: 2 }}>
             TEST ONLINE
@@ -147,7 +143,7 @@ const handleSkillTabChange = (event, newValue) => {
           </Tabs>
         </Box>
       )}
-      <ListTestContent list={list}/>
+      <ListTestContent  list={list}/>
       <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
           <CustomPagination count={totalPage} onChange={onChangePage} key={currtype} />
         </Stack>

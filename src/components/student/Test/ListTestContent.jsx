@@ -8,6 +8,16 @@ import {
     Grid, 
     styled
   } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
+const type = {
+    mixing: 'MIXING',
+    skills: {
+        reading: 'READING',
+        listening: 'LISTENING',
+        speaking: 'SPEAKING',
+        writing: 'WRITING',
+    }
+};
 
 const ListTestContainer = styled(Box)(({ theme }) => ({
     marginTop: theme.spacing(12),
@@ -32,6 +42,35 @@ const ListTestContainer = styled(Box)(({ theme }) => ({
   }));
 
 function ListTestContent({list}){
+    const navigate = useNavigate();
+    const location = useLocation();
+    
+    const handleClick = (datatest) => {
+
+        const currentPath = location.pathname; 
+        let newPath = '';
+
+        switch (datatest.type) {
+            case type.mixing:
+                newPath = `${currentPath}mixing`; 
+                break;
+            case type.skills.reading:
+                newPath = `${currentPath}reading`; 
+                break;
+            case type.skills.listening:
+                newPath = `${currentPath}listening`; 
+                break;
+            case type.skills.speaking:
+                newPath = `${currentPath}speaking`; 
+                break;
+            case type.skills.writing:
+                newPath = `${currentPath}writing`; 
+                break;
+            default:
+                break;
+        }
+        navigate(newPath, { state: datatest });
+    };
     return (
         <>
         <ListTestContainer>
@@ -44,7 +83,7 @@ function ListTestContent({list}){
                   <Typography><strong>Duration:</strong> {test.duration}</Typography>
                   <Typography><strong>Number of Questions:</strong> {test.questions}</Typography>
                   <Typography><strong>Score:</strong> {test.score}</Typography>
-                  <DoTestButton variant="contained">Do test</DoTestButton>
+                  <DoTestButton variant="contained" onClick={() => handleClick(test)}>Do test</DoTestButton>
                 </CardContent>
                 <Button component="a" href="link-cua-ban" sx={{padding: "6px 16px !important"}}>
                   See History
