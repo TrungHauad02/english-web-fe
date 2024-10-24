@@ -25,7 +25,7 @@ export default function GrammarInfo({ data, setData }) {
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, img: imageUrl });
+      setTopic({ ...topic, image: imageUrl });
     }
   };
 
@@ -47,6 +47,11 @@ export default function GrammarInfo({ data, setData }) {
   const onChangeContent = (e) => {
     if (!isEditing) return;
     setTopic({ ...topic, content: e.target.value });
+  };
+
+  const onChangeDescription = (e) => {
+    if (!isEditing) return;
+    setTopic({ ...topic, description: e.target.value });
   };
 
   const onChangeExample = (e) => {
@@ -120,12 +125,17 @@ export default function GrammarInfo({ data, setData }) {
       </Grid2>
       <Grid2 container size={6} direction={"column"} sx={{ width: "70%" }}>
         <MultiLineTextField
+          label={"Description"}
+          value={topic.description}
+          onChange={onChangeDescription}
+          disabled={!isEditing}
+        />
+        <MultiLineTextField
           label={"Content"}
           value={topic.content}
           onChange={onChangeContent}
           disabled={!isEditing}
         />
-
         <MultiLineTextField
           label={"Example"}
           value={topic.example}

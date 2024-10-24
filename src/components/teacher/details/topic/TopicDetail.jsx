@@ -7,6 +7,25 @@ import DotLoader from "../../../../shared/component/loader/DotLoader";
 
 export default function TopicDetail() {
   const { data, answerQuestion, fetchData } = useTopicDetail();
+  const answerQuestionContainerStyle = {
+    height: "500px",
+    width: "53rem",
+    overflowY: "auto",
+    "&::-webkit-scrollbar": {
+      width: "0.5rem",
+    },
+    "&::-webkit-scrollbar-track": {
+      backgroundColor: "#e0e0e0",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "#888",
+      borderRadius: "10px",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      backgroundColor: "#555",
+    },
+  };
+
   if (data === null)
     return (
       <Stack
@@ -24,35 +43,19 @@ export default function TopicDetail() {
       spacing={2}
       sx={{ margin: "2rem 4% 2rem 4%" }}
     >
-      <Grid2 container direction={"row"}>
+      <Grid2 container direction={"row"} justifyContent={"space-between"}>
         <Grid2 item>
           <TopicInfo data={data} />
         </Grid2>
         <Grid2
           borderRadius={"0.5rem"}
           boxShadow={"0 0 0.5rem 0.1rem #00000040"}
-          sx={{
-            height: "500px",
-            width: "53.5rem",
-            overflowY: "auto",
-            "&::-webkit-scrollbar": {
-              width: "0.5rem",
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "#e0e0e0",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#888",
-              borderRadius: "10px",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: "#555",
-            },
-          }}
+          sx={answerQuestionContainerStyle}
         >
           <AnswerQuestionManagement
             data={answerQuestion}
             fetchData={fetchData}
+            path={"topics"}
           />
         </Grid2>
       </Grid2>

@@ -99,6 +99,7 @@ function MatchImageWithWord({ stateVocab }) {
 
     return `Your Score: ${score}/${total}`;
   };
+  if (!state) return <></>;
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Card

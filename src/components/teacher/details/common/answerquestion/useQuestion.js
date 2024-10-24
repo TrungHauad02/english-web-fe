@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import {
-  createTopicAnswer,
-  createTopicQuestion,
-  deleteTopicAnswer,
-  updateTopicAnswer,
-  updateTopicQuestion,
-} from "../../../../../api/teacher/topicAnswerQuestionService";
+  createAnswer,
+  createQuestion,
+  deleteAnswer,
+  updateAnswer,
+  updateQuestion,
+} from "../../../../../api/teacher/answerQuestionService";
 
-export default function useQuestion(data, fetchData, setError) {
+export default function useQuestion(data, fetchData, setError, path) {
   const [question, setQuestion] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -27,16 +27,24 @@ export default function useQuestion(data, fetchData, setError) {
       setError("An unexpected error occurred.");
     }
   }
-  async function updateAnswer(newQuestion) {
+  async function handleUpdateAnswer(newQuestion) {
+    let parentIdName =
+      path === "topics"
+        ? "topicQuestionId"
+        : path === "grammar"
+        ? "grammarQuestionId"
+        : path === "reading"
+        ? "readingQuestionId"
+        : "";
     const updatedAnswers = question.answers.map((answer) => {
-      return { ...answer, topicQuestionId: newQuestion.id };
+      return { ...answer, [parentIdName]: newQuestion.id };
     });
 
     const promises = updatedAnswers.map((answer) => {
       if (answer.id === "-1") {
-        return createTopicAnswer(answer);
+        return createAnswer(path, answer);
       } else {
-        return updateTopicAnswer(answer);
+        return updateAnswer(path, answer);
       }
     });
     try {
@@ -50,12 +58,12 @@ export default function useQuestion(data, fetchData, setError) {
     try {
       let newQuestion;
       if (question.id === "-1") {
-        newQuestion = await createTopicQuestion(question);
+        newQuestion = await createQuestion(path, question);
       } else {
-        await updateTopicQuestion(question);
+        await updateQuestion(path, question);
         newQuestion = question;
       }
-      await updateAnswer(newQuestion);
+      await handleUpdateAnswer(newQuestion);
       await fetchData();
       setIsEditing(false);
     } catch (error) {
@@ -65,17 +73,39 @@ export default function useQuestion(data, fetchData, setError) {
 
   function handleAddNewAnswer() {
     if (!isEditing) return;
-    const newAnswers = [
-      ...question.answers,
-      {
-        id: "-1",
-        content: "",
-        correct: false,
-        topicQuestionId: question.id,
-        status: "ACTIVE",
-      },
-    ];
-    setQuestion({ ...question, answers: newAnswers });
+    const newAnswers = {
+      topics: [
+        ...question.answers,
+        {
+          id: "-1",
+          content: "",
+          correct: false,
+          topicQuestionId: question.id,
+          status: "ACTIVE",
+        },
+      ],
+      grammar: [
+        ...question.answers,
+        {
+          id: "-1",
+          content: "",
+          correct: false,
+          grammarQuestionId: question.id,
+          status: "ACTIVE",
+        },
+      ],
+      reading: [
+        ...question.answers,
+        {
+          id: "-1",
+          content: "",
+          correct: false,
+          readingQuestionId: question.id,
+          status: "ACTIVE",
+        },
+      ],
+    };
+    setQuestion({ ...question, answers: newAnswers[path] });
   }
 
   function onChangeCorrectAnswer(e) {
@@ -105,7 +135,7 @@ export default function useQuestion(data, fetchData, setError) {
   async function onDeleteAnswer(id) {
     if (!isEditing) return;
     try {
-      await deleteTopicAnswer(id);
+      await deleteAnswer(path, id);
       await fetchData();
     } catch (error) {
       handleError(error);
