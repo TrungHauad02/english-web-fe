@@ -6,20 +6,15 @@ export const handleSearch = (students, searchName, searchStartDate, searchEndDat
         const studentEndDate = student.endDate ? new Date(student.endDate) : null;
         const searchStart = searchStartDate ? new Date(searchStartDate) : null;
         const searchEnd = searchEndDate ? new Date(searchEndDate) : null;
-        const today = new Date();  // Current date
+        const today = new Date(); 
 
-        // Logic tìm kiếm theo ngày
         const isDateMatch = (
-            // 1. Nếu chỉ có searchStart: tìm kiếm từ searchStart đến thời điểm hiện tại
             (searchStart && !searchEnd && studentStartDate >= searchStart && (!studentEndDate || studentEndDate >= today)) ||
 
-            // 2. Nếu chỉ có searchEnd: tìm kiếm từ trước searchEnd
             (!searchStart && searchEnd && studentStartDate <= searchEnd) ||
 
-            // 3. Nếu cả searchStart và searchEnd: tìm kiếm từ searchStart đến searchEnd
             (searchStart && searchEnd && studentStartDate >= searchStart && studentStartDate <= searchEnd) ||
 
-            // 4. Nếu không có searchStart và searchEnd: bao gồm tất cả
             (!searchStart && !searchEnd)
         );
 

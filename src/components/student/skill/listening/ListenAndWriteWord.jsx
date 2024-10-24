@@ -3,7 +3,7 @@ import SoundViewer from "../../../common/soundViewer/SoundViewer";
 import { useState } from "react";
 import { listListeningWriteWord } from "./listListening";
 import PrevNextSubmitButton from "../../../common/button/PrevNextSubmitButton";
-import Explanation from "../../common/answerQuestion/Explanation";
+import Explanation from "../../common/answerquestion/Explanation";
 
 export default function ListenAndWriteWord({ questions }) {
   questions = listListeningWriteWord;

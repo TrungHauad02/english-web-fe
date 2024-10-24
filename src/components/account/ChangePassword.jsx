@@ -19,9 +19,8 @@ const ChangePassword = ({ open, handleClose }) => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showReEnterPassword, setShowReEnterPassword] = useState(false);
 
-  const fakeCurrentPassword = "123"; // Fake current password for validation
+  const fakeCurrentPassword = "123"; // Fake current password
 
-  // Handle password change logic
   const handlePasswordChange = () => {
     if (oldPassword !== fakeCurrentPassword) {
       alert("Old password is incorrect!");

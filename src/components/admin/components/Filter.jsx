@@ -11,14 +11,12 @@ const SearchPanel = ({
     setSearchEndDate, 
     handleSearch 
 }) => {
-    // Effect to ensure end date is greater than start date
     useEffect(() => {
         if (searchStartDate && searchEndDate && new Date(searchStartDate) > new Date(searchEndDate)) {
-            setSearchEndDate(searchStartDate); // Reset end date if it's before start date
+            setSearchEndDate(searchStartDate);
         }
     }, [searchStartDate, searchEndDate, setSearchEndDate]);
 
-    // Determine if the end date input should be disabled
     const isEndDateDisabled = !searchStartDate || new Date(searchStartDate) >= new Date();
 
     return (
@@ -48,7 +46,7 @@ const SearchPanel = ({
                     onChange={(e) => {
                         setSearchStartDate(e.target.value);
                         if (searchEndDate && new Date(e.target.value) > new Date(searchEndDate)) {
-                            setSearchEndDate(e.target.value); // Reset end date if it's less than the new start date
+                            setSearchEndDate(e.target.value); 
                         }
                     }}
                     onKeyDown={(e) => {
@@ -68,12 +66,11 @@ const SearchPanel = ({
                     value={searchEndDate}
                     onChange={(e) => {
                         const selectedEndDate = e.target.value;
-                        // Set end date only if it's greater than the start date
                         if (new Date(selectedEndDate) > new Date(searchStartDate)) {
                             setSearchEndDate(selectedEndDate);
                         }
                     }}
-                    disabled={isEndDateDisabled} // Disable end date if invalid
+                    disabled={isEndDateDisabled} 
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                             handleSearch();
