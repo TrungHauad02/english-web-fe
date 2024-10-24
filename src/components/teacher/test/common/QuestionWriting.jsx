@@ -31,7 +31,7 @@ const ButtonContainer = styled(Box)(({ theme }) => ({
 
 const QuestionWriting = ({data}) => {
   const [content, setContent] = useState(data?.content || '');
-  const [serialNumber, setSerialNumber] = useState(data?.serialNumber || 36);
+  const [serialNumber, setSerialNumber] = useState(data.serial);
 
   const handleSave = () => {
     // Handle saving logic here

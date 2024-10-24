@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   Box,
   TextField,
@@ -6,11 +6,12 @@ import {
   MenuItem,
   Button,
   Typography,
-  InputLabel,
   Paper,
   FormControl,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { duration, styled } from '@mui/material/styles';
+import { updateTest } from '../../../../api/teacher/test/TestApi'; 
+
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -53,15 +54,45 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-function InformationTest({data}) {
+function InformationTest({ data }) {
   const [formData, setFormData] = useState(data);
+  const [backupData, setBackupData] = useState(data); 
+  const [editMode, setEditMode] = useState(false);
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const handleEdit = () => {
+    setEditMode(true);
+  };
+
+  const handleSave = () => {
+
+    updateTest(formData)
+      .then((updatedData) => {
+        
+        setFormData(prevState => ({
+          ...prevState,
+          ...updatedData
+        }));
+        setEditMode(false);
+      })
+      .catch((error) => {
+        console.error("Error updating test:", error);
+      });
+};
+
+
+
+  const handleCancel = () => {
+    setFormData(backupData); 
+    setEditMode(false);
   };
 
   return (
@@ -72,88 +103,95 @@ function InformationTest({data}) {
         </Typography>
 
         <Box sx={{ mb: 1 }}>
-  <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Title</Typography>
-  <StyledTextField
-    fullWidth
-    placeholder="Speaking Detail 1"
-    name="title"
-    value={formData.title}
-    onChange={handleChange}
-  />
-</Box>
+          <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Title</Typography>
+          <StyledTextField
+            fullWidth
+            placeholder="Speaking Detail 1"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            disabled={!editMode} // Chỉ có thể chỉnh sửa khi ở chế độ edit
+          />
+        </Box>
 
-<Box sx={{ mb: 1 }}>
-  <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Serial</Typography>
-  <StyledTextField
-    fullWidth
-    placeholder="1"
-    name="serial"
-    value={formData.serial}
-    onChange={handleChange}
-  />
-</Box>
+        <Box sx={{ mb: 1 }}>
+          <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Serial</Typography>
+          <StyledTextField
+            fullWidth
+            placeholder="1"
+            name="serial"
+            value={formData.serial}
+            onChange={handleChange}
+            disabled={!editMode}
+          />
+        </Box>
 
-<Box sx={{ mb: 1 }}>
-  <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Duration</Typography>
-  <StyledTextField
-    fullWidth
-    placeholder="Duration"
-    name="duration"
-    value={formData.duration}
-    onChange={handleChange}
-  />
-</Box>
+        <Box sx={{ mb: 1 }}>
+          <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Duration</Typography>
+          <StyledTextField
+            fullWidth
+            placeholder="Duration"
+            name="duration"
+            value={formData.duration}
+            onChange={handleChange}
+            disabled={!editMode}
+          />
+        </Box>
 
-<Box sx={{ mb: 1 }}>
-  <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Type</Typography>
-  <StyledTextField
-    fullWidth
-    placeholder="Type"
-    name="type"
-    value={formData.type}
-    onChange={handleChange}
-  />
-</Box>
+        <Box sx={{ mb: 1 }}>
+          <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Type</Typography>
+          <StyledTextField
+            fullWidth
+            placeholder="Type"
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            disabled={!editMode}
+          />
+        </Box>
 
-<Box sx={{ mb: 1 }}>
-  <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Status</Typography>
-  <FormControl fullWidth>
-    <Select
-      value={formData.status}
-      onChange={handleChange}
-      name="status"
-      displayEmpty
-      sx={{
-        height: '3rem',
-        borderRadius: '0.5rem',
-        backgroundColor: 'white',
-        '& .MuiSelect-select': {
-          color: '#9E9E9E',
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-          borderColor: '#E0E0E0',
-        },
-      }}
-    >
-      <MenuItem value="">
-     
-      </MenuItem>
-      <MenuItem value="active">Active</MenuItem>
-      <MenuItem value="inactive">Inactive</MenuItem>
-    </Select>
-  </FormControl>
-</Box>
+        <Box sx={{ mb: 1 }}>
+          <Typography variant="h7" sx={{ mb: 1, fontWeight: 'bold' }}>Status</Typography>
+          <FormControl fullWidth>
+            <Select
+              value={formData.status}
+              onChange={handleChange}
+              name="status"
+              disabled={!editMode}
+              displayEmpty
+              sx={{
+                height: '3rem',
+                borderRadius: '0.5rem',
+                backgroundColor: 'white',
+                '& .MuiSelect-select': {
+                  color: '#9E9E9E',
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#E0E0E0',
+                },
+              }}
+            >
+              <MenuItem value="ACTIVE">Active</MenuItem>
+              <MenuItem value="INACTIVE">Inactive</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
 
         <ButtonContainer>
-          <ColorButton color="#F08080" variant="contained">
-            Cancel
-          </ColorButton>
-          <ColorButton color="#FFD700" variant="contained">
-            Edit
-          </ColorButton>
-          <ColorButton color="#98FB98" variant="contained">
-            Save
-          </ColorButton>
+          {editMode ? (
+            <>
+              <ColorButton color="#F08080" variant="contained" onClick={handleCancel}>
+                Cancel
+              </ColorButton>
+              <ColorButton color="#98FB98" variant="contained" onClick={handleSave}>
+                Save
+              </ColorButton>
+            </>
+          ) : (
+            <ColorButton color="#FFD700" variant="contained" onClick={handleEdit}>
+              Edit
+            </ColorButton>
+          )}
         </ButtonContainer>
       </FormContainer>
     </Box>

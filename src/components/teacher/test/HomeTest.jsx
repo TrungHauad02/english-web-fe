@@ -14,21 +14,16 @@ import {
   TableRow,
   MenuItem,
   Select,
+  Stack
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useEffect } from 'react';
+import { getListTest } from "../../../api/student/test/listTestApi"
+import { getListTestByType } from "../../../api/student/test/listTestApi"
+import CustomPagination from "../../common/pagination/CustomPagination";
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const FormContainer = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  backgroundColor: '#fff5e6',
-  borderRadius: theme.spacing(2),
-}));
 
-const SearchContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: theme.spacing(2),
-}));
 
 const ColorButton = styled(Button)(({ color }) => ({
   borderRadius: '8px',
@@ -42,27 +37,92 @@ const ColorButton = styled(Button)(({ color }) => ({
 }));
 
 const TestManagement = () => {
+  const type = {
+    mixing: 'MIXING',
+    reading: 'READING',
+    listening: 'LISTENING',
+    speaking: 'SPEAKING',
+    writing: 'WRITING',
+  
+};
+  const [page, setPage] = useState(1);
+  const [list, setList] = useState([]);
+  const [alltest, setalltest] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [currtype, setCurrtype] = useState(type.mixing);
+  const [totalPage, setTotalPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('Mixed');
-  const [tests, setTests] = useState([
-    { serial: 1, title: 'Test mixd 2024', status: 'Active', type: 'Mixed' },
-    { serial: 2, title: 'Test mixd 2024', status: 'Inactive', type: 'Reading' },
-    { serial: 3, title: 'Test mixd 2024', status: 'Active', type: 'Listening' },
-    { serial: 4, title: 'Test mixd 2024', status: 'Active', type: 'Speaking' },
-  ]);
+
+
+
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
   const handleFilterChange = (event) => {
-    setFilterType(event.target.value);
+    setCurrtype(event.target.value);
   };
 
-  const filteredTests = tests.filter((test) =>
-    test.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (filterType === 'Mixed' || test.type === filterType)
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getListTest(page,currtype);
+      const tests = data.content;
+      setalltest(await getListTestByType(currtype));
+      console.log(tests);
+      setTotalPage(data.totalPages);
+      
+      if (tests) {
+        setList(tests);
+        
+      } else {
+        setList([]);
+   
+      }
+    };
+
+    fetchData();
+  }, [page,currtype]);
+  
+  useEffect(() => {
+    const filtered = alltest.filter(test => 
+      test.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredList(filtered);
+  }, [searchTerm, alltest]);
+  const onChangePage = (event, value) => {
+    setPage(value);
+    setSearchTerm('');
+  };
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const handlebtnDetail = (datatest) => {
+
+    const currentPath = location.pathname; 
+    let newPath = '';
+
+    switch (datatest.type) {
+        case type.mixing:
+            newPath = `${currentPath}mixing`; 
+            break;
+        case type.reading:
+            newPath = `${currentPath}reading`; 
+            break;
+        case type.listening:
+            newPath = `${currentPath}listening`; 
+            break;
+        case type.speaking:
+            newPath = `${currentPath}speaking`; 
+            break;
+        case type.writing:
+            newPath = `${currentPath}writing`; 
+            break;
+        default:
+            break;
+    }
+    navigate(newPath, { state: datatest });
+};
 
   return (
     <Container maxWidth="lg" sx={{marginTop:'4rem' ,marginBottom:'2rem'}}>
@@ -87,16 +147,16 @@ const TestManagement = () => {
     }}
   >
     <Select
-      value={filterType}
+      value={currtype}
       onChange={handleFilterChange}
       variant="outlined"
       sx={{ minWidth: 120 }}
     >
-      <MenuItem value="Mixed">Mixed</MenuItem>
-      <MenuItem value="Reading">Reading</MenuItem>
-      <MenuItem value="Listening">Listening</MenuItem>
-      <MenuItem value="Speaking">Speaking</MenuItem>
-      <MenuItem value="Writing">Writing</MenuItem>
+      <MenuItem value={type.mixing}>Mixing</MenuItem>
+      <MenuItem value={type.reading}>Reading</MenuItem>
+      <MenuItem value={type.listening}>Listening</MenuItem>
+      <MenuItem value={type.speaking}>Speaking</MenuItem>
+      <MenuItem value={type.writing}>Writing</MenuItem>
     </Select>
     
     <TextField
@@ -124,23 +184,27 @@ const TestManagement = () => {
           <TableCell>Serial</TableCell>
           <TableCell>Title</TableCell>
           <TableCell>Status</TableCell>
-          <TableCell align="center">Details</TableCell>  {/* Căn giữa cho cột chi tiết */}
+          <TableCell align="center">Details</TableCell> 
         </TableRow>
       </TableHead>
       <TableBody>
-        {filteredTests.map((test) => (
+        {(searchTerm === '' ? list : filteredList).map((test) => (
           <TableRow key={test.serial}>
             <TableCell>{test.serial}</TableCell>
             <TableCell>{test.title}</TableCell>
             <TableCell>{test.status}</TableCell>
             <TableCell align="center">
-              <Button variant="outlined">Detail</Button>
+              <Button variant="outlined" onClick={() => handlebtnDetail(test)}>Detail</Button>
             </TableCell>
           </TableRow>
         ))}
       </TableBody>
+
     </Table>
   </TableContainer>
+  <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
+          <CustomPagination count={totalPage} onChange={onChangePage} key={currtype} />
+        </Stack>
 </Container>
 
   );

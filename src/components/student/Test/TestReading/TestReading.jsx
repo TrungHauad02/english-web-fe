@@ -2,7 +2,6 @@ import { Box, Typography, Paper  } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MainTitle  from '../MainTitle';
 import OneReadingTest from './OneReadingTest';
-import DataTestReading from './DataTestReading';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import BtnPreviousNextContentTest from '../common/BtnPreviousNextContentTest'
 import { useLocation } from 'react-router-dom';
