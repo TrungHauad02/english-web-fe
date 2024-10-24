@@ -18,7 +18,7 @@ export default function WritingInfo({
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, img: imageUrl });
+      setTopic({ ...topic, image: imageUrl });
     }
   };
 
@@ -45,7 +45,7 @@ export default function WritingInfo({
       <Grid2 container size={6} direction={"row"} sx={{ width: "100%" }}>
         <Grid2 container spacing={2} direction={"column"}>
           <CardMedia
-            image={topic.img}
+            image={topic.image}
             sx={{ height: "250px", width: "250px" }}
           />
           <Button
@@ -86,7 +86,7 @@ export default function WritingInfo({
             label={"Status"}
             value={topic.status}
             onChange={onChangeStatus}
-            options={["active", "inactive"]}
+            options={["ACTIVE", "INACTIVE"]}
             disabled={!isEditing}
           />
         </Grid2>

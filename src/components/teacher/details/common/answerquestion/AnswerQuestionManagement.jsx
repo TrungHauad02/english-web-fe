@@ -13,6 +13,7 @@ export default function AnswerQuestionManagement({ data, fetchData, path }) {
       sx={{
         backgroundColor: "#f1f1f1",
         borderRadius: "0.25rem",
+        width: "100%",
       }}
     >
       <Stack
