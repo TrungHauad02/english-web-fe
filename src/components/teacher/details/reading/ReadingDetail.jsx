@@ -3,13 +3,23 @@ import { getReadingDetail } from "../../../../api/teacher/readingService";
 import { Grid2 } from "@mui/material";
 import ReadingInfo from "./ReadingInfo";
 import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MarkedViewer from "../../../common/markedViewer/MarkedViewer";
 
 export default function ReadingDetail() {
   const { id } = useParams();
-  const data = getReadingDetail(id);
-  const [localData, setLocalData] = useState(data);
+  const [localData, setLocalData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getReadingDetail(id);
+      setLocalData(data);
+    };
+    fetchData();
+  }, [id]);
+
+  if (!localData) return;
+
   return (
     <Grid2
       container
@@ -51,7 +61,7 @@ export default function ReadingDetail() {
         </Grid2>
         <Grid2 container sx={{ width: "100%" }}>
           {/* Preview File*/}
-          <MarkedViewer path={localData.file} displayAppBar />
+          <MarkedViewer path={localData.content} displayAppBar />
         </Grid2>
       </Grid2>
     </Grid2>

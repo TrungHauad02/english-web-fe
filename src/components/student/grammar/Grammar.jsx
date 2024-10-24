@@ -2,7 +2,7 @@ import MainPicture from "../common/listTopic/MainPicture";
 import GrammarInfo from "./GrammarInfo";
 import GrammarDocument from "./GrammarDocument";
 import { listQuestion } from "./ListQuestion";
-import AnswerQuestion from "../common/answerquestion/AnswerQuestion";
+import AnswerQuestion from "../common/answerQuestion/AnswerQuestion";
 
 function Grammar({ topic }) {
   topic = {

@@ -1,73 +1,30 @@
 import { Button, CardMedia, Grid2, Typography } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useState } from "react";
 import BasicTextField from "../common/textField/BasicTextField";
 import BasicSelect from "../common/select/BasicSelect";
 import MultiLineTextField from "../common/textField/MultiLineTextField";
-import SaveEditDeleteButton from "../common/button/SaveEditDeleteButton";
 import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
+import useGrammarInfo from "./useGrammarInfo";
+import DeleteButton from "../common/button/DeleteButton";
+import EditButton from "../common/button/EditButton";
+import SaveButton from "../common/button/SaveButton";
 
 export default function GrammarInfo({ data, setData }) {
-  const [topic, setTopic] = useState(data);
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handleEditing = () => {
-    setIsEditing(true);
-  };
-
-  const handleSave = () => {
-    setIsEditing(false);
-    setData(topic);
-  };
-
-  const onChangeImage = (e) => {
-    if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, image: imageUrl });
-    }
-  };
-
-  const onChangeTitle = (e) => {
-    if (!isEditing) return;
-    setTopic({ ...topic, title: e.target.value });
-  };
-  const onChangeSerial = (e) => {
-    if (!isEditing) return;
-    if (e.target.value <= 0) return;
-    setTopic({ ...topic, serial: e.target.value });
-  };
-
-  const onChangeStatus = (e) => {
-    if (!isEditing) return;
-    setTopic({ ...topic, status: e.target.value });
-  };
-
-  const onChangeContent = (e) => {
-    if (!isEditing) return;
-    setTopic({ ...topic, content: e.target.value });
-  };
-
-  const onChangeDescription = (e) => {
-    if (!isEditing) return;
-    setTopic({ ...topic, description: e.target.value });
-  };
-
-  const onChangeExample = (e) => {
-    if (!isEditing) return;
-    setTopic({ ...topic, example: e.target.value });
-  };
-
-  const onChangeFile = (e) => {
-    if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const fileUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, file: fileUrl });
-      setData({ ...topic, file: fileUrl });
-    }
-  };
+  const {
+    topic,
+    isEditing,
+    handleEditing,
+    handleSave,
+    handleDelete,
+    onChangeImage,
+    onChangeTitle,
+    onChangeSerial,
+    onChangeStatus,
+    onChangeContent,
+    onChangeDescription,
+    onChangeExample,
+    onChangeFile,
+  } = useGrammarInfo(data, setData);
 
   return (
     <Grid2 container direction={"column"} spacing={4}>
@@ -118,7 +75,7 @@ export default function GrammarInfo({ data, setData }) {
             label={"Status"}
             value={topic.status}
             onChange={onChangeStatus}
-            options={["active", "inactive"]}
+            options={["ACTIVE", "INACTIVE"]}
             disabled={!isEditing}
           />
         </Grid2>
@@ -165,11 +122,31 @@ export default function GrammarInfo({ data, setData }) {
               onChange={onChangeFile}
             />
           </Button>
-          <SaveEditDeleteButton
-            showText
-            onEdit={handleEditing}
-            onSave={handleSave}
-          />
+          <Grid2
+            container
+            direction="row"
+            spacing={1}
+            justifyContent="space-evenly"
+            alignItems="center"
+          >
+            <Grid2 item>
+              <EditButton
+                disabled={isEditing}
+                showText
+                onEdit={handleEditing}
+              />
+            </Grid2>
+            <Grid2 item>
+              <DeleteButton
+                disabled={!isEditing}
+                showText
+                onDel={handleDelete}
+              />
+            </Grid2>
+            <Grid2 item>
+              <SaveButton disabled={!isEditing} showText onSave={handleSave} />
+            </Grid2>
+          </Grid2>
         </Grid2>
       </Grid2>
     </Grid2>

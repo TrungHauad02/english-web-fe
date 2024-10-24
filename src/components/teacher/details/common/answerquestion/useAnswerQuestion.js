@@ -24,7 +24,7 @@ export default function useAnswerQuestion(data, fetchData, path) {
             id: "-1",
             content: "",
             correct: true,
-            topicQuestionId: "-1",
+            questionId: "-1",
             status: "ACTIVE",
           },
         ],
@@ -41,7 +41,7 @@ export default function useAnswerQuestion(data, fetchData, path) {
             id: "-1",
             content: "",
             correct: true,
-            grammarQuestionId: "-1",
+            questionId: "-1",
             status: "ACTIVE",
           },
         ],
@@ -58,7 +58,7 @@ export default function useAnswerQuestion(data, fetchData, path) {
             id: "-1",
             content: "",
             correct: true,
-            readingQuestionId: "-1",
+            questionId: "-1",
             status: "ACTIVE",
           },
         ],
@@ -69,6 +69,7 @@ export default function useAnswerQuestion(data, fetchData, path) {
   }
 
   async function onDelQuestion(id) {
+    if (id === "-1") return;
     try {
       await deleteQuestion(path, id);
       await fetchData();

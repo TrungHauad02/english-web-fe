@@ -37,7 +37,6 @@ export default function useTopicInfo(data) {
 
   const handleSaveClick = async () => {
     try {
-      setIsEditing(false);
       if (topic.id === "-1") {
         const res = await createTopic(topic);
         navigate(`/teacher/topics/${res.id}`);
@@ -46,6 +45,7 @@ export default function useTopicInfo(data) {
       const res = await updateTopic(topic);
       setTopic(res);
       setError("");
+      setIsEditing(false);
     } catch (err) {
       console.error("Error updating topic:", err);
       if (err.response && err.response.data && err.response.data.details) {
