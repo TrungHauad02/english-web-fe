@@ -91,14 +91,10 @@ export default function useQuestion(data, fetchData, setError, path) {
     setQuestion({ ...question, answers: newAnswers });
   }
 
-  function onChangeAnswerContent(e, id) {
+  function onChangeAnswerContent(e, i) {
     if (!isEditing) return;
     const newAnswers = [...question.answers];
-    newAnswers.forEach((answer) => {
-      if (answer.id === id) {
-        answer.content = e.target.value;
-      }
-    });
+    newAnswers[i].content = e.target.value;
     setQuestion({ ...question, answers: newAnswers });
   }
 

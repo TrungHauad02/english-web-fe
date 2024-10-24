@@ -69,6 +69,7 @@ export default function useAnswerQuestion(data, fetchData, path) {
   }
 
   async function onDelQuestion(id) {
+    if (id === "-1") return;
     try {
       await deleteQuestion(path, id);
       await fetchData();
