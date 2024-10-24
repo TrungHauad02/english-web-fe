@@ -20,6 +20,22 @@ export default function ListeningDetail() {
     }
   }
 
+  const scrollBarStyle = {
+    "&::-webkit-scrollbar": {
+      width: "0.5rem",
+    },
+    "&::-webkit-scrollbar-track": {
+      backgroundColor: "#e0e0e0",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "#888",
+      borderRadius: "10px",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      backgroundColor: "#555",
+    },
+  };
+
   return (
     <Grid2
       container
@@ -42,19 +58,7 @@ export default function ListeningDetail() {
           sx={{
             maxHeight: "500px",
             overflowY: "auto",
-            "&::-webkit-scrollbar": {
-              width: "0.5rem",
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "#e0e0e0",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#888",
-              borderRadius: "10px",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: "#555",
-            },
+            scrollBarStyle,
           }}
         >
           <WriteAWordManagement />
@@ -68,19 +72,7 @@ export default function ListeningDetail() {
           sx={{
             maxHeight: "600px",
             overflowY: "auto",
-            "&::-webkit-scrollbar": {
-              width: "0.5rem",
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "#e0e0e0",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#888",
-              borderRadius: "10px",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: "#555",
-            },
+            scrollBarStyle,
           }}
         >
           <AnswerQuestionManagement

@@ -1,10 +1,11 @@
-import { Button, Card, Grid2, Typography } from "@mui/material";
+import { Button, Card, Grid2 } from "@mui/material";
 import { styled } from "@mui/system";
 import ProcessBar from "./ProcessBar";
-import { useState } from "react";
 import PrevNextSubmitButton from "../../../common/button/PrevNextSubmitButton";
 import ListOptions from "./ListOptions";
 import Explanation from "./Explanation";
+import Question from "./Question";
+import useAnswerQuestion from "./useAnswerQuestion";
 
 const Title = styled("h4")({
   fontSize: "1.5rem",
@@ -14,88 +15,34 @@ const Title = styled("h4")({
   color: "#000",
 });
 
-function Question({ index, content }) {
-  return (
-    <Grid2 container spacing={2} sx={{ marginY: "1rem", marginLeft: "1rem" }}>
-      <Typography
-        variant="body"
-        component="body"
-        sx={{ fontWeight: "bold", fontSize: "1.25rem" }}
-      >
-        Question {index}:{" "}
-      </Typography>
-      <Typography variant="body" component="body" sx={{ fontSize: "1.25rem" }}>
-        {content}
-      </Typography>
-    </Grid2>
-  );
-}
+const containerStyle = {
+  marginX: "5%",
+  marginY: "2rem",
+  padding: "1rem",
+  backgroundColor: "#f1f1f1",
+  position: "relative",
+};
 
 function AnswerQuestion({ listQuestion }) {
-  const [curIndex, setCurIndex] = useState(0);
-  const question = listQuestion[curIndex];
-  const [userAnswer, setUserAnswer] = useState(null);
-  const [isSubmit, setIsSubmit] = useState(false);
-  const [isShowExplain, setIsShowExplain] = useState(false);
-
-  const handleChange = (e) => {
-    const answer = {
-      questionId: question.id,
-      answerId: e.target.value,
-    };
-
-    setUserAnswer((prevAnswers) => ({
-      ...prevAnswers,
-      [question.id]: answer.answerId,
-    }));
-  };
-
-  const getUserAnswer = (questionId) => {
-    if (!userAnswer) return null;
-    return userAnswer[questionId] || null;
-  };
-
-  const handlePrevious = () => {
-    if (curIndex === 0) return;
-    setCurIndex((prevIndex) => prevIndex - 1);
-  };
-  const handleNext = () => {
-    if (curIndex === listQuestion.length - 1) return;
-    setCurIndex((prevIndex) => prevIndex + 1);
-  };
-
-  const getSubmitContent = () => {
-    const total = listQuestion.length;
-    const answered = Object.keys(userAnswer || {}).length;
-    return `Answered questions: ${answered} out of ${total}. Do you want to finish?`;
-  };
-
-  const getScoreContent = () => {
-    let score = 0;
-    const total = listQuestion.length;
-    Object.entries(userAnswer || {}).forEach(([questionId, answerId]) => {
-      const question = listQuestion.find((q) => q.id === questionId);
-      if (question) {
-        const selectedOption = question.answers.find((o) => o.id === answerId);
-        if (selectedOption && selectedOption.correct) {
-          score++;
-        }
-      }
-    });
-
-    return `Your Score: ${score}/${total}`;
-  };
-
+  console.log(listQuestion);
+  const {
+    curIndex,
+    question,
+    isSubmit,
+    setIsSubmit,
+    isShowExplain,
+    setIsShowExplain,
+    getUserAnswer,
+    getSubmitContent,
+    getScoreContent,
+    handleChange,
+    handleNext,
+    handlePrevious,
+  } = useAnswerQuestion(listQuestion);
+  if (!listQuestion || listQuestion.length === 0)
+    return <Card sx={containerStyle}></Card>;
   return (
-    <Card
-      sx={{
-        marginX: "5%",
-        marginY: "2rem",
-        padding: "1rem",
-        backgroundColor: "#f1f1f1",
-        position: "relative",
-      }}
-    >
+    <Card sx={containerStyle}>
       <Title>Answer Question</Title>
       <ProcessBar
         questionNumber={curIndex + 1}

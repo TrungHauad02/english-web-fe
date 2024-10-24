@@ -69,11 +69,13 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
     try {
       setIsEditing(false);
       const vocab = { ...curVocab, topicId: id };
+      let newData = vocab;
       if (curVocab.id === "-1") {
-        await createVocab(vocab);
+        newData = await createVocab(vocab);
       } else {
-        await updateVocab(vocab);
+        newData = await updateVocab(vocab);
       }
+      setCurVocab(newData);
       await fetchData();
     } catch (err) {
       handleError(err);
