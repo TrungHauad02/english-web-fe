@@ -96,17 +96,17 @@ function HeaderStudent() {
       <Stack direction={"row"} alignItems={"center"} spacing={2}>
         <Button
           component={NavLink}
-          to="/student/list-topic"
+          to="/student/topics"
           sx={{
-            backgroundColor: isActivePath("/student/list-topic")
+            backgroundColor: isActivePath("/student/topics")
               ? "#fff"
               : "transparent",
-            color: isActivePath("/student/list-topic") ? "#4A475C" : "white",
+            color: isActivePath("/student/topics") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: isActivePath("/student/list-topic")
+              backgroundColor: isActivePath("/student/topics")
                 ? "#fff"
                 : "rgba(255, 255, 255, 0.2)",
             },
@@ -116,17 +116,17 @@ function HeaderStudent() {
         </Button>
         <Button
           component={NavLink}
-          to="/student/grammar"
+          to="/student/grammars"
           sx={{
-            backgroundColor: isActivePath("/student/grammar")
+            backgroundColor: isActivePath("/student/grammars")
               ? "#fff"
               : "transparent",
-            color: isActivePath("/student/grammar") ? "#4A475C" : "white",
+            color: isActivePath("/student/grammars") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: isActivePath("/student/grammar")
+              backgroundColor: isActivePath("/student/grammars")
                 ? "#fff"
                 : "rgba(255, 255, 255, 0.2)",
             },

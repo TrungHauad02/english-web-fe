@@ -57,28 +57,28 @@ function SkillMenu() {
         <MenuItem
           onClick={handleMouseLeaveMenu}
           component={Link}
-          to="/student/skill/reading"
+          to="/student/readings"
         >
           Reading
         </MenuItem>
         <MenuItem
           onClick={handleMouseLeaveMenu}
           component={Link}
-          to="/student/skill/speaking"
+          to="/student/speakings"
         >
           Speaking
         </MenuItem>
         <MenuItem
           onClick={handleMouseLeaveMenu}
           component={Link}
-          to="/student/skill/writing"
+          to="/student/writings"
         >
           Writing
         </MenuItem>
         <MenuItem
           onClick={handleMouseLeaveMenu}
           component={Link}
-          to="/student/skill/listening"
+          to="/student/listenings"
         >
           Listening
         </MenuItem>
