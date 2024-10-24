@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getTopicById } from "../../../api/student/listTopicApi";
 import { getVocabularyInTopic } from "../../../api/student/vocabularyApi";
-import { getTopicAnswerQuestions } from "../../../api/teacher/topicAnswerQuestionService";
+import { getAnswerQuestions } from "../../../api/teacher/answerQuestionService";
 
 export default function useVocabulary() {
   const { id } = useParams();
@@ -16,7 +16,7 @@ export default function useVocabulary() {
         const [topicData, vocabData, listQuestionData] = await Promise.all([
           getTopicById(id),
           getVocabularyInTopic(0, 24, id),
-          getTopicAnswerQuestions(id),
+          getAnswerQuestions("topics", id),
         ]);
         setTopic(topicData);
         setListQuestion(listQuestionData);

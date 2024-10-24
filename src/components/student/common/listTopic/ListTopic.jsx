@@ -6,7 +6,7 @@ import "./ListTopic.css";
 import { getListTopic } from "../../../../api/student/listTopicApi";
 import { useEffect, useState } from "react";
 
-function ListTopic({ quote, title, bg }) {
+function ListTopic({ path, quote, title, bg }) {
   const [page, setPage] = useState(1);
   const [list, setList] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
@@ -14,7 +14,7 @@ function ListTopic({ quote, title, bg }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getListTopic(page - 1, 10);
+        const data = await getListTopic(path, page - 1, 10);
         console.log(data);
         const topics = data.content;
         setTotalPage(data.totalPages);

@@ -4,7 +4,13 @@ import useQuestion from "./useQuestion";
 import CustomTextField from "./CustomTextField";
 import Answer from "./Answer";
 
-export default function Question({ data, onDelQuestion, fetchData, setError }) {
+export default function Question({
+  data,
+  onDelQuestion,
+  fetchData,
+  setError,
+  path,
+}) {
   const {
     question,
     isEditing,
@@ -17,7 +23,7 @@ export default function Question({ data, onDelQuestion, fetchData, setError }) {
     onChangeCorrectAnswer,
     onChangeAnswerContent,
     onDeleteAnswer,
-  } = useQuestion(data, fetchData, setError);
+  } = useQuestion(data, fetchData, setError, path);
 
   const questionContainerStyle = {
     backgroundColor: "#fff",

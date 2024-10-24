@@ -1,15 +1,35 @@
-import { useParams } from "react-router-dom";
-import { getGrammarDetail } from "../../../../api/teacher/grammarService";
 import { Grid2 } from "@mui/material";
 import GrammarInfo from "./GrammarInfo";
 import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
 import PDFViewer from "../../../common/pdfViewer/PDFViewer";
-import { useState } from "react";
+import useGrammarDetails from "./useGrammarDetails";
 
 export default function GrammarDetail() {
-  const { id } = useParams();
-  const data = getGrammarDetail(id);
-  const [localData, setLocalData] = useState(data);
+  const { localData, setLocalData, answerQuestion, fetchData } =
+    useGrammarDetails();
+
+  const answerQuestionContainerStyle = {
+    maxHeight: "500px",
+    overflowY: "auto",
+    borderRadius: "0.5rem",
+    backgroundColor: "#FFF4CC",
+    boxShadow: "0 0 0.5rem 0.1rem #00000040",
+    width: "100%",
+    "&::-webkit-scrollbar": {
+      width: "0.5rem",
+    },
+    "&::-webkit-scrollbar-track": {
+      backgroundColor: "#e0e0e0",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "#888",
+      borderRadius: "10px",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      backgroundColor: "#555",
+    },
+  };
+  if (!localData || !answerQuestion) return <></>;
   return (
     <Grid2 container direction={"row"} sx={{ margin: "2rem 4%" }} spacing={4}>
       <Grid2 item>
@@ -17,32 +37,12 @@ export default function GrammarDetail() {
         <GrammarInfo data={localData} setData={setLocalData} />
       </Grid2>
       <Grid2 container direction={"column"} spacing={4}>
-        <Grid2
-          item
-          size={6}
-          borderRadius={"0.5rem"}
-          backgroundColor={"#FFF4CC"}
-          boxShadow={"0 0 0.5rem 0.1rem #00000040"}
-          width={"100%"}
-          sx={{
-            maxHeight: "500px",
-            overflowY: "auto",
-            "&::-webkit-scrollbar": {
-              width: "0.5rem",
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "#e0e0e0",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#888",
-              borderRadius: "10px",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: "#555",
-            },
-          }}
-        >
-          <AnswerQuestionManagement />
+        <Grid2 item size={6} sx={answerQuestionContainerStyle}>
+          <AnswerQuestionManagement
+            data={answerQuestion}
+            fetchData={fetchData}
+            path={"grammar"}
+          />
         </Grid2>
         <Grid2 container sx={{ width: "100%" }}>
           {/* Preview File*/}

@@ -41,7 +41,12 @@ export default function AppRoutes() {
         ...site.map((page) => ({
           path: page.path,
           element: (
-            <page.file bg={page.bg} title={page.title} quote={page.quote} />
+            <page.file
+              bg={page.bg}
+              title={page.title}
+              quote={page.quote}
+              path={page.path}
+            />
           ),
         })),
 

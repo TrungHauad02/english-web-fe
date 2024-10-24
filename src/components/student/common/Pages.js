@@ -21,7 +21,7 @@ const site = [
     id: 2,
     title: "Grammar",
     bg: "/bg_grammar.png",
-    path: "grammar",
+    path: "grammars",
     quote:
       "Master the rules of grammar to express yourself with confidence and clarity. Learn the building blocks of language with ease!",
     file: ListTopic,
@@ -31,7 +31,7 @@ const site = [
     id: 3,
     title: "Reading",
     bg: "/bg_reading.png",
-    path: "skill/reading",
+    path: "readings",
     quote:
       "Enhance your comprehension and analytical skills by exploring various texts. Uncover the power of reading and deepen your understanding!",
     file: ListTopic,
@@ -41,7 +41,7 @@ const site = [
     id: 4,
     title: "Listening",
     bg: "/bg_listening.png",
-    path: "skill/listening",
+    path: "listenings",
     quote:
       "Sharpen your listening skills and tune in to real-life conversations. Improve your ability to understand spoken language effectively!",
     file: ListTopic,
@@ -51,7 +51,7 @@ const site = [
     id: 5,
     title: "Speaking",
     bg: "/bg_speaking.png",
-    path: "skill/speaking",
+    path: "speakings",
     quote:
       "Speak with confidence and fluency in any situation. Practice your speaking skills and become a natural communicator!",
     file: ListTopic,
@@ -61,7 +61,7 @@ const site = [
     id: 6,
     title: "Writing",
     bg: "/bg_writing.png",
-    path: "skill/writing",
+    path: "writings",
     quote:
       "Enhance your writing abilities to express your ideas clearly and effectively. Write with precision and creativity across various styles!",
     file: ListTopic,
