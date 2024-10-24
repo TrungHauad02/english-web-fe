@@ -101,7 +101,7 @@ const handleSkillTabChange = (event, newValue) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getListTest(page - 1,currtype);
+      const data = await getListTest(page,currtype);
       const tests = data.content;
       console.log(tests);
       

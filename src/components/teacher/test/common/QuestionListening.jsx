@@ -12,7 +12,6 @@ import {
   TableHead,
   TableRow,
   IconButton,
-  Checkbox
 } from '@mui/material';
 import { Trash, Edit, Save, Upload, PlusCircle } from 'lucide-react';
 import { styled } from '@mui/material/styles';

@@ -8,11 +8,11 @@ import {
   RadioGroup,
   FormControlLabel,
   TextField,
-  IconButton
+  IconButton 
 } from "@mui/material"; 
 import { Trash, PlusCircle } from 'lucide-react';
 import { styled } from '@mui/material/styles';
-import { createAnswerVocabulary, updateQuestionVocabulary, updateAnswerVocabulary } from '../../../../api/teacher/test/TestVocabularyApi'; 
+import { createAnswerGrammar, updateQuestionGrammar, updateAnswerGrammar } from '../../../../api/teacher/test/TestGrammarApi'; 
 
 const ButtonContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -43,21 +43,25 @@ const FormContainer = styled(Paper)(({ theme }) => ({
   borderRadius: theme.spacing(2),
 }));
 
-const VocabularyQuiz = ({ question }) => {
+const QuestionGrammar = ({ question }) => {
   return (
     <>
-
+      {question.details ? (
+        <Box sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
+          <ContentQuestion question={question} />
+        </Box>
+      ) : (
         <FormContainer sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
           <ContentQuestion question={question} />
         </FormContainer>
-
+      )}
     </>
   );
 };
 
 const ContentQuestion = ({ question }) => {
-  const [questionvoca, setQuestionvoca] = useState(question);
-  const [selectedAnswer, setSelectedAnswer] = useState(findCorrectAnswerId(question.answers));
+  const [questionGrammar, setQuestionGrammar] = useState(question);
+  const [selectedAnswer, setSelectedAnswer] = useState(findCorrectAnswerId(questionGrammar.answers));
   const [isEditMode, setIsEditMode] = useState(false);
 
   const handleAddAnswer = () => {
@@ -66,73 +70,68 @@ const ContentQuestion = ({ question }) => {
       content: '',
       isCorrect: false,
       status: 'ACTIVE',
-      testIdQuestionVocabulary:questionvoca.id
-
+      testIdQuestionGrammar: questionGrammar.id
     };
-    setQuestionvoca({
-      ...questionvoca,
-      answers: [...questionvoca.answers, newAnswer]
+    setQuestionGrammar({
+      ...questionGrammar,
+      answers: [...questionGrammar.answers, newAnswer]
     });
   };
 
   const handleRadioChange = (answerId) => {
     setSelectedAnswer(answerId);
-    setQuestionvoca({
-      ...questionvoca,
-      answers: questionvoca.answers.map(a =>
+    setQuestionGrammar({
+      ...questionGrammar,
+      answers: questionGrammar.answers.map(a =>
         ({ ...a, isCorrect: a.id === answerId })
       )
     });
   };
 
   const handleDeleteAnswer = (answerId) => {
-    setQuestionvoca({
-      ...questionvoca,
-      answers: questionvoca.answers.filter(a => a.id !== answerId)
+    setQuestionGrammar({
+      ...questionGrammar,
+      answers: questionGrammar.answers.filter(a => a.id !== answerId)
     });
   };
 
   const handleSave = async () => {
-  try {
-
-    await updateQuestionVocabulary(questionvoca);
-  
-    const answerPromises = questionvoca.answers.map((answer) => {
-      if (answer.id.startsWith('temp')) {
+    console.log("tan",questionGrammar);
     
-        return createAnswerVocabulary({
-          ...answer,
-        }).then((newAnswer) => {
-          const updatedAnswers = questionvoca.answers.map(a =>
-            a.id === answer.id ? newAnswer : a
-          );
-          setQuestionvoca({ ...questionvoca, answers: updatedAnswers });
-        });
-      } else {
-    
-        return updateAnswerVocabulary(answer);
-      }
-    });
+    try {
+      await updateQuestionGrammar(questionGrammar);
   
+      const answerPromises = questionGrammar.answers.map((answer) => {
+        if (answer.id.startsWith('temp')) {
+          return createAnswerGrammar({
+            ...answer,
+          }).then((newAnswer) => {
+            const updatedAnswers = questionGrammar.answers.map(a =>
+              a.id === answer.id ? newAnswer : a
+            );
+            setQuestionGrammar({ ...questionGrammar, answers: updatedAnswers });
+          });
+        } else {
+          return updateAnswerGrammar(answer);
+        }
+      });
 
-    await Promise.all(answerPromises);
-    setIsEditMode(false);
-    
-  } catch (error) {
-    console.error("Error saving question or answers:", error);
-  }
-};
+      await Promise.all(answerPromises);
+      setIsEditMode(false);
+    } catch (error) {
+      console.error("Error saving question or answers:", error);
+    }
+  };
 
-  
   const handleCancel = () => {
     setIsEditMode(false); 
-    setQuestionvoca(question); 
-    setSelectedAnswer(findCorrectAnswerId(questionvoca.answers));
+    setQuestionGrammar(question); 
+    setSelectedAnswer(findCorrectAnswerId(questionGrammar.answers));
   };
 
   const handleEdit = () => {
     setIsEditMode(true); 
-    setSelectedAnswer(findCorrectAnswerId(questionvoca.answers));
+    setSelectedAnswer(findCorrectAnswerId(questionGrammar.answers));
   };
 
   return (
@@ -161,9 +160,9 @@ const ContentQuestion = ({ question }) => {
           <TextField
             fullWidth
             disabled={!isEditMode} 
-            value={questionvoca.content || ""}
+            value={questionGrammar.content || ""}
             onChange={(e) => {
-              setQuestionvoca({ ...questionvoca, content: e.target.value });
+              setQuestionGrammar({ ...questionGrammar, content: e.target.value });
             }}
           />
         </Box>
@@ -174,26 +173,25 @@ const ContentQuestion = ({ question }) => {
           value={selectedAnswer} 
           onChange={(e) => handleRadioChange(e.target.value)}
         >
-          {questionvoca.answers.map((answer) => (
+          {questionGrammar.answers.map((answer) => (
             <Box key={answer.id} sx={{ display: 'flex', alignItems: 'center', mb: 1, borderRadius: '4px', justifyContent: 'space-between' }}>
               <TextField
                 disabled={!isEditMode}
                 sx={{ flexGrow: 1 }}
                 value={answer.content}
                 onChange={(e) => {
-                  const updatedOptions = questionvoca.answers.map(opt =>
+                  const updatedOptions = questionGrammar.answers.map(opt =>
                     opt.id === answer.id ? { ...opt, content: e.target.value } : opt
                   );
-                  setQuestionvoca({ ...questionvoca, answers: updatedOptions });
+                  setQuestionGrammar({ ...questionGrammar, answers: updatedOptions });
                 }}
               />
               <FormControlLabel
                 control={
                   <Radio 
-                
-                  disabled={!isEditMode}
-                  onChange={() => handleRadioChange(answer.id)} // Đảm bảo sự kiện này thay 
-                />
+                    disabled={!isEditMode}
+                    onChange={() => handleRadioChange(answer.id)} 
+                  />
                 }
                 label=""
                 value={answer.id}
@@ -213,9 +211,9 @@ const ContentQuestion = ({ question }) => {
               sx={{ width: '90%' }}
               multiline
               rows={2}
-              value={questionvoca.explantion || ""}
+              value={questionGrammar.explantion || ""}
               onChange={(e) => {
-                setQuestionvoca({ ...questionvoca, explantion: e.target.value });
+                setQuestionGrammar({ ...questionGrammar, explantion: e.target.value });
               }}
               disabled={!isEditMode} 
             />
@@ -256,4 +254,4 @@ const ContentQuestion = ({ question }) => {
   );
 };
 
-export default VocabularyQuiz;
+export default QuestionGrammar;

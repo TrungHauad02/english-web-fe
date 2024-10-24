@@ -48,8 +48,6 @@ function OneReadingTest({onereading,status,onAnswerChange,handlebtnSubmit,title,
           </Typography>
       </Box> : null
     }
-   
-   
     <Button sx={{
   borderRadius: '1rem',   backgroundColor: status === 'Testing' ? '#FFD984' : '#4A90E2',color:'black',float:'right',marginRight:'10%',marginBottom:'2%',padding:'1rem 2rem'}}  onClick={status === 'Testing' ? handlebtnSubmit : onClickTestAgain } 
   >

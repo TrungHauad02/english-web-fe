@@ -12,7 +12,8 @@ import {
 } from "@mui/material"; 
 import { Trash, PlusCircle } from 'lucide-react';
 import { styled } from '@mui/material/styles';
-import { createAnswerVocabulary, updateQuestionVocabulary, updateAnswerVocabulary } from '../../../../api/teacher/test/TestVocabularyApi'; 
+import { updateReadingQuestion } from '../../../../api/teacher/test/TestReadingQuestionApi'; 
+import { createReadingAnswer, updateReadingAnswer } from '../../../../api/teacher/test/TestReadingAnswerApi'; 
 
 const ButtonContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -43,21 +44,25 @@ const FormContainer = styled(Paper)(({ theme }) => ({
   borderRadius: theme.spacing(2),
 }));
 
-const VocabularyQuiz = ({ question }) => {
+const QuestionReading = ({ question }) => {
   return (
     <>
-
+      {question.details ? (
+        <Box sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
+          <ContentQuestion question={question} />
+        </Box>
+      ) : (
         <FormContainer sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
           <ContentQuestion question={question} />
         </FormContainer>
-
+      )}
     </>
   );
 };
 
 const ContentQuestion = ({ question }) => {
-  const [questionvoca, setQuestionvoca] = useState(question);
-  const [selectedAnswer, setSelectedAnswer] = useState(findCorrectAnswerId(question.answers));
+  const [questionData, setQuestionData] = useState(question);
+  const [selectedAnswer, setSelectedAnswer] = useState(findCorrectAnswerId(questionData.answers));
   const [isEditMode, setIsEditMode] = useState(false);
 
   const handleAddAnswer = () => {
@@ -66,73 +71,69 @@ const ContentQuestion = ({ question }) => {
       content: '',
       isCorrect: false,
       status: 'ACTIVE',
-      testIdQuestionVocabulary:questionvoca.id
-
+      testQuestionReadingId: questionData.id
     };
-    setQuestionvoca({
-      ...questionvoca,
-      answers: [...questionvoca.answers, newAnswer]
+    setQuestionData({
+      ...questionData,
+      answers: [...questionData.answers, newAnswer]
     });
   };
 
   const handleRadioChange = (answerId) => {
     setSelectedAnswer(answerId);
-    setQuestionvoca({
-      ...questionvoca,
-      answers: questionvoca.answers.map(a =>
+    setQuestionData({
+      ...questionData,
+      answers: questionData.answers.map(a =>
         ({ ...a, isCorrect: a.id === answerId })
       )
     });
   };
 
   const handleDeleteAnswer = (answerId) => {
-    setQuestionvoca({
-      ...questionvoca,
-      answers: questionvoca.answers.filter(a => a.id !== answerId)
+    setQuestionData({
+      ...questionData,
+      answers: questionData.answers.filter(a => a.id !== answerId)
     });
   };
 
   const handleSave = async () => {
-  try {
-
-    await updateQuestionVocabulary(questionvoca);
+    try {
+        console.log(questionData);
+        
+      await updateReadingQuestion(questionData);
   
-    const answerPromises = questionvoca.answers.map((answer) => {
-      if (answer.id.startsWith('temp')) {
-    
-        return createAnswerVocabulary({
-          ...answer,
-        }).then((newAnswer) => {
-          const updatedAnswers = questionvoca.answers.map(a =>
-            a.id === answer.id ? newAnswer : a
-          );
-          setQuestionvoca({ ...questionvoca, answers: updatedAnswers });
-        });
-      } else {
-    
-        return updateAnswerVocabulary(answer);
-      }
-    });
+      const answerPromises = questionData.answers.map((answer) => {
+        if (answer.id.startsWith('temp')) {
+          return createReadingAnswer({
+            ...answer,
+          }).then((newAnswer) => {
+            const updatedAnswers = questionData.answers.map(a =>
+              a.id === answer.id ? newAnswer : a
+            );
+            setQuestionData({ ...questionData, answers: updatedAnswers });
+          });
+        } else {
+          return updateReadingAnswer(answer);
+        }
+      });
   
+      await Promise.all(answerPromises);
+      setIsEditMode(false);
+      
+    } catch (error) {
+      console.error("Error saving question or answers:", error);
+    }
+  };
 
-    await Promise.all(answerPromises);
-    setIsEditMode(false);
-    
-  } catch (error) {
-    console.error("Error saving question or answers:", error);
-  }
-};
-
-  
   const handleCancel = () => {
     setIsEditMode(false); 
-    setQuestionvoca(question); 
-    setSelectedAnswer(findCorrectAnswerId(questionvoca.answers));
+    setQuestionData(question); 
+    setSelectedAnswer(findCorrectAnswerId(questionData.answers));
   };
 
   const handleEdit = () => {
     setIsEditMode(true); 
-    setSelectedAnswer(findCorrectAnswerId(questionvoca.answers));
+    setSelectedAnswer(findCorrectAnswerId(questionData.answers));
   };
 
   return (
@@ -161,9 +162,9 @@ const ContentQuestion = ({ question }) => {
           <TextField
             fullWidth
             disabled={!isEditMode} 
-            value={questionvoca.content || ""}
+            value={questionData.content || ""}
             onChange={(e) => {
-              setQuestionvoca({ ...questionvoca, content: e.target.value });
+              setQuestionData({ ...questionData, content: e.target.value });
             }}
           />
         </Box>
@@ -174,26 +175,25 @@ const ContentQuestion = ({ question }) => {
           value={selectedAnswer} 
           onChange={(e) => handleRadioChange(e.target.value)}
         >
-          {questionvoca.answers.map((answer) => (
+          {questionData.answers.map((answer) => (
             <Box key={answer.id} sx={{ display: 'flex', alignItems: 'center', mb: 1, borderRadius: '4px', justifyContent: 'space-between' }}>
               <TextField
                 disabled={!isEditMode}
                 sx={{ flexGrow: 1 }}
                 value={answer.content}
                 onChange={(e) => {
-                  const updatedOptions = questionvoca.answers.map(opt =>
+                  const updatedOptions = questionData.answers.map(opt =>
                     opt.id === answer.id ? { ...opt, content: e.target.value } : opt
                   );
-                  setQuestionvoca({ ...questionvoca, answers: updatedOptions });
+                  setQuestionData({ ...questionData, answers: updatedOptions });
                 }}
               />
               <FormControlLabel
                 control={
                   <Radio 
-                
-                  disabled={!isEditMode}
-                  onChange={() => handleRadioChange(answer.id)} // Đảm bảo sự kiện này thay 
-                />
+                    disabled={!isEditMode}
+                    onChange={() => handleRadioChange(answer.id)} 
+                  />
                 }
                 label=""
                 value={answer.id}
@@ -213,9 +213,9 @@ const ContentQuestion = ({ question }) => {
               sx={{ width: '90%' }}
               multiline
               rows={2}
-              value={questionvoca.explantion || ""}
+              value={questionData.explanation || ""}
               onChange={(e) => {
-                setQuestionvoca({ ...questionvoca, explantion: e.target.value });
+                setQuestionData({ ...questionData, explanation: e.target.value });
               }}
               disabled={!isEditMode} 
             />
@@ -256,4 +256,4 @@ const ContentQuestion = ({ question }) => {
   );
 };
 
-export default VocabularyQuiz;
+export default QuestionReading;
