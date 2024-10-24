@@ -28,7 +28,6 @@ export default function WritingDetail() {
           data={localData}
           setData={setLocalData}
           isEditing={isEditing}
-          setIsEditing={setIsEditing}
         />
       </Grid2>
       <Grid2 container size={7} direction={"column"} spacing={4}>
