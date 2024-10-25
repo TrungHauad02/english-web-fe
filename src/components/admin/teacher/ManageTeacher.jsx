@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Grid, Card, Typography, Select, MenuItem, FormControl, InputLabel, Avatar } from '@mui/material';
 import ProfileTeacher from './components/ProfileTeacher';
-import SearchPanel from './../components/SearchPanel';
+import SearchPanel from '../components/Filter';
 import StudentTeacherList from './../components/StudentTeacherList';
 import DeleteConfirmationDialog from './../components/DeleteConfirmationDialog';
 import TeacherInfo from './components/TeacherInfo';
@@ -179,7 +179,7 @@ function ManageTeacher() {
                     setFilteredTeachers,
                     setConfirmDeleteOpen,
                     setSelectedTeacher,
-                    handleClear // Pass handleClear here
+                    handleClear
                 )}
             />
         </Grid>

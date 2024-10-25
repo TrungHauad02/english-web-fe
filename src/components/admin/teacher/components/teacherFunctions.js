@@ -82,8 +82,7 @@ export const handleDeleteTeacher = (selectedTeacher, teachers, setTeachers, setF
     setFilteredTeachers(updatedTeachers);
     setConfirmDeleteOpen(false);
 
-    // Call handleClear after deletion
-    handleClear(setSelectedTeacher); // Reset selected teacher
+    handleClear(setSelectedTeacher); 
 };
 
 export const handleSearch = (teachers, searchName, searchStartDate, searchEndDate, searchLevel, setFilteredTeachers) => {
@@ -95,24 +94,19 @@ export const handleSearch = (teachers, searchName, searchStartDate, searchEndDat
         const teacherEndDate = teacher.endDate ? new Date(teacher.endDate) : null;
         const searchStart = searchStartDate ? new Date(searchStartDate) : null;
         const searchEnd = searchEndDate ? new Date(searchEndDate) : null;
-        const today = new Date();  // Current date
+        const today = new Date(); 
 
-        // Logic for date search
         const isDateMatch = (
-            // 1. If only searchStart is provided: search from searchStart to the current date
             (searchStart && !searchEnd && teacherStartDate >= searchStart && (!teacherEndDate || teacherEndDate >= today)) ||
 
-            // 2. If only searchEnd is provided: search before searchEnd
             (!searchStart && searchEnd && teacherStartDate <= searchEnd) ||
 
-            // 3. If both searchStart and searchEnd are provided: search between them
             (searchStart && searchEnd && teacherStartDate >= searchStart && teacherStartDate <= searchEnd) ||
 
-            // 4. If neither searchStart nor searchEnd are provided: include all
             (!searchStart && !searchEnd)
         );
 
-        return isNameMatch && isLevelMatch && isDateMatch; // Return combined conditions
+        return isNameMatch && isLevelMatch && isDateMatch; 
     });
 
     setFilteredTeachers(filtered);
@@ -126,9 +120,9 @@ export const handleClear = (setSelectedTeacher) => {
         level: '',
         startDate: '',
         endDate: '',
-        avatar: '', // Initialize avatar to an empty string
-        status: 'Active', // Default status
-        id: null, // Resetting the id
+        avatar: '', 
+        status: 'Active', 
+        id: null, 
     });
 };
 
@@ -154,7 +148,7 @@ export const handleSaveEdit = (selectedTeacher, teachers, setTeachers, setFilter
         teacher.id === selectedTeacher.id
             ? {
                 ...selectedTeacher,
-                avatar: avatarFile ? URL.createObjectURL(avatarFile) : teacher.avatar, // Use avatarFile if available
+                avatar: avatarFile ? URL.createObjectURL(avatarFile) : teacher.avatar, 
             }
             : teacher
     );

@@ -12,12 +12,10 @@ const SignUp = ({ toggleForm }) => {
   const [rePassword, setRePassword] = useState('');
   const [error, setError] = useState('');
 
-  // Fake database to store users
   const [fakeDatabase, setFakeDatabase] = useState([
     { email: 'existinguser@gmail.com', password: 'Password@123' }
   ]);
 
-  // Ref for email input
   const emailInputRef = useRef(null);
 
   const handleClickShowPassword = () => {
@@ -35,13 +33,11 @@ const SignUp = ({ toggleForm }) => {
   };
 
   const handleSignUp = () => {
-    // Check if all fields are filled
     if (!name || !email || !password || !rePassword) {
       setError('Please fill in all fields.');
       return;
     }
 
-    // Validate email format
     if (!validateEmail(email)) {
       setError('Invalid email format. Please enter a valid email address.');
       setEmail('');
@@ -51,7 +47,6 @@ const SignUp = ({ toggleForm }) => {
       return;
     }
 
-    // Check if email already exists in the fake database
     const emailExists = fakeDatabase.some((user) => user.email === email);
     if (emailExists) {
       setError('Email already exists. Please use a different email.');
@@ -62,7 +57,6 @@ const SignUp = ({ toggleForm }) => {
       return;
     }
 
-    // Check if password meets requirements
     if (!validatePassword(password)) {
       setError(
         'Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.'
@@ -70,21 +64,17 @@ const SignUp = ({ toggleForm }) => {
       return;
     }
 
-    // Check if passwords match
     if (password !== rePassword) {
       setError('Passwords do not match.');
       return;
     }
 
-    // Clear errors
     setError('');
 
-    // Add new user to the fake database
     const newUser = { email, password };
     setFakeDatabase([...fakeDatabase, newUser]);
     console.log('User signed up successfully:', newUser);
 
-    // Navigate to sign-in page
     toggleForm('signin');
   };
 

@@ -2,12 +2,12 @@ import MainPicture from "../common/listTopic/MainPicture";
 import GrammarInfo from "./GrammarInfo";
 import GrammarDocument from "./GrammarDocument";
 import { listQuestion } from "./ListQuestion";
-import AnswerQuestion from "../common/answerQuestion/AnswerQuestion";
+import AnswerQuestion from "../common/answerquestion/AnswerQuestion";
 
 function Grammar({ topic }) {
   topic = {
     title: "Simple Present tense",
-    img: "/environment.png",
+    img: "/environment.png", 
   };
 
   const grammar = {

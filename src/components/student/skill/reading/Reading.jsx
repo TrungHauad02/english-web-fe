@@ -1,7 +1,7 @@
 import MainPicture from "../../common/listTopic/MainPicture";
 import ReadingContent from "./ReadingContent";
 import { listQuestion } from "./ListQuestion";
-import AnswerQuestion from "../../common/answerQuestion/AnswerQuestion";
+import AnswerQuestion from "../../common/answerquestion/AnswerQuestion";
 
 export default function Reading({ topic }) {
   topic = {
