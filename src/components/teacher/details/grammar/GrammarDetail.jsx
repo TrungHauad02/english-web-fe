@@ -1,6 +1,6 @@
 import { Grid2 } from "@mui/material";
 import GrammarInfo from "./GrammarInfo";
-import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
+import AnswerQuestionManagement from "../common/answerQuestion1/AnswerQuestionManagement";
 import PDFViewer from "../../../common/pdfViewer/PDFViewer";
 import useGrammarDetails from "./useGrammarDetails";
 
