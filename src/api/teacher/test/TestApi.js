@@ -2,7 +2,7 @@ import apiClient from "../../apiClient";
 
 export function getTestById(Testid) {
   return apiClient
-    .get("/api/tests/" + Testid)
+    .get("/tests/" + Testid)
     .then((response) => {
       return response.data;
     })
@@ -14,7 +14,7 @@ export function getTestById(Testid) {
 
 export function createTest(testData) {
   return apiClient
-    .post("/api/tests", testData)
+    .post("/tests", testData)
     .then((response) => {
       return response.data;
     })
@@ -27,7 +27,7 @@ export function updateTest(testData) {
   console.log(testData);
 
   return apiClient
-    .put("/api/tests", testData)
+    .put("/tests", testData)
     .then((response) => {
       return response.data;
     })
@@ -38,7 +38,7 @@ export function updateTest(testData) {
 }
 export function deleteTestById(testId) {
   return apiClient
-    .delete("/api/tests/" + testId)
+    .delete("/tests/" + testId)
     .then((response) => {
       return response.status === 204;
     })
