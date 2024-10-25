@@ -2,7 +2,7 @@ import apiClient from "../../apiClient";
 
 export function getWritingById(writingId) {
   return apiClient
-    .get("/api/testwriting/" + writingId)
+    .get("/testwriting/" + writingId)
     .then((response) => {
       return response.data;
     })
@@ -14,7 +14,7 @@ export function getWritingById(writingId) {
 
 export function createWriting(writing) {
   return apiClient
-    .post("/api/testwriting", writing)
+    .post("/testwriting", writing)
     .then((response) => {
       return response.data;
     })
@@ -26,7 +26,7 @@ export function createWriting(writing) {
 
 export function updateWriting(writing) {
   return apiClient
-    .put("/api/testwriting", writing)
+    .put("/testwriting", writing)
     .then((response) => {
       return response.data;
     })
@@ -38,7 +38,7 @@ export function updateWriting(writing) {
 
 export function deleteWritingById(writingId) {
   return apiClient
-    .delete("/api/testwriting/" + writingId)
+    .delete("/testwriting/" + writingId)
     .then((response) => {
       return response.status === 204;
     })

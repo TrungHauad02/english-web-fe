@@ -53,9 +53,6 @@ const TestManagement = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
 
-
-
-
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -123,7 +120,6 @@ const TestManagement = () => {
     }
     navigate(newPath, { state: datatest });
 };
-
   return (
     <Container maxWidth="lg" sx={{marginTop:'4rem' ,marginBottom:'2rem'}}>
 
@@ -199,7 +195,6 @@ const TestManagement = () => {
           </TableRow>
         ))}
       </TableBody>
-
     </Table>
   </TableContainer>
   <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
@@ -209,5 +204,4 @@ const TestManagement = () => {
 
   );
 };
-
 export default TestManagement;

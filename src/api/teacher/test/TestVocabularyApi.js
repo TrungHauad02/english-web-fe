@@ -2,7 +2,7 @@ import apiClient from "../../apiClient";
 
 export function getAnswerVocabularyById(answervocabularyid) {
   return apiClient
-    .get("/api/testvocabularyanswer/" + answervocabularyid)
+    .get("/testvocabularyanswer/" + answervocabularyid)
     .then((response) => {
       return response.data;
     })
@@ -14,7 +14,7 @@ export function getAnswerVocabularyById(answervocabularyid) {
 
 export function createAnswerVocabulary(answervocabulary) {
   return apiClient
-    .post("/api/testvocabularyanswer", answervocabulary)
+    .post("/testvocabularyanswer", answervocabulary)
     .then((response) => {
       return response.data;
     })
@@ -26,7 +26,7 @@ export function createAnswerVocabulary(answervocabulary) {
 export function updateAnswerVocabulary(answervocabulary) {
   console.log("giatri", answervocabulary);
   return apiClient
-    .put("/api/testvocabularyanswer", answervocabulary)
+    .put("/testvocabularyanswer", answervocabulary)
 
     .then((response) => {
       console.log("giatri", response.data);
@@ -40,7 +40,7 @@ export function updateAnswerVocabulary(answervocabulary) {
 }
 export function deleteAnswerVocabularyById(answervocabularyid) {
   return apiClient
-    .delete("/api/testvocabularyanswer/" + answervocabularyid)
+    .delete("/testvocabularyanswer/" + answervocabularyid)
     .then((response) => {
       return response.status === 204;
     })
@@ -52,7 +52,7 @@ export function deleteAnswerVocabularyById(answervocabularyid) {
 
 export function getQuestionVocabularyById(questionvocabularyid) {
   return apiClient
-    .get("/api/testvocabularyquestion/" + questionvocabularyid)
+    .get("/testvocabularyquestion/" + questionvocabularyid)
     .then((response) => {
       return response.data;
     })
@@ -64,7 +64,7 @@ export function getQuestionVocabularyById(questionvocabularyid) {
 
 export function createQuestionVocabulary(questionvocabulary) {
   return apiClient
-    .post("/api/testvocabularyquestion", questionvocabulary)
+    .post("/testvocabularyquestion", questionvocabulary)
     .then((response) => {
       return response.data;
     })
@@ -77,7 +77,7 @@ export function createQuestionVocabulary(questionvocabulary) {
 }
 export function updateQuestionVocabulary(questionvocabulary) {
   return apiClient
-    .put("/api/testvocabularyquestion", questionvocabulary)
+    .put("/testvocabularyquestion", questionvocabulary)
     .then((response) => {
       return response.data;
     })
@@ -88,7 +88,7 @@ export function updateQuestionVocabulary(questionvocabulary) {
 }
 export function deleteQuestionVocabularyById(questionvocabularyid) {
   return apiClient
-    .delete("/api/testvocabularyquestion/" + questionvocabularyid)
+    .delete("/testvocabularyquestion/" + questionvocabularyid)
     .then((response) => {
       return response.status === 204;
     })

@@ -2,7 +2,7 @@ import apiClient from "../../apiClient";
 
 export function getAnswerGrammarById(answergrammarid) {
   return apiClient
-    .get("/api/testgrammaranswer/" + answergrammarid)
+    .get("/testgrammaranswer/" + answergrammarid)
     .then((response) => {
       return response.data;
     })
@@ -14,7 +14,7 @@ export function getAnswerGrammarById(answergrammarid) {
 
 export function createAnswerGrammar(answergrammar) {
   return apiClient
-    .post("/api/testgrammaranswer", answergrammar)
+    .post("/testgrammaranswer", answergrammar)
     .then((response) => {
       return response.data;
     })
@@ -26,7 +26,7 @@ export function createAnswerGrammar(answergrammar) {
 
 export function updateAnswerGrammar(answergrammar) {
   return apiClient
-    .put("/api/testgrammaranswer", answergrammar)
+    .put("/testgrammaranswer", answergrammar)
     .then((response) => {
       return response.data;
     })
@@ -38,7 +38,7 @@ export function updateAnswerGrammar(answergrammar) {
 
 export function deleteAnswerGrammarById(answergrammarid) {
   return apiClient
-    .delete("/api/testgrammaranswer/" + answergrammarid)
+    .delete("/testgrammaranswer/" + answergrammarid)
     .then((response) => {
       return response.status === 204;
     })
@@ -50,7 +50,7 @@ export function deleteAnswerGrammarById(answergrammarid) {
 
 export function getQuestionGrammarById(questiongrammarid) {
   return apiClient
-    .get("/api/testgrammarquestion/" + questiongrammarid)
+    .get("/testgrammarquestion/" + questiongrammarid)
     .then((response) => {
       return response.data;
     })
@@ -62,7 +62,7 @@ export function getQuestionGrammarById(questiongrammarid) {
 
 export function createQuestionGrammar(questiongrammar) {
   return apiClient
-    .post("/api/testgrammarquestion", questiongrammar)
+    .post("/testgrammarquestion", questiongrammar)
     .then((response) => {
       return response.data;
     })
@@ -74,7 +74,7 @@ export function createQuestionGrammar(questiongrammar) {
 
 export function updateQuestionGrammar(questiongrammar) {
   return apiClient
-    .put("/api/testgrammarquestion", questiongrammar)
+    .put("/testgrammarquestion", questiongrammar)
     .then((response) => {
       return response.data;
     })
@@ -86,7 +86,7 @@ export function updateQuestionGrammar(questiongrammar) {
 
 export function deleteQuestionGrammarById(questiongrammarid) {
   return apiClient
-    .delete("/api/testgrammarquestion/" + questiongrammarid)
+    .delete("/testgrammarquestion/" + questiongrammarid)
     .then((response) => {
       return response.status === 204;
     })
