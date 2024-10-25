@@ -36,7 +36,7 @@ export default function useQuestion(data, fetchData, setError, path) {
       if (answer.id === "-1") {
         return createAnswer(path, answer);
       } else {
-        return updateAnswer(path, answer);
+        return updateAnswer(path, answer.id, answer);
       }
     });
     try {
@@ -52,7 +52,7 @@ export default function useQuestion(data, fetchData, setError, path) {
       if (question.id === "-1") {
         newQuestion = await createQuestion(path, question);
       } else {
-        await updateQuestion(path, question);
+        await updateQuestion(path, question.id, question);
         newQuestion = question;
       }
       await handleUpdateAnswer(newQuestion);

@@ -14,6 +14,7 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (curVocab.id !== "-1") return;
     setIsEditing(curVocab.id === "-1");
   }, [curVocab]);
 
@@ -67,15 +68,15 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
 
   async function onHandleSave() {
     try {
-      setIsEditing(false);
       const vocab = { ...curVocab, topicId: id };
       let newData = vocab;
       if (curVocab.id === "-1") {
         newData = await createVocab(vocab);
       } else {
-        newData = await updateVocab(vocab);
+        newData = await updateVocab(curVocab.id, vocab);
       }
       setCurVocab(newData);
+      setIsEditing(false);
       await fetchData();
     } catch (err) {
       handleError(err);

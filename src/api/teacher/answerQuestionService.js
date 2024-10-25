@@ -21,9 +21,9 @@ export const createQuestion = async (path, question) => {
   }
 };
 
-export const updateQuestion = async (path, question) => {
+export const updateQuestion = async (path, id, question) => {
   try {
-    const res = await apiClient.put(`${path}-question`, question);
+    const res = await apiClient.put(`${path}-question${id}`, question);
     return res.data;
   } catch (error) {
     throw error;
@@ -47,9 +47,9 @@ export const createAnswer = async (path, answer) => {
   }
 };
 
-export const updateAnswer = async (path, answer) => {
+export const updateAnswer = async (path, id, answer) => {
   try {
-    const res = await apiClient.put(`/${path}-answer`, answer);
+    const res = await apiClient.put(`/${path}-answer/${id}`, answer);
     return res.data;
   } catch (error) {
     throw error;

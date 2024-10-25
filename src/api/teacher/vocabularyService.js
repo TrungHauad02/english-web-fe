@@ -42,9 +42,9 @@ export async function createVocab(vocab) {
   }
 }
 
-export async function updateVocab(vocab) {
+export async function updateVocab(id, vocab) {
   try {
-    const res = await apiClient.put("/vocabulary", vocab);
+    const res = await apiClient.put(`/vocabulary/${id}`, vocab);
     return res.data;
   } catch (err) {
     console.error("Error updating vocab:", err);

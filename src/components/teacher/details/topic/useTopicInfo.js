@@ -42,7 +42,7 @@ export default function useTopicInfo(data) {
         navigate(`/teacher/topics/${res.id}`);
         return;
       }
-      const res = await updateTopic(topic);
+      const res = await updateTopic(id, topic);
       setTopic(res);
       setError("");
       setIsEditing(false);
