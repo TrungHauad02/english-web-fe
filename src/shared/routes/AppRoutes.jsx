@@ -22,12 +22,11 @@ import SpeakingDetail from "../../components/teacher/details/speaking/SpeakingDe
 import Mixing from "../../components/teacher/test/Mixing/Mixing";
 import HomeTest from "../../components/teacher/test/HomeTest";
 import ListTest from "../../components/student/Test/ListTest";
-import TestListening from "../../components/student/Test/TestListening"
+import TestListening from "../../components/student/Test/TestListening";
 import TestReading from "../../components/student/Test/TestReading/TestReading";
-import TestWriting from "../../components/student/Test/TestWriting/TestWriting"
-import TestSpeaking from "../../components/student/Test/TestSpeaking/TestSpeaking"
-import TestMixing from "../../components/student/Test/TestMixing/TestMixing"
-
+import TestWriting from "../../components/student/Test/TestWriting/TestWriting";
+import TestSpeaking from "../../components/student/Test/TestSpeaking/TestSpeaking";
+import TestMixing from "../../components/student/Test/TestMixing/TestMixing";
 
 export default function AppRoutes() {
   const router = createBrowserRouter([
