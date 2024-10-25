@@ -6,6 +6,7 @@ import QuestionListening from "../common/QuestionListening";
 import React, { useState, useEffect } from 'react';
 import QuestionReading from "../common/QuestionReading";
 import QuestionWriting from "../common/QuestionWriting";
+import QuestionSpeaking from "../common/QuestionSpeaking"
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useLocation } from 'react-router-dom';
 import { getTestById } from '../../../../api/teacher/test/TestApi';
@@ -14,6 +15,8 @@ import { getQuestionVocabularyById } from '../../../../api/teacher/test/TestVoca
 import { getReadingById } from '../../../../api/teacher/test/TestReadingApi';
 import { getListeningById } from '../../../../api/teacher/test/TestListeningApi';
 import { getSpeakingById } from '../../../../api/teacher/test/TestSpeakingApi';
+import { getTestMixingQuestion } from '../../../../api/teacher/test/TestMixingQuestionApi';
+import { getWritingById } from "../../../../api/teacher/test/TestWritingApi";
 
 function Mixing() {
     const location = useLocation();
@@ -48,6 +51,8 @@ function Mixing() {
 
     const handleRowClick = async (question) => {
         setType(question.type);
+        console.log(question);
+        
         if(question.new)
         {
             setNewQuestion(question)
@@ -57,10 +62,10 @@ function Mixing() {
             let fetchedData;
             switch (question.type) {
                 case 'Grammar':
-                    fetchedData = await getQuestionGrammarById(question.id);
+                    fetchedData = await getTestMixingQuestion(question.id);
                     break;
                 case 'Vocabulary':
-                    fetchedData = await getQuestionVocabularyById(question.id);
+                    fetchedData = await getTestMixingQuestion(question.id);
                     break;
                 case 'Listening':
                     fetchedData = await getListeningById(question.id);
@@ -68,12 +73,17 @@ function Mixing() {
                 case 'Reading':
                     fetchedData = await getReadingById(question.id);
                     break;
-                case 'Writing':
+                case 'Speaking':
                     fetchedData = await getSpeakingById(question.id);
+                    break;
+                case 'Writing':
+                    fetchedData = await getWritingById(question.id);
                     break;
                 default:
                     fetchedData = null;
             }
+            console.log(fetchedData);
+            
             setQuestionData(fetchedData); 
         } catch (err) {
             setError("Failed to fetch question data");
@@ -101,6 +111,8 @@ function Mixing() {
                 return <QuestionReading key={questionData.id} data={questionData} />;
             case 'Writing':
                 return <QuestionWriting key={questionData.id} data={questionData} />;
+            case 'Speaking':
+                return  <QuestionSpeaking key={questionData.id} initialData={questionData}/>;
             default:
                 return null;
         }

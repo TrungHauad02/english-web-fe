@@ -20,8 +20,7 @@ function TestSpeaking() {
             <MainTitle title={title} bg={"/bg_test.png"} />
             <Box sx={{marginLeft:'5%', marginRight:'5%',marginTop:'3rem'}}>
          
-            
-                <SpeakingTesting data={datatest.testSpeaking} status={status}/>
+                <SpeakingTesting dataList={datatest.testSpeakings} status={status}/>
             </Box>
         </Box>
     );
