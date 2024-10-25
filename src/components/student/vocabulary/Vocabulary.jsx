@@ -2,7 +2,7 @@ import MatchImageWithWord from "./MatchImageWithWord/MatchImageWithWord";
 import Introduction from "./introduction/Introduction";
 import ListFlashcard from "./listFlashcard/ListFlashcard";
 import MainPicture from "../common/listTopic/MainPicture";
-import AnswerQuestion from "../common/answerQuestion1/AnswerQuestion";
+import AnswerQuestion from "../common/answerQuestion/AnswerQuestion";
 import LoadingComponent from "../common/loadingPage/LoadingComponent";
 import { Grid2 } from "@mui/material";
 import useVocabulary from "./useVocabulary";

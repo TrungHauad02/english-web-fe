@@ -1,6 +1,6 @@
 import { Grid2, Stack } from "@mui/material";
 import TopicInfo from "./TopicInfo";
-import AnswerQuestionManagement from "../common/answerQuestion1/AnswerQuestionManagement";
+import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
 import VocabularyManagement from "./vocabulary/VocabularyManagement";
 import useTopicDetail from "./useTopicDetail";
 import DotLoader from "../../../../shared/component/loader/DotLoader";

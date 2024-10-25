@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import SoundViewer from "../../../common/soundViewer/SoundViewer";
-import AnswerQuestion from "../../common/answerQuestion1/AnswerQuestion";
+import AnswerQuestion from "../../common/answerQuestion/AnswerQuestion";
 import { listQuestion } from "./ListQuestion";
 
 export default function ListenAndAnswerQuestion() {
