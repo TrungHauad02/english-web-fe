@@ -3,7 +3,7 @@ import { getListeningDetail } from "../../../../api/teacher/listeningService";
 import { Grid2 } from "@mui/material";
 import ListeningInfo from "./ListeningInfo";
 import WriteAWordManagement from "../common/writeAWord/WriteAWordManagement";
-import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
+import AnswerQuestionManagement from "../common/answerQuestion1/AnswerQuestionManagement";
 import { useState } from "react";
 
 export default function ListeningDetail() {
