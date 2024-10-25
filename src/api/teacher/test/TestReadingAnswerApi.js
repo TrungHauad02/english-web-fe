@@ -2,7 +2,7 @@ import apiClient from "../../apiClient";
 
 export function getReadingAnswerById(readingAnswerId) {
   return apiClient
-    .get("/api/testreadinganswer/" + readingAnswerId)
+    .get("/testreadinganswer/" + readingAnswerId)
     .then((response) => {
       return response.data;
     })
@@ -14,7 +14,7 @@ export function getReadingAnswerById(readingAnswerId) {
 
 export function createReadingAnswer(readingAnswer) {
   return apiClient
-    .post("/api/testreadinganswer", readingAnswer)
+    .post("/testreadinganswer", readingAnswer)
     .then((response) => {
       return response.data;
     })
@@ -26,7 +26,7 @@ export function createReadingAnswer(readingAnswer) {
 
 export function updateReadingAnswer(readingAnswer) {
   return apiClient
-    .put("/api/testreadinganswer", readingAnswer)
+    .put("/testreadinganswer", readingAnswer)
     .then((response) => {
       return response.data;
     })
@@ -38,7 +38,7 @@ export function updateReadingAnswer(readingAnswer) {
 
 export function deleteReadingAnswerById(readingAnswerId) {
   return apiClient
-    .delete("/api/testreadinganswer/" + readingAnswerId)
+    .delete("/testreadinganswer/" + readingAnswerId)
     .then((response) => {
       return response.status === 204;
     })

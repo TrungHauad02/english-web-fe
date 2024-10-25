@@ -1,9 +1,8 @@
 import apiClient from "../../apiClient";
 
-// API cho TestListeningQuestion
 export function getListeningQuestionById(listeningQuestionId) {
   return apiClient
-    .get("/api/testlisteningquestion/" + listeningQuestionId)
+    .get("/testlisteningquestion/" + listeningQuestionId)
     .then((response) => {
       return response.data;
     })
@@ -15,7 +14,7 @@ export function getListeningQuestionById(listeningQuestionId) {
 
 export function createListeningQuestion(listeningQuestion) {
   return apiClient
-    .post("/api/testlisteningquestion", listeningQuestion)
+    .post("/testlisteningquestion", listeningQuestion)
     .then((response) => {
       return response.data;
     })
@@ -27,7 +26,7 @@ export function createListeningQuestion(listeningQuestion) {
 
 export function updateListeningQuestion(listeningQuestion) {
   return apiClient
-    .put("/api/testlisteningquestion", listeningQuestion)
+    .put("/testlisteningquestion", listeningQuestion)
     .then((response) => {
       return response.data;
     })
@@ -39,7 +38,7 @@ export function updateListeningQuestion(listeningQuestion) {
 
 export function deleteListeningQuestionById(listeningQuestionId) {
   return apiClient
-    .delete("/api/listeningquestion/" + listeningQuestionId)
+    .delete("/listeningquestion/" + listeningQuestionId)
     .then((response) => {
       return response.status === 204;
     })

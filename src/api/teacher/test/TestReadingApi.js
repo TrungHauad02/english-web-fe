@@ -2,7 +2,7 @@ import apiClient from "../../apiClient";
 
 export function getReadingById(readingId) {
   return apiClient
-    .get("/api/testreading/" + readingId)
+    .get("/testreading/" + readingId)
     .then((response) => {
       return response.data;
     })
@@ -14,7 +14,7 @@ export function getReadingById(readingId) {
 
 export function createReading(reading) {
   return apiClient
-    .post("/api/testreading", reading)
+    .post("/testreading", reading)
     .then((response) => {
       return response.data;
     })
@@ -26,7 +26,7 @@ export function createReading(reading) {
 
 export function updateReading(reading) {
   return apiClient
-    .put("/api/testreading", reading)
+    .put("/testreading", reading)
     .then((response) => {
       return response.data;
     })
@@ -38,7 +38,7 @@ export function updateReading(reading) {
 
 export function deleteReadingById(readingId) {
   return apiClient
-    .delete("/api/testreading/" + readingId)
+    .delete("/testreading/" + readingId)
     .then((response) => {
       return response.status === 204;
     })

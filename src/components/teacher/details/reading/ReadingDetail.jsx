@@ -3,7 +3,9 @@ import { getReadingDetail } from "../../../../api/teacher/readingService";
 import { Grid2 } from "@mui/material";
 import ReadingInfo from "./ReadingInfo";
 import AnswerQuestionManagement from "../common/answerquestion/AnswerQuestionManagement";
+
 import { useEffect, useState } from "react";
+
 import MarkedViewer from "../../../common/markedViewer/MarkedViewer";
 
 export default function ReadingDetail() {

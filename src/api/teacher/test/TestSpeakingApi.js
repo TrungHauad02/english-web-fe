@@ -2,7 +2,7 @@ import apiClient from "../../apiClient";
 
 export function getSpeakingById(speakingId) {
   return apiClient
-    .get("/api/testspeaking/" + speakingId)
+    .get("/testspeaking/" + speakingId)
     .then((response) => {
       return response.data;
     })
@@ -14,7 +14,7 @@ export function getSpeakingById(speakingId) {
 
 export function createSpeaking(speaking) {
   return apiClient
-    .post("/api/testspeaking", speaking)
+    .post("/testspeaking", speaking)
     .then((response) => {
       return response.data;
     })
@@ -26,7 +26,7 @@ export function createSpeaking(speaking) {
 
 export function updateSpeaking(speaking) {
   return apiClient
-    .put("/api/testspeaking", speaking)
+    .put("/testspeaking", speaking)
     .then((response) => {
       return response.data;
     })
