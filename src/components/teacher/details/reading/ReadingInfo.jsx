@@ -108,7 +108,7 @@ export default function ReadingInfo({ data, setData }) {
             label={"Status"}
             value={topic.status}
             onChange={onChangeStatus}
-            options={["active", "inactive"]}
+            options={["ACTIVE", "INACTIVE"]}
             disabled={!isEditing}
           />
         </Grid2>

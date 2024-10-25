@@ -62,42 +62,44 @@ const HistoryTest = () => {
     <>
       <MainPicture src={"/bg_history_test.png"} title={"History Test"} />
       <Box p={3}>
-        <Filter
-          filter={filter}
-          setFilter={setFilter}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-          searchText={searchText}
-          setSearchText={setSearchText}
-          handleSearch={handleSearch}
-        />
-        <Grid container spacing={2}>
-          {currentTests.map((test, index) => (
-            <Grid item xs={12} sm={6} key={index}>
-              <CardStyled variant="outlined">
-                <Typography variant="h6">{test.name}</Typography>
-                <Typography>Date: {test.date.toLocaleString()}</Typography>
-                <Typography>Time: {test.time}</Typography>
-                <Typography>Score: {test.score}</Typography>
-              </CardStyled>
-            </Grid>
-          ))}
-        </Grid>
-
-        {/* Pagination */}
-        <Box mt={2} display="flex" justifyContent="center">
-          <Pagination
-            count={Math.ceil(tests.length / ITEMS_PER_PAGE)}
-            page={currentPage}
-            onChange={(event, page) => setCurrentPage(page)}
-            color="primary"
+        <Box mx="5%">
+          <Filter
+            filter={filter}
+            setFilter={setFilter}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+            searchText={searchText}
+            setSearchText={setSearchText}
+            handleSearch={handleSearch}
           />
+          <Grid container spacing={2}>
+            {currentTests.map((test, index) => (
+              <Grid item xs={12} sm={6} key={index}>
+                <CardStyled variant="outlined">
+                  <Typography variant="h6">{test.name}</Typography>
+                  <Typography>Date: {test.date.toLocaleString()}</Typography>
+                  <Typography>Time: {test.time}</Typography>
+                  <Typography>Score: {test.score}</Typography>
+                </CardStyled>
+              </Grid>
+            ))}
+          </Grid>
+  
+          {/* Pagination */}
+          <Box mt={2} display="flex" justifyContent="center">
+            <Pagination
+              count={Math.ceil(tests.length / ITEMS_PER_PAGE)}
+              page={currentPage}
+              onChange={(event, page) => setCurrentPage(page)}
+              color="primary"
+            />
+          </Box>
         </Box>
       </Box>
     </>
-  );
+  );  
 };
 
 export default HistoryTest;

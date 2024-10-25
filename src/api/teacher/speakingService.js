@@ -1,13 +1,14 @@
 import apiClient from "../apiClient";
 
 export async function getSpeakingDetail(id) {
-  try {
-    const res = await apiClient.get(`/speakings/${id}`);
-    return res.data;
-  } catch (err) {
-    console.error("Error fetching detail:", err);
-    throw err;
-  }
+  return {};
+  // try {
+  //   const res = await apiClient.get(`/speakings/${id}`);
+  //   return res.data;
+  // } catch (err) {
+  //   console.error("Error fetching detail:", err);
+  //   throw err;
+  // }
 }
 
 export function getConversationDetail(id) {

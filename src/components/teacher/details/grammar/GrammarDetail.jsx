@@ -29,7 +29,7 @@ export default function GrammarDetail() {
       backgroundColor: "#555",
     },
   };
-  if (!localData || !answerQuestion) return <></>;
+  if (!localData) return <></>;
   return (
     <Grid2 container direction={"row"} sx={{ margin: "2rem 4%" }} spacing={4}>
       <Grid2 item>

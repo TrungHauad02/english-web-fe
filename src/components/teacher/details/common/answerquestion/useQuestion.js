@@ -28,16 +28,8 @@ export default function useQuestion(data, fetchData, setError, path) {
     }
   }
   async function handleUpdateAnswer(newQuestion) {
-    let parentIdName =
-      path === "topics"
-        ? "topicQuestionId"
-        : path === "grammar"
-        ? "grammarQuestionId"
-        : path === "reading"
-        ? "readingQuestionId"
-        : "";
     const updatedAnswers = question.answers.map((answer) => {
-      return { ...answer, [parentIdName]: newQuestion.id };
+      return { ...answer, questionId: newQuestion.id };
     });
 
     const promises = updatedAnswers.map((answer) => {
@@ -73,39 +65,17 @@ export default function useQuestion(data, fetchData, setError, path) {
 
   function handleAddNewAnswer() {
     if (!isEditing) return;
-    const newAnswers = {
-      topics: [
-        ...question.answers,
-        {
-          id: "-1",
-          content: "",
-          correct: false,
-          topicQuestionId: question.id,
-          status: "ACTIVE",
-        },
-      ],
-      grammar: [
-        ...question.answers,
-        {
-          id: "-1",
-          content: "",
-          correct: false,
-          grammarQuestionId: question.id,
-          status: "ACTIVE",
-        },
-      ],
-      reading: [
-        ...question.answers,
-        {
-          id: "-1",
-          content: "",
-          correct: false,
-          readingQuestionId: question.id,
-          status: "ACTIVE",
-        },
-      ],
-    };
-    setQuestion({ ...question, answers: newAnswers[path] });
+    const newAnswers = [
+      ...question.answers,
+      {
+        id: "-1",
+        content: "",
+        correct: false,
+        questionId: question.id,
+        status: "ACTIVE",
+      },
+    ];
+    setQuestion({ ...question, answers: newAnswers });
   }
 
   function onChangeCorrectAnswer(e) {
@@ -121,14 +91,10 @@ export default function useQuestion(data, fetchData, setError, path) {
     setQuestion({ ...question, answers: newAnswers });
   }
 
-  function onChangeAnswerContent(e, id) {
+  function onChangeAnswerContent(e, i) {
     if (!isEditing) return;
     const newAnswers = [...question.answers];
-    newAnswers.forEach((answer) => {
-      if (answer.id === id) {
-        answer.content = e.target.value;
-      }
-    });
+    newAnswers[i].content = e.target.value;
     setQuestion({ ...question, answers: newAnswers });
   }
 

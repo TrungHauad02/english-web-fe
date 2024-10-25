@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Grid} from '@mui/material';
+import { Grid } from '@mui/material';
 import ProfileStudent from './components/ProfileStudent';
-import SearchPanel from './../components/SearchPanel';
+import SearchPanel from '../components/Filter';
 import StudentTeacherList from './../components/StudentTeacherList';
 import DeleteConfirmationDialog from './../components/DeleteConfirmationDialog';
 import StudentInfo from './components/StudentInfo';

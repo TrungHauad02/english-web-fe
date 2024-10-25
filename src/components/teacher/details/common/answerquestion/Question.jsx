@@ -104,11 +104,11 @@ export default function Question({
           </Grid2>
           {/* Answers */}
           <Grid2 container direction={"column"} spacing={1}>
-            {question.answers.map((answer) => (
+            {question.answers.map((answer, index) => (
               <Answer
                 data={answer}
                 isEditing={isEditing}
-                onChangeAnswerContent={onChangeAnswerContent}
+                onChangeAnswerContent={(e) => onChangeAnswerContent(e, index)}
                 onChangeCorrectAnswer={onChangeCorrectAnswer}
                 onDeleteAnswer={onDeleteAnswer}
               />

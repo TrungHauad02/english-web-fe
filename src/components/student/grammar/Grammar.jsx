@@ -7,7 +7,7 @@ import AnswerQuestion from "../common/answerquestion/AnswerQuestion";
 function Grammar({ topic }) {
   topic = {
     title: "Simple Present tense",
-    img: "/environment.png",
+    img: "/environment.png", 
   };
 
   const grammar = {

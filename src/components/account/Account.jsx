@@ -3,19 +3,19 @@ import { Box } from '@mui/material';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import ForgotPassword from './ForgotPassword';
-import './Account.css'; // Import CSS
+import './Account.css'; 
 
 const Account = () => {
-  const [formState, setFormState] = useState('signin'); // Trạng thái để theo dõi form hiện tại
-  const [isFlipped, setIsFlipped] = useState(false); // Trạng thái để lật khung
+  const [formState, setFormState] = useState('signin');
+  const [isFlipped, setIsFlipped] = useState(false); 
 
   const toggleForm = (newState) => {
-    setIsFlipped(true); // Lật khung
+    setIsFlipped(true); 
 
     setTimeout(() => {
-      setFormState(newState); // Cập nhật trạng thái form
-      setIsFlipped(false); // Đặt lại trạng thái lật
-    }, 300); // Thời gian trễ để khung hoàn thành lật
+      setFormState(newState); 
+      setIsFlipped(false); 
+    }, 300); 
   };
 
   return (
@@ -42,7 +42,6 @@ const Account = () => {
       >
         <Box className="container">
           <Box className={`card ${isFlipped ? 'flipped' : ''}`}>
-            {/* Hiển thị khung theo trạng thái */}
             {formState === 'signin' && (
               <div className="card-front">
                 <SignIn toggleForm={toggleForm} />

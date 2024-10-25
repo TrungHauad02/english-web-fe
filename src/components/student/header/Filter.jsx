@@ -1,9 +1,5 @@
-// src/components/Filter.jsx
-import React from "react";
+import React, { useEffect } from "react";
 import { TextField, Button, MenuItem, Grid, IconButton } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import SearchIcon from "@mui/icons-material/Search";
 
 const Filter = ({
@@ -17,75 +13,104 @@ const Filter = ({
     setSearchText,
     handleSearch,
 }) => {
+
+    useEffect(() => {
+        if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+            setEndDate(startDate);
+        }
+    }, [startDate, endDate, setEndDate]);
+
+    const isEndDateDisabled = !startDate || new Date(startDate) >= new Date();
+
     return (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Grid container spacing={2} alignItems="center" mb={2}>
-                <Grid item xs={12} sm={4}>
-                    <TextField
-                        fullWidth
-                        variant="outlined"
-                        placeholder="Enter your search"
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value)}
-                        onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                        InputProps={{
-                            endAdornment: (
-                                <IconButton onClick={handleSearch}>
-                                    <SearchIcon />
-                                </IconButton>
-                            ),
-                        }}
-                    />
-                </Grid>
-
-                <Grid item xs={12} sm={3} disableScrollLock>
-                    <TextField
-                        select
-                        fullWidth
-                        variant="outlined"
-                        value={filter}
-                        onChange={(e) => setFilter(e.target.value)}
-                    >
-                        <MenuItem value="All">All</MenuItem>
-                        <MenuItem value="Vocabulary">Vocabulary</MenuItem>
-                        <MenuItem value="Grammar">Grammar</MenuItem>
-                        <MenuItem value="Listening">Listening</MenuItem>
-                        <MenuItem value="Speaking">Speaking</MenuItem>
-                        <MenuItem value="Reading">Reading</MenuItem>
-                        <MenuItem value="Writing">Writing</MenuItem>
-                    </TextField>
-                </Grid>
-
-                <Grid item xs={12} sm={2}>
-                    <DatePicker
-                        label="Start Date"
-                        value={startDate}
-                        onChange={(newDate) => {
-                            setStartDate(newDate);
-                            if (endDate && newDate > endDate) setEndDate(null);
-                        }}
-                        renderInput={(params) => <TextField {...params} variant="outlined" fullWidth />}
-                        maxDate={endDate || null}
-                    />
-                </Grid>
-
-                <Grid item xs={12} sm={2}>
-                    <DatePicker
-                        label="End Date"
-                        value={endDate}
-                        onChange={setEndDate}
-                        renderInput={(params) => <TextField {...params} variant="outlined" fullWidth />}
-                        minDate={startDate || null}
-                    />
-                </Grid>
-
-                <Grid item xs={12} sm={1}>
-                    <Button variant="contained" onClick={handleSearch}>
-                        Search
-                    </Button>
-                </Grid>
+        <Grid container spacing={2} alignItems="center" mb={2}>
+            <Grid item xs={12} sm={4}>
+                <TextField
+                    fullWidth
+                    variant="outlined"
+                    placeholder="Enter your search"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                    InputProps={{
+                        endAdornment: (
+                            <IconButton onClick={handleSearch}>
+                                <SearchIcon />
+                            </IconButton>
+                        ),
+                    }}
+                />
             </Grid>
-        </LocalizationProvider>
+
+            <Grid item xs={12} sm={3}>
+                <TextField
+                    select
+                    fullWidth
+                    variant="outlined"
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value)}
+                >
+                    <MenuItem value="All">All</MenuItem>
+                    <MenuItem value="Vocabulary">Vocabulary</MenuItem>
+                    <MenuItem value="Grammar">Grammar</MenuItem>
+                    <MenuItem value="Listening">Listening</MenuItem>
+                    <MenuItem value="Speaking">Speaking</MenuItem>
+                    <MenuItem value="Reading">Reading</MenuItem>
+                    <MenuItem value="Writing">Writing</MenuItem>
+                </TextField>
+            </Grid>
+
+            <Grid item xs={12} sm={2}>
+                <TextField
+                    fullWidth
+                    label="Start Date"
+                    variant="outlined"
+                    type="date"
+                    InputLabelProps={{ shrink: true }}
+                    value={startDate}
+                    onChange={(e) => {
+                        setStartDate(e.target.value);
+                        if (endDate && new Date(e.target.value) > new Date(endDate)) {
+                            setEndDate(e.target.value); 
+                        }
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            handleSearch();
+                        }
+                    }}
+                />
+            </Grid>
+
+            <Grid item xs={12} sm={2}>
+                <TextField
+                    fullWidth
+                    label="End Date"
+                    variant="outlined"
+                    type="date"
+                    InputLabelProps={{ shrink: true }}
+                    value={endDate}
+                    onChange={(e) => {
+                        const selectedEndDate = e.target.value;
+                        if (new Date(selectedEndDate) > new Date(startDate)) {
+                            setEndDate(selectedEndDate);
+                        }
+                    }}
+                    disabled={isEndDateDisabled}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            handleSearch();
+                        }
+                    }}
+                />
+            </Grid>
+
+            <Grid item xs={12} sm={1}>
+                <Button variant="contained" onClick={handleSearch}>
+                    Search
+                </Button>
+            </Grid>
+        </Grid>
     );
 };
 

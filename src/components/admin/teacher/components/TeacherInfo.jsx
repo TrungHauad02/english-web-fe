@@ -83,7 +83,7 @@ const TeacherInfo = ({
                             variant="contained"
                             color="error"
                             sx={{ bgcolor: '#FF6655' }}
-                            onClick={() => setConfirmDeleteOpen(true)} // Open delete confirmation dialog
+                            onClick={() => setConfirmDeleteOpen(true)} 
                             disabled={!selectedTeacher.id || !selectedTeacher.name.trim() || selectedTeacher.status !== 'Active'}
                         >
                             Delete
