@@ -49,7 +49,7 @@ const Profile = ({ open, handleClose }) => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm" disableScrollLock>
       <DialogContent>
         <Stack
           direction="row"

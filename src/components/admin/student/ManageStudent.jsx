@@ -5,7 +5,7 @@ import SearchPanel from '../components/Filter';
 import StudentTeacherList from './../components/StudentTeacherList';
 import DeleteConfirmationDialog from './../components/DeleteConfirmationDialog';
 import StudentInfo from './components/StudentInfo';
-import { handleSearch, handleDeleteStudent, handleClearSelection } from '../student/components/studentFunctions';
+import { handleSearch, handleDeleteStudent, handleClearSelection } from '../student/components/HandleStudent';
 
 function ManageStudent() {
     const initialStudents = [

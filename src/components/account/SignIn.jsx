@@ -4,6 +4,9 @@ import GoogleIcon from '@mui/icons-material/Google';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
+import { handleSignIn, handleClickShowPassword } from './components/HandleSignIn';
+
+import { useAuth } from '../security/AutthContext';
 
 const SignIn = ({ toggleForm }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,42 +15,13 @@ const SignIn = ({ toggleForm }) => {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
+  const authContext = useAuth();  
 
   const fakeDatabase = [
     { email: 'student@gmail.com', password: '123', role: 'student' },
     { email: 'teacher@gmail.com', password: '123', role: 'teacher' },
     { email: 'admin@gmail.com', password: '123', role: 'admin' }
   ];
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleSignIn = () => {
-    const user = fakeDatabase.find(
-      (u) => u.email === email && u.password === password
-    );
-
-    if (user) {
-      localStorage.setItem('isSignIn', 'true');
-      switch (user.role) {
-        case 'student':
-          navigate('/student');
-          break;
-        case 'teacher':
-          navigate('/teacher');
-          break;
-        case 'admin':
-          navigate('/admin/teacher');
-          break;
-        default:
-          break;
-      }
-      window.location.reload();
-    } else {
-      setError('Incorrect email or password');
-    }
-  };
 
   return (
     <Box
@@ -85,19 +59,19 @@ const SignIn = ({ toggleForm }) => {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton onClick={handleClickShowPassword}>
+              <IconButton onClick={() => handleClickShowPassword(showPassword, setShowPassword)}>
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </InputAdornment>
           ),
-        }}
+        }}        
       />
       <Button
         fullWidth
         variant="contained"
         color="primary"
         style={{ marginTop: 16, marginBottom: 16 }}
-        onClick={handleSignIn}
+        onClick={() => handleSignIn(email, password, fakeDatabase, authContext, navigate, setError)}
       >
         Sign In
       </Button>

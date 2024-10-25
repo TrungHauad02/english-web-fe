@@ -1,33 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, Stack, Menu, MenuItem, IconButton } from "@mui/material";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import HeaderTypography from "../../common/header/HeaderTypography";
 import SkillMenu from "./SkillMenu";
 import Profile from "./Profile";
+import { useAuth} from "../../security/AutthContext";
 
 function HeaderStudent() {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isAuthenticated, setAuthenticated } = useAuth(); 
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
   const navigate = useNavigate();
   const location = useLocation(); // Hook để lấy đường dẫn hiện tại
 
-  useEffect(() => {
-    const checkLoggedIn = () => {
-      const loggedIn = localStorage.getItem("isSignIn") === "true";
-      setIsLoggedIn(loggedIn);
-    };
-
-    checkLoggedIn();
-    window.addEventListener("storage", checkLoggedIn);
-
-    return () => {
-      window.removeEventListener("storage", checkLoggedIn);
-    };
-  }, []);
-
   const handleMenuClick = (event) => {
-    if (isLoggedIn) {
+    if (isAuthenticated) {
       setAnchorEl(event.currentTarget);
     } else {
       navigate("/student/account");
@@ -39,8 +26,7 @@ function HeaderStudent() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("isSignIn");
-    setIsLoggedIn(false);
+    setAuthenticated(false); 
     handleMenuClose();
     navigate("/student/account");
   };
@@ -98,17 +84,13 @@ function HeaderStudent() {
           component={NavLink}
           to="/student/topics"
           sx={{
-            backgroundColor: isActivePath("/student/topics")
-              ? "#fff"
-              : "transparent",
+            backgroundColor: isActivePath("/student/topics") ? "#fff" : "transparent",
             color: isActivePath("/student/topics") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: isActivePath("/student/topics")
-                ? "#fff"
-                : "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath("/student/topics") ? "#fff" : "rgba(255, 255, 255, 0.2)",
             },
           }}
         >
@@ -118,17 +100,13 @@ function HeaderStudent() {
           component={NavLink}
           to="/student/grammars"
           sx={{
-            backgroundColor: isActivePath("/student/grammars")
-              ? "#fff"
-              : "transparent",
+            backgroundColor: isActivePath("/student/grammars") ? "#fff" : "transparent",
             color: isActivePath("/student/grammars") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: isActivePath("/student/grammars")
-                ? "#fff"
-                : "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath("/student/grammars") ? "#fff" : "rgba(255, 255, 255, 0.2)",
             },
           }}
         >
@@ -141,17 +119,13 @@ function HeaderStudent() {
           component={NavLink}
           to="/student/test"
           sx={{
-            backgroundColor: isActivePath("/student/test")
-              ? "#fff"
-              : "transparent",
+            backgroundColor: isActivePath("/student/test") ? "#fff" : "transparent",
             color: isActivePath("/student/test") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: isActivePath("/student/test")
-                ? "#fff"
-                : "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath("/student/test") ? "#fff" : "rgba(255, 255, 255, 0.2)",
             },
           }}
         >
@@ -205,7 +179,7 @@ function HeaderStudent() {
           >
             History Test
           </MenuItem>
-          {isLoggedIn && (
+          {isAuthenticated && (
             <MenuItem
               onClick={handleLogout}
               sx={{

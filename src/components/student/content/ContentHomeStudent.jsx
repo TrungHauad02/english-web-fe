@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { sections } from "./HomeStudent.js";
+import { sections } from "./components/HomeStudent.js";
+import { useAuth } from '../../security/AutthContext.js';
+import { HandleHomeStudent } from './components/HandleHomeStudent.js';
+import RequiredLoginDialog from './components/RequiredLoginDialog.js';
 
 const ContentHomeStudent = () => {
-  const navigate = useNavigate();
-  const [requiredLoginDialog, setrequiredLoginDialog] = useState(false); // Trạng thái modal
+  const [requiredLoginDialog, setRequiredLoginDialog] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const { handleButtonClick, handleCloseDialog } = HandleHomeStudent(isAuthenticated);
 
   useEffect(() => {
     AOS.init({
@@ -19,21 +21,6 @@ const ContentHomeStudent = () => {
       once: false,
     });
   }, []);
-
-  const handleButtonClick = (link) => {
-    const isLoggedIn = localStorage.getItem('isSignIn') === 'true';
-
-    if (isLoggedIn) {
-      navigate(link); // Chuyển đến link mong muốn nếu đã đăng nhập
-    } else {
-      setrequiredLoginDialog(true); // Mở modal nếu chưa đăng nhập
-    }
-  };
-
-  const handleCloseDialog = () => {
-    setrequiredLoginDialog(false);
-    navigate('/student/account'); 
-  };
 
   return (
     <>
@@ -120,7 +107,7 @@ const ContentHomeStudent = () => {
                           borderRadius: '1rem',
                           fontSize: '1rem',
                         }}
-                        onClick={() => handleButtonClick(section.link)} 
+                        onClick={() => handleButtonClick(section.link, setRequiredLoginDialog)} 
                       >
                         {section.title === 'TEST'
                           ? 'Take Test'
@@ -174,7 +161,7 @@ const ContentHomeStudent = () => {
                           borderRadius: '1rem',
                           fontSize: '1rem',
                         }}
-                        onClick={() => handleButtonClick(section.link)} 
+                        onClick={() => handleButtonClick(section.link, setRequiredLoginDialog)} 
                       >
                         {section.title === 'TEST'
                           ? 'Take Test'
@@ -205,24 +192,11 @@ const ContentHomeStudent = () => {
           </Box>
         </Box>
       ))}
-
-      {/* Modal yêu cầu đăng nhập */}
-      <Dialog open={requiredLoginDialog} onClose={() => setrequiredLoginDialog(false)}>
-        <DialogTitle>Remind</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-          You need to sign in to continue. Please sign in to access this page.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setrequiredLoginDialog(false)} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleCloseDialog} color="primary">
-            Sign in
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <RequiredLoginDialog
+        open={requiredLoginDialog}
+        onClose={() => setRequiredLoginDialog(false)}
+        onSignIn={() => handleCloseDialog(setRequiredLoginDialog)}
+      />
     </>
   );
 };

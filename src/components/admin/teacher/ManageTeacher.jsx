@@ -16,7 +16,7 @@ import {
     handleSaveEdit,
     handleSearch,
     handleTeacherClick,
-} from './components/teacherFunctions';
+} from './components/HandleTeacher';
 
 function ManageTeacher() {
     const initialTeachers = [
