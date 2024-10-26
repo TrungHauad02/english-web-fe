@@ -56,25 +56,25 @@
 
   .prev-button,
   .next-button {
-    position: absolute !important;
+    position: fixed !important;
     top: 60%;
     transform: translateY(-50%);
     height: 4rem;
     cursor: pointer;
-    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     border-radius: 50% !important;
+    overflow: visible;
   }
 
   .prev-button {
-    left: 0;
+    left: 5rem;
   }
 
   .next-button {
-    right: 0;
+    right: 5rem;
   }
 
   .prev-button:hover,

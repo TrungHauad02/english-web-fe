@@ -12,16 +12,11 @@ const SignIn = ({ toggleForm }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('student');
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
   const authContext = useAuth();  
-
-  const fakeDatabase = [
-    { email: 'student@gmail.com', password: '123', role: 'student' },
-    { email: 'teacher@gmail.com', password: '123', role: 'teacher' },
-    { email: 'admin@gmail.com', password: '123', role: 'admin' }
-  ];
 
   return (
     <Box
@@ -71,7 +66,7 @@ const SignIn = ({ toggleForm }) => {
         variant="contained"
         color="primary"
         style={{ marginTop: 16, marginBottom: 16 }}
-        onClick={() => handleSignIn(email, password, fakeDatabase, authContext, navigate, setError)}
+        onClick={() => handleSignIn(email, password, role, authContext, navigate, setError)}
       >
         Sign In
       </Button>

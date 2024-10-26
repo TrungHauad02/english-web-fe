@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import './PracticeTestSlider.css';
+import { handleNext, handlePrev } from './components/HandlePracticeTestSlider';
 
 const slides = [
   {
@@ -35,18 +36,6 @@ const slides = [
 const PracticeTestSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const handleNext = () => {
-    if (currentSlide < slides.length - 3) {
-      setCurrentSlide(currentSlide + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentSlide > 0) {
-      setCurrentSlide(currentSlide - 1);
-    }
-  };
-
   return (
     <Box className="slider-container">
       <Typography variant="h4" className="slider-title">
@@ -65,10 +54,18 @@ const PracticeTestSlider = () => {
           </Box>
         ))}
       </Box>
-      <Button className="prev-button" onClick={handlePrev} disabled={currentSlide === 0}>
+      <Button
+        className="prev-button"
+        onClick={() => handlePrev(currentSlide, setCurrentSlide)}
+        disabled={currentSlide === 0}
+      >
         &#10094;
       </Button>
-      <Button className="next-button" onClick={handleNext} disabled={currentSlide >= slides.length - 3}>
+      <Button
+        className="next-button"
+        onClick={() => handleNext(currentSlide, setCurrentSlide, slides.length)}
+        disabled={currentSlide >= slides.length - 3}
+      >
         &#10095;
       </Button>
     </Box>

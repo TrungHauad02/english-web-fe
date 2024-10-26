@@ -9,6 +9,7 @@ import { useAuth} from "../../security/AutthContext";
 function HeaderStudent() {
   const [anchorEl, setAnchorEl] = useState(null);
   const { isAuthenticated, setAuthenticated } = useAuth(); 
+  const auContext = useAuth();
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
   const navigate = useNavigate();
   const location = useLocation(); // Hook để lấy đường dẫn hiện tại
@@ -26,7 +27,7 @@ function HeaderStudent() {
   };
 
   const handleLogout = () => {
-    setAuthenticated(false); 
+    auContext.Logout();
     handleMenuClose();
     navigate("/student/account");
   };
