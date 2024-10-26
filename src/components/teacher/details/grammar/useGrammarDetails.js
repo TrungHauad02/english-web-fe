@@ -28,7 +28,7 @@ export default function useGrammarDetails() {
     }
     const [grammarData, answerQuestionData] = await Promise.all([
       getGrammarDetail(id),
-      //getAnswerQuestions("grammar", id),
+      getAnswerQuestions("grammar", id),
     ]);
     setLocalData(grammarData);
     setAnswerQuestion(answerQuestionData);

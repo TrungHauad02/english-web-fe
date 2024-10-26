@@ -10,9 +10,9 @@ export async function getTopicDetail(id) {
   }
 }
 
-export async function updateTopic(data) {
+export async function updateTopic(id, data) {
   try {
-    const res = await apiClient.put(`/topics`, data);
+    const res = await apiClient.put(`/topics/${id}`, data);
     return res.data;
   } catch (err) {
     console.error("Error updating topic:", err);

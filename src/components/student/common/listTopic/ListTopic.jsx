@@ -29,7 +29,7 @@ function ListTopic({ path, quote, title, bg }) {
     };
 
     fetchData();
-  }, [page]);
+  }, [page, path]);
   const onChangePage = (value) => {
     setPage(value);
   };
