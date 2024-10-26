@@ -1,18 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  createGrammar,
+  updateGrammar,
+} from "../../../../api/teacher/grammarService";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function useGrammarInfo(data, setData) {
+  const { id } = useParams();
   const [topic, setTopic] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setIsEditing(id === "-1");
+  }, [id]);
 
   const handleEditing = () => {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    setData(topic);
-    if (topic.id === "-1") {
-    }
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      if (id === "-1") {
+        const data = await createGrammar(topic);
+        setData(data);
+        navigate(`/teacher/grammars/${data.id}`);
+        return;
+      }
+      const data = await updateGrammar(id, topic);
+      setData(data);
+      setIsEditing(false);
+    } catch (error) {}
   };
 
   const handleDelete = () => {

@@ -34,7 +34,7 @@ export default function GrammarInfo({ data, setData }) {
       <Grid2 container size={6} direction={"row"} sx={{ width: "100%" }}>
         <Grid2 container spacing={2} direction={"column"}>
           <CardMedia
-            image={topic.img}
+            image={topic.image}
             sx={{ height: "250px", width: "250px" }}
           />
           <Button
