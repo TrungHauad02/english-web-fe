@@ -23,7 +23,7 @@ export const createQuestion = async (path, question) => {
 
 export const updateQuestion = async (path, id, question) => {
   try {
-    const res = await apiClient.put(`${path}-question${id}`, question);
+    const res = await apiClient.put(`${path}-question/${id}`, question);
     return res.data;
   } catch (error) {
     throw error;
