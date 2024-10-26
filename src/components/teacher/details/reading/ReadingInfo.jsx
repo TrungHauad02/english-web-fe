@@ -29,7 +29,7 @@ export default function ReadingInfo({ data, setData }) {
       <Grid2 container size={6} direction={"row"} sx={{ width: "100%" }}>
         <Grid2 container spacing={2} direction={"column"}>
           <CardMedia
-            image={topic.img}
+            image={topic.image}
             sx={{ height: "250px", width: "250px" }}
           />
           <Button
@@ -92,17 +92,17 @@ export default function ReadingInfo({ data, setData }) {
               backgroundColor: "#D7ED6D",
               width: "fit-content",
               padding: "0.5rem 2rem",
-              textTransform: "capitalize",
+              textTransform: "initial",
             }}
             tabIndex={-1}
             startIcon={<CloudUploadIcon />}
             disabled={!isEditing}
           >
-            Upload file .md
+            Upload file pdf
             <VisuallyHiddenInput
               type="file"
               multiple
-              accept=".md"
+              accept="application/pdf"
               onChange={onChangeFile}
             />
           </Button>

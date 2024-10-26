@@ -9,3 +9,23 @@ export async function getReadingDetail(id) {
     throw err;
   }
 }
+
+export async function createReading(reading) {
+  try {
+    const res = await apiClient.post(`/readings`, reading);
+    return res.data;
+  } catch (err) {
+    console.error("Error create reading: ", err);
+    throw err;
+  }
+}
+
+export async function updateReading(id, reading) {
+  try {
+    const res = await apiClient.put(`/readings/${id}`, reading);
+    return res.data;
+  } catch (err) {
+    console.error("Error update reading: ", err);
+    throw err;
+  }
+}

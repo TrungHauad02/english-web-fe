@@ -2,11 +2,12 @@ import { Grid2 } from "@mui/material";
 import ReadingInfo from "./ReadingInfo";
 import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
 
-import MarkedViewer from "../../../common/markedViewer/MarkedViewer";
+import PDFViewer from "../../../common/pdfViewer/PDFViewer";
 import useReadingDetail from "./useReadingDetail";
 
 export default function ReadingDetail() {
-  const { localData, setLocalData } = useReadingDetail();
+  const { localData, setLocalData, listQuestion, fetchData } =
+    useReadingDetail();
 
   const answerQuestionContainerStyle = {
     maxHeight: "500px",
@@ -43,13 +44,17 @@ export default function ReadingDetail() {
         {/** Reading info*/}
         <ReadingInfo data={localData} setData={setLocalData} />
       </Grid2>
-      <Grid2 container direction={"column"} spacing={2} size={6}>
+      <Grid2 container direction={"column"} spacing={2} size={7}>
         <Grid2 item size={6} sx={answerQuestionContainerStyle}>
-          <AnswerQuestionManagement />
+          <AnswerQuestionManagement
+            data={listQuestion}
+            fetchData={fetchData}
+            path={"reading"}
+          />
         </Grid2>
         <Grid2 container sx={{ width: "100%" }}>
           {/* Preview File*/}
-          <MarkedViewer path={localData.content} displayAppBar />
+          <PDFViewer file={localData.content} title={localData.title} />
         </Grid2>
       </Grid2>
     </Grid2>
