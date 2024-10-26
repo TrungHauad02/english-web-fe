@@ -56,6 +56,7 @@ export default function TopicContent({ topic, path }) {
             backgroundColor: "#000",
             fontSize: "1rem",
             padding: "0.5rem 1rem",
+            textTransform: "capitalize",
           }}
           onClick={handleDetailsClick}
         >

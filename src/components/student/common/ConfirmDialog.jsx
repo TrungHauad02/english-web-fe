@@ -41,6 +41,7 @@ export default function ConfirmDialog({
               boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
               backgroundColor: "#D9D9D9",
               color: "#000000",
+              textTransform: "capitalize",
             }}
           >
             {cancelText}
@@ -53,6 +54,7 @@ export default function ConfirmDialog({
               boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
               backgroundColor: "#6EC2F7",
               color: "#000",
+              textTransform: "capitalize",
             }}
           >
             {agreeText}

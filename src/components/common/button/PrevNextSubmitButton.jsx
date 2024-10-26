@@ -18,19 +18,31 @@ function PrevNextSubmitButton({
         content="Previous"
         onClick={handlePrevious}
         startIcon={<ArrowBackIosNewRoundedIcon />}
-        sx={{ color: "#fff", backgroundColor: "#6EC2F7" }}
+        sx={{
+          color: "#fff",
+          backgroundColor: "#6EC2F7",
+          textTransform: "capitalize",
+        }}
       />
       <BasicButton
         content="Next"
         onClick={handleNext}
         endIcon={<ArrowForwardIosRoundedIcon />}
-        sx={{ color: "#fff", backgroundColor: "#6EC2F7" }}
+        sx={{
+          color: "#fff",
+          backgroundColor: "#6EC2F7",
+          textTransform: "capitalize",
+        }}
       />
       <ConfirmAndSubmit
         submitContent={submitContent}
         scoreContent={scoreContent}
         onSubmit={onSubmit}
-        sx={{ color: "#fff", backgroundColor: "#6EC2F7" }}
+        sx={{
+          color: "#fff",
+          backgroundColor: "#6EC2F7",
+          textTransform: "capitalize",
+        }}
       />
     </Grid2>
   );

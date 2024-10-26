@@ -110,7 +110,7 @@ export default function Question({
                 isEditing={isEditing}
                 onChangeAnswerContent={(e) => onChangeAnswerContent(e, index)}
                 onChangeCorrectAnswer={onChangeCorrectAnswer}
-                onDeleteAnswer={onDeleteAnswer}
+                onDeleteAnswer={() => onDeleteAnswer(answer.id, index)}
               />
             ))}
           </Grid2>
@@ -136,7 +136,11 @@ export default function Question({
               onClick={handleAddNewAnswer}
               variant="contained"
               disabled={!isEditing}
-              sx={{ backgroundColor: "#000", color: "#fff" }}
+              sx={{
+                backgroundColor: "#000",
+                color: "#fff",
+                textTransform: "capitalize",
+              }}
             >
               Add new answer
             </Button>

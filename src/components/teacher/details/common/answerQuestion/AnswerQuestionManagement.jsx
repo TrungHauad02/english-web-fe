@@ -39,7 +39,11 @@ export default function AnswerQuestionManagement({ data, fetchData, path }) {
         <Stack direction={"row"} spacing={2} sx={{ paddingX: "1rem" }}>
           <Button
             variant="contained"
-            sx={{ backgroundColor: "#fff", color: "#000" }}
+            sx={{
+              backgroundColor: "#fff",
+              color: "#000",
+              textTransform: "capitalize",
+            }}
             onClick={handleAddNewQuestion}
           >
             Add new question
@@ -50,13 +54,13 @@ export default function AnswerQuestionManagement({ data, fetchData, path }) {
         {/** Questions */}
         {localData &&
           localData.length !== 0 &&
-          localData.map((question) => (
+          localData.map((question, index) => (
             <Question
               key={question.id}
               data={question}
               path={path}
               fetchData={fetchData}
-              onDelQuestion={() => onDelQuestion(question.id)}
+              onDelQuestion={() => onDelQuestion(question.id, index)}
               setError={setError}
             />
           ))}

@@ -68,8 +68,11 @@ export default function useAnswerQuestion(data, fetchData, path) {
     setLocalData([...localData, newQuestion[path]]);
   }
 
-  async function onDelQuestion(id) {
-    if (id === "-1") return;
+  async function onDelQuestion(id, index) {
+    if (id === "-1") {
+      setLocalData((prevData) => prevData.filter((_, i) => i !== index));
+      return;
+    }
     try {
       await deleteQuestion(path, id);
       await fetchData();

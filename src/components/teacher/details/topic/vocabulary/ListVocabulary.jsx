@@ -25,16 +25,27 @@ export default function ListVocabulary({ listVocab, setCurVocab, fetchData }) {
           <SearchBar
             title={"Vocabulary"}
             onHandleSearch={handleSearch}
-            maxWidth="15rem"
+            maxWidth="14rem"
           />
         </Grid2>
         <Grid2 item sx={{ marginTop: "0.5rem" }}>
-          <Button sx={{ color: "#000", marginX: "0.25rem" }} onClick={onReLoad}>
+          <Button
+            sx={{
+              color: "#000",
+              marginX: "0.25rem",
+              textTransform: "capitalize",
+            }}
+            onClick={onReLoad}
+          >
             <RefreshIcon />
           </Button>
           <Button
             variant="contained"
-            sx={{ backgroundColor: "#fff", color: "#000" }}
+            sx={{
+              backgroundColor: "#fff",
+              color: "#000",
+              textTransform: "capitalize",
+            }}
             onClick={onHandleAddNewVocab}
           >
             Add new vocabulary

@@ -40,6 +40,7 @@ export default function TopicList({ title }) {
               backgroundColor: "#6EC2F7",
               padding: "1rem 1.5rem",
               color: "#fff",
+              textTransform: "capitalize",
             }}
           >
             Add new {title}

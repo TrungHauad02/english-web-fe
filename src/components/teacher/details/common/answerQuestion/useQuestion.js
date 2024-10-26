@@ -98,8 +98,15 @@ export default function useQuestion(data, fetchData, setError, path) {
     setQuestion({ ...question, answers: newAnswers });
   }
 
-  async function onDeleteAnswer(id) {
+  async function onDeleteAnswer(id, index) {
     if (!isEditing) return;
+    if (id === "-1") {
+      setQuestion((prevData) => ({
+        ...prevData,
+        answers: prevData.answers.filter((_, i) => i !== index),
+      }));
+      return;
+    }
     try {
       await deleteAnswer(path, id);
       await fetchData();

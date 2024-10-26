@@ -11,6 +11,7 @@ export default function SearchBar({ title, onHandleSearch, sx, maxWidth }) {
     padding: "1rem 1.5rem",
     border: "1px solid #828282",
     boxShadow: "none",
+    textTransform: "capitalize",
   };
   return (
     <Stack direction={"row"} spacing={4}>

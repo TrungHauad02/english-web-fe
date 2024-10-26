@@ -22,7 +22,11 @@ export default function SaveEditDeleteButton({
           onClick={onDel}
           variant="contained"
           size={size}
-          sx={{ backgroundColor: "#FF6655", color: "#000" }}
+          sx={{
+            backgroundColor: "#FF6655",
+            color: "#000",
+            textTransform: "capitalize",
+          }}
         >
           {showText ? "Delete" : <Delete />}
         </Button>
@@ -32,7 +36,11 @@ export default function SaveEditDeleteButton({
           onClick={onEdit}
           variant="contained"
           size={size}
-          sx={{ backgroundColor: "#FFD014", color: "#000" }}
+          sx={{
+            backgroundColor: "#FFD014",
+            color: "#000",
+            textTransform: "capitalize",
+          }}
         >
           {showText ? "Edit" : <Edit />}
         </Button>
@@ -42,7 +50,11 @@ export default function SaveEditDeleteButton({
           onClick={onSave}
           variant="contained"
           size={size}
-          sx={{ backgroundColor: "#64FF64", color: "#000" }}
+          sx={{
+            backgroundColor: "#64FF64",
+            color: "#000",
+            textTransform: "capitalize",
+          }}
         >
           {showText ? "Save" : <Save />}
         </Button>

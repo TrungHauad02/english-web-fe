@@ -109,6 +109,7 @@ export default function GrammarInfo({ data, setData }) {
               backgroundColor: "#D7ED6D",
               width: "fit-content",
               padding: "0.5rem 2rem",
+              textTransform: "initial",
             }}
             tabIndex={-1}
             startIcon={<CloudUploadIcon />}

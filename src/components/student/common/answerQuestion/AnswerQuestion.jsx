@@ -77,6 +77,7 @@ function AnswerQuestion({ listQuestion }) {
               backgroundColor: "#6EC2F7",
               position: "absolute",
               bottom: "0",
+              textTransform: "capitalize",
             }}
           >
             {isShowExplain ? "Hide" : "Show"} explanation

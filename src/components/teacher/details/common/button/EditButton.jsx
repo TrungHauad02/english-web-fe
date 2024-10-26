@@ -16,7 +16,11 @@ export default function EditButton({ onEdit, showText, size, disabled }) {
           variant="contained"
           size={size}
           disabled={disabled}
-          sx={{ backgroundColor: "#FFD014", color: "#000" }}
+          sx={{
+            backgroundColor: "#FFD014",
+            color: "#000",
+            textTransform: "capitalize",
+          }}
         >
           {showText ? "Edit" : <Edit />}
         </Button>
