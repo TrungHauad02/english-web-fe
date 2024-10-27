@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getVocabByTopicId } from "../../../../../api/teacher/vocabularyService";
+import { getVocabByTopicId } from "api/study/topic/vocabularyService";
 import { useParams } from "react-router-dom";
 
 export default function useVocabularyManagement() {

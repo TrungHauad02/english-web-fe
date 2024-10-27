@@ -1,7 +1,7 @@
 import { Button, Grid2, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import SaveEditDeleteButton from "../button/SaveEditDeleteButton";
-import SoundViewer from "../../../../common/soundViewer/SoundViewer";
+import SoundViewer from "shared/component/soundViewer/SoundViewer";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 

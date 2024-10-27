@@ -2,7 +2,7 @@ import { Grid2 } from "@mui/material";
 import ReadingInfo from "./ReadingInfo";
 import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
 
-import PDFViewer from "../../../common/pdfViewer/PDFViewer";
+import PDFViewer from "shared/component/pdfViewer/PDFViewer";
 import useReadingDetail from "./useReadingDetail";
 
 export default function ReadingDetail() {

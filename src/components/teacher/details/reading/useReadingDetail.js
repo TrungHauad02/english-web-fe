@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getReadingDetail } from "../../../../api/teacher/readingService";
-import { getAnswerQuestions } from "../../../../api/teacher/answerQuestionService";
+import { getReadingDetail } from "api/study/reading/readingService";
+import { getAnswerQuestions } from "api/study/answerQuestion/answerQuestionService";
 
 export default function useReadingDetail() {
   const { id } = useParams();

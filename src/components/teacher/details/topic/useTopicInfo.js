@@ -3,7 +3,7 @@ import {
   createTopic,
   deleteTopic,
   updateTopic,
-} from "../../../../api/teacher/topicService";
+} from "api/study/topic/topicService";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function useTopicInfo(data) {

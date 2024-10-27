@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  createReading,
-  updateReading,
-} from "../../../../api/teacher/readingService";
+import { createReading, updateReading } from "api/study/reading/readingService";
 
 export default function useReadingInfo(data, setData) {
   const { id } = useParams();

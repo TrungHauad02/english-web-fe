@@ -3,8 +3,8 @@ import { DragDropContext } from "react-beautiful-dnd";
 import VocabularyList from "./VocabularyList";
 import VocabularyContainer from "./VocabularyContainer";
 import { Card, Grid2, styled } from "@mui/material";
-import ResetButton from "../../../common/button/ResetButton";
-import ConfirmAndSubmit from "../../common/ConfirmAndSubmit";
+import ResetButton from "shared/component/button/ResetButton";
+import ConfirmAndSubmit from "../../../../shared/component/confirmDialog/ConfirmAndSubmit";
 
 const Title = styled("h4")({
   fontSize: "1.5rem",

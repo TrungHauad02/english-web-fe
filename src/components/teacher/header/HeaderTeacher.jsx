@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Stack, Menu, MenuItem, IconButton } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
-import HeaderTypography from "../../common/header/HeaderTypography";
+import HeaderTypography from "shared/component/header/HeaderTypography";
 import SkillMenu from "./SkillMenu";
 import Profile from "./Profile";
 

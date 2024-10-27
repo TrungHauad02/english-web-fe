@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { deleteQuestion } from "../../../../../api/teacher/answerQuestionService";
+import { deleteQuestion } from "api/study/answerQuestion/answerQuestionService";
 
 export default function useAnswerQuestion(data, fetchData, path) {
   const [localData, setLocalData] = useState(data);

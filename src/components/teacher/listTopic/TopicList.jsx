@@ -1,10 +1,10 @@
 import { Button, Grid2, Stack, Typography, Box } from "@mui/material";
-import SearchBar from "../common/searchbar/SearchBar";
+import SearchBar from "shared/component/searchbar/SearchBar";
 import TopicContent from "./TopicContent";
 import Divider from "@mui/material/Divider";
-import DotLoader from "../../../shared/component/loader/DotLoader";
+import DotLoader from "shared/component/loader/DotLoader";
 import useTopicList from "./useTopicList";
-import ErrorComponent from "../../../shared/component/error/ErrorComponent";
+import ErrorComponent from "shared/component/error/ErrorComponent";
 
 export default function TopicList({ title }) {
   const {

@@ -3,7 +3,7 @@ import {
   createVocab,
   deleteVocab,
   updateVocab,
-} from "../../../../../api/teacher/vocabularyService";
+} from "api/study/topic/vocabularyService";
 import { useParams } from "react-router-dom";
 
 export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {

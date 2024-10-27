@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState, useCallback } from "react";
-import BasicButton from "../../../common/button/BasicButton";
+import BasicButton from "shared/component/button/BasicButton";
 import Comment from "./Comment";
 
 const writing = {

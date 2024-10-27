@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Grid2, Stack, Typography } from "@mui/material";
 import { ReactMic } from "react-mic";
 import MicIcon from "@mui/icons-material/Mic";
-import BasicButton from "../../../common/button/BasicButton";
-import SoundViewer from "../../../common/soundViewer/SoundViewer";
+import BasicButton from "shared/component/button/BasicButton";
+import SoundViewer from "shared/component/soundViewer/SoundViewer";
 
 const speaking = {
   content:

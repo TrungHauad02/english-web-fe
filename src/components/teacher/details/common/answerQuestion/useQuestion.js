@@ -5,7 +5,7 @@ import {
   deleteAnswer,
   updateAnswer,
   updateQuestion,
-} from "../../../../../api/teacher/answerQuestionService";
+} from "api/study/answerQuestion/answerQuestionService";
 
 export default function useQuestion(data, fetchData, setError, path) {
   const [question, setQuestion] = useState(data);

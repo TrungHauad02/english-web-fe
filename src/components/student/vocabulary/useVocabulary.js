@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getTopicById } from "../../../api/student/listTopicApi";
-import { getVocabularyInTopic } from "../../../api/student/vocabularyApi";
-import { getAnswerQuestions } from "../../../api/teacher/answerQuestionService";
+import { getTopicDetail } from "api/study/topic/topicService";
+import { getVocabByPageAndTopicId } from "api/study/topic/vocabularyService";
+import { getAnswerQuestions } from "api/study/answerQuestion/answerQuestionService";
 
 export default function useVocabulary() {
   const { id } = useParams();
@@ -14,8 +14,8 @@ export default function useVocabulary() {
     const fetchData = async () => {
       try {
         const [topicData, vocabData, listQuestionData] = await Promise.all([
-          getTopicById(id),
-          getVocabularyInTopic(0, 24, id),
+          getTopicDetail(id),
+          getVocabByPageAndTopicId(id, 0, 24),
           getAnswerQuestions("topics", id),
         ]);
         setTopic(topicData);

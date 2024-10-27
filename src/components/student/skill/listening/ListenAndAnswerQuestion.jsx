@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import SoundViewer from "../../../common/soundViewer/SoundViewer";
+import SoundViewer from "shared/component/soundViewer/SoundViewer";
 import AnswerQuestion from "../../common/answerQuestion/AnswerQuestion";
 import { listQuestion } from "./ListQuestion";
 

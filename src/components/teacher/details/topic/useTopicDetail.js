@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getTopicDetail } from "../../../../api/teacher/topicService";
-import { getAnswerQuestions } from "../../../../api/teacher/answerQuestionService";
+import { getTopicDetail } from "api/study/topic/topicService";
+import { getAnswerQuestions } from "api/study/answerQuestion/answerQuestionService";
 
 export default function useTopicDetail() {
   const { id } = useParams();

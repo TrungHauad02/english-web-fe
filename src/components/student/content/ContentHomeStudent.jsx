@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import React, { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import { sections } from "./components/HomeStudent.js";
-import { useAuth } from '../../security/AutthContext.js';
-import { HandleHomeStudent } from './components/HandleHomeStudent.js';
-import RequiredLoginDialog from './components/RequiredLoginDialog.js';
+import { useAuth } from "security/AuthContext.js";
+import { HandleHomeStudent } from "./components/HandleHomeStudent.js";
+import RequiredLoginDialog from "./components/RequiredLoginDialog.js";
 
 const ContentHomeStudent = () => {
   const [requiredLoginDialog, setRequiredLoginDialog] = useState(false);
   const { isAuthenticated } = useAuth();
-  const { handleButtonClick, handleCloseDialog } = HandleHomeStudent(isAuthenticated);
+  const { handleButtonClick, handleCloseDialog } =
+    HandleHomeStudent(isAuthenticated);
 
   useEffect(() => {
     AOS.init({
@@ -28,25 +29,26 @@ const ContentHomeStudent = () => {
         <Box
           key={index}
           sx={{
-            width: '100%',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1.5rem 0',
-            overflow: 'hidden',
+            width: "100%",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "1.5rem 0",
+            overflow: "hidden",
           }}
         >
           <Box
             sx={{
-              backgroundColor: 'transparent',
-              borderRadius: '1rem',
-              width: '80%',
-              transform: index % 2 === 0 ? 'translateX(-80px)' : 'translateX(80px)',
-              transition: 'transform 1.5s ease-out',
+              backgroundColor: "transparent",
+              borderRadius: "1rem",
+              width: "80%",
+              transform:
+                index % 2 === 0 ? "translateX(-80px)" : "translateX(80px)",
+              transition: "transform 1.5s ease-out",
             }}
-            data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'}
+            data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
           >
             <Grid container spacing={3}>
               {index % 2 === 0 ? (
@@ -57,11 +59,11 @@ const ContentHomeStudent = () => {
                       src={section.imgSrc}
                       alt={section.title}
                       sx={{
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: '0.5rem',
-                        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-                        objectFit: 'cover',
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: "0.5rem",
+                        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                        objectFit: "cover",
                       }}
                     />
                   </Grid>
@@ -69,29 +71,29 @@ const ContentHomeStudent = () => {
                   <Grid item xs={12} md={6}>
                     <Box
                       sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        height: '100%',
-                        padding: '0 1.5rem',
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        height: "100%",
+                        padding: "0 1.5rem",
                       }}
                     >
                       <Box
                         sx={{
-                          fontSize: '1.8rem',
-                          fontWeight: 'bold',
-                          marginBottom: '0.8rem',
-                          textAlign: { xs: 'center', md: 'left' },
-                          fontFamily: 'Roboto',
+                          fontSize: "1.8rem",
+                          fontWeight: "bold",
+                          marginBottom: "0.8rem",
+                          textAlign: { xs: "center", md: "left" },
+                          fontFamily: "Roboto",
                         }}
                       >
                         {section.title}
                       </Box>
                       <Box
                         sx={{
-                          fontSize: '1rem',
-                          textAlign: 'justify',
-                          fontFamily: 'Roboto',
+                          fontSize: "1rem",
+                          textAlign: "justify",
+                          fontFamily: "Roboto",
                         }}
                       >
                         {section.description}
@@ -101,18 +103,23 @@ const ContentHomeStudent = () => {
                         variant="contained"
                         disableElevation
                         sx={{
-                          margin: '1rem 0',
-                          width: '50%',
-                          background: '#4a475c',
-                          borderRadius: '1rem',
-                          fontSize: '1rem',
+                          margin: "1rem 0",
+                          width: "50%",
+                          background: "#4a475c",
+                          borderRadius: "1rem",
+                          fontSize: "1rem",
                         }}
-                        onClick={() => handleButtonClick(section.link, setRequiredLoginDialog)} 
+                        onClick={() =>
+                          handleButtonClick(
+                            section.link,
+                            setRequiredLoginDialog
+                          )
+                        }
                       >
-                        {section.title === 'TEST'
-                          ? 'Take Test'
-                          : section.title === 'SKILLS'
-                          ? 'Improve Your Skills'
+                        {section.title === "TEST"
+                          ? "Take Test"
+                          : section.title === "SKILLS"
+                          ? "Improve Your Skills"
                           : `Learn ${section.title}`}
                       </Button>
                     </Box>
@@ -123,29 +130,29 @@ const ContentHomeStudent = () => {
                   <Grid item xs={12} md={6}>
                     <Box
                       sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        height: '100%',
-                        padding: '0 1.5rem',
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        height: "100%",
+                        padding: "0 1.5rem",
                       }}
                     >
                       <Box
                         sx={{
-                          fontSize: '1.8rem',
-                          fontWeight: 'bold',
-                          marginBottom: '0.8rem',
-                          textAlign: { xs: 'center', md: 'left' },
-                          fontFamily: 'Roboto',
+                          fontSize: "1.8rem",
+                          fontWeight: "bold",
+                          marginBottom: "0.8rem",
+                          textAlign: { xs: "center", md: "left" },
+                          fontFamily: "Roboto",
                         }}
                       >
                         {section.title}
                       </Box>
                       <Box
                         sx={{
-                          fontSize: '1rem',
-                          textAlign: 'justify',
-                          fontFamily: 'Roboto',
+                          fontSize: "1rem",
+                          textAlign: "justify",
+                          fontFamily: "Roboto",
                         }}
                       >
                         {section.description}
@@ -155,18 +162,23 @@ const ContentHomeStudent = () => {
                         variant="contained"
                         disableElevation
                         sx={{
-                          margin: '1rem 0',
-                          width: '50%',
-                          background: '#4a475c',
-                          borderRadius: '1rem',
-                          fontSize: '1rem',
+                          margin: "1rem 0",
+                          width: "50%",
+                          background: "#4a475c",
+                          borderRadius: "1rem",
+                          fontSize: "1rem",
                         }}
-                        onClick={() => handleButtonClick(section.link, setRequiredLoginDialog)} 
+                        onClick={() =>
+                          handleButtonClick(
+                            section.link,
+                            setRequiredLoginDialog
+                          )
+                        }
                       >
-                        {section.title === 'TEST'
-                          ? 'Take Test'
-                          : section.title === 'SKILLS'
-                          ? 'Improve Your Skills'
+                        {section.title === "TEST"
+                          ? "Take Test"
+                          : section.title === "SKILLS"
+                          ? "Improve Your Skills"
                           : `Learn ${section.title}`}
                       </Button>
                     </Box>
@@ -178,11 +190,11 @@ const ContentHomeStudent = () => {
                       src={section.imgSrc}
                       alt={section.title}
                       sx={{
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: '0.5rem',
-                        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-                        objectFit: 'cover',
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: "0.5rem",
+                        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                        objectFit: "cover",
                       }}
                     />
                   </Grid>
@@ -192,7 +204,7 @@ const ContentHomeStudent = () => {
           </Box>
         </Box>
       ))}
-        <RequiredLoginDialog
+      <RequiredLoginDialog
         open={requiredLoginDialog}
         onClose={() => setRequiredLoginDialog(false)}
         onSignIn={() => handleCloseDialog(setRequiredLoginDialog)}

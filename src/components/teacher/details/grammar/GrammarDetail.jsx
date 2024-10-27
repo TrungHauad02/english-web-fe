@@ -1,7 +1,7 @@
 import { Grid2 } from "@mui/material";
 import GrammarInfo from "./GrammarInfo";
 import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
-import PDFViewer from "../../../common/pdfViewer/PDFViewer";
+import PDFViewer from "shared/component/pdfViewer/PDFViewer";
 import useGrammarDetails from "./useGrammarDetails";
 
 export default function GrammarDetail() {

@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe0f51bb-9b1c-4bec-ae16-df10e97e9a53" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/teacher/answerQuestionService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/teacher/answerQuestionService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/teacher/readingService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/teacher/readingService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/reading/ReadingDetail.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/reading/ReadingDetail.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/reading/ReadingInfo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/reading/ReadingInfo.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/reading/useReadingDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/reading/useReadingDetail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/reading/useReadingInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/reading/useReadingInfo.js" afterDir="false" />
-    </list>
+    <list default="true" id="fe0f51bb-9b1c-4bec-ae16-df10e97e9a53" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,7 +55,7 @@
       <option name="presentableId" value="Default" />
       <updated>1728373649309</updated>
       <workItem from="1728373650444" duration="3000" />
-      <workItem from="1729948835739" duration="1251000" />
+      <workItem from="1729948835739" duration="1846000" />
     </task>
     <servers />
   </component>
