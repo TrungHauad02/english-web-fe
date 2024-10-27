@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { Box, Button, TextField, Typography, Link } from '@mui/material';
+import { Box, Button, TextField, Typography, Link, IconButton, InputAdornment,} from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { IconButton, InputAdornment } from '@mui/material';
+import {handleSignUp, validateEmail, validatePassword, handleClickShowPassword,} from './components/HandleSignUp';
 
 const SignUp = ({ toggleForm }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,70 +13,10 @@ const SignUp = ({ toggleForm }) => {
   const [error, setError] = useState('');
 
   const [fakeDatabase, setFakeDatabase] = useState([
-    { email: 'existinguser@gmail.com', password: 'Password@123' }
+    { email: 'existinguser@gmail.com', password: 'Password@123' },
   ]);
 
   const emailInputRef = useRef(null);
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
-
-  const validatePassword = (password) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return regex.test(password);
-  };
-
-  const handleSignUp = () => {
-    if (!name || !email || !password || !rePassword) {
-      setError('Please fill in all fields.');
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      setError('Invalid email format. Please enter a valid email address.');
-      setEmail('');
-      if (emailInputRef.current) {
-        emailInputRef.current.focus();
-      }
-      return;
-    }
-
-    const emailExists = fakeDatabase.some((user) => user.email === email);
-    if (emailExists) {
-      setError('Email already exists. Please use a different email.');
-      setEmail('');
-      if (emailInputRef.current) {
-        emailInputRef.current.focus();
-      }
-      return;
-    }
-
-    if (!validatePassword(password)) {
-      setError(
-        'Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.'
-      );
-      return;
-    }
-
-    if (password !== rePassword) {
-      setError('Passwords do not match.');
-      return;
-    }
-
-    setError('');
-
-    const newUser = { email, password };
-    setFakeDatabase([...fakeDatabase, newUser]);
-    console.log('User signed up successfully:', newUser);
-
-    toggleForm('signin');
-  };
 
   return (
     <Box
@@ -123,7 +63,9 @@ const SignUp = ({ toggleForm }) => {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton onClick={handleClickShowPassword}>
+              <IconButton
+                onClick={() => handleClickShowPassword(showPassword, setShowPassword)}
+              >
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </InputAdornment>
@@ -142,7 +84,9 @@ const SignUp = ({ toggleForm }) => {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton onClick={handleClickShowPassword}>
+              <IconButton
+                onClick={() => handleClickShowPassword(showPassword, setShowPassword)}
+              >
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </InputAdornment>
@@ -154,7 +98,9 @@ const SignUp = ({ toggleForm }) => {
         variant="contained"
         color="primary"
         style={{ marginTop: 16, marginBottom: 16 }}
-        onClick={handleSignUp}
+        onClick={() =>
+          handleSignUp( name, email, password, rePassword, setError, setFakeDatabase, fakeDatabase,toggleForm, emailInputRef)
+        }
       >
         Sign Up
       </Button>

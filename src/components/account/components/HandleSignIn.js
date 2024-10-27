@@ -1,33 +1,24 @@
-export const handleSignIn = (email, password, fakeDatabase, authContext, navigate, setError) => {
-    const user = fakeDatabase.find(
-      (u) => u.email === email && u.password === password
-    );
-  
-    if (user) {
-      localStorage.setItem('isSignIn', 'true');
-      authContext.setAuthenticated(true);
-      switch (user.role) {
-        case 'student':
-          navigate('/student');
-          break;
-        case 'teacher':
-          navigate('/teacher');
-          break;
-        case 'admin':
-          navigate('/admin/teacher');
-          break;
-        default:
-          break;
+export const handleSignIn = (email, password, role, authContext, navigate, setError) => {
+  if (authContext.SignIn(email, password, setError)) {
+      switch (role) {
+          case 'student':
+              navigate('/student');
+              break;
+          case 'teacher':
+              navigate('/teacher');
+              break;
+          case 'admin':
+              navigate('/admin/teacher');
+              break;
+          default:
+              break;
       }
-    } else {
-      authContext.setAuthenticated(false);
-      setError('Incorrect email or password');
-    }
-  
-    return null; 
-  };
+      return true;
+  } else {
+      return false;
+  }
+};
 
-  export const handleClickShowPassword = (showPassword, setShowPassword) => {
-    setShowPassword(!showPassword);
-  };
-  
+export const handleClickShowPassword = (showPassword, setShowPassword) => {
+  setShowPassword(!showPassword);
+};

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
-import ForgotPassword from './ForgotPassword';
+import ForgotPassword from './forgotPassword/ForgotPassword';
 import './Account.css'; 
 
 const Account = () => {

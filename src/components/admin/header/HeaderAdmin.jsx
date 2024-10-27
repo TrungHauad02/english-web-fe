@@ -2,13 +2,15 @@ import React from "react";
 import { Button, Stack } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 import HeaderTypography from "../../common/header/HeaderTypography";
+import { useAuth } from "../../security/AutthContext";
 
 function HeaderAdmin() {
   const navigate = useNavigate();
+  const auContext = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem('isSignIn');
-    navigate('/student/account');
+    auContext.Logout();
+    navigate("/student/account")
   };
 
   return (
