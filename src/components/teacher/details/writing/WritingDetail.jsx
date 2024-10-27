@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { getWritingDetail } from "../../../../api/teacher/writingService";
+import { getWritingDetail } from "api/study/writing/writingService";
 import { Grid2 } from "@mui/material";
 import WritingInfo from "./WritingInfo";
 import { useEffect, useState } from "react";

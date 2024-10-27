@@ -1,9 +1,9 @@
 import { Stack, Typography } from "@mui/material";
 import MainPicture from "./MainPicture";
 import ListContent from "./ListContent";
-import CustomPagination from "../../../common/pagination/CustomPagination";
+import CustomPagination from "shared/component/pagination/CustomPagination";
 import "./ListTopic.css";
-import { getListTopic } from "../../../../api/student/listTopicApi";
+import { getListTopic } from "api/study/listTopic/listTopicService";
 import { useEffect, useState } from "react";
 
 function ListTopic({ path, quote, title, bg }) {
@@ -14,7 +14,7 @@ function ListTopic({ path, quote, title, bg }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getListTopic(path, page - 1, 10);
+        const data = await getListTopic(path, page - 1, 10, "serial");
         console.log(data);
         const topics = data.content;
         setTotalPage(data.totalPages);

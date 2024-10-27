@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Button, Stack, Menu, MenuItem, IconButton } from "@mui/material";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import HeaderTypography from "../../common/header/HeaderTypography";
+import HeaderTypography from "shared/component/header/HeaderTypography";
 import SkillMenu from "./SkillMenu";
 import Profile from "./Profile";
-import { useAuth} from "../../security/AutthContext";
+import { useAuth } from "security/AuthContext";
 
 function HeaderStudent() {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { isAuthenticated, setAuthenticated } = useAuth(); 
+  const { isAuthenticated, setAuthenticated } = useAuth();
   const auContext = useAuth();
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
   const navigate = useNavigate();
@@ -85,13 +85,17 @@ function HeaderStudent() {
           component={NavLink}
           to="/student/topics"
           sx={{
-            backgroundColor: isActivePath("/student/topics") ? "#fff" : "transparent",
+            backgroundColor: isActivePath("/student/topics")
+              ? "#fff"
+              : "transparent",
             color: isActivePath("/student/topics") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: isActivePath("/student/topics") ? "#fff" : "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath("/student/topics")
+                ? "#fff"
+                : "rgba(255, 255, 255, 0.2)",
             },
           }}
         >
@@ -101,13 +105,17 @@ function HeaderStudent() {
           component={NavLink}
           to="/student/grammars"
           sx={{
-            backgroundColor: isActivePath("/student/grammars") ? "#fff" : "transparent",
+            backgroundColor: isActivePath("/student/grammars")
+              ? "#fff"
+              : "transparent",
             color: isActivePath("/student/grammars") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: isActivePath("/student/grammars") ? "#fff" : "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath("/student/grammars")
+                ? "#fff"
+                : "rgba(255, 255, 255, 0.2)",
             },
           }}
         >
@@ -120,13 +128,17 @@ function HeaderStudent() {
           component={NavLink}
           to="/student/test"
           sx={{
-            backgroundColor: isActivePath("/student/test") ? "#fff" : "transparent",
+            backgroundColor: isActivePath("/student/test")
+              ? "#fff"
+              : "transparent",
             color: isActivePath("/student/test") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: isActivePath("/student/test") ? "#fff" : "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath("/student/test")
+                ? "#fff"
+                : "rgba(255, 255, 255, 0.2)",
             },
           }}
         >

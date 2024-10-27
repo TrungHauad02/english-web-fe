@@ -1,63 +1,25 @@
 import { Button, CardMedia, Grid2, Typography } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useState } from "react";
 import BasicTextField from "../common/textField/BasicTextField";
 import BasicSelect from "../common/select/BasicSelect";
 import MultiLineTextField from "../common/textField/MultiLineTextField";
 import SaveEditDeleteButton from "../common/button/SaveEditDeleteButton";
 import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
+import useReadingInfo from "./useReadingInfo";
 
 export default function ReadingInfo({ data, setData }) {
-  const [topic, setTopic] = useState(data);
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handleEditing = () => {
-    setIsEditing(true);
-  };
-
-  const handleSave = () => {
-    setIsEditing(false);
-    setData(topic);
-  };
-
-  const onChangeImage = (e) => {
-    if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, img: imageUrl });
-    }
-  };
-
-  const onChangeTitle = (e) => {
-    if (!isEditing) return;
-    setTopic({ ...topic, title: e.target.value });
-  };
-  const onChangeSerial = (e) => {
-    if (!isEditing) return;
-    if (e.target.value <= 0) return;
-    setTopic({ ...topic, serial: e.target.value });
-  };
-
-  const onChangeStatus = (e) => {
-    if (!isEditing) return;
-    setTopic({ ...topic, status: e.target.value });
-  };
-
-  const onChangeDescription = (e) => {
-    if (!isEditing) return;
-    setTopic({ ...topic, description: e.target.value });
-  };
-
-  const onChangeFile = (e) => {
-    if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const fileUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, file: fileUrl });
-      setData({ ...topic, file: fileUrl });
-    }
-  };
+  const {
+    topic,
+    isEditing,
+    handleEditing,
+    handleSave,
+    onChangeImage,
+    onChangeTitle,
+    onChangeSerial,
+    onChangeStatus,
+    onChangeDescription,
+    onChangeFile,
+  } = useReadingInfo(data, setData);
 
   return (
     <Grid2 container direction={"column"} spacing={4}>
@@ -67,14 +29,14 @@ export default function ReadingInfo({ data, setData }) {
       <Grid2 container size={6} direction={"row"} sx={{ width: "100%" }}>
         <Grid2 container spacing={2} direction={"column"}>
           <CardMedia
-            image={topic.img}
+            image={topic.image}
             sx={{ height: "250px", width: "250px" }}
           />
           <Button
             component="label"
             role={undefined}
             variant="text"
-            sx={{ color: "#828282" }}
+            sx={{ color: "#828282", textTransform: "capitalize" }}
             tabIndex={-1}
             startIcon={<CloudUploadIcon />}
             disabled={!isEditing}
@@ -130,16 +92,17 @@ export default function ReadingInfo({ data, setData }) {
               backgroundColor: "#D7ED6D",
               width: "fit-content",
               padding: "0.5rem 2rem",
+              textTransform: "initial",
             }}
             tabIndex={-1}
             startIcon={<CloudUploadIcon />}
             disabled={!isEditing}
           >
-            Upload file .md
+            Upload file pdf
             <VisuallyHiddenInput
               type="file"
               multiple
-              accept=".md"
+              accept="application/pdf"
               onChange={onChangeFile}
             />
           </Button>

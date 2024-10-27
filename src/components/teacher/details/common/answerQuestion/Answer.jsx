@@ -30,7 +30,7 @@ export default function Answer({
         size={"small"}
         showText={false}
         disabled={!isEditing}
-        onDel={() => onDeleteAnswer(data.id)}
+        onDel={onDeleteAnswer}
       />
     </Grid2>
   );

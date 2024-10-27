@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  createGrammar,
-  updateGrammar,
-} from "../../../../api/teacher/grammarService";
+import { createGrammar, updateGrammar } from "api/study/grammar/grammarService";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function useGrammarInfo(data, setData) {

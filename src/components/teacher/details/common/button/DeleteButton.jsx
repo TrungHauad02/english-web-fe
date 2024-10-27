@@ -16,7 +16,11 @@ export default function DeleteButton({ onDel, showText, size, disabled }) {
           disabled={disabled}
           variant="contained"
           size={size}
-          sx={{ backgroundColor: "#FF6655", color: "#000" }}
+          sx={{
+            backgroundColor: "#FF6655",
+            color: "#000",
+            textTransform: "capitalize",
+          }}
         >
           {showText ? "Delete" : <Delete />}
         </Button>

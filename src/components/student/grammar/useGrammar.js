@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getGrammarDetail } from "../../../api/teacher/grammarService";
-import { getAnswerQuestions } from "../../../api/teacher/answerQuestionService";
+import { getGrammarDetail } from "api/study/grammar/grammarService";
+import { getAnswerQuestions } from "api/study/answerQuestion/answerQuestionService";
 
 export default function useGrammar() {
   const { id } = useParams();

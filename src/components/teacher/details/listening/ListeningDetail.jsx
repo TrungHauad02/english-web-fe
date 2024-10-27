@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { getListeningDetail } from "../../../../api/teacher/listeningService";
+import { getListeningDetail } from "api/study/listening/listeningService";
 import { Grid2 } from "@mui/material";
 import ListeningInfo from "./ListeningInfo";
 import WriteAWordManagement from "../common/writeAWord/WriteAWordManagement";

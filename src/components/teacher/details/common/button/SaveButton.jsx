@@ -16,7 +16,11 @@ export default function SaveButton({ onSave, showText, size, disabled }) {
           variant="contained"
           size={size}
           disabled={disabled}
-          sx={{ backgroundColor: "#64FF64", color: "#000" }}
+          sx={{
+            backgroundColor: "#64FF64",
+            color: "#000",
+            textTransform: "capitalize",
+          }}
         >
           {showText ? "Save" : <Save />}
         </Button>

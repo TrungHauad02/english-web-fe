@@ -1,22 +1,34 @@
-import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, Divider, IconButton, InputAdornment, Link } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useNavigate } from 'react-router-dom';
-import { handleSignIn, handleClickShowPassword } from './components/HandleSignIn';
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Divider,
+  IconButton,
+  InputAdornment,
+  Link,
+} from "@mui/material";
+import GoogleIcon from "@mui/icons-material/Google";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useNavigate } from "react-router-dom";
+import {
+  handleSignIn,
+  handleClickShowPassword,
+} from "./components/HandleSignIn";
 
-import { useAuth } from '../security/AutthContext';
+import { useAuth } from "../../security/AuthContext";
 
 const SignIn = ({ toggleForm }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('student');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("student");
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const authContext = useAuth();  
+  const authContext = useAuth();
 
   return (
     <Box
@@ -46,7 +58,7 @@ const SignIn = ({ toggleForm }) => {
         fullWidth
         variant="outlined"
         label="Password"
-        type={showPassword ? 'text' : 'password'}
+        type={showPassword ? "text" : "password"}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="password"
@@ -54,19 +66,25 @@ const SignIn = ({ toggleForm }) => {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton onClick={() => handleClickShowPassword(showPassword, setShowPassword)}>
+              <IconButton
+                onClick={() =>
+                  handleClickShowPassword(showPassword, setShowPassword)
+                }
+              >
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </InputAdornment>
           ),
-        }}        
+        }}
       />
       <Button
         fullWidth
         variant="contained"
         color="primary"
         style={{ marginTop: 16, marginBottom: 16 }}
-        onClick={() => handleSignIn(email, password, role, authContext, navigate, setError)}
+        onClick={() =>
+          handleSignIn(email, password, role, authContext, navigate, setError)
+        }
       >
         Sign In
       </Button>
@@ -83,10 +101,10 @@ const SignIn = ({ toggleForm }) => {
         Sign in with Google
       </Button>
       <Box mt={2} display="flex" justifyContent="space-between">
-        <Link href="#" variant="body2" onClick={() => toggleForm('signup')}>
+        <Link href="#" variant="body2" onClick={() => toggleForm("signup")}>
           Sign up
         </Link>
-        <Link href="#" variant="body2" onClick={() => toggleForm('forgot')}>
+        <Link href="#" variant="body2" onClick={() => toggleForm("forgot")}>
           Forgot password?
         </Link>
       </Box>

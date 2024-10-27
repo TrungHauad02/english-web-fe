@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import HeaderStudent from "./header/HeaderStudent";
-import Footer from "../footer/Footer";
+import Footer from "../../shared/footer/Footer";
 import React from "react";
 
 function HomeStudent() {

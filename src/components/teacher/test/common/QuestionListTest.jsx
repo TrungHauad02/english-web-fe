@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Tabs,
   Tab,
@@ -11,54 +11,60 @@ import {
   TableRow,
   Paper,
   IconButton,
-  Button
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { PlusCircle } from 'lucide-react';
-import DeleteIcon from '@mui/icons-material/DeleteOutline';
-import { createTestMixingQuestion ,updateTestMixingQuestion } from '../../../../api/teacher/test/TestMixingQuestionApi'; 
-import { createListening } from '../../../../api/teacher/test/TestListeningApi'; 
-import { createReading } from '../../../../api/teacher/test/TestReadingApi'; 
-import { createSpeaking } from '../../../../api/teacher/test/TestSpeakingApi'; 
-import { createWriting } from '../../../../api/teacher/test/TestWritingApi'; 
+  Button,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { PlusCircle } from "lucide-react";
+import DeleteIcon from "@mui/icons-material/DeleteOutline";
+import { createListening } from "api/test/TestListeningApi";
+import { createReading } from "api/test/TestReadingApi";
+import { createSpeaking } from "api/test/TestSpeakingApi";
+import { createWriting } from "api/test/TestWritingApi";
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
-  backgroundColor: '#fff5e6',
+  backgroundColor: "#fff5e6",
   borderRadius: theme.spacing(2),
 }));
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   marginBottom: theme.spacing(3),
 
-  '& .MuiTab-root': {
-    backgroundColor: '#D4E9B9',
-    margin: '0 0.2rem',
-    borderRadius: '0.5rem 0.5rem 0 0',
-    color: 'black',
-    '&.Mui-selected': {
-      backgroundColor: '#8BC34A',
-      color: 'black',
+  "& .MuiTab-root": {
+    backgroundColor: "#D4E9B9",
+    margin: "0 0.2rem",
+    borderRadius: "0.5rem 0.5rem 0 0",
+    color: "black",
+    "&.Mui-selected": {
+      backgroundColor: "#8BC34A",
+      color: "black",
     },
   },
-  '& .MuiTabs-indicator': {
-    display: 'none',
+  "& .MuiTabs-indicator": {
+    display: "none",
   },
 }));
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
-  backgroundColor: 'white',
+  backgroundColor: "white",
   borderRadius: theme.spacing(2),
-  maxHeight: '300px', 
-  overflowY: 'auto', 
-  '& .MuiTableCell-head': {
-    backgroundColor: '#f5f5f5',
-    fontWeight: 'bold',
+  maxHeight: "300px",
+  overflowY: "auto",
+  "& .MuiTableCell-head": {
+    backgroundColor: "#f5f5f5",
+    fontWeight: "bold",
   },
 }));
 function QuestionList({ data, handleRowClick }) {
   const [currentTab, setCurrentTab] = useState(0);
-  const tabs = ['VOCABULARY', 'GRAMMAR', 'READING', 'LISTENING', 'SPEAKING', 'WRITING'];
+  const tabs = [
+    "VOCABULARY",
+    "GRAMMAR",
+    "READING",
+    "LISTENING",
+    "SPEAKING",
+    "WRITING",
+  ];
 
   const [datamixing, setDatamixing] = useState([]);
 
@@ -67,14 +73,14 @@ function QuestionList({ data, handleRowClick }) {
       {
         type: "Vocabulary",
         questions: data.testMixingQuestions.filter(
-          question => question.type === "VOCABULARY"
-        )
+          (question) => question.type === "VOCABULARY"
+        ),
       },
       {
         type: "Grammar",
         questions: data.testMixingQuestions.filter(
-          question => question.type === "GRAMMAR"
-        )
+          (question) => question.type === "GRAMMAR"
+        ),
       },
       {
         type: "Reading",
@@ -103,16 +109,16 @@ function QuestionList({ data, handleRowClick }) {
   const getListSerialTest = () => {
     const questions = [];
 
-    datamixing.forEach(data => {
+    datamixing.forEach((data) => {
       if (data.type === "Grammar") {
-        data.questions.forEach(question => {
+        data.questions.forEach((question) => {
           question.type = data.type;
           question.serialquestion = question.serial;
           questions.push(question);
         });
       }
       if (data.type === "Vocabulary") {
-        data.questions.forEach(question => {
+        data.questions.forEach((question) => {
           question.type = data.type;
           question.serialquestion = question.serial;
           questions.push(question);
@@ -120,9 +126,10 @@ function QuestionList({ data, handleRowClick }) {
       }
 
       if (data.type === "Reading" || data.type === "Listening") {
-        data.dataitem.forEach(item => {
+        data.dataitem.forEach((item) => {
           item.type = data.type;
-          item.serialquestion = item.questions[0].serial + '-' + item.questions[2].serial;
+          item.serialquestion =
+            item.questions[0].serial + "-" + item.questions[2].serial;
           questions.push(item);
         });
       }
@@ -134,14 +141,16 @@ function QuestionList({ data, handleRowClick }) {
         questions.push(datawriting);
       }
       if (data.type === "Speaking") {
-        data.dataitem.forEach(item => {
+        data.dataitem.forEach((item) => {
           item.type = data.type;
-          item.serialquestion = item.questions[0].serial + '-' + item.questions[item.questions.length-1].serial;
+          item.serialquestion =
+            item.questions[0].serial +
+            "-" +
+            item.questions[item.questions.length - 1].serial;
           questions.push(item);
         });
       }
     });
-    
 
     return questions;
   };
@@ -154,51 +163,49 @@ function QuestionList({ data, handleRowClick }) {
 
   const handleAddNewQuestion = async () => {
     const newQuestion = {
-      id: '',
-      content: '',
-      status: 'ACTIVE',
+      id: "",
+      content: "",
+      status: "ACTIVE",
       serial: 0,
-      explanation: '',
-      ...(tabs[currentTab] === 'VOCABULARY' && {
-        type: 'VOCABULARY',
+      explanation: "",
+      ...(tabs[currentTab] === "VOCABULARY" && {
+        type: "VOCABULARY",
         testId: data.testVocabularyQuestions[0].testId,
       }),
-      ...(tabs[currentTab] === 'GRAMMAR' && {
-        type: 'GRAMMAR',
+      ...(tabs[currentTab] === "GRAMMAR" && {
+        type: "GRAMMAR",
       }),
-      ...(tabs[currentTab] === 'READING' && {
-        type: 'READING',
+      ...(tabs[currentTab] === "READING" && {
+        type: "READING",
       }),
-      ...(tabs[currentTab] === 'LISTENING' && {
-        type: 'LISTENING',
+      ...(tabs[currentTab] === "LISTENING" && {
+        type: "LISTENING",
       }),
-      ...(tabs[currentTab] === 'SPEAKING' && {
-        type: 'SPEAKING',
+      ...(tabs[currentTab] === "SPEAKING" && {
+        type: "SPEAKING",
       }),
-      ...(tabs[currentTab] === 'WRITING' && {
-        type: 'WRITING',
+      ...(tabs[currentTab] === "WRITING" && {
+        type: "WRITING",
       }),
     };
 
     try {
       let createdQuestion;
       switch (newQuestion.type) {
-        case 'VOCABULARY':
-  
+        case "VOCABULARY":
           break;
-        case 'GRAMMAR':
-     
+        case "GRAMMAR":
           break;
-        case 'READING':
+        case "READING":
           createdQuestion = await createReading(newQuestion);
           break;
-        case 'LISTENING':
+        case "LISTENING":
           createdQuestion = await createListening(newQuestion);
           break;
-        case 'SPEAKING':
+        case "SPEAKING":
           createdQuestion = await createSpeaking(newQuestion);
           break;
-        case 'WRITING':
+        case "WRITING":
           createdQuestion = await createWriting(newQuestion);
           break;
         default:
@@ -206,19 +213,23 @@ function QuestionList({ data, handleRowClick }) {
       }
       const dataforward = {
         ...createdQuestion,
-        type: 'Vocabulary',
-        new: true
+        type: "Vocabulary",
+        new: true,
       };
       handleRowClick(dataforward);
-
     } catch (error) {
       console.error("Failed to add new question:", error);
     }
   };
 
   return (
-    <FormContainer sx={{ bgcolor: '#FFF8DC', p: 3 }}>
-      <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>
+    <FormContainer sx={{ bgcolor: "#FFF8DC", p: 3 }}>
+      <Typography
+        variant="h4"
+        align="center"
+        gutterBottom
+        sx={{ fontWeight: "bold", mb: 4 }}
+      >
         QUESTION LIST
       </Typography>
 
@@ -237,15 +248,18 @@ function QuestionList({ data, handleRowClick }) {
           <TableHead>
             <TableRow>
               <TableCell>Serial</TableCell>
-              <TableCell align='center'>Type</TableCell>
+              <TableCell align="center">Type</TableCell>
               <TableCell align="right">Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredQuestions.map((question) => (
-              <TableRow key={question.id} onClick={() => handleRowClick(question)}>
+              <TableRow
+                key={question.id}
+                onClick={() => handleRowClick(question)}
+              >
                 <TableCell>{question.serialquestion}</TableCell>
-                <TableCell align='center'>{question.type}</TableCell>
+                <TableCell align="center">{question.type}</TableCell>
                 <TableCell align="right">
                   <IconButton>
                     <DeleteIcon />
@@ -261,7 +275,11 @@ function QuestionList({ data, handleRowClick }) {
         variant="contained"
         onClick={handleAddNewQuestion}
         startIcon={<PlusCircle />}
-        sx={{ bgcolor: '#9dc45f', '&:hover': { bgcolor: '#8ab54e' }, marginTop: '1rem' }}
+        sx={{
+          bgcolor: "#9dc45f",
+          "&:hover": { bgcolor: "#8ab54e" },
+          marginTop: "1rem",
+        }}
       >
         Add new question
       </Button>

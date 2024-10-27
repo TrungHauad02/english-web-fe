@@ -5,7 +5,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import MicIcon from "@mui/icons-material/Mic";
-import TextToSpeechViewer from "../../../common/soundViewer/TextToSpeechViewer";
+import TextToSpeechViewer from "shared/component/soundViewer/TextToSpeechViewer";
 import { listConversation } from "./ListConversation";
 
 export default function SpeakingInConversation() {

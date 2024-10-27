@@ -1,8 +1,8 @@
 import { Grid2 } from "@mui/material";
 import VocabularyCard from "./VocabularyCard";
 import { useEffect, useState } from "react";
-import CustomPagination from "../../../common/pagination/CustomPagination";
-import { getVocabularyInTopic } from "../../../../api/student/vocabularyApi";
+import CustomPagination from "shared/component/pagination/CustomPagination";
+import { getVocabByPageAndTopicId } from "api/study/topic/vocabularyService";
 
 function ListFlashcard({ topicId }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -11,7 +11,7 @@ function ListFlashcard({ topicId }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getVocabularyInTopic(currentPage - 1, 8, topicId);
+      const data = await getVocabByPageAndTopicId(topicId, currentPage - 1, 8);
       if (data) {
         setList(data.content);
         setTotalPage(data.totalPages);

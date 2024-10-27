@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getListTopic } from "../../../api/teacher/listTopicService";
+import { getListTopic } from "api/study/listTopic/listTopicService";
 import { useNavigate } from "react-router-dom";
 
 export default function useTopicList(title) {

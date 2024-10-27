@@ -1,7 +1,7 @@
 import { Button, Card, Grid2 } from "@mui/material";
 import { styled } from "@mui/system";
 import ProcessBar from "./ProcessBar";
-import PrevNextSubmitButton from "../../../common/button/PrevNextSubmitButton";
+import PrevNextSubmitButton from "shared/component/button/PrevNextSubmitButton";
 import ListOptions from "./ListOptions";
 import Explanation from "./Explanation";
 import Question from "./Question";
@@ -77,6 +77,7 @@ function AnswerQuestion({ listQuestion }) {
               backgroundColor: "#6EC2F7",
               position: "absolute",
               bottom: "0",
+              textTransform: "capitalize",
             }}
           >
             {isShowExplain ? "Hide" : "Show"} explanation

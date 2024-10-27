@@ -49,7 +49,7 @@ export default function TopicInfo({ data }) {
               component="label"
               role={undefined}
               variant="text"
-              sx={{ color: "#828282" }}
+              sx={{ color: "#828282", textTransform: "capitalize" }}
               tabIndex={-1}
               startIcon={<CloudUploadIcon />}
               disabled={!isEditing}

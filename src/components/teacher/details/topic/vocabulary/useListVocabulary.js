@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getVocabById } from "../../../../../api/teacher/vocabularyService";
+import { getVocabById } from "api/study/topic/vocabularyService";
 
 export default function useListVocabulary(listVocab, setCurVocab, fetchData) {
   const [displayVocab, setDisplayVocab] = useState(listVocab);

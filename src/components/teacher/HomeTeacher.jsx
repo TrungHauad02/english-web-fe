@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 import HeaderTeacher from "./header/HeaderTeacher";
-import Footer from "../footer/Footer";
+import Footer from "shared/footer/Footer";
 import { Outlet } from "react-router-dom";
 
 export default function HomeTeacher() {

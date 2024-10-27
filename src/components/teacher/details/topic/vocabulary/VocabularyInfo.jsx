@@ -39,7 +39,7 @@ export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
           <Button
             component="label"
             variant="text"
-            sx={{ color: "#828282" }}
+            sx={{ color: "#828282", textTransform: "capitalize" }}
             tabIndex={-1}
             disabled={!isEditing}
             startIcon={<CloudUploadIcon />}

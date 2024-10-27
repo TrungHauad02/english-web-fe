@@ -1,8 +1,8 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import SoundViewer from "../../../common/soundViewer/SoundViewer";
+import SoundViewer from "shared/component/soundViewer/SoundViewer";
 import { useState } from "react";
 import { listListeningWriteWord } from "./listListening";
-import PrevNextSubmitButton from "../../../common/button/PrevNextSubmitButton";
+import PrevNextSubmitButton from "shared/component/button/PrevNextSubmitButton";
 import Explanation from "../../common/answerQuestion/Explanation";
 
 export default function ListenAndWriteWord({ questions }) {

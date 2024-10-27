@@ -1,8 +1,8 @@
 import { Button, Grid2, Stack, Typography } from "@mui/material";
-import SearchBar from "../../../common/searchbar/SearchBar";
+import SearchBar from "shared/component/searchbar/SearchBar";
 import Divider from "@mui/material/Divider";
 import useListVocabulary from "./useListVocabulary";
-import DotLoader from "../../../../../shared/component/loader/DotLoader";
+import DotLoader from "shared/component/loader/DotLoader";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 export default function ListVocabulary({ listVocab, setCurVocab, fetchData }) {
@@ -25,16 +25,27 @@ export default function ListVocabulary({ listVocab, setCurVocab, fetchData }) {
           <SearchBar
             title={"Vocabulary"}
             onHandleSearch={handleSearch}
-            maxWidth="15rem"
+            maxWidth="14rem"
           />
         </Grid2>
         <Grid2 item sx={{ marginTop: "0.5rem" }}>
-          <Button sx={{ color: "#000", marginX: "0.25rem" }} onClick={onReLoad}>
+          <Button
+            sx={{
+              color: "#000",
+              marginX: "0.25rem",
+              textTransform: "capitalize",
+            }}
+            onClick={onReLoad}
+          >
             <RefreshIcon />
           </Button>
           <Button
             variant="contained"
-            sx={{ backgroundColor: "#fff", color: "#000" }}
+            sx={{
+              backgroundColor: "#fff",
+              color: "#000",
+              textTransform: "capitalize",
+            }}
             onClick={onHandleAddNewVocab}
           >
             Add new vocabulary

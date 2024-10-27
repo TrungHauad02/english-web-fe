@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Stack } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
-import HeaderTypography from "../../common/header/HeaderTypography";
-import { useAuth } from "../../security/AutthContext";
+import HeaderTypography from "../../../shared/component/header/HeaderTypography";
+import { useAuth } from "../../../security/AuthContext";
 
 function HeaderAdmin() {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ function HeaderAdmin() {
 
   const handleLogout = () => {
     auContext.Logout();
-    navigate("/student/account")
+    navigate("/student/account");
   };
 
   return (
