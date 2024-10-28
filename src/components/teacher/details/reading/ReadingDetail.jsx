@@ -6,8 +6,7 @@ import PDFViewer from "shared/component/pdfViewer/PDFViewer";
 import useReadingDetail from "./useReadingDetail";
 
 export default function ReadingDetail() {
-  const { localData, setLocalData, listQuestion, fetchData } =
-    useReadingDetail();
+  const { localData, setLocalData } = useReadingDetail();
 
   const answerQuestionContainerStyle = {
     maxHeight: "500px",
@@ -46,11 +45,7 @@ export default function ReadingDetail() {
       </Grid2>
       <Grid2 container direction={"column"} spacing={2} size={7}>
         <Grid2 item size={6} sx={answerQuestionContainerStyle}>
-          <AnswerQuestionManagement
-            data={listQuestion}
-            fetchData={fetchData}
-            path={"reading"}
-          />
+          <AnswerQuestionManagement path={"reading"} />
         </Grid2>
         <Grid2 container sx={{ width: "100%" }}>
           {/* Preview File*/}

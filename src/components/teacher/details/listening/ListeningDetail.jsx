@@ -1,84 +1,63 @@
-import { useParams } from "react-router-dom";
-import { getListeningDetail } from "api/study/listening/listeningService";
 import { Grid2 } from "@mui/material";
 import ListeningInfo from "./ListeningInfo";
 import WriteAWordManagement from "../common/writeAWord/WriteAWordManagement";
 import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
-import { useState } from "react";
+import useListeningDetail from "./useListeningDetail";
 
 export default function ListeningDetail() {
-  const { id } = useParams();
-  const data = getListeningDetail(id);
-  const [localData, setLocalData] = useState(data);
-  const [file, setFile] = useState("/fileListening.mp3");
+  const { listQuestion, fetchData } = useListeningDetail();
 
-  function onChangeFile(e) {
-    const file = e.target.files[0];
-    if (file) {
-      const audioUrl = URL.createObjectURL(file);
-      setFile(audioUrl);
-    }
-  }
-
-  const scrollBarStyle = {
-    "&::-webkit-scrollbar": {
-      width: "0.5rem",
+  const stylesListening = {
+    container: {
+      margin: "2rem 4%",
     },
-    "&::-webkit-scrollbar-track": {
-      backgroundColor: "#e0e0e0",
+    scrollableSection: {
+      borderRadius: "0.5rem",
+      boxShadow: "0 0 0.5rem 0.1rem #00000040",
+      width: "100%",
+      maxHeight: "500px",
+      overflowY: "auto",
+      "&::-webkit-scrollbar": {
+        width: "0.5rem",
+      },
+      "&::-webkit-scrollbar-track": {
+        backgroundColor: "#e0e0e0",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "#888",
+        borderRadius: "10px",
+      },
+      "&::-webkit-scrollbar-thumb:hover": {
+        backgroundColor: "#555",
+      },
     },
-    "&::-webkit-scrollbar-thumb": {
-      backgroundColor: "#888",
-      borderRadius: "10px",
-    },
-    "&::-webkit-scrollbar-thumb:hover": {
-      backgroundColor: "#555",
+    largerScrollableSection: {
+      maxHeight: "600px",
     },
   };
 
   return (
     <Grid2
       container
-      direction={"row"}
-      sx={{ margin: "2rem 4%" }}
-      justifyContent={"space-between"}
+      direction="row"
+      sx={stylesListening.container}
+      justifyContent="space-between"
     >
       <Grid2 item>
-        {/** Listening info*/}
-        <ListeningInfo data={localData} setData={setLocalData} />
+        <ListeningInfo />
       </Grid2>
-      <Grid2 container direction={"column"} spacing={4}>
-        <Grid2
-          item
-          size={6}
-          borderRadius={"0.5rem"}
-          backgroundColor={"#FFF4CC"}
-          boxShadow={"0 0 0.5rem 0.1rem #00000040"}
-          width={"100%"}
-          sx={{
-            maxHeight: "500px",
-            overflowY: "auto",
-            scrollBarStyle,
-          }}
-        >
+      <Grid2 container direction="column" spacing={4}>
+        <Grid2 item sx={stylesListening.scrollableSection}>
           <WriteAWordManagement />
         </Grid2>
         <Grid2
           container
-          borderRadius={"0.5rem"}
-          boxShadow={"0 0 0.5rem 0.1rem #00000040"}
-          width={"100%"}
           sx={{
-            maxHeight: "600px",
-            overflowY: "auto",
-            scrollBarStyle,
+            ...stylesListening.scrollableSection,
+            ...stylesListening.largerScrollableSection,
           }}
         >
-          <AnswerQuestionManagement
-            isListening
-            file={file}
-            onChangeFile={onChangeFile}
-          />
+          <AnswerQuestionManagement path="listening" />
         </Grid2>
       </Grid2>
     </Grid2>

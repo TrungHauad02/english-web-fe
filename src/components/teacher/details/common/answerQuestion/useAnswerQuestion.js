@@ -1,69 +1,50 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { deleteQuestion } from "api/study/answerQuestion/answerQuestionService";
+import {
+  deleteQuestion,
+  getAnswerQuestions,
+} from "api/study/answerQuestion/answerQuestionService";
 
-export default function useAnswerQuestion(data, fetchData, path) {
-  const [localData, setLocalData] = useState(data);
+export default function useAnswerQuestion(path) {
+  const [localData, setLocalData] = useState(null);
   const [error, setError] = useState("");
   const { id } = useParams();
 
+  const fetchData = async () => {
+    try {
+      const listQuestionData = await getAnswerQuestions(path, id);
+      console.log(listQuestionData);
+      setLocalData(listQuestionData);
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    setLocalData(data);
-  }, [data]);
+    fetchData();
+  }, [id, path]);
 
   function handleAddNewQuestion() {
+    const createQuestionObject = (type, id) => ({
+      id: "-1",
+      serial: localData.length + 1,
+      content: "",
+      explanation: "",
+      [`${type}Id`]: id,
+      answers: [
+        {
+          id: "-1",
+          content: "",
+          correct: true,
+          questionId: "-1",
+          status: "ACTIVE",
+        },
+      ],
+      status: "ACTIVE",
+    });
     const newQuestion = {
-      topics: {
-        id: "-1",
-        serial: localData.length + 1,
-        content: "",
-        explanation: "",
-        topicId: id,
-        answers: [
-          {
-            id: "-1",
-            content: "",
-            correct: true,
-            questionId: "-1",
-            status: "ACTIVE",
-          },
-        ],
-        status: "ACTIVE",
-      },
-      grammar: {
-        id: "-1",
-        serial: localData.length + 1,
-        content: "",
-        explanation: "",
-        grammarId: id,
-        answers: [
-          {
-            id: "-1",
-            content: "",
-            correct: true,
-            questionId: "-1",
-            status: "ACTIVE",
-          },
-        ],
-        status: "ACTIVE",
-      },
-      reading: {
-        id: "-1",
-        serial: localData.length + 1,
-        content: "",
-        explanation: "",
-        readingId: id,
-        answers: [
-          {
-            id: "-1",
-            content: "",
-            correct: true,
-            questionId: "-1",
-            status: "ACTIVE",
-          },
-        ],
-        status: "ACTIVE",
-      },
+      topics: createQuestionObject("topic", id),
+      grammar: createQuestionObject("grammar", id),
+      reading: createQuestionObject("reading", id),
+      listening: createQuestionObject("listening", id),
     };
     setLocalData([...localData, newQuestion[path]]);
   }
@@ -83,6 +64,7 @@ export default function useAnswerQuestion(data, fetchData, path) {
 
   return {
     localData,
+    fetchData,
     handleAddNewQuestion,
     onDelQuestion,
     error,

@@ -5,8 +5,7 @@ import PDFViewer from "shared/component/pdfViewer/PDFViewer";
 import useGrammarDetails from "./useGrammarDetails";
 
 export default function GrammarDetail() {
-  const { localData, setLocalData, answerQuestion, fetchData } =
-    useGrammarDetails();
+  const { localData, setLocalData } = useGrammarDetails();
 
   const answerQuestionContainerStyle = {
     maxHeight: "500px",
@@ -38,11 +37,7 @@ export default function GrammarDetail() {
       </Grid2>
       <Grid2 container direction={"column"} spacing={4} sx={{ width: "59%" }}>
         <Grid2 item size={6} sx={answerQuestionContainerStyle}>
-          <AnswerQuestionManagement
-            data={answerQuestion}
-            fetchData={fetchData}
-            path={"grammar"}
-          />
+          <AnswerQuestionManagement path={"grammar"} />
         </Grid2>
         <Grid2 container sx={{ width: "100%" }}>
           {/* Preview File*/}

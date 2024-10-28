@@ -52,11 +52,7 @@ export default function TopicDetail() {
           boxShadow={"0 0 0.5rem 0.1rem #00000040"}
           sx={answerQuestionContainerStyle}
         >
-          <AnswerQuestionManagement
-            data={answerQuestion}
-            fetchData={fetchData}
-            path={"topics"}
-          />
+          <AnswerQuestionManagement path={"topics"} />
         </Grid2>
       </Grid2>
       <Grid2 item direction={"row"}>
