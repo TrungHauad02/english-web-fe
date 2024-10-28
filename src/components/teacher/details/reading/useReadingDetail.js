@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getReadingDetail } from "api/study/reading/readingService";
-import { getAnswerQuestions } from "api/study/answerQuestion/answerQuestionService";
 
 export default function useReadingDetail() {
   const { id } = useParams();
   const [localData, setLocalData] = useState(null);
-  const [listQuestion, setListQuestion] = useState(null);
 
   const emptyReading = {
     id: "-1",
@@ -21,16 +19,10 @@ export default function useReadingDetail() {
   const fetchData = async () => {
     if (id === "-1") {
       setLocalData(emptyReading);
-      setListQuestion([]);
     }
     try {
-      const [data, listQuestionData] = await Promise.all([
-        getReadingDetail(id),
-        getAnswerQuestions("reading", id),
-      ]);
-      setListQuestion(listQuestionData);
+      const data = await getReadingDetail(id);
       setLocalData(data);
-      if (!listQuestionData) setListQuestion([]);
     } catch (error) {}
   };
 
@@ -38,5 +30,5 @@ export default function useReadingDetail() {
     fetchData();
   }, [id]);
 
-  return { localData, setLocalData, listQuestion, fetchData };
+  return { localData, setLocalData };
 }

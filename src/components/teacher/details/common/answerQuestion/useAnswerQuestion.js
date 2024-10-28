@@ -1,15 +1,26 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { deleteQuestion } from "api/study/answerQuestion/answerQuestionService";
+import {
+  deleteQuestion,
+  getAnswerQuestions,
+} from "api/study/answerQuestion/answerQuestionService";
 
-export default function useAnswerQuestion(data, fetchData, path) {
-  const [localData, setLocalData] = useState(data);
+export default function useAnswerQuestion(path) {
+  const [localData, setLocalData] = useState(null);
   const [error, setError] = useState("");
   const { id } = useParams();
 
+  const fetchData = async () => {
+    try {
+      const listQuestionData = await getAnswerQuestions(path, id);
+      console.log(listQuestionData);
+      setLocalData(listQuestionData);
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    setLocalData(data);
-  }, [data]);
+    fetchData();
+  }, [id, path]);
 
   function handleAddNewQuestion() {
     const createQuestionObject = (type, id) => ({
@@ -53,6 +64,7 @@ export default function useAnswerQuestion(data, fetchData, path) {
 
   return {
     localData,
+    fetchData,
     handleAddNewQuestion,
     onDelQuestion,
     error,

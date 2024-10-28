@@ -3,9 +3,15 @@ import Question from "./Question";
 import useAnswerQuestion from "./useAnswerQuestion";
 import ErrorComponent from "../../../../../shared/component/error/ErrorComponent";
 
-export default function AnswerQuestionManagement({ data, fetchData, path }) {
-  const { localData, handleAddNewQuestion, onDelQuestion, error, setError } =
-    useAnswerQuestion(data, fetchData, path);
+export default function AnswerQuestionManagement({ path }) {
+  const {
+    localData,
+    fetchData,
+    handleAddNewQuestion,
+    onDelQuestion,
+    error,
+    setError,
+  } = useAnswerQuestion(path);
 
   return (
     <Stack

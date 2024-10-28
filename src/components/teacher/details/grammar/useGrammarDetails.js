@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getGrammarDetail } from "api/study/grammar/grammarService";
-import { getAnswerQuestions } from "api/study/answerQuestion/answerQuestionService";
 
 export default function useGrammarDetails() {
   const { id } = useParams();
   const [localData, setLocalData] = useState(null);
-  const [answerQuestion, setAnswerQuestion] = useState(null);
 
   const emptyGrammar = {
     id: "-1",
@@ -20,28 +18,20 @@ export default function useGrammarDetails() {
     status: "ACTIVE",
   };
 
-  const fetchData = async () => {
-    if (id === "-1") {
-      setAnswerQuestion([]);
-      setLocalData(emptyGrammar);
-      return;
-    }
-    const [grammarData, answerQuestionData] = await Promise.all([
-      getGrammarDetail(id),
-      getAnswerQuestions("grammar", id),
-    ]);
-    setLocalData(grammarData);
-    setAnswerQuestion(answerQuestionData);
-    if (!answerQuestionData) setAnswerQuestion([]);
-  };
   useEffect(() => {
+    const fetchData = async () => {
+      if (id === "-1") {
+        setLocalData(emptyGrammar);
+        return;
+      }
+      const grammarData = await getGrammarDetail(id);
+      setLocalData(grammarData);
+    };
     fetchData();
   }, [id]);
 
   return {
     localData,
     setLocalData,
-    answerQuestion,
-    fetchData,
   };
 }
