@@ -12,58 +12,28 @@ export default function useAnswerQuestion(data, fetchData, path) {
   }, [data]);
 
   function handleAddNewQuestion() {
+    const createQuestionObject = (type, id) => ({
+      id: "-1",
+      serial: localData.length + 1,
+      content: "",
+      explanation: "",
+      [`${type}Id`]: id,
+      answers: [
+        {
+          id: "-1",
+          content: "",
+          correct: true,
+          questionId: "-1",
+          status: "ACTIVE",
+        },
+      ],
+      status: "ACTIVE",
+    });
     const newQuestion = {
-      topics: {
-        id: "-1",
-        serial: localData.length + 1,
-        content: "",
-        explanation: "",
-        topicId: id,
-        answers: [
-          {
-            id: "-1",
-            content: "",
-            correct: true,
-            questionId: "-1",
-            status: "ACTIVE",
-          },
-        ],
-        status: "ACTIVE",
-      },
-      grammar: {
-        id: "-1",
-        serial: localData.length + 1,
-        content: "",
-        explanation: "",
-        grammarId: id,
-        answers: [
-          {
-            id: "-1",
-            content: "",
-            correct: true,
-            questionId: "-1",
-            status: "ACTIVE",
-          },
-        ],
-        status: "ACTIVE",
-      },
-      reading: {
-        id: "-1",
-        serial: localData.length + 1,
-        content: "",
-        explanation: "",
-        readingId: id,
-        answers: [
-          {
-            id: "-1",
-            content: "",
-            correct: true,
-            questionId: "-1",
-            status: "ACTIVE",
-          },
-        ],
-        status: "ACTIVE",
-      },
+      topics: createQuestionObject("topic", id),
+      grammar: createQuestionObject("grammar", id),
+      reading: createQuestionObject("reading", id),
+      listening: createQuestionObject("listening", id),
     };
     setLocalData([...localData, newQuestion[path]]);
   }

@@ -6,6 +6,7 @@ export const getAnswerQuestions = async (path, id) => {
     if (path === "topics") nameId = "topicId";
     if (path === "grammar") nameId = "grammarId";
     if (path === "reading") nameId = "readingId";
+    if (path === "listening") nameId = "listeningId";
     const res = await apiClient.get(`/${path}-question?${nameId}=${id}`);
     return res.data;
   } catch (error) {
