@@ -43,7 +43,7 @@ export default function ListeningDetail() {
       <Grid2 item>
         <ListeningInfo />
       </Grid2>
-      <Grid2 container direction="column" spacing={4}>
+      <Grid2 container direction="column" spacing={1} sx={{ width: "60%" }}>
         <Grid2 item sx={stylesListening.scrollableSection}>
           <WriteAWordManagement />
         </Grid2>

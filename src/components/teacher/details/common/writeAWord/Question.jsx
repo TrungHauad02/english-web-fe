@@ -1,9 +1,9 @@
 import { Button, Grid2, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
 import SaveEditDeleteButton from "../button/SaveEditDeleteButton";
 import SoundViewer from "shared/component/soundViewer/SoundViewer";
-import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { VisuallyHiddenInput } from "shared/component/visuallyHiddenInput/VisuallyHiddenInput";
+import useQuestion from "./useQuestion";
 
 const CustomTextField = ({
   value,
@@ -29,90 +29,20 @@ const CustomTextField = ({
     />
   );
 };
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
-export default function Question({ data, onDelQuestion }) {
-  const [question, setQuestion] = useState(data);
-  const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => {
-    if (!data) return;
-    if (!data.sentence.includes("___")) {
-      const words = data.sentence.split(" ");
-
-      const index = data.missingWordIndex;
-      if (index >= 0 && index <= words.length) {
-        words.splice(index, 0, "___");
-      } else {
-        return;
-      }
-      const updatedSentence = words.join(" ");
-      setQuestion({ ...data, sentence: updatedSentence });
-    } else {
-      setQuestion(data);
-    }
-  }, [data]);
-  function handleEdit() {
-    setIsEditing(true);
-  }
-
-  function handleSave() {
-    setIsEditing(false);
-  }
-
-  function onChangeField(e, field) {
-    if (!isEditing) return;
-    setQuestion({ ...question, [field]: e.target.value });
-  }
-
-  function onChangeWordIndex(e) {
-    if (!isEditing || e.target.value < 0) return;
-    const index = e.target.value;
-    const sentenceWithoutPlaceholder = question.sentence.replace("___", "");
-    const words = sentenceWithoutPlaceholder.split(" ").filter(Boolean);
-
-    if (index >= words.length + 1) {
-      return;
-    }
-
-    words.splice(index, 0, "___");
-
-    const updatedSentence = words.join(" ");
-
-    setQuestion({
-      ...question,
-      sentence: updatedSentence,
-      missingWordIndex: index,
-    });
-  }
-
-  function onChangeSerial(e) {
-    if (!isEditing || e.target.value < 1) return;
-    setQuestion({ ...question, serial: e.target.value });
-  }
-
-  function onChangeSentence(e) {
-    if (!isEditing || !e.target.value.includes("___")) return;
-    setQuestion({ ...question, sentence: e.target.value });
-  }
-
-  function onChangeFile(e) {
-    if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const audioUrl = URL.createObjectURL(file);
-      setQuestion({ ...question, audioUrl });
-    }
-  }
+export default function Question({ data, fetchData }) {
+  const {
+    question,
+    isEditing,
+    handleEdit,
+    handleSave,
+    handleDelete,
+    onChangeField,
+    onChangeWordIndex,
+    onChangeSerial,
+    onChangeSentence,
+    onChangeFile,
+  } = useQuestion(data, fetchData);
 
   return (
     <Grid2 container direction="column" sx={{ marginY: "0.5rem" }}>
@@ -148,15 +78,14 @@ export default function Question({ data, onDelQuestion }) {
         <Grid2 item>
           <CustomTextField
             value={question.sentence}
-            maxWidth="20rem"
-            minWidth="22rem"
+            minWidth="20rem"
             disabled={!isEditing}
             onChange={(e) => onChangeSentence(e)}
           />
         </Grid2>
         <Grid2 item>
           <SaveEditDeleteButton
-            onDel={onDelQuestion}
+            onDel={handleDelete}
             onEdit={handleEdit}
             onSave={handleSave}
             showText={false}
@@ -187,7 +116,7 @@ export default function Question({ data, onDelQuestion }) {
           </Grid2>
           <Grid2 item>
             <CustomTextField
-              value={question.missingWordIndex}
+              value={question.missingIndex}
               type="number"
               disabled={!isEditing}
               onChange={(e) => onChangeWordIndex(e)}
@@ -213,6 +142,7 @@ export default function Question({ data, onDelQuestion }) {
                 color: "#000",
                 width: "fit-content",
                 padding: "0.5rem 2rem",
+                textTransform: "capitalize",
               }}
               tabIndex={-1}
               startIcon={<CloudUploadIcon />}
@@ -237,8 +167,7 @@ export default function Question({ data, onDelQuestion }) {
           </Grid2>
           <Grid2 item>
             <CustomTextField
-              minWidth="8rem"
-              maxWidth="12rem"
+              minWidth="12rem"
               value={question.correctAnswer}
               disabled={!isEditing}
               onChange={(e) => onChangeField(e, "correctAnswer")}
