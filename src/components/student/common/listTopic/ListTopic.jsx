@@ -15,7 +15,6 @@ function ListTopic({ path, quote, title, bg }) {
     const fetchData = async () => {
       try {
         const data = await getListTopic(path, page - 1, 10, "serial");
-        console.log(data);
         const topics = data.content;
         setTotalPage(data.totalPages);
         if (topics) {

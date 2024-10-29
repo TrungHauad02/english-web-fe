@@ -1,4 +1,4 @@
-export default function useWritingInfo(data, setData, isEditing) {
+export default function useWritingInfo(data, setData, isEditing, setIsEditing) {
   const onChangeImage = (e) => {
     if (!isEditing) return;
     const file = e.target.files[0];

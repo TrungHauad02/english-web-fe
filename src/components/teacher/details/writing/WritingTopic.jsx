@@ -1,7 +1,7 @@
 import { Grid2 } from "@mui/material";
 import MultiLineTextField from "../common/textField/MultiLineTextField";
 import SaveEditDeleteButton from "../common/button/SaveEditDeleteButton";
-import useWritingInfo from "./useWritingInfo";
+import useWritingTopic from "./useWritingTopic";
 
 export default function WritingTopic({
   data,
@@ -10,7 +10,7 @@ export default function WritingTopic({
   setIsEditing,
 }) {
   const { handleEditing, handleSave, onChangeDescription, onChangeTopic } =
-    useWritingInfo(data, setData, isEditing, setIsEditing);
+    useWritingTopic(data, setData, isEditing, setIsEditing);
 
   return (
     <Grid2

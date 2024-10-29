@@ -1,25 +1,12 @@
-import { useParams } from "react-router-dom";
-import { getWritingDetail } from "api/study/writing/writingService";
 import { Grid2 } from "@mui/material";
 import WritingInfo from "./WritingInfo";
-import { useEffect, useState } from "react";
 import WritingTopic from "./WritingTopic";
+import useWritingDetail from "./useWritingDetail";
 
 export default function WritingDetail() {
-  const { id } = useParams();
-  const [localData, setLocalData] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getWritingDetail(id);
-      setLocalData(data);
-    };
-    fetchData();
-  }, [id]);
-
-  if (!localData) return;
-
+  const { localData, setLocalData, isEditing, setIsEditing } =
+    useWritingDetail();
+  if (!localData) return <></>;
   return (
     <Grid2 container direction={"row"} sx={{ margin: "2rem 1% 2rem 2%" }}>
       <Grid2 item size={5}>
