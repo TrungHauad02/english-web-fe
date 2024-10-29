@@ -6,6 +6,7 @@ import MultiLineTextField from "../common/textField/MultiLineTextField";
 import SaveEditDeleteButton from "../common/button/SaveEditDeleteButton";
 import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useListeningInfo from "./useListeningInfo";
+import SoundViewer from "shared/component/soundViewer/SoundViewer";
 
 export default function ListeningInfo() {
   const {
@@ -18,6 +19,7 @@ export default function ListeningInfo() {
     onChangeSerial,
     onChangeStatus,
     onChangeDescription,
+    onChangeFile,
   } = useListeningInfo();
 
   if (!topic) return;
@@ -75,13 +77,46 @@ export default function ListeningInfo() {
           />
         </Grid2>
       </Grid2>
-      <Grid2 container size={6} direction={"column"} sx={{ width: "70%" }}>
+      <Grid2
+        container
+        size={6}
+        direction={"column"}
+        sx={{ width: "100%" }}
+        spacing={2}
+      >
         <MultiLineTextField
           label={"Description"}
           value={topic.description}
           onChange={onChangeDescription}
           disabled={!isEditing}
         />
+        <Grid2 sx={{ marginY: 0 }}>
+          <Button
+            component="label"
+            role={undefined}
+            variant="text"
+            sx={{
+              color: "#000",
+              textTransform: "capitalize",
+              paddingX: "1.5rem",
+              boxShadow: "1px 2px 2px #00000046",
+            }}
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+            disabled={!isEditing}
+          >
+            Upload audio
+            <VisuallyHiddenInput
+              type="file"
+              multiple
+              accept="audio/*"
+              onChange={onChangeFile}
+            />
+          </Button>
+        </Grid2>
+        <Grid2 sx={{ width: "100%" }}>
+          <SoundViewer audioSrc={topic.audioUrl} />
+        </Grid2>
         <Grid2 container direction={"row"} spacing={2}>
           <SaveEditDeleteButton
             showText

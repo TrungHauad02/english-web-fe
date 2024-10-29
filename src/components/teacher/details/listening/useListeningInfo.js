@@ -1,16 +1,37 @@
-import { getListeningDetail } from "api/study/listening/listeningService";
+import {
+  getListeningDetail,
+  updateListening,
+  createListening,
+} from "api/study/listening/listeningService";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function useListeningInfo() {
   const { id } = useParams();
   const [topic, setTopic] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
+
+  const emptyListening = {
+    id: "-1",
+    title: "",
+    serial: 1,
+    description: "",
+    image: "",
+    audioUrl: "",
+    status: "ACTIVE",
+  };
 
   useEffect(() => {
     const fetchData = async () => {
+      if (id === "-1") {
+        setTopic(emptyListening);
+        setIsEditing(true);
+        return;
+      }
       const data = await getListeningDetail(id);
       setTopic(data);
+      setIsEditing(false);
     };
     fetchData();
   }, [id]);
@@ -19,8 +40,17 @@ export default function useListeningInfo() {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      if (id === "-1") {
+        const data = await createListening(topic);
+        navigate(`/teacher/listenings/${data.id}`);
+        return;
+      }
+      const data = await updateListening(id, topic);
+      setTopic(data);
+      setIsEditing(false);
+    } catch (error) {}
   };
 
   const onChangeImage = (e) => {
@@ -52,6 +82,15 @@ export default function useListeningInfo() {
     setTopic({ ...topic, description: e.target.value });
   };
 
+  function onChangeFile(e) {
+    if (!isEditing) return;
+    const file = e.target.files[0];
+    if (file) {
+      const audioUrl = URL.createObjectURL(file);
+      setTopic({ ...topic, audioUrl: audioUrl });
+    }
+  }
+
   return {
     topic,
     isEditing,
@@ -62,5 +101,6 @@ export default function useListeningInfo() {
     onChangeSerial,
     onChangeStatus,
     onChangeDescription,
+    onChangeFile,
   };
 }

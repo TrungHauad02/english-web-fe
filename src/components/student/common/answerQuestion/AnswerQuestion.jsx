@@ -24,7 +24,6 @@ const containerStyle = {
 };
 
 function AnswerQuestion({ listQuestion }) {
-  console.log(listQuestion);
   const {
     curIndex,
     question,
@@ -40,7 +39,11 @@ function AnswerQuestion({ listQuestion }) {
     handlePrevious,
   } = useAnswerQuestion(listQuestion);
   if (!listQuestion || listQuestion.length === 0)
-    return <Card sx={containerStyle}></Card>;
+    return (
+      <Card sx={containerStyle}>
+        <Title>Answer Question</Title>
+      </Card>
+    );
   return (
     <Card sx={containerStyle}>
       <Title>Answer Question</Title>

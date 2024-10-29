@@ -1,37 +1,17 @@
 import { Button, Stack, Typography } from "@mui/material";
-import SaveButton from "../button/SaveButton";
 import Question from "./Question";
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import useWriteAWord from "./useWriteAWord";
 
 export default function WriteAWordManagement() {
-  const fakeData = [
-    {
-      id: "1",
-      serial: 1,
-      sentence: "The cat is sitting on the.",
-      missingWordIndex: 5,
-      audioUrl: "/fileListening.mp3",
-      correctAnswer: "mat",
-    },
-  ];
+  const { data, handleAddNewQuestion, fetchData } = useWriteAWord();
 
-  const [data, setData] = useState(fakeData);
-
-  const handleAddNewQuestion = () => {
-    const newQuestion = {
-      id: uuidv4(),
-      serial: data.length + 1,
-      sentence: "",
-      missingWordIndex: 0,
-      audioUrl: "",
-      correctAnswer: "",
-    };
-    setData([...data, newQuestion]);
-  };
-
-  const onDelQuestion = (id) => {
-    setData(data.filter((question) => question.id !== id));
+  const headStyle = {
+    position: "sticky",
+    top: 0,
+    backgroundColor: "#fff",
+    padding: "1rem 0",
+    zIndex: 3,
+    boxShadow: "0 0 0.5rem 0.1rem #00000050",
   };
 
   return (
@@ -39,18 +19,7 @@ export default function WriteAWordManagement() {
       direction={"column"}
       sx={{ backgroundColor: "#f1f1f1", borderRadius: "0.5rem" }}
     >
-      <Stack
-        direction={"row"}
-        justifyContent={"space-between"}
-        sx={{
-          position: "sticky",
-          top: 0,
-          backgroundColor: "#fff",
-          padding: "1rem 0",
-          zIndex: 3,
-          boxShadow: "0 0 0.5rem 0.1rem #00000050",
-        }}
-      >
+      <Stack direction={"row"} justifyContent={"space-between"} sx={headStyle}>
         <Typography
           variant="h4"
           textTransform={"uppercase"}
@@ -60,10 +29,13 @@ export default function WriteAWordManagement() {
           Write A Word
         </Typography>
         <Stack direction={"row"} spacing={2} sx={{ paddingX: "1rem" }}>
-          <SaveButton showText={true} size={"large"} />
           <Button
             variant="contained"
-            sx={{ backgroundColor: "#fff", color: "#000" }}
+            sx={{
+              backgroundColor: "#fff",
+              color: "#000",
+              textTransform: "capitalize",
+            }}
             onClick={handleAddNewQuestion}
           >
             Add new question
@@ -71,13 +43,11 @@ export default function WriteAWordManagement() {
         </Stack>
       </Stack>
       <Stack sx={{ padding: "1rem" }}>
-        {data.map((question) => (
-          <Question
-            key={question.id}
-            data={question}
-            onDelQuestion={() => onDelQuestion(question.id)}
-          />
-        ))}
+        {data &&
+          data.length !== 0 &&
+          data.map((question) => (
+            <Question key={question.id} data={question} fetchData={fetchData} />
+          ))}
       </Stack>
     </Stack>
   );

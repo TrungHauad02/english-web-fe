@@ -63,8 +63,8 @@ export default function useReadingInfo(data, setData) {
     const file = e.target.files[0];
     if (file) {
       const fileUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, content: fileUrl });
-      setData({ ...topic, content: fileUrl });
+      setTopic({ ...topic, file: fileUrl });
+      setData({ ...topic, file: fileUrl });
     }
   };
 

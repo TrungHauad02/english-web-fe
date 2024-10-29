@@ -49,7 +49,7 @@ export default function ReadingDetail() {
         </Grid2>
         <Grid2 container sx={{ width: "100%" }}>
           {/* Preview File*/}
-          <PDFViewer file={localData.content} title={localData.title} />
+          <PDFViewer file={localData.file} title={localData.title} />
         </Grid2>
       </Grid2>
     </Grid2>
