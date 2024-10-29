@@ -2,11 +2,8 @@ import { Grid2 } from "@mui/material";
 import ListeningInfo from "./ListeningInfo";
 import WriteAWordManagement from "../common/writeAWord/WriteAWordManagement";
 import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionManagement";
-import useListeningDetail from "./useListeningDetail";
 
 export default function ListeningDetail() {
-  const { listQuestion, fetchData } = useListeningDetail();
-
   const stylesListening = {
     container: {
       margin: "2rem 4%",

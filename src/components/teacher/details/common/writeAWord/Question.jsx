@@ -156,9 +156,9 @@ export default function Question({ data, onDelQuestion }) {
         </Grid2>
         <Grid2 item>
           <SaveEditDeleteButton
-            ondel={onDelQuestion}
-            onedit={handleEdit}
-            onsave={handleSave}
+            onDel={onDelQuestion}
+            onEdit={handleEdit}
+            onSave={handleSave}
             showText={false}
             size={"small"}
           />
@@ -211,7 +211,6 @@ export default function Question({ data, onDelQuestion }) {
               variant="text"
               sx={{
                 color: "#000",
-                backgroundColor: "#D7ED6D",
                 width: "fit-content",
                 padding: "0.5rem 2rem",
               }}
