@@ -1,23 +1,16 @@
 import MainPicture from "../../common/listTopic/MainPicture";
 import ReadingContent from "./ReadingContent";
-import { listQuestion } from "./ListQuestion";
 import AnswerQuestion from "../../common/answerQuestion/AnswerQuestion";
+import useReading from "./useReading";
 
-export default function Reading({ topic }) {
-  topic = {
-    title: "The Environment",
-    img: "/bg_reading.png",
-  };
+export default function Reading() {
+  const { topic, listQuestion } = useReading();
 
-  const reading = {
-    img: "/environment.png",
-    content: "/reading.md",
-  };
-
+  if (!topic) return <></>;
   return (
     <>
-      <MainPicture src={topic.img} title={topic.title} />
-      <ReadingContent img={reading.img} content={reading.content} />
+      <MainPicture src={topic.image} title={topic.title} />
+      <ReadingContent topic={topic} />
       <AnswerQuestion listQuestion={listQuestion} />
     </>
   );

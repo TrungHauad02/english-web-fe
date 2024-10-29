@@ -10,7 +10,7 @@ export default function useReadingDetail() {
     id: "-1",
     title: "",
     serial: 1,
-    content: "",
+    file: "",
     description: "",
     image: "",
     status: "ACTIVE",
