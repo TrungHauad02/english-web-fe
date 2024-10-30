@@ -6,14 +6,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState, useCallback } from "react";
+import React from "react";
 import BasicButton from "shared/component/button/BasicButton";
 import Comment from "./Comment";
+import useWritingAboutTopic from "./useWritingAboutTopic";
 
-const writing = {
-  content:
-    "Write a paragraph about the topic below. You should write about 100 words.",
-};
 export const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
   margin: theme.spacing(2),
@@ -21,18 +18,15 @@ export const StyledPaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function WritingAboutTopic() {
-  const [essay, setEssay] = useState("");
-  const [wordCount, setWordCount] = useState(0);
+  const { writing, essay, wordCount, handleEssayChange } =
+    useWritingAboutTopic();
 
-  const handleEssayChange = useCallback((event) => {
-    const text = event.target.value;
-    setEssay(text);
-    setWordCount(text.trim() === "" ? 0 : text.trim().split(/\s+/).length);
-  }, []);
+  if (!writing) return;
+
   return (
     <Grid2 container direction={"column"} spacing={2}>
       <Grid2 item xs={12}>
-        <Typography variant="h6">{writing.content}</Typography>
+        <Typography variant="h6">{writing.topic}</Typography>
       </Grid2>
       <Grid2 item xs={12}>
         <StyledPaper elevation={3}>
@@ -76,7 +70,7 @@ export default function WritingAboutTopic() {
         </BasicButton>
       </Grid2>
       <Grid2 item xs={12}>
-        <Comment content={essay} />
+        <Comment />
       </Grid2>
     </Grid2>
   );
