@@ -1,69 +1,23 @@
-import { useEffect, useRef, useState } from "react";
 import { Button, Grid2, Stack, Typography } from "@mui/material";
 import { ReactMic } from "react-mic";
 import MicIcon from "@mui/icons-material/Mic";
 import BasicButton from "shared/component/button/BasicButton";
 import SoundViewer from "shared/component/soundViewer/SoundViewer";
-
-const speaking = {
-  content:
-    "The best way to travel is in a group led by a tour guide. Do you agree or disagree with this statement?",
-  timeLimit: 120,
-};
+import useSpeakingTopic from "./useSpeakingTopic";
 
 export default function SpeakingInTopic() {
-  const [hasMicPermission, setHasMicPermission] = useState(false);
-  const [permissionChecked, setPermissionChecked] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  const [audioSrc, setAudioSrc] = useState(null);
-  const [timer, setTimer] = useState(speaking.timeLimit);
-  const timerRef = useRef(null);
-
-  const handleStartRecording = () => {
-    setIsRecording((prevState) => !prevState);
-    if (!isRecording) {
-      timerRef.current = setInterval(() => {
-        setTimer((prevTimer) => {
-          if (prevTimer > 1) return prevTimer - 1;
-          clearInterval(timerRef.current);
-          handleStopRecording();
-          return 0;
-        });
-      }, 1000);
-    } else {
-      handleStopRecording();
-    }
-  };
-
-  const handleStopRecording = () => {
-    setIsRecording(false);
-    clearInterval(timerRef.current);
-    setTimer(speaking.timeLimit);
-  };
-
-  const handleStop = (recordedBlob) => {
-    const audioURL = URL.createObjectURL(recordedBlob.blob);
-    setAudioSrc(audioURL);
-  };
-
-  const handleClearAudio = () => {
-    setAudioSrc(null);
-  };
-
-  useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then(() => {
-        setHasMicPermission(true); // Đã có quyền
-      })
-      .catch(() => {
-        setHasMicPermission(false); // Không có quyền
-      })
-      .finally(() => {
-        setPermissionChecked(true); // Đã kiểm tra quyền
-      });
-  }, []);
-
+  const {
+    speaking,
+    hasMicPermission,
+    permissionChecked,
+    isRecording,
+    audioSrc,
+    timer,
+    handleStartRecording,
+    handleStop,
+    handleClearAudio,
+  } = useSpeakingTopic();
+  if (!speaking) return;
   return (
     <Grid2 container alignItems={"center"} direction={"column"} spacing={2}>
       <Grid2 item xs={12}>
@@ -73,7 +27,7 @@ export default function SpeakingInTopic() {
       </Grid2>
       <Grid2 item xs={12} sx={{ width: "100%" }}>
         <Typography variant="body1" textAlign={"left"} fontWeight={"bold"}>
-          Topic: {speaking.content}
+          Topic: {speaking.topic}
         </Typography>
       </Grid2>
 
@@ -161,6 +115,7 @@ export default function SpeakingInTopic() {
               backgroundColor: "#6EC2F7",
               borderRadius: "0rem",
               paddingX: "2rem",
+              textTransform: "capitalize",
             }}
           >
             Submit
