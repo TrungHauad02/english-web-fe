@@ -1,5 +1,5 @@
 import React from 'react';
-import Profile from '../../components/Profile';
+import Profile from '../../common/Profile';
 
 const ProfileStudent = ({ open, handleClose, student }) => {
     return (

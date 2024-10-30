@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Grid } from '@mui/material';
-import ProfileStudent from './components/ProfileStudent';
-import SearchPanel from '../components/Filter';
-import StudentTeacherList from './../components/StudentTeacherList';
-import DeleteConfirmationDialog from './../components/DeleteConfirmationDialog';
-import StudentInfo from './components/StudentInfo';
-import { handleSearch, handleDeleteStudent, handleClearSelection } from '../student/components/HandleStudent';
+import ProfileStudent from './common/ProfileStudent';
+import SearchPanel from '../common/Filter';
+import StudentTeacherList from '../common/StudentTeacherList';
+import DeleteConfirmationDialog from '../common/DeleteConfirmationDialog';
+import StudentInfo from './common/StudentInfo';
+import { handleSearch, handleDeleteStudent, handleClearSelection } from './common/HandleStudent';
 
 function ManageStudent() {
     const initialStudents = [

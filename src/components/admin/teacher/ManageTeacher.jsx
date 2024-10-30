@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Grid, Card, Typography, Select, MenuItem, FormControl, InputLabel, Avatar } from '@mui/material';
-import ProfileTeacher from './components/ProfileTeacher';
-import SearchPanel from '../components/Filter';
-import StudentTeacherList from './../components/StudentTeacherList';
-import DeleteConfirmationDialog from './../components/DeleteConfirmationDialog';
-import TeacherInfo from './components/TeacherInfo';
+import ProfileTeacher from './common/ProfileTeacher';
+import SearchPanel from '../common/Filter';
+import StudentTeacherList from '../common/StudentTeacherList';
+import DeleteConfirmationDialog from '../common/DeleteConfirmationDialog';
+import TeacherInfo from './common/TeacherInfo';
 import {
     handleAddTeacher,
     handleClear,
@@ -16,7 +16,7 @@ import {
     handleSaveEdit,
     handleSearch,
     handleTeacherClick,
-} from './components/HandleTeacher';
+} from './common/HandleTeacher';
 
 function ManageTeacher() {
     const initialTeachers = [

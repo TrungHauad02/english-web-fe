@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { Box, Button, TextField, Typography, Link, IconButton, InputAdornment,} from '@mui/material';
+import { Box, Button, TextField, Typography, Link, IconButton, InputAdornment, } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import {handleSignUp, validateEmail, validatePassword, handleClickShowPassword,} from './components/HandleSignUp';
+import { handleSignUp, validateEmail, validatePassword, handleClickShowPassword, } from './common/HandleSignUp';
 
 const SignUp = ({ toggleForm }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -99,7 +99,7 @@ const SignUp = ({ toggleForm }) => {
         color="primary"
         style={{ marginTop: 16, marginBottom: 16 }}
         onClick={() =>
-          handleSignUp( name, email, password, rePassword, setError, setFakeDatabase, fakeDatabase,toggleForm, emailInputRef)
+          handleSignUp(name, email, password, rePassword, setError, setFakeDatabase, fakeDatabase, toggleForm, emailInputRef)
         }
       >
         Sign Up

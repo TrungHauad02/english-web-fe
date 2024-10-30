@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Link } from '@mui/material';
-import EmailStep from './components/EmailStep';
-import OtpStep from './components/OtpStep';
-import ResetPasswordStep from './components/ResetPasswordStep';
-import { handleGetOtp, handleVerifyOtp, handleResetPassword, handleClickShowPassword,} from './components/HandleForgotPassword';
+import EmailStep from './common/EmailStep';
+import OtpStep from './common/OtpStep';
+import ResetPasswordStep from './common/ResetPasswordStep';
+import { handleGetOtp, handleVerifyOtp, handleResetPassword, handleClickShowPassword,} from './common/HandleForgotPassword';
 
 const ForgotPassword = ({ toggleForm }) => {
   const [step, setStep] = useState(1);
