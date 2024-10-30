@@ -1,37 +1,41 @@
-export function getConversationDetail(id) {
-  const data = {
-    1: [
-      {
-        id: "1",
-        serial: 1,
-        name: "John",
-        content: "Hello",
-      },
-      {
-        id: "2",
-        serial: 2,
-        name: "Dutch",
-        content: "Hi",
-      },
-      {
-        id: "3",
-        serial: 3,
-        name: "Mica",
-        content: "How are you?",
-      },
-      {
-        id: "4",
-        serial: 4,
-        name: "Jenny",
-        content: "I'm fine",
-      },
-      {
-        id: "5",
-        serial: 5,
-        name: "Linda",
-        content: "Goodbye",
-      },
-    ],
-  };
-  return data[id];
+import apiClient from "api/apiClient";
+
+export function getConversationInSpeaking(speakingId) {
+  try {
+    const res = apiClient.get(`/speakingConversation?speakingId=${speakingId}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetch data conversation: ", error);
+    throw error;
+  }
+}
+
+export function createConversation(object) {
+  try {
+    const res = apiClient.post(`/speakingConversation`, object);
+    return res.data;
+  } catch (error) {
+    console.error("Error create data conversation: ", error);
+    throw error;
+  }
+}
+
+export function updateConversation(id, object) {
+  try {
+    const res = apiClient.put(`/speakingConversation/${id}`, object);
+    return res.data;
+  } catch (error) {
+    console.error("Error update data conversation: ", error);
+    throw error;
+  }
+}
+
+export function deleteConversation(id) {
+  try {
+    const res = apiClient.delete(`/speakingConversation/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error delete data conversation: ", error);
+    throw error;
+  }
 }

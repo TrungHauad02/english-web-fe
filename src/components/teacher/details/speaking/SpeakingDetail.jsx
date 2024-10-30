@@ -28,6 +28,7 @@ export default function SpeakingDetail() {
     },
   };
 
+  if (!people || !conversation) return <></>;
   return (
     <Grid2
       container
@@ -40,7 +41,12 @@ export default function SpeakingDetail() {
       </Grid2>
       <Grid2 container xs={12} sm={7} direction="column" spacing={4}>
         <Grid2 item sx={{ ...scrollableContainerStyles, height: "50vh" }}>
-          <PeopleInConversation listPeople={people} setListPeople={setPeople} />
+          <PeopleInConversation
+            listPeople={people}
+            setListPeople={setPeople}
+            conversation={conversation}
+            setConversation={setConversation}
+          />
         </Grid2>
         <Grid2 item sx={{ ...scrollableContainerStyles, height: "72vh" }}>
           <Conversation
