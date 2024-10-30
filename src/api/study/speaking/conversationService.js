@@ -1,8 +1,10 @@
 import apiClient from "api/apiClient";
 
-export function getConversationInSpeaking(speakingId) {
+export async function getConversationInSpeaking(speakingId) {
   try {
-    const res = apiClient.get(`/speakingConversation?speakingId=${speakingId}`);
+    const res = await apiClient.get(
+      `/speakingConversation?speakingId=${speakingId}`
+    );
     return res.data;
   } catch (error) {
     console.error("Error fetch data conversation: ", error);
@@ -10,9 +12,9 @@ export function getConversationInSpeaking(speakingId) {
   }
 }
 
-export function createConversation(object) {
+export async function createConversation(object) {
   try {
-    const res = apiClient.post(`/speakingConversation`, object);
+    const res = await apiClient.post(`/speakingConversation`, object);
     return res.data;
   } catch (error) {
     console.error("Error create data conversation: ", error);
@@ -20,9 +22,9 @@ export function createConversation(object) {
   }
 }
 
-export function updateConversation(id, object) {
+export async function updateConversation(id, object) {
   try {
-    const res = apiClient.put(`/speakingConversation/${id}`, object);
+    const res = await apiClient.put(`/speakingConversation/${id}`, object);
     return res.data;
   } catch (error) {
     console.error("Error update data conversation: ", error);
@@ -30,9 +32,9 @@ export function updateConversation(id, object) {
   }
 }
 
-export function deleteConversation(id) {
+export async function deleteConversation(id) {
   try {
-    const res = apiClient.delete(`/speakingConversation/${id}`);
+    const res = await apiClient.delete(`/speakingConversation/${id}`);
     return res.data;
   } catch (error) {
     console.error("Error delete data conversation: ", error);

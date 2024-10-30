@@ -1,3 +1,7 @@
+import {
+  createConversation,
+  updateConversation,
+} from "api/study/speaking/conversationService";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -18,6 +22,8 @@ export default function useConversation(
         name: nameToAdd,
         serial: (conversation?.length || 0) + 1,
         content: "",
+        speakingId: id,
+        status: "ACTIVE",
       },
     ];
     setConversation(newConversation);
@@ -28,8 +34,18 @@ export default function useConversation(
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      const listRequest = conversation.map((line) => {
+        if (line.id === "-1") return createConversation(line);
+        else return updateConversation(line.id, line);
+      });
+      const newData = await Promise.all(listRequest);
+      setConversation(newData);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error saving conversation: ", error);
+    }
   };
 
   return {

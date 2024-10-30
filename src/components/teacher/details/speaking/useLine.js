@@ -1,3 +1,5 @@
+import { deleteConversation } from "api/study/speaking/conversationService";
+
 export default function useLine(conversation, setConversation, index) {
   const onChangeName = (event) => {
     const newConversation = [...conversation];
@@ -17,7 +19,16 @@ export default function useLine(conversation, setConversation, index) {
     setConversation(newConversation);
   };
 
-  const onDeleteLine = () => {
+  const onDeleteLine = async () => {
+    const lineToDelete = conversation[index];
+
+    if (lineToDelete.id !== "-1") {
+      try {
+        await deleteConversation(lineToDelete.id);
+      } catch (error) {
+        console.error("Error deleting conversation: ", error);
+      }
+    }
     const newConversation = conversation.filter((_, idx) => idx !== index);
     setConversation(newConversation);
   };
