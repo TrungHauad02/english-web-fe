@@ -1,8 +1,8 @@
 import apiClient from "../apiClient";
 
-export function getListeningQuestionById(listeningQuestionId) {
+export function getTestListeningQuestionById(testListeningQuestionId) {
   return apiClient
-    .get("/testlisteningquestion/" + listeningQuestionId)
+    .get("/testlisteningquestion/" + testListeningQuestionId)
     .then((response) => {
       return response.data;
     })
@@ -12,9 +12,9 @@ export function getListeningQuestionById(listeningQuestionId) {
     });
 }
 
-export function createListeningQuestion(listeningQuestion) {
+export function createTestListeningQuestion(testListeningQuestion) {
   return apiClient
-    .post("/testlisteningquestion", listeningQuestion)
+    .post("/testlisteningquestion", testListeningQuestion)
     .then((response) => {
       return response.data;
     })
@@ -24,9 +24,9 @@ export function createListeningQuestion(listeningQuestion) {
     });
 }
 
-export function updateListeningQuestion(listeningQuestion) {
+export function updateTestListeningQuestion(id, testListeningQuestion) {
   return apiClient
-    .put("/testlisteningquestion", listeningQuestion)
+    .put(`/testlisteningquestion/${id}`, testListeningQuestion)
     .then((response) => {
       return response.data;
     })
@@ -36,9 +36,9 @@ export function updateListeningQuestion(listeningQuestion) {
     });
 }
 
-export function deleteListeningQuestionById(listeningQuestionId) {
+export function deleteTestListeningQuestion(tesListeningQuestionId) {
   return apiClient
-    .delete("/listeningquestion/" + listeningQuestionId)
+    .delete("/listeningquestion/" + tesListeningQuestionId)
     .then((response) => {
       return response.status === 204;
     })

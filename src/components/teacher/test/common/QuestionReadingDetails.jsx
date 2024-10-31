@@ -12,10 +12,10 @@ import {
 } from "@mui/material";
 import { Trash, PlusCircle } from "lucide-react";
 import { styled } from "@mui/material/styles";
-import { updateReadingQuestion } from "api/test/TestReadingQuestionApi";
+import { updateTestReadingQuestion } from "api/test/TestReadingQuestionApi";
 import {
-  createReadingAnswer,
-  updateReadingAnswer,
+  createTestReadingAnswer,
+  updateTestReadingAnswer,
 } from "api/test/TestReadingAnswerApi";
 
 const ButtonContainer = styled(Box)(({ theme }) => ({
@@ -106,11 +106,11 @@ const ContentQuestion = ({ question }) => {
     try {
       console.log(questionData);
 
-      await updateReadingQuestion(questionData);
+      await updateTestReadingQuestion(questionData);
 
       const answerPromises = questionData.answers.map((answer) => {
         if (answer.id.startsWith("temp")) {
-          return createReadingAnswer({
+          return createTestReadingAnswer({
             ...answer,
           }).then((newAnswer) => {
             const updatedAnswers = questionData.answers.map((a) =>
@@ -119,7 +119,7 @@ const ContentQuestion = ({ question }) => {
             setQuestionData({ ...questionData, answers: updatedAnswers });
           });
         } else {
-          return updateReadingAnswer(answer);
+          return updateTestReadingAnswer(answer);
         }
       });
 

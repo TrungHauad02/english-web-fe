@@ -13,11 +13,15 @@ const ItemTest = ({ title, datatest }) => {
   const DataTestMixing = [
     {
       title: "Vocabulary",
-      questions: datatest?.testVocabularyQuestions || [],
+      questions: datatest?.testMixingQuestions.filter(
+        (question) => question.type === "VOCABULARY"
+      ) || [],
     },
     {
       title: "Grammar",
-      questions: datatest?.testGrammarQuestions || [],
+      questions: datatest?.testMixingQuestions.filter(
+        (question) => question.type === "GRAMMAR"
+      ) || [],
     },
     {
       title: "Reading",

@@ -1,6 +1,6 @@
 import apiClient from "../apiClient";
 
-export function getListeningAnswerById(listeningAnswerId) {
+export function getListeningAnswer(listeningAnswerId) {
   return apiClient
     .get("/testlisteninganswer/" + listeningAnswerId)
     .then((response) => {
@@ -24,9 +24,9 @@ export function createListeningAnswer(listeningAnswer) {
     });
 }
 
-export function updateListeningAnswer(listeningAnswer) {
+export function updateListeningAnswer(id, listeningAnswer) {
   return apiClient
-    .put("/testlisteninganswer", listeningAnswer)
+    .put(`/testlisteninganswer/${id}`, listeningAnswer)
     .then((response) => {
       return response.data;
     })
@@ -36,7 +36,7 @@ export function updateListeningAnswer(listeningAnswer) {
     });
 }
 
-export function deleteListeningAnswerById(listeningAnswerId) {
+export function deleteListeningAnswer(listeningAnswerId) {
   return apiClient
     .delete("/testlisteninganswer/" + listeningAnswerId)
     .then((response) => {

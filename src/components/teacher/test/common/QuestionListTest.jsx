@@ -16,10 +16,17 @@ import {
 import { styled } from "@mui/material/styles";
 import { PlusCircle } from "lucide-react";
 import DeleteIcon from "@mui/icons-material/DeleteOutline";
-import { createListening } from "api/test/TestListeningApi";
-import { createReading } from "api/test/TestReadingApi";
-import { createSpeaking } from "api/test/TestSpeakingApi";
-import { createWriting } from "api/test/TestWritingApi";
+
+import { createTestMixingQuestion,updateTestMixingQuestion,deleteTestMixingQuestion } from "api/test/TestMixingQuestionApi";
+
+import { updateTestReadingQuestion } from "api/test/TestReadingQuestionApi";
+import { updateTestListeningQuestion } from "api/test/TestListeningQuestionApi";
+import { updateTestSpeakingQuestion } from "api/test/TestSpeakingQuestionApi";
+
+import { createTestListening,deleteTestListening } from "api/test/TestListeningApi";
+import { createTestReading,deleteTestReading } from "api/test/TestReadingApi";
+import { createTestSpeaking,deleteTestSpeaking } from "api/test/TestSpeakingApi";
+import { createTestWriting,updateTestWriting,deleteTestWriting } from "api/test/TestWritingApi";
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -55,7 +62,7 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
     fontWeight: "bold",
   },
 }));
-function QuestionList({ data, handleRowClick }) {
+function QuestionList({ data, handleRowClick,setQuestionUpdate }) {
   const [currentTab, setCurrentTab] = useState(0);
   const tabs = [
     "VOCABULARY",
@@ -71,34 +78,34 @@ function QuestionList({ data, handleRowClick }) {
   useEffect(() => {
     const initialDataMixing = [
       {
-        type: "Vocabulary",
+        type: "VOCABULARY",
         questions: data.testMixingQuestions.filter(
           (question) => question.type === "VOCABULARY"
         ),
       },
       {
-        type: "Grammar",
+        type: "GRAMMAR",
         questions: data.testMixingQuestions.filter(
           (question) => question.type === "GRAMMAR"
         ),
       },
       {
-        type: "Reading",
+        type: "READING",
         dataitem: data.testReadings,
       },
       {
-        type: "Listening",
+        type: "LISTENING",
         dataitem: data.testListenings,
       },
       {
-        type: "Speaking",
+        type: "SPEAKING",
         dataitem: data.testSpeakings,
       },
       {
-        type: "Writing",
+        type: "WRITING",
         dataitem: data.testWritings,
       },
-    ];
+    ];  
     setDatamixing(initialDataMixing);
   }, [data]);
 
@@ -110,43 +117,61 @@ function QuestionList({ data, handleRowClick }) {
     const questions = [];
 
     datamixing.forEach((data) => {
-      if (data.type === "Grammar") {
+      if (data.type === "GRAMMAR") {
         data.questions.forEach((question) => {
-          question.type = data.type;
+     
           question.serialquestion = question.serial;
           questions.push(question);
         });
       }
-      if (data.type === "Vocabulary") {
+      if (data.type === "VOCABULARY") {
         data.questions.forEach((question) => {
-          question.type = data.type;
-          question.serialquestion = question.serial;
+ 
+          question.serialquestion = question.serial ;
           questions.push(question);
         });
       }
 
-      if (data.type === "Reading" || data.type === "Listening") {
+      if (data.type === "READING" || data.type === "LISTENING") {
         data.dataitem.forEach((item) => {
           item.type = data.type;
-          item.serialquestion =
-            item.questions[0].serial + "-" + item.questions[2].serial;
+          const serials = item.questions
+          .map((q) => q.serial)
+          .filter((serial) => serial != null); 
+        if (serials.length === 1) {
+          item.serialquestion = serials[0];
+        } else if (serials.length === 2) {
+          item.serialquestion = serials[0] + "-" + serials[1];
+        } else if (serials.length > 2) {
+          item.serialquestion = serials[0] + "-" + serials[serials.length - 1];
+        }
           questions.push(item);
         });
       }
 
-      if (data.type === "Writing") {
-        const datawriting = data.dataitem[0];
-        datawriting.type = data.type;
-        datawriting.serialquestion = datawriting.serial;
-        questions.push(datawriting);
+      if (data.type === "WRITING") {
+        data.dataitem.forEach((item) =>
+        {
+          item.type = data.type;
+          item.serialquestion = item.serial;
+          questions.push(item);
+        }
+        );
+       
       }
-      if (data.type === "Speaking") {
+      if (data.type === "SPEAKING") {
         data.dataitem.forEach((item) => {
           item.type = data.type;
-          item.serialquestion =
-            item.questions[0].serial +
-            "-" +
-            item.questions[item.questions.length - 1].serial;
+          const serials = item.questions
+          .map((q) => q.serial)
+          .filter((serial) => serial != null); 
+        if (serials.length === 1) {
+          item.serialquestion = serials[0];
+        } else if (serials.length === 2) {
+          item.serialquestion = serials[0] + "-" + serials[1];
+        } else if (serials.length > 2) {
+          item.serialquestion = serials[0] + "-" + serials[serials.length - 1];
+        }
           questions.push(item);
         });
       }
@@ -164,25 +189,30 @@ function QuestionList({ data, handleRowClick }) {
   const handleAddNewQuestion = async () => {
     const newQuestion = {
       id: "",
-      content: "",
-      status: "ACTIVE",
       serial: 0,
-      explanation: "",
+      content: "",
+      testId: data.id,
+      status: "ACTIVE",
       ...(tabs[currentTab] === "VOCABULARY" && {
         type: "VOCABULARY",
-        testId: data.testVocabularyQuestions[0].testId,
+        explanation: "",
       }),
       ...(tabs[currentTab] === "GRAMMAR" && {
         type: "GRAMMAR",
+        explanation: "",
       }),
       ...(tabs[currentTab] === "READING" && {
         type: "READING",
+        image: '',
       }),
       ...(tabs[currentTab] === "LISTENING" && {
         type: "LISTENING",
+        transcript:'',
       }),
       ...(tabs[currentTab] === "SPEAKING" && {
         type: "SPEAKING",
+        title:'',
+
       }),
       ...(tabs[currentTab] === "WRITING" && {
         type: "WRITING",
@@ -191,22 +221,58 @@ function QuestionList({ data, handleRowClick }) {
 
     try {
       let createdQuestion;
+      let highestSerial = 0;
       switch (newQuestion.type) {
         case "VOCABULARY":
+          datamixing.forEach((item) => {
+            if (item.type.toUpperCase() === newQuestion.type) {
+              item.questions.forEach((question) => {
+                if (question.serial > highestSerial) {
+                  highestSerial = question.serial;
+                }
+              });
+            }
+          });
+          newQuestion.serial = highestSerial + 1;
+          createdQuestion = await createTestMixingQuestion(newQuestion);
+          await Promise.all([
+            updateGrammarQuestions(datamixing,1,newQuestion.serial-1),
+            updateReadingQuestions(datamixing,1,newQuestion.serial-1),
+            updateListeningQuestions(datamixing,1,newQuestion.serial-1),
+            updateSpeakingQuestions(datamixing,1,newQuestion.serial-1),
+            updateWritingQuestions(datamixing,1,newQuestion.serial-1),
+          ]);
           break;
         case "GRAMMAR":
+          datamixing.forEach((item) => {
+            if (item.type.toUpperCase() === newQuestion.type) {
+              item.questions.forEach((question) => {
+                if (question.serial > highestSerial) {
+                  highestSerial = question.serial;
+                }
+              });
+            }
+          });
+          newQuestion.serial = highestSerial + 1;
+          createdQuestion = await createTestMixingQuestion(newQuestion);
+          await Promise.all([
+            updateReadingQuestions(datamixing,1,newQuestion.serial-1),
+            updateListeningQuestions(datamixing,1,newQuestion.serial-1),
+            updateSpeakingQuestions(datamixing,1,newQuestion.serial-1),
+            updateWritingQuestions(datamixing,1,newQuestion.serial-1),
+          ]);
           break;
         case "READING":
-          createdQuestion = await createReading(newQuestion);
+          createdQuestion = await createTestReading(newQuestion);
           break;
         case "LISTENING":
-          createdQuestion = await createListening(newQuestion);
+          createdQuestion = await createTestListening(newQuestion);
           break;
         case "SPEAKING":
-          createdQuestion = await createSpeaking(newQuestion);
+          createdQuestion = await createTestSpeaking(newQuestion);
           break;
         case "WRITING":
-          createdQuestion = await createWriting(newQuestion);
+          createdQuestion = await createTestWriting(newQuestion);
           break;
         default:
           return;
@@ -219,6 +285,51 @@ function QuestionList({ data, handleRowClick }) {
       handleRowClick(dataforward);
     } catch (error) {
       console.error("Failed to add new question:", error);
+    }
+  };
+
+  const handleDeleteQuestion = async (question) => {
+    let serialupdate=question.serial;
+    let serialdelete=1
+    try {
+      switch (question.type) {
+        case "VOCABULARY":
+        case "GRAMMAR":
+          await deleteTestMixingQuestion(question.id);
+          break;
+        case "READING":
+          serialupdate= question.questions[question.questions.length-1].serial;
+          serialdelete= question.questions.length;
+          await deleteTestReading(question.id);
+          break;
+        case "LISTENING":
+          serialupdate= question.questions[question.questions.length-1].serial;
+          serialdelete= question.questions.length;
+          await deleteTestListening(question.id);
+          break;
+        case "SPEAKING":
+          serialupdate= question.questions[question.questions.length-1].serial;
+          serialdelete= question.questions.length;
+          await deleteTestSpeaking(question.id);
+          break;
+        case "WRITING":
+          await deleteTestWriting(question.id);
+          break;
+        default:
+          return;
+      }
+    
+      await Promise.all([
+        updateVocabularyQuestions(datamixing,-serialdelete,serialupdate),
+        updateGrammarQuestions(datamixing,-serialdelete,serialupdate),
+        updateReadingQuestions(datamixing,-serialdelete,serialupdate),
+        updateListeningQuestions(datamixing,-serialdelete,serialupdate),
+        updateSpeakingQuestions(datamixing,-serialdelete,serialupdate),
+        updateWritingQuestions(datamixing,-serialdelete,serialupdate),
+      ]);
+      setQuestionUpdate(question)
+    } catch (error) {
+      console.error("Failed to delete question:", error);
     }
   };
 
@@ -256,12 +367,12 @@ function QuestionList({ data, handleRowClick }) {
             {filteredQuestions.map((question) => (
               <TableRow
                 key={question.id}
-                onClick={() => handleRowClick(question)}
+
               >
-                <TableCell>{question.serialquestion}</TableCell>
-                <TableCell align="center">{question.type}</TableCell>
+                <TableCell    onClick={() => handleRowClick(question)} >{question.serialquestion}</TableCell>
+                <TableCell align="center"    onClick={() => handleRowClick(question)}>{question.type.charAt(0) + question.type.slice(1).toLowerCase()}</TableCell>
                 <TableCell align="right">
-                  <IconButton>
+                <IconButton onClick={() => handleDeleteQuestion(question)}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -286,5 +397,97 @@ function QuestionList({ data, handleRowClick }) {
     </FormContainer>
   );
 }
+
+const updateGrammarQuestions = async (datamixing,serialupdate,questionserialupdate) => {
+  const grammarQuestions = datamixing.find((data) => data.type === "GRAMMAR")?.questions;
+  if (grammarQuestions) {
+    for (const question of grammarQuestions) {
+      if(questionserialupdate<question.serial)
+        {
+          question.serial = question.serial + serialupdate;
+          question.type = "GRAMMAR";
+          await updateTestMixingQuestion(question.id, question);
+        }
+    }
+  }
+};
+
+const updateVocabularyQuestions = async (datamixing,serialupdate,questionserialupdate) => {
+  const vocabularyQuestions = datamixing.find((data) => data.type === "VOCABULARY")?.questions;
+  if (vocabularyQuestions) {
+    for (const question of vocabularyQuestions) {
+      console.log(questionserialupdate,"ca");
+      if(questionserialupdate<question.serial)
+        {
+          question.serial = question.serial + serialupdate;
+          await updateTestMixingQuestion(question.id, question);
+        }
+    }
+  }
+};
+
+const updateReadingQuestions = async (datamixing,serialupdate,questionserialupdate) => {
+  const readingItems = datamixing.find((data) => data.type === "READING")?.dataitem;
+  if (readingItems) {
+    for (const item of readingItems) {
+      for (const question of item.questions) {
+
+        if(questionserialupdate<question.serial)
+          {
+            question.serial = question.serial + serialupdate;
+          await updateTestReadingQuestion(question.id, question);
+          }
+    
+      }
+    }
+  }
+};
+
+const updateListeningQuestions = async (datamixing,serialupdate,questionserialupdate) => {
+  const listeningItems = datamixing.find((data) => data.type === "LISTENING")?.dataitem;
+  if (listeningItems) {
+    for (const item of listeningItems) {
+      for (const question of item.questions) {
+
+        if(questionserialupdate<question.serial)
+          {
+            question.serial = question.serial + serialupdate;
+            await updateTestListeningQuestion(question.id, question);
+          }
+   
+      }
+    }
+  }
+};
+
+const updateWritingQuestions = async (datamixing,serialupdate,questionserialupdate) => {
+  const writingItems = datamixing.find((data) => data.type === "WRITING")?.dataitem;
+  if (writingItems) {
+    for (const item of writingItems) {
+      if(questionserialupdate<item.serial)
+        {
+          item.serial = item.serial + serialupdate;
+          await updateTestWriting(item.id, item);
+        }
+    
+    }
+  }
+};
+
+const updateSpeakingQuestions = async (datamixing,serialupdate,questionserialupdate) => {
+  const speakingItems = datamixing.find((data) => data.type === "SPEAKING")?.dataitem;
+  if (speakingItems) {
+    for (const item of speakingItems) {
+      for (const question of item.questions) {
+        if(questionserialupdate<question.serial)
+          {
+            question.serial = question.serial + serialupdate;
+            await updateTestSpeakingQuestion(question.id, question);
+          }
+  
+      }
+    }
+  }
+};
 
 export default QuestionList;

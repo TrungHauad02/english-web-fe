@@ -1,8 +1,8 @@
 import apiClient from "../apiClient";
 
-export function getWritingById(writingId) {
+export function getTestWriting(testWritingId) {
   return apiClient
-    .get("/testwriting/" + writingId)
+    .get("/testwriting/" + testWritingId)
     .then((response) => {
       return response.data;
     })
@@ -12,9 +12,9 @@ export function getWritingById(writingId) {
     });
 }
 
-export function createWriting(writing) {
+export function createTestWriting(testWriting) {
   return apiClient
-    .post("/testwriting", writing)
+    .post("/testwriting", testWriting)
     .then((response) => {
       return response.data;
     })
@@ -24,9 +24,9 @@ export function createWriting(writing) {
     });
 }
 
-export function updateWriting(writing) {
+export function updateTestWriting(id, testWriting) {
   return apiClient
-    .put("/testwriting", writing)
+    .put(`/testwriting/${id}`, testWriting)
     .then((response) => {
       return response.data;
     })
@@ -36,9 +36,9 @@ export function updateWriting(writing) {
     });
 }
 
-export function deleteWritingById(writingId) {
+export function deleteTestWriting(testWritingId) {
   return apiClient
-    .delete("/testwriting/" + writingId)
+    .delete("/testwriting/" + testWritingId)
     .then((response) => {
       return response.status === 204;
     })
