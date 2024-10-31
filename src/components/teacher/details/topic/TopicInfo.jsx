@@ -7,10 +7,9 @@ import useTopicInfo from "./useTopicInfo";
 import SaveButton from "../common/button/SaveButton";
 import EditButton from "../common/button/EditButton";
 import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
-import ErrorComponent from "../../../../shared/component/error/ErrorComponent";
 import DeleteButton from "../common/button/DeleteButton";
 
-export default function TopicInfo({ data }) {
+export default function TopicInfo({ data, setError }) {
   const {
     topic,
     onChangeTitle,
@@ -22,9 +21,7 @@ export default function TopicInfo({ data }) {
     handleEditClick,
     handleSaveClick,
     handleDelete,
-    error,
-    handleCloseError,
-  } = useTopicInfo(data);
+  } = useTopicInfo(data, setError);
 
   return (
     <Stack direction={"column"} spacing={4}>
@@ -119,10 +116,6 @@ export default function TopicInfo({ data }) {
           />
         </Grid2>
       </Grid2>
-      {/**Hiển thị khi có lỗi */}
-      {error && (
-        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
-      )}
     </Stack>
   );
 }

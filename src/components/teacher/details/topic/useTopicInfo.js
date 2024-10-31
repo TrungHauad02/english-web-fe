@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   createTopic,
   deleteTopic,
@@ -6,16 +6,16 @@ import {
 } from "api/study/topic/topicService";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function useTopicInfo(data) {
+export default function useTopicInfo(data, setError) {
   const { id } = useParams();
   const [topic, setTopic] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleCloseError = () => {
-    setError("");
-  };
+  useEffect(() => {
+    setIsEditing(id === "-1");
+    setTopic(data);
+  }, [id, data]);
 
   const handleDelete = async () => {
     if (id === "-1") {
@@ -98,7 +98,5 @@ export default function useTopicInfo(data) {
     handleEditClick,
     handleSaveClick,
     handleDelete,
-    error,
-    handleCloseError,
   };
 }

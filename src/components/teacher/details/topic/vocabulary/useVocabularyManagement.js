@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getVocabByTopicId } from "api/study/topic/vocabularyService";
 import { useParams } from "react-router-dom";
 
-export default function useVocabularyManagement() {
+export default function useVocabularyManagement(setError) {
   const emptyVocab = {
     id: "-1",
     word: "",
@@ -19,12 +19,16 @@ export default function useVocabularyManagement() {
   const [listVocab, setListVocab] = useState(null);
 
   const fetchData = async () => {
-    if (id === "-1") {
-      setListVocab([]);
-      return;
+    try {
+      if (id === "-1") {
+        setListVocab([]);
+        return;
+      }
+      const data = await getVocabByTopicId(id);
+      setListVocab(data);
+    } catch (error) {
+      setError(error.response.data.message);
     }
-    const data = await getVocabByTopicId(id);
-    setListVocab(data);
   };
 
   useEffect(() => {

@@ -18,14 +18,19 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
     setIsEditing(curVocab.id === "-1");
   }, [curVocab]);
 
-  function handleInputChange(field) {
-    return (e) => {
-      if (!isEditing) return;
-      const value =
-        field === "image"
-          ? URL.createObjectURL(e.target.files[0])
-          : e.target.value;
-      setCurVocab({ ...curVocab, [field]: value });
+  function handleInputChange(fieldName) {
+    return (event) => {
+      try {
+        if (!isEditing) return;
+        const newValue =
+          fieldName === "image"
+            ? URL.createObjectURL(event.target.files[0])
+            : event.target.value;
+        setCurVocab({ ...curVocab, [fieldName]: newValue });
+      } catch (error) {
+        console.error(error);
+        setError(error.message);
+      }
     };
   }
 
@@ -49,12 +54,16 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
 
   async function onHandleDelete() {
     try {
+      if (curVocab.id === "-1") {
+        setError("Cannot delete vocabulary that doesn't exits yet");
+        return;
+      }
       await deleteVocab(curVocab.id);
       await fetchData();
       setCurVocab({
         id: "-1",
         word: "",
-        img: "",
+        image: "",
         meaning: "",
         wordType: "NOUN",
         phonetic: "",
@@ -68,6 +77,12 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
 
   async function onHandleSave() {
     try {
+      if (id === "-1") {
+        setError(
+          "Cannot create vocabulary. Please, create lesson and try again"
+        );
+        return;
+      }
       const vocab = { ...curVocab, topicId: id };
       let newData = vocab;
       if (curVocab.id === "-1") {
