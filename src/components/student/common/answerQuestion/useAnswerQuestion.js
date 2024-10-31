@@ -27,10 +27,12 @@ export default function useAnswerQuestion(listQuestion) {
   const handlePrevious = () => {
     if (curIndex === 0) return;
     setCurIndex((prevIndex) => prevIndex - 1);
+    setIsShowExplain(false);
   };
   const handleNext = () => {
     if (curIndex === listQuestion.length - 1) return;
     setCurIndex((prevIndex) => prevIndex + 1);
+    setIsShowExplain(false);
   };
 
   const getSubmitContent = () => {
@@ -55,6 +57,13 @@ export default function useAnswerQuestion(listQuestion) {
     return `Your Score: ${score}/${total}`;
   };
 
+  const handleReset = () => {
+    setIsSubmit(false);
+    setIsShowExplain(false);
+    setUserAnswer(null);
+    setCurIndex(0);
+  };
+
   return {
     curIndex,
     question,
@@ -68,5 +77,6 @@ export default function useAnswerQuestion(listQuestion) {
     handleChange,
     handleNext,
     handlePrevious,
+    handleReset,
   };
 }

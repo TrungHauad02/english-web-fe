@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getTopicDetail } from "api/study/topic/topicService";
 
 export default function useTopicDetail() {
