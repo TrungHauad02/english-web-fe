@@ -1,8 +1,8 @@
 import apiClient from "../apiClient";
 
-export function getListeningById(listeningId) {
+export function getTestListening(testlisteningId) {
   return apiClient
-    .get("/testlistening/" + listeningId)
+    .get("/testlistening/" + testlisteningId)
     .then((response) => {
       return response.data;
     })
@@ -12,9 +12,9 @@ export function getListeningById(listeningId) {
     });
 }
 
-export function createListening(listening) {
+export function createTestListening(testlistening) {
   return apiClient
-    .post("/testlistening", listening)
+    .post("/testlistening", testlistening)
     .then((response) => {
       return response.data;
     })
@@ -24,9 +24,9 @@ export function createListening(listening) {
     });
 }
 
-export function updateListening(listening) {
+export function updateTestListening(id, testlistening) {
   return apiClient
-    .put("/testlistening", listening)
+    .put(`/testlistening/${id}`, testlistening)
     .then((response) => {
       return response.data;
     })
@@ -36,9 +36,9 @@ export function updateListening(listening) {
     });
 }
 
-export function deleteListeningById(listeningId) {
+export function deleteTestListening(testlisteningId) {
   return apiClient
-    .delete("/testlistening/" + listeningId)
+    .delete("/testlistening/" + testlisteningId)
     .then((response) => {
       return response.status === 204;
     })
@@ -49,12 +49,6 @@ export function deleteListeningById(listeningId) {
 }
 export function getTestListeningbySerial(testId) {
   return apiClient.get("/listening?testId=" + testId).then((response) => {
-    return response.data;
-  });
-}
-
-export function getTestById(testId) {
-  return apiClient.get("/tests/" + testId).then((response) => {
     return response.data;
   });
 }

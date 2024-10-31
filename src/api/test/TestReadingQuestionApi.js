@@ -1,8 +1,8 @@
 import apiClient from "../apiClient";
 
-export function getReadingQuestionById(readingQuestionId) {
+export function getTestReadingQuestion(testReadingQuestionId) {
   return apiClient
-    .get("/testreadingquestion/" + readingQuestionId)
+    .get("/testreadingquestion/" + testReadingQuestionId)
     .then((response) => {
       return response.data;
     })
@@ -12,9 +12,9 @@ export function getReadingQuestionById(readingQuestionId) {
     });
 }
 
-export function createReadingQuestion(readingQuestion) {
+export function createTestReadingQuestion(testReadingQuestion) {
   return apiClient
-    .post("/testreadingquestion", readingQuestion)
+    .post("/testreadingquestion", testReadingQuestion)
     .then((response) => {
       return response.data;
     })
@@ -24,9 +24,9 @@ export function createReadingQuestion(readingQuestion) {
     });
 }
 
-export function updateReadingQuestion(readingQuestion) {
+export function updateTestReadingQuestion(id, testReadingQuestion) {
   return apiClient
-    .put("/testreadingquestion", readingQuestion)
+    .put(`/testreadingquestion/${id}`, testReadingQuestion)
     .then((response) => {
       return response.data;
     })
@@ -36,9 +36,9 @@ export function updateReadingQuestion(readingQuestion) {
     });
 }
 
-export function deleteReadingQuestionById(readingQuestionId) {
+export function deleteTestReadingQuestion(testReadingQuestionId) {
   return apiClient
-    .delete("/api/testreadingquestion/" + readingQuestionId)
+    .delete("/api/testreadingquestion/" + testReadingQuestionId)
     .then((response) => {
       return response.status === 204;
     })

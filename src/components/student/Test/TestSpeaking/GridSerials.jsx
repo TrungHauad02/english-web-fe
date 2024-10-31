@@ -1,20 +1,19 @@
 import React from 'react';
-import { Typography, Grid, Button, Paper } from '@mui/material';
+import { Typography, Grid, Button, Box } from '@mui/material';
 import { styled } from '@mui/system';
 import PropTypes from 'prop-types';
 
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2),
+const StyledBox = styled(Box)({
+  padding: '16px',
   textAlign: 'center',
   borderRadius: '1rem',
-  boxShadow: theme.shadows[3],
-}));
+  boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
+});
 
-const GridItem = styled(Paper)(({ theme, color }) => ({
-  padding: theme.spacing(1),
+const GridItem = styled(Box)(({ color }) => ({
+  padding: '8px',
   textAlign: 'center',
-  color: theme.palette.text.secondary,
+  color: '#757575',
   backgroundColor: color === 'red' ? '#f44336' : color === 'green' ? '#4caf50' : 'white',
   border: '1px solid #000',
   transition: 'background-color 0.3s ease',
@@ -32,12 +31,12 @@ const getStatusColor = (status) => {
 
 const ScoreGrid = ({ score, gridData = [], serials = [], onItemClick, onClickTestAgain, status, handleBtnSubmit }) => {
   return (
-    <StyledPaper elevation={3}>
+    <StyledBox>
       <Typography variant={status === 'Testing' ? 'h6' : 'h5'} gutterBottom>
         {status === 'Testing' ? 'Time remaining: 60:00' : `Score: ${score}`}
       </Typography>
 
-      <Grid container spacing={1} sx={{ marginBottom: 2,marginTop:'1rem' }}>
+      <Grid container spacing={1} sx={{ marginBottom: 2, marginTop: '1rem' }}>
         {serials.length > 0 ? (
           serials.map((item, index) => (
             <Grid item xs={4} sm={3} md={2} key={index}>
@@ -67,9 +66,10 @@ const ScoreGrid = ({ score, gridData = [], serials = [], onItemClick, onClickTes
       >
         {status === 'Testing' ? 'SUBMIT' : 'TEST AGAIN'}
       </Button>
-    </StyledPaper>
+    </StyledBox>
   );
 };
+
 ScoreGrid.propTypes = {
   score: PropTypes.number.isRequired,
   gridData: PropTypes.array.isRequired,

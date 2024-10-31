@@ -1,17 +1,16 @@
 import React from 'react';
-import { Box, Typography, Button, Paper, Grid, Divider } from '@mui/material';
+import { Box, Typography, Button, Grid, Divider } from '@mui/material';
 import { styled } from '@mui/system';
 import ItemSerialTest from './ItemSerialTest';
 
-// Chuyển styling từ Paper sang Box
-const StyledBox = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(3),
+const StyledBox = styled(Box)({
+  padding: '24px',
   textAlign: 'center',
   justifyContent: 'center',
   borderRadius: '1rem',
-  backgroundColor: 'white', // Thêm màu nền nếu cần
-  boxShadow: theme.shadows[3], // Thêm shadow để giống Paper
-}));
+  backgroundColor: 'white',
+  boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
+});
 
 function SerialGrid({
   gridData = [],
@@ -58,7 +57,7 @@ function SerialGrid({
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'flex-end', 
+          justifyContent: 'flex-end',
           marginTop: '1rem',
         }}
       >

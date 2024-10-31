@@ -9,12 +9,12 @@ import QuestionWriting from "../common/QuestionWriting";
 import QuestionSpeaking from "../common/QuestionSpeaking";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { getTestById } from "api/test/TestApi";
-import { getReadingById } from "api/test/TestReadingApi";
-import { getListeningById } from "api/test/TestListeningApi";
-import { getSpeakingById } from "api/test/TestSpeakingApi";
+import { getTest } from "api/test/TestApi";
+import { getTestReading } from "api/test/TestReadingApi";
+import { getTestListening } from "api/test/TestListeningApi";
+import { getTestSpeaking } from "api/test/TestSpeakingApi";
 import { getTestMixingQuestion } from "api/test/TestMixingQuestionApi";
-import { getWritingById } from "api/test/TestWritingApi";
+import { getTestWriting } from "api/test/TestWritingApi";
 
 function Mixing() {
   const location = useLocation();
@@ -22,16 +22,16 @@ function Mixing() {
   const [datatest, setdatatest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [newQuestion, setNewQuestion] = useState();
+  const [questionUpdate, setQuestionUpdate] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getTestById(state.id);
+        const data = await getTest(state.id);
         if (data) {
           setdatatest(data);
         } else {
-          setdatatest(null); // Handle empty data
+          setdatatest(null); 
         }
       } catch (err) {
         setError("Failed to fetch test data");
@@ -41,7 +41,7 @@ function Mixing() {
     };
 
     fetchData();
-  }, [state.id, newQuestion]);
+  }, [state.id, questionUpdate]);
 
   const [type, setType] = useState("");
   const [dataitemtest, setdataitemtest] = useState();
@@ -52,29 +52,29 @@ function Mixing() {
     console.log(question);
 
     if (question.new) {
-      setNewQuestion(question);
+      setQuestionUpdate(question);
     }
     setdataitemtest(question);
     try {
       let fetchedData;
       switch (question.type) {
-        case "Grammar":
+        case "GRAMMAR":
           fetchedData = await getTestMixingQuestion(question.id);
           break;
-        case "Vocabulary":
+        case "VOCABULARY":
           fetchedData = await getTestMixingQuestion(question.id);
           break;
-        case "Listening":
-          fetchedData = await getListeningById(question.id);
+        case "LISTENING":
+          fetchedData = await getTestListening(question.id);
           break;
-        case "Reading":
-          fetchedData = await getReadingById(question.id);
+        case "READING":
+          fetchedData = await getTestReading(question.id);
           break;
-        case "Speaking":
-          fetchedData = await getSpeakingById(question.id);
+        case "SPEAKING":
+          fetchedData = await getTestSpeaking(question.id);
           break;
-        case "Writing":
-          fetchedData = await getWritingById(question.id);
+        case "WRITING":
+          fetchedData = await getTestWriting(question.id);
           break;
         default:
           fetchedData = null;
@@ -95,24 +95,24 @@ function Mixing() {
   }
 
   const renderQuestionComponent = () => {
-    if (!questionData) return null; // Không render nếu không có dữ liệu câu hỏi
+    if (!questionData) return null; 
 
     switch (type) {
-      case "Vocabulary":
+      case "VOCABULARY":
         return (
           <QuestionVocabulary key={questionData.id} question={questionData} />
         );
-      case "Grammar":
+      case "GRAMMAR":
         return (
           <QuestionGrammar key={questionData.id} question={questionData} />
         );
-      case "Listening":
+      case "LISTENING":
         return <QuestionListening key={questionData.id} data={questionData} />;
-      case "Reading":
+      case "READING":
         return <QuestionReading key={questionData.id} data={questionData} />;
-      case "Writing":
+      case "WRITING":
         return <QuestionWriting key={questionData.id} data={questionData} />;
-      case "Speaking":
+      case "SPEAKING":
         return (
           <QuestionSpeaking key={questionData.id} initialData={questionData} />
         );
@@ -135,7 +135,7 @@ function Mixing() {
           <InformationTest data={datatest} />
         </Box>
         <Box sx={{ marginLeft: "2%", flex: 6, minHeight: 0 }}>
-          <QuestionListTest data={datatest} handleRowClick={handleRowClick} />
+          <QuestionListTest data={datatest} handleRowClick={handleRowClick} setQuestionUpdate = { setQuestionUpdate} />
         </Box>
       </Box>
       {renderQuestionComponent()}

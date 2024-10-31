@@ -16,7 +16,7 @@ import {
 import { Trash, Upload, PlusCircle } from "lucide-react";
 import { styled } from "@mui/material/styles";
 import QuestionReadingDetails from "./QuestionReadingDetails";
-import { updateReading } from "api/test/TestReadingApi"; // import API
+import { updateTestReading } from "api/test/TestReadingApi"; // import API
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -67,7 +67,7 @@ function QuestionReading({ data }) {
       content: formData.content,
       image: formData.imageUrl,
     };
-    updateReading(updatedData)
+    updateTestReading(updatedData)
       .then((response) => {
         console.log("Test updated successfully:", response);
       })

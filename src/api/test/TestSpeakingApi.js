@@ -1,8 +1,8 @@
 import apiClient from "../apiClient";
 
-export function getSpeakingById(speakingId) {
+export function getTestSpeaking(testSpeakingId) {
   return apiClient
-    .get("/testspeaking/" + speakingId)
+    .get("/testspeaking/" + testSpeakingId)
     .then((response) => {
       return response.data;
     })
@@ -12,9 +12,9 @@ export function getSpeakingById(speakingId) {
     });
 }
 
-export function createSpeaking(speaking) {
+export function createTestSpeaking(testSpeaking) {
   return apiClient
-    .post("/testspeaking", speaking)
+    .post("/testspeaking", testSpeaking)
     .then((response) => {
       return response.data;
     })
@@ -24,9 +24,9 @@ export function createSpeaking(speaking) {
     });
 }
 
-export function updateSpeaking(speaking) {
+export function updateTestSpeaking(id, testSpeaking) {
   return apiClient
-    .put("/testspeaking", speaking)
+    .put(`/testspeaking/${id}`, testSpeaking)
     .then((response) => {
       return response.data;
     })
@@ -36,9 +36,9 @@ export function updateSpeaking(speaking) {
     });
 }
 
-export function deleteSpeakingById(speakingId) {
+export function deleteTestSpeaking(testSpeakingId) {
   return apiClient
-    .delete("/api/testspeaking/" + speakingId)
+    .delete("/api/testspeaking/" + testSpeakingId)
     .then((response) => {
       return response.status === 204;
     })

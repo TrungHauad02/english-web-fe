@@ -70,19 +70,21 @@ function InformationTest({ data }) {
     setEditMode(true);
   };
 
-  const handleSave = () => {
-    updateTest(formData)
-      .then((updatedData) => {
-        setFormData((prevState) => ({
-          ...prevState,
-          ...updatedData,
-        }));
-        setEditMode(false);
-      })
-      .catch((error) => {
-        console.error("Error updating test:", error);
-      });
+  const handleSave = async () => {
+    try {
+      const updatedData = await updateTest(data.id, formData);
+      
+      setFormData((prevState) => ({
+        ...prevState,
+        ...updatedData,
+      }));
+      
+      setEditMode(false);
+    } catch (error) {
+      console.error("Error updating test:", error);
+    }
   };
+  
 
   const handleCancel = () => {
     setFormData(backupData);

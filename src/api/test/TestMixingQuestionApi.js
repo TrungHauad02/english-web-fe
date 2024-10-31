@@ -24,9 +24,9 @@ export function createTestMixingQuestion(testmixingquestion) {
     });
 }
 
-export function updateTestMixingQuestion(testmixingquestion) {
+export function updateTestMixingQuestion(id, testmixingquestion) {
   return apiClient
-    .put("/testmixingquestion", testmixingquestion)
+    .put(`/testmixingquestion/${id}`, testmixingquestion)
     .then((response) => {
       return response.data;
     })
@@ -36,9 +36,9 @@ export function updateTestMixingQuestion(testmixingquestion) {
     });
 }
 
-export function deleteTestMixingQuestionById(testmixingquestionId) {
+export function deleteTestMixingQuestion(testmixingquestionId) {
   return apiClient
-    .delete("/api/testmixingquestion/" + testmixingquestionId)
+    .delete("/testmixingquestion/" + testmixingquestionId)
     .then((response) => {
       return response.status === 204;
     })
