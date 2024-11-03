@@ -131,6 +131,18 @@ export default function useQuestion(data, fetchData, setError, path) {
     setQuestion({ ...question, explanation: e.target.value });
   }
 
+  function onChangeStatus(e) {
+    if (!isEditing) return;
+    setQuestion({ ...question, status: e.target.value });
+  }
+
+  function onChangeAnswerStatus(e, i) {
+    if (!isEditing) return;
+    const newAnswers = [...question.answers];
+    newAnswers[i].status = e.target.value;
+    setQuestion({ ...question, answers: newAnswers });
+  }
+
   return {
     question,
     isEditing,
@@ -142,6 +154,8 @@ export default function useQuestion(data, fetchData, setError, path) {
     onChangeExplanation,
     onChangeCorrectAnswer,
     onChangeAnswerContent,
+    onChangeAnswerStatus,
+    onChangeStatus,
     onDeleteAnswer,
   };
 }

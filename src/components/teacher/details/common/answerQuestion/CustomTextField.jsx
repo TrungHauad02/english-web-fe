@@ -11,7 +11,7 @@ const CustomTextField = ({
     maxWidth: maxWidth,
     minWidth: minWidth,
     "& .MuiInputBase-root": {
-      fontSize: "1rem",
+      fontSize: "0.85rem",
       padding: "0",
     },
   },

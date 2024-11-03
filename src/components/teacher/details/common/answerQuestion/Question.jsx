@@ -3,6 +3,7 @@ import SaveEditDeleteButton from "../button/SaveEditDeleteButton";
 import useQuestion from "./useQuestion";
 import CustomTextField from "./CustomTextField";
 import Answer from "./Answer";
+import BasicSelect from "../select/BasicSelect";
 
 export default function Question({
   data,
@@ -22,14 +23,16 @@ export default function Question({
     onChangeExplanation,
     onChangeCorrectAnswer,
     onChangeAnswerContent,
+    onChangeAnswerStatus,
+    onChangeStatus,
     onDeleteAnswer,
   } = useQuestion(data, fetchData, setError, path);
 
   const questionContainerStyle = {
     backgroundColor: "#fff",
-    borderRadius: "0.5rem",
-    padding: "1rem",
-    boxShadow: "0 0 0.5rem 0.1rem #00000050",
+    borderRadius: "0.3rem",
+    padding: "0.5rem",
+    boxShadow: "0 0 0.3rem 0.05rem #00000030",
     zIndex: 2,
   };
 
@@ -48,7 +51,7 @@ export default function Question({
       container
       direction="column"
       sx={{
-        marginY: "0.5rem",
+        marginY: "0.3rem",
       }}
     >
       <Grid2
@@ -56,10 +59,11 @@ export default function Question({
         direction="row"
         alignItems="center"
         spacing={1}
+        justifyContent={"flex-start"}
         sx={questionContainerStyle}
       >
         <Grid2 item>
-          <Typography variant="h6" fontWeight={"bold"}>
+          <Typography variant="subtitle1" fontWeight={"bold"}>
             Question
           </Typography>
         </Grid2>
@@ -68,8 +72,14 @@ export default function Question({
           <CustomTextField
             value={question.serial}
             type="number"
-            disabled={!isEditing}
+            disabled={true}
             onChange={onChangeQuestionSerial}
+            sx={{
+              width: "4rem",
+              "& .MuiInputBase-root": {
+                fontSize: "0.85rem",
+              },
+            }}
           />
         </Grid2>
         <Grid2 item>
@@ -80,9 +90,18 @@ export default function Question({
           <CustomTextField
             value={question.content}
             maxWidth="20rem"
-            minWidth="22rem"
+            minWidth={"18rem"}
             disabled={!isEditing}
             onChange={onChangeQuestionContent}
+          />
+        </Grid2>
+        <Grid2 item sx={{ marginTop: "-0.5rem" }}>
+          <BasicSelect
+            disabled={!isEditing}
+            options={["ACTIVE", "INACTIVE"]}
+            value={question.status}
+            onChange={onChangeStatus}
+            sx={{ minWidth: "6.8rem" }}
           />
         </Grid2>
         <Grid2 item>
@@ -98,7 +117,7 @@ export default function Question({
       <Grid2 container direction={"column"} sx={answerContainerStyle}>
         <Grid2 container direction={"row"}>
           <Grid2 item size={2}>
-            <Typography variant="h6" fontWeight={"bold"}>
+            <Typography variant="subtitle1" fontWeight={"bold"}>
               Answers:
             </Typography>
           </Grid2>
@@ -111,13 +130,14 @@ export default function Question({
                 onChangeAnswerContent={(e) => onChangeAnswerContent(e, index)}
                 onChangeCorrectAnswer={onChangeCorrectAnswer}
                 onDeleteAnswer={() => onDeleteAnswer(answer.id, index)}
+                onChangeAnswerStatus={(e) => onChangeAnswerStatus(e, index)}
               />
             ))}
           </Grid2>
         </Grid2>
         <Grid2 container direction={"row"} alignItems={"center"}>
           <Grid2 item size={2}>
-            <Typography variant="h6" fontWeight={"bold"}>
+            <Typography variant="subtitle1" fontWeight={"bold"}>
               Explain:
             </Typography>
           </Grid2>
@@ -140,6 +160,7 @@ export default function Question({
                 backgroundColor: "#000",
                 color: "#fff",
                 textTransform: "capitalize",
+                fontSize: "0.85rem",
               }}
             >
               Add new answer

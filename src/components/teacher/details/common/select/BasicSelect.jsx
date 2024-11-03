@@ -29,11 +29,17 @@ export default function BasicSelect({
           value={value}
           onChange={onChange}
           disabled={disabled}
-          sx={sx}
+          sx={{
+            fontSize: "0.85rem",
+            ...sx,
+          }}
         >
           {options.map((option) => (
             <MenuItem key={option} value={option}>
-              <Typography sx={{ textTransform: "capitalize" }}>
+              <Typography
+                fontSize="0.85rem"
+                sx={{ textTransform: "capitalize" }}
+              >
                 {option}
               </Typography>
             </MenuItem>
