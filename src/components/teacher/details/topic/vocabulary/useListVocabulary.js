@@ -20,7 +20,7 @@ export default function useListVocabulary(listVocab, setCurVocab, fetchData) {
     setCurVocab({
       id: "-1",
       word: "",
-      img: "",
+      image: "",
       meaning: "",
       wordType: "NOUN",
       phonetic: "",

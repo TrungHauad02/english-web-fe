@@ -20,11 +20,13 @@ export async function getVocabByTopicId(topicId) {
   }
 }
 
-export async function getVocabByPageAndTopicId(topicId, page, size) {
+export async function getVocabByPageAndTopicId(topicId, page, size, status) {
   try {
-    const res = await apiClient.get(
-      `/vocabulary?page=${page}&size=${size}&topicId=${topicId}`
-    );
+    const requestUrl = status
+      ? `/vocabulary?page=${page}&size=${size}&topicId=${topicId}&status=${status}`
+      : `/vocabulary?page=${page}&size=${size}&topicId=${topicId}`;
+
+    const res = await apiClient.get(requestUrl);
     return res.data;
   } catch (err) {
     console.error("Error fetching vocab:", err);
