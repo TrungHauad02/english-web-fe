@@ -15,7 +15,8 @@ function ListFlashcard({ topicId, setError }) {
         const data = await getVocabByPageAndTopicId(
           topicId,
           currentPage - 1,
-          8
+          8,
+          "ACTIVE"
         );
         if (data) {
           setList(data.content);
