@@ -17,7 +17,7 @@ export default function useVocabulary() {
         const [topicData, vocabData, listQuestionData] = await Promise.all([
           getTopicDetail(id),
           getVocabByPageAndTopicId(id, 0, 24, "ACTIVE"),
-          getAnswerQuestions("topics", id),
+          getAnswerQuestions("topics", id, "ACTIVE"),
         ]);
         if (
           !topicData ||

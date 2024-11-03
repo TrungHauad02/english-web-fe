@@ -1,13 +1,16 @@
 import apiClient from "../../apiClient";
 
-export const getAnswerQuestions = async (path, id) => {
+export const getAnswerQuestions = async (path, id, status) => {
   try {
     let nameId = "";
     if (path === "topics") nameId = "topicId";
     if (path === "grammar") nameId = "grammarId";
     if (path === "reading") nameId = "readingId";
     if (path === "listening") nameId = "listeningId";
-    const res = await apiClient.get(`/${path}-question?${nameId}=${id}`);
+
+    const queryParams = `${nameId}=${id}${status ? `&status=${status}` : ""}`;
+    const res = await apiClient.get(`/${path}-question?${queryParams}`);
+
     return res.data;
   } catch (error) {
     throw error;
