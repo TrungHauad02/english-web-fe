@@ -12,10 +12,15 @@ export default function useAnswerQuestion(path) {
 
   const fetchData = async () => {
     try {
+      if (id === "-1") {
+        setLocalData([]);
+        return;
+      }
       const listQuestionData = await getAnswerQuestions(path, id);
-      console.log(listQuestionData);
       setLocalData(listQuestionData);
-    } catch (error) {}
+    } catch (error) {
+      setError(error.response.data.message);
+    }
   };
 
   useEffect(() => {
@@ -23,6 +28,13 @@ export default function useAnswerQuestion(path) {
   }, [id, path]);
 
   function handleAddNewQuestion() {
+    if (id === "-1" || !localData) {
+      setError(
+        "Cannot create question. Please, create lesson first and try again"
+      );
+      return;
+    }
+
     const createQuestionObject = (type, id) => ({
       id: "-1",
       serial: localData.length + 1,

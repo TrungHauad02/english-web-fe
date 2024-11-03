@@ -3,9 +3,9 @@ import ListVocabulary from "./ListVocabulary";
 import VocabularyInfo from "./VocabularyInfo";
 import useVocabularyManagement from "./useVocabularyManagement";
 
-export default function VocabularyManagement({ topicId }) {
+export default function VocabularyManagement({ setError }) {
   const { curVocab, setCurVocab, listVocab, fetchData } =
-    useVocabularyManagement(topicId);
+    useVocabularyManagement(setError);
 
   const containerStyle = {
     backgroundColor: "#f1f1f1",

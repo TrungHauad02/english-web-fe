@@ -4,9 +4,10 @@ import AnswerQuestionManagement from "../common/answerQuestion/AnswerQuestionMan
 import VocabularyManagement from "./vocabulary/VocabularyManagement";
 import useTopicDetail from "./useTopicDetail";
 import DotLoader from "../../../../shared/component/loader/DotLoader";
+import ErrorComponent from "shared/component/error/ErrorComponent";
 
 export default function TopicDetail() {
-  const { data, answerQuestion, fetchData } = useTopicDetail();
+  const { data, error, setError, handleCloseError } = useTopicDetail();
   const answerQuestionContainerStyle = {
     height: "500px",
     width: "53rem",
@@ -45,7 +46,7 @@ export default function TopicDetail() {
     >
       <Grid2 container direction={"row"} justifyContent={"space-between"}>
         <Grid2 item>
-          <TopicInfo data={data} />
+          <TopicInfo data={data} setError={setError} />
         </Grid2>
         <Grid2
           borderRadius={"0.5rem"}
@@ -56,8 +57,12 @@ export default function TopicDetail() {
         </Grid2>
       </Grid2>
       <Grid2 item direction={"row"}>
-        <VocabularyManagement />
+        <VocabularyManagement setError={setError} />
       </Grid2>
+      {/**Hiển thị khi có lỗi */}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
+      )}
     </Grid2>
   );
 }

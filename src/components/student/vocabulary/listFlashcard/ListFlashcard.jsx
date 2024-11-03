@@ -4,19 +4,27 @@ import { useEffect, useState } from "react";
 import CustomPagination from "shared/component/pagination/CustomPagination";
 import { getVocabByPageAndTopicId } from "api/study/topic/vocabularyService";
 
-function ListFlashcard({ topicId }) {
+function ListFlashcard({ topicId, setError }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [list, setList] = useState(null);
   const [totalPage, setTotalPage] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getVocabByPageAndTopicId(topicId, currentPage - 1, 8);
-      if (data) {
-        setList(data.content);
-        setTotalPage(data.totalPages);
-      } else {
-        setList([]);
+      try {
+        const data = await getVocabByPageAndTopicId(
+          topicId,
+          currentPage - 1,
+          8
+        );
+        if (data) {
+          setList(data.content);
+          setTotalPage(data.totalPages);
+        } else {
+          setList([]);
+        }
+      } catch (error) {
+        setError(error.response.data.message);
       }
     };
 

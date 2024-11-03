@@ -6,9 +6,15 @@ import AnswerQuestion from "../common/answerQuestion/AnswerQuestion";
 import LoadingComponent from "../common/loadingPage/LoadingComponent";
 import { Grid2 } from "@mui/material";
 import useVocabulary from "./useVocabulary";
+import ErrorComponent from "shared/component/error/ErrorComponent";
 
 function Vocabulary() {
-  const { topic, stateVocab, listQuestion } = useVocabulary();
+  const { topic, stateVocab, listQuestion, error, setError, handleCloseError } =
+    useVocabulary();
+
+  if (error) {
+    return <ErrorComponent errorMessage={error} onClose={handleCloseError} />;
+  }
 
   if (!topic)
     return (
@@ -27,13 +33,18 @@ function Vocabulary() {
         </Grid2>
       </Grid2>
     );
+
   return (
     <>
       <MainPicture title={topic.title} src={topic.image} />
       <MatchImageWithWord stateVocab={stateVocab} />
       <Introduction title={topic.title} />
-      <ListFlashcard topicId={topic.id} />
+      <ListFlashcard topicId={topic.id} setError={setError} />
       <AnswerQuestion listQuestion={listQuestion} />
+      {/**Hiển thị khi có lỗi */}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
+      )}
     </>
   );
 }

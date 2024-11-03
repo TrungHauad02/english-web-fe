@@ -9,6 +9,7 @@ export default function useVocabulary() {
   const [topic, setTopic] = useState(null);
   const [stateVocab, setStateVocab] = useState(null);
   const [listQuestion, setListQuestion] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,6 +19,14 @@ export default function useVocabulary() {
           getVocabByPageAndTopicId(id, 0, 24),
           getAnswerQuestions("topics", id),
         ]);
+        if (
+          !topicData ||
+          vocabData.content.length === 0 ||
+          listQuestionData.length === 0
+        ) {
+          setError("Lesson isn't available yet");
+          return;
+        }
         setTopic(topicData);
         setListQuestion(listQuestionData);
         if (vocabData.content.length > 0) {
@@ -33,7 +42,7 @@ export default function useVocabulary() {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
+        setError(error.response.data.message);
       }
     };
     fetchData();
@@ -46,9 +55,17 @@ export default function useVocabulary() {
         "2": { id: "2", contain: null },
     };
   */
+
+  const handleCloseError = () => {
+    setError("");
+  };
+
   return {
     topic,
     stateVocab,
     listQuestion,
+    error,
+    setError,
+    handleCloseError,
   };
 }

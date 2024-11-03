@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getTopicDetail } from "api/study/topic/topicService";
-import { getAnswerQuestions } from "api/study/answerQuestion/answerQuestionService";
 
 export default function useTopicDetail() {
-  const { id } = useParams();
-  const [data, setData] = useState(null);
-  const [answerQuestion, setAnswerQuestion] = useState(null);
-
   const emptyTopic = {
     id: "-1",
     serial: 1,
@@ -16,31 +11,35 @@ export default function useTopicDetail() {
     description: "",
     status: "ACTIVE",
   };
+  const { id } = useParams();
+  const [data, setData] = useState(emptyTopic);
+  const [error, setError] = useState("");
 
-  const fetchData = async () => {
-    try {
-      if (id === "-1") {
-        setAnswerQuestion([]);
-        setData(emptyTopic);
-        return;
-      }
-      const [dataRes, answerQuestionRes] = await Promise.all([
-        getTopicDetail(id),
-        getAnswerQuestions("topics", id),
-      ]);
-      setAnswerQuestion(answerQuestionRes);
-      setData(dataRes);
-    } catch (err) {
-      console.error(err);
-    }
-  };
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (id === "-1") {
+          setData(emptyTopic);
+          return;
+        }
+        const dataRes = await getTopicDetail(id);
+        console.log(dataRes);
+        setData(dataRes);
+      } catch (error) {
+        setError(error.response.data.message);
+      }
+    };
     fetchData();
   }, [id]);
 
+  const handleCloseError = () => {
+    setError("");
+  };
+
   return {
     data,
-    answerQuestion,
-    fetchData,
+    error,
+    setError,
+    handleCloseError,
   };
 }

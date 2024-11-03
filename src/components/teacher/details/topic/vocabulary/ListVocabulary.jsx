@@ -1,8 +1,7 @@
-import { Button, Grid2, Stack, Typography } from "@mui/material";
+import { Button, Grid2, Typography } from "@mui/material";
 import SearchBar from "shared/component/searchbar/SearchBar";
 import Divider from "@mui/material/Divider";
 import useListVocabulary from "./useListVocabulary";
-import DotLoader from "shared/component/loader/DotLoader";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 export default function ListVocabulary({ listVocab, setCurVocab, fetchData }) {
@@ -70,16 +69,16 @@ export default function ListVocabulary({ listVocab, setCurVocab, fetchData }) {
             </Typography>
           </Grid2>
           <Grid2 item size={4}>
-            <Typography variant={"h6"} fontWeight={"bold"} textAlign={"center"}>
+            <Typography
+              variant={"h6"}
+              fontWeight={"bold"}
+              textAlign={"center"}
+              textTransform={"capitalize"}
+            >
               Details
             </Typography>
           </Grid2>
         </Grid2>
-        {!displayVocab && (
-          <Stack justifyContent="center" alignItems={"center"}>
-            <DotLoader />
-          </Stack>
-        )}
         <Grid2
           spacing={1}
           sx={{ height: "400px", overflowY: "auto", padding: "0.5rem" }}
@@ -99,7 +98,11 @@ export default function ListVocabulary({ listVocab, setCurVocab, fetchData }) {
                   <Grid2 item size={4} textAlign={"center"}>
                     <Button
                       variant="contained"
-                      sx={{ backgroundColor: "#000", color: "#fff" }}
+                      sx={{
+                        backgroundColor: "#000",
+                        color: "#fff",
+                        textTransform: "capitalize",
+                      }}
                       onClick={() => onUpdateCurVocab(vocab.id)}
                     >
                       Details

@@ -1,5 +1,5 @@
 import { Button, Card, Grid2 } from "@mui/material";
-import { styled } from "@mui/system";
+import { Stack, styled } from "@mui/system";
 import ProcessBar from "./ProcessBar";
 import PrevNextSubmitButton from "shared/component/button/PrevNextSubmitButton";
 import ListOptions from "./ListOptions";
@@ -37,6 +37,7 @@ function AnswerQuestion({ listQuestion }) {
     handleChange,
     handleNext,
     handlePrevious,
+    handleReset,
   } = useAnswerQuestion(listQuestion);
   if (!listQuestion || listQuestion.length === 0)
     return (
@@ -87,13 +88,30 @@ function AnswerQuestion({ listQuestion }) {
           </Button>
         )}
       </Grid2>
-      <PrevNextSubmitButton
-        handleNext={handleNext}
-        handlePrevious={handlePrevious}
-        submitContent={getSubmitContent()}
-        scoreContent={getScoreContent()}
-        onSubmit={() => setIsSubmit(true)}
-      />
+      <Stack
+        direction={"row"}
+        alignItems={"flex-end"}
+        justifyContent={"flex-end"}
+        spacing={2}
+        sx={{ marginTop: "1rem" }}
+      >
+        {isSubmit && (
+          <Button
+            variant="contained"
+            sx={{ bgcolor: "#6EC2F7", textTransform: "capitalize" }}
+            onClick={handleReset}
+          >
+            Reset
+          </Button>
+        )}
+        <PrevNextSubmitButton
+          handleNext={handleNext}
+          handlePrevious={handlePrevious}
+          submitContent={getSubmitContent()}
+          scoreContent={getScoreContent()}
+          onSubmit={() => setIsSubmit(true)}
+        />
+      </Stack>
     </Card>
   );
 }
