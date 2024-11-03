@@ -10,3 +10,14 @@ export const getListTopic = async (title, page, size, sortBy) => {
     throw error;
   }
 };
+
+export const getListTopicActive = async (title, page, size, sortBy) => {
+  try {
+    const path = `/${title}?page=${page}&size=${size}&sortBy=${sortBy}&status=ACTIVE`;
+    const response = await apiClient.get(path);
+    return response.data;
+  } catch (error) {
+    console.error(error.response.data.message);
+    throw error;
+  }
+};
