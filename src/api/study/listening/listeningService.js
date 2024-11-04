@@ -29,3 +29,11 @@ export async function updateListening(id, listening) {
     throw err;
   }
 }
+
+export async function deleteListening(id) {
+  try {
+    await apiClient.delete(`/listenings/${id}`);
+  } catch (error) {
+    throw error;
+  }
+}

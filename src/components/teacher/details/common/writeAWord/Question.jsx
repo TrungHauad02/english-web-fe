@@ -4,6 +4,8 @@ import SoundViewer from "shared/component/soundViewer/SoundViewer";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { VisuallyHiddenInput } from "shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useQuestion from "./useQuestion";
+import ErrorComponent from "shared/component/error/ErrorComponent";
+import BasicSelect from "../select/BasicSelect";
 
 const CustomTextField = ({
   value,
@@ -42,6 +44,8 @@ export default function Question({ data, fetchData }) {
     onChangeSerial,
     onChangeSentence,
     onChangeFile,
+    error,
+    handleCloseError,
   } = useQuestion(data, fetchData);
 
   return (
@@ -173,8 +177,20 @@ export default function Question({ data, fetchData }) {
               onChange={(e) => onChangeField(e, "correctAnswer")}
             />
           </Grid2>
+          <Grid2 item sx={{ marginTop: "-0.65rem" }}>
+            <BasicSelect
+              disabled={!isEditing}
+              value={question.status}
+              options={["ACTIVE", "INACTIVE"]}
+              onChange={(e) => onChangeField(e, "status")}
+            />
+          </Grid2>
         </Grid2>
       </Grid2>
+      {/**Hiển thị khi xảy ra lỗi */}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
+      )}
     </Grid2>
   );
 }

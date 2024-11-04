@@ -9,9 +9,7 @@ export const getAnswerQuestions = async (path, id, status) => {
     if (path === "listening") nameId = "listeningId";
 
     const queryParams = `${nameId}=${id}${status ? `&status=${status}` : ""}`;
-    console.log(`/${path}-question?${queryParams}`);
     const res = await apiClient.get(`/${path}-question?${queryParams}`);
-    console.log(res);
     return res.data;
   } catch (error) {
     throw error;
