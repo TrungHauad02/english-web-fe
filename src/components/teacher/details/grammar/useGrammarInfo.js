@@ -1,12 +1,22 @@
 import { useEffect, useState } from "react";
-import { createGrammar, updateGrammar } from "api/study/grammar/grammarService";
+import {
+  createGrammar,
+  deleteGrammar,
+  updateGrammar,
+} from "api/study/grammar/grammarService";
 import { useNavigate, useParams } from "react-router-dom";
+import handleError from "shared/utils/handleError";
 
 export default function useGrammarInfo(data, setData) {
   const { id } = useParams();
   const [topic, setTopic] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const handleCloseError = () => {
+    setError("");
+  };
 
   useEffect(() => {
     setIsEditing(id === "-1");
@@ -27,11 +37,19 @@ export default function useGrammarInfo(data, setData) {
       const data = await updateGrammar(id, topic);
       setData(data);
       setIsEditing(false);
-    } catch (error) {}
+    } catch (error) {
+      handleError(error, setError);
+    }
   };
 
-  const handleDelete = () => {
-    if (topic.id === "-1") return;
+  const handleDelete = async () => {
+    if (id === "-1") return;
+    try {
+      await deleteGrammar(id);
+      navigate(`/teacher/grammars`);
+    } catch (error) {
+      handleError(error, setError);
+    }
   };
 
   const onChangeImage = (e) => {
@@ -97,5 +115,7 @@ export default function useGrammarInfo(data, setData) {
     onChangeDescription,
     onChangeExample,
     onChangeFile,
+    error,
+    handleCloseError,
   };
 }

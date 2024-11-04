@@ -29,3 +29,11 @@ export async function updateGrammar(id, grammar) {
     throw err;
   }
 }
+
+export async function deleteGrammar(id) {
+  try {
+    await apiClient.delete(`/grammars/${id}`);
+  } catch (err) {
+    throw err;
+  }
+}

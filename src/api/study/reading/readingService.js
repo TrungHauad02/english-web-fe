@@ -29,3 +29,12 @@ export async function updateReading(id, reading) {
     throw err;
   }
 }
+
+export async function deleteReading(id) {
+  try {
+    await apiClient.delete(`/readings/${id}`);
+  } catch (err) {
+    console.error("Error delete reading: ", err);
+    throw err;
+  }
+}

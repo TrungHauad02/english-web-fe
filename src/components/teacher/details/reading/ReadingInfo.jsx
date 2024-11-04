@@ -6,6 +6,7 @@ import MultiLineTextField from "../common/textField/MultiLineTextField";
 import SaveEditDeleteButton from "../common/button/SaveEditDeleteButton";
 import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useReadingInfo from "./useReadingInfo";
+import ErrorComponent from "shared/component/error/ErrorComponent";
 
 export default function ReadingInfo({ data, setData }) {
   const {
@@ -13,12 +14,15 @@ export default function ReadingInfo({ data, setData }) {
     isEditing,
     handleEditing,
     handleSave,
+    handleDelete,
     onChangeImage,
     onChangeTitle,
     onChangeSerial,
     onChangeStatus,
     onChangeDescription,
     onChangeFile,
+    error,
+    handleCloseError,
   } = useReadingInfo(data, setData);
 
   return (
@@ -108,11 +112,16 @@ export default function ReadingInfo({ data, setData }) {
           </Button>
           <SaveEditDeleteButton
             showText
+            onDel={handleDelete}
             onEdit={handleEditing}
             onSave={handleSave}
           />
         </Grid2>
       </Grid2>
+      {/* Hiện thị khi có lỗi */}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
+      )}
     </Grid2>
   );
 }

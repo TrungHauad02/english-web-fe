@@ -1,19 +1,39 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { createReading, updateReading } from "api/study/reading/readingService";
+import {
+  createReading,
+  deleteReading,
+  updateReading,
+} from "api/study/reading/readingService";
+import handleError from "shared/utils/handleError";
 
 export default function useReadingInfo(data, setData) {
   const { id } = useParams();
   const [topic, setTopic] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsEditing(id === "-1");
   }, [id]);
 
+  const handleCloseError = () => {
+    setError("");
+  };
+
   const handleEditing = () => {
     setIsEditing(true);
+  };
+
+  const handleDelete = async () => {
+    try {
+      if (!isEditing) return;
+      await deleteReading(id);
+      navigate(`/teacher/readings`);
+    } catch (error) {
+      handleError(error, setError);
+    }
   };
 
   const handleSave = async () => {
@@ -26,7 +46,9 @@ export default function useReadingInfo(data, setData) {
       const data = await updateReading(id, topic);
       setTopic(data);
       setIsEditing(false);
-    } catch (error) {}
+    } catch (error) {
+      handleError(error, setError);
+    }
   };
 
   const onChangeImage = (e) => {
@@ -73,11 +95,14 @@ export default function useReadingInfo(data, setData) {
     isEditing,
     handleEditing,
     handleSave,
+    handleDelete,
     onChangeImage,
     onChangeTitle,
     onChangeSerial,
     onChangeStatus,
     onChangeDescription,
     onChangeFile,
+    error,
+    handleCloseError,
   };
 }

@@ -36,7 +36,7 @@ export default function ReadingDetail() {
     <Grid2
       container
       direction={"row"}
-      sx={{ margin: "2rem 4%" }}
+      sx={{ margin: "2rem 3%" }}
       justifyContent={"space-between"}
     >
       <Grid2 item>
@@ -44,7 +44,7 @@ export default function ReadingDetail() {
         <ReadingInfo data={localData} setData={setLocalData} />
       </Grid2>
       <Grid2 container direction={"column"} spacing={2} size={7}>
-        <Grid2 item size={6} sx={answerQuestionContainerStyle}>
+        <Grid2 item sx={answerQuestionContainerStyle}>
           <AnswerQuestionManagement path={"reading"} />
         </Grid2>
         <Grid2 container sx={{ width: "100%" }}>
