@@ -5,6 +5,7 @@ import {
   updateGrammar,
 } from "api/study/grammar/grammarService";
 import { useNavigate, useParams } from "react-router-dom";
+import handleError from "shared/utils/handleError";
 
 export default function useGrammarInfo(data, setData) {
   const { id } = useParams();
@@ -12,17 +13,6 @@ export default function useGrammarInfo(data, setData) {
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
-  function handleError(err) {
-    if (err.response?.data?.details) {
-      const details = err.response.data.details;
-      const errorMessages = Object.values(details).filter(Boolean).join(".\n");
-      setError(errorMessages);
-    } else {
-      if (err.response.data.message) setError(err.response.data.message);
-      else setError("An unexpected error occurred.");
-    }
-  }
 
   const handleCloseError = () => {
     setError("");
@@ -48,7 +38,7 @@ export default function useGrammarInfo(data, setData) {
       setData(data);
       setIsEditing(false);
     } catch (error) {
-      handleError(error);
+      handleError(error, setError);
     }
   };
 
@@ -58,7 +48,7 @@ export default function useGrammarInfo(data, setData) {
       await deleteGrammar(id);
       navigate(`/teacher/grammars`);
     } catch (error) {
-      handleError(error);
+      handleError(error, setError);
     }
   };
 

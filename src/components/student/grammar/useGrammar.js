@@ -7,6 +7,11 @@ export default function useGrammar() {
   const { id } = useParams();
   const [grammar, setGrammar] = useState(null);
   const [listQuestion, setListQuestion] = useState(null);
+  const [error, setError] = useState("");
+
+  const handleCloseError = () => {
+    setError("");
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +24,11 @@ export default function useGrammar() {
         );
         setListQuestion(answerQuestionData);
         setGrammar(data);
-      } catch (error) {}
+        if (!answerQuestionData || answerQuestionData.length === 0)
+          setError("This lesson doesn't available yet");
+      } catch (error) {
+        setError(error.response.data.details.message);
+      }
     };
     fetchData();
   }, [id]);
@@ -28,5 +37,7 @@ export default function useGrammar() {
     grammar,
     setGrammar,
     listQuestion,
+    error,
+    handleCloseError,
   };
 }
