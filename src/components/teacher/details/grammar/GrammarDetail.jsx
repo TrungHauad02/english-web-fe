@@ -30,13 +30,13 @@ export default function GrammarDetail() {
   };
   if (!localData) return <></>;
   return (
-    <Grid2 container direction={"row"} sx={{ margin: "2rem 4%" }} spacing={4}>
+    <Grid2 container direction={"row"} sx={{ margin: "2rem 4%" }} spacing={2}>
       <Grid2 item>
         {/** Grammar info*/}
         <GrammarInfo data={localData} setData={setLocalData} />
       </Grid2>
-      <Grid2 container direction={"column"} spacing={4} sx={{ width: "59%" }}>
-        <Grid2 item size={6} sx={answerQuestionContainerStyle}>
+      <Grid2 container direction={"column"} spacing={4} sx={{ width: "60%" }}>
+        <Grid2 item sx={answerQuestionContainerStyle}>
           <AnswerQuestionManagement path={"grammar"} />
         </Grid2>
         <Grid2 container sx={{ width: "100%" }}>

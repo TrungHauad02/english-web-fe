@@ -8,6 +8,7 @@ import useGrammarInfo from "./useGrammarInfo";
 import DeleteButton from "../common/button/DeleteButton";
 import EditButton from "../common/button/EditButton";
 import SaveButton from "../common/button/SaveButton";
+import ErrorComponent from "shared/component/error/ErrorComponent";
 
 export default function GrammarInfo({ data, setData }) {
   const {
@@ -24,6 +25,8 @@ export default function GrammarInfo({ data, setData }) {
     onChangeDescription,
     onChangeExample,
     onChangeFile,
+    error,
+    handleCloseError,
   } = useGrammarInfo(data, setData);
 
   return (
@@ -150,6 +153,10 @@ export default function GrammarInfo({ data, setData }) {
           </Grid2>
         </Grid2>
       </Grid2>
+      {/**Hiển thị khi có lỗi */}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
+      )}
     </Grid2>
   );
 }

@@ -12,7 +12,11 @@ export default function useGrammar() {
     const fetchData = async () => {
       try {
         const data = await getGrammarDetail(id);
-        const answerQuestionData = await getAnswerQuestions("grammar", id);
+        const answerQuestionData = await getAnswerQuestions(
+          "grammar",
+          id,
+          "ACTIVE"
+        );
         setListQuestion(answerQuestionData);
         setGrammar(data);
       } catch (error) {}
