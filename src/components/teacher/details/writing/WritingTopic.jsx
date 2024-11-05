@@ -8,9 +8,15 @@ export default function WritingTopic({
   setData,
   isEditing,
   setIsEditing,
+  setError,
 }) {
-  const { handleEditing, handleSave, onChangeDescription, onChangeTopic } =
-    useWritingTopic(data, setData, isEditing, setIsEditing);
+  const {
+    handleEditing,
+    handleSave,
+    handleDelete,
+    onChangeDescription,
+    onChangeTopic,
+  } = useWritingTopic(data, setData, isEditing, setIsEditing, setError);
 
   return (
     <Grid2
@@ -35,6 +41,7 @@ export default function WritingTopic({
         <Grid2 container direction={"row"} spacing={2}>
           <SaveEditDeleteButton
             showText
+            onDel={handleDelete}
             onEdit={handleEditing}
             onSave={handleSave}
           />
