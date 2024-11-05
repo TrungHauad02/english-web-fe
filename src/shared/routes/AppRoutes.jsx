@@ -28,6 +28,7 @@ import TestWriting from "../../components/student/Test/TestWriting/TestWriting";
 import TestSpeaking from "../../components/student/Test/TestSpeaking/TestSpeaking";
 import TestMixing from "../../components/student/Test/TestMixing/TestMixing";
 import AuthenticatedRoute from "./AuthenticatedRoute";
+import TeacherManagement from "components/teacher/TeacherManagement";
 
 export default function AppRoutes() {
   const router = createBrowserRouter([
@@ -41,7 +42,7 @@ export default function AppRoutes() {
       children: [
         { path: "", element: <HomePageStudent /> },
         { path: "skill", element: <Skills /> },
-        
+
         // {
         //   path: "skill",
         //   element: (
@@ -82,6 +83,10 @@ export default function AppRoutes() {
       path: "/teacher/*",
       element: <HomeTeacher />,
       children: [
+        {
+          path: "",
+          element: <TeacherManagement />,
+        },
         {
           path: "topics",
           element: <ListTopicManagement title="topics" />,
