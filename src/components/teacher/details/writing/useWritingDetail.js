@@ -6,30 +6,46 @@ export default function useWritingDetail() {
   const { id } = useParams();
   const [localData, setLocalData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-
-  const emptyWriting = {
-    id: "-1",
-    title: "",
-    serial: 1,
-    description: "",
-    image: "",
-    topic: "",
-    status: "ACTIVE",
-  };
+  const [error, setError] = useState("");
 
   useEffect(() => {
+    const emptyWriting = {
+      id: "-1",
+      title: "",
+      serial: 1,
+      description: "",
+      image: "",
+      topic: "",
+      status: "ACTIVE",
+    };
     const fetchData = async () => {
-      if (id === "-1") {
-        setLocalData(emptyWriting);
-        setIsEditing(true);
-        return;
+      try {
+        if (id === "-1") {
+          setLocalData(emptyWriting);
+          setIsEditing(true);
+          return;
+        }
+        const data = await getWritingDetail(id);
+        setLocalData(data);
+        setIsEditing(false);
+      } catch (err) {
+        setError(err.response.data.message);
       }
-      const data = await getWritingDetail(id);
-      setLocalData(data);
-      setIsEditing(false);
     };
     fetchData();
   }, [id]);
 
-  return { localData, setLocalData, isEditing, setIsEditing };
+  const handleCloseError = () => {
+    setError("");
+  };
+
+  return {
+    localData,
+    setLocalData,
+    isEditing,
+    setIsEditing,
+    error,
+    setError,
+    handleCloseError,
+  };
 }
