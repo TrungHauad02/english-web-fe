@@ -45,11 +45,13 @@ export default function useSpeakingTopic() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getSpeakingDetail(id);
-      setSpeaking(data);
-      if (data && data.duration) {
-        setTimer(data.duration);
-      }
+      try {
+        const data = await getSpeakingDetail(id);
+        setSpeaking(data);
+        if (data && data.duration) {
+          setTimer(data.duration);
+        }
+      } catch (err) {}
     };
     fetchData();
     navigator.mediaDevices

@@ -7,12 +7,14 @@ import SaveEditDeleteButton from "../common/button/SaveEditDeleteButton";
 import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useListeningInfo from "./useListeningInfo";
 import SoundViewer from "shared/component/soundViewer/SoundViewer";
+import ErrorComponent from "shared/component/error/ErrorComponent";
 
 export default function ListeningInfo() {
   const {
     topic,
     isEditing,
     handleEditing,
+    handleDelete,
     handleSave,
     onChangeImage,
     onChangeTitle,
@@ -20,6 +22,8 @@ export default function ListeningInfo() {
     onChangeStatus,
     onChangeDescription,
     onChangeFile,
+    error,
+    handleCloseError,
   } = useListeningInfo();
 
   if (!topic) return;
@@ -120,11 +124,16 @@ export default function ListeningInfo() {
         <Grid2 container direction={"row"} spacing={2}>
           <SaveEditDeleteButton
             showText
+            onDel={handleDelete}
             onEdit={handleEditing}
             onSave={handleSave}
           />
         </Grid2>
       </Grid2>
+      {/**Hiển thị khi có lỗi */}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
+      )}
     </Grid2>
   );
 }

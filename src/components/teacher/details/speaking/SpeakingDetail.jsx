@@ -3,10 +3,18 @@ import SpeakingInfo from "./SpeakingInfo";
 import PeopleInConversation from "./PeopleInConversation";
 import Conversation from "./Conversation";
 import useSpeakingDetail from "./useSpeakingDetail";
+import ErrorComponent from "shared/component/error/ErrorComponent";
 
 export default function SpeakingDetail() {
-  const { people, setPeople, conversation, setConversation } =
-    useSpeakingDetail();
+  const {
+    people,
+    setPeople,
+    conversation,
+    setConversation,
+    error,
+    setError,
+    handleCloseError,
+  } = useSpeakingDetail();
 
   const scrollableContainerStyles = {
     boxShadow: "0 0 0.5rem 0.1rem #00000040",
@@ -37,7 +45,7 @@ export default function SpeakingDetail() {
       justifyContent={"space-between"}
     >
       <Grid2 item xs={12} sm={5}>
-        <SpeakingInfo />
+        <SpeakingInfo setError={setError} />
       </Grid2>
       <Grid2 container xs={12} sm={7} direction="column" spacing={4}>
         <Grid2 item sx={{ ...scrollableContainerStyles, height: "50vh" }}>
@@ -46,6 +54,7 @@ export default function SpeakingDetail() {
             setListPeople={setPeople}
             conversation={conversation}
             setConversation={setConversation}
+            setError={setError}
           />
         </Grid2>
         <Grid2 item sx={{ ...scrollableContainerStyles, height: "72vh" }}>
@@ -53,9 +62,14 @@ export default function SpeakingDetail() {
             listPeople={people}
             conversation={conversation}
             setConversation={setConversation}
+            setError={setError}
           />
         </Grid2>
       </Grid2>
+      {/*Hiển thị khi có lỗi*/}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
+      )}
     </Grid2>
   );
 }

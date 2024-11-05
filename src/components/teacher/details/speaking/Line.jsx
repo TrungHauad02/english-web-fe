@@ -11,6 +11,7 @@ import DeleteButton from "../common/button/DeleteButton";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import useLine from "./useLine";
+import BasicSelect from "../common/select/BasicSelect";
 
 export default function Line({
   listPeople,
@@ -20,8 +21,14 @@ export default function Line({
   setConversation,
   index,
 }) {
-  const { onChangeName, onChangeContent, onDeleteLine, moveUp, moveDown } =
-    useLine(conversation, setConversation, index);
+  const {
+    onChangeName,
+    onChangeContent,
+    onChangeStatus,
+    onDeleteLine,
+    moveUp,
+    moveDown,
+  } = useLine(conversation, setConversation, index);
 
   return (
     <Stack
@@ -54,6 +61,17 @@ export default function Line({
           sx={{ backgroundColor: "#fff" }}
           disabled={disabled}
           fullWidth
+        />
+        <BasicSelect
+          disabled={disabled}
+          options={["ACTIVE", "INACTIVE"]}
+          value={line.status}
+          onChange={onChangeStatus}
+          sx={{
+            marginTop: "-0.5rem",
+            backgroundColor: "#fff",
+            minWidth: "7rem",
+          }}
         />
         <DeleteButton onDel={onDeleteLine} disabled={disabled} />
         <Stack direction="column" spacing={1}>

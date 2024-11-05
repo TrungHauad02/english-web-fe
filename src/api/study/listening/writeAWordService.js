@@ -10,11 +10,12 @@ export async function getWriteAWordById(id) {
   }
 }
 
-export async function getWriteAWordByListeningId(listeningId) {
+export async function getWriteAWordByListeningId(listeningId, status) {
   try {
-    const res = await apiClient.get(
-      `/listenAndWriteAWord?listeningId=${listeningId}`
-    );
+    const queryParams = `listeningId=${listeningId}${
+      status ? `&status=${status}` : ""
+    }`;
+    const res = await apiClient.get(`/listenAndWriteAWord?${queryParams}`);
     return res.data;
   } catch (error) {
     console.error("Error when get list question write a word: ", error);

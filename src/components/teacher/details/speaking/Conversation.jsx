@@ -8,9 +8,10 @@ export default function Conversation({
   listPeople,
   conversation,
   setConversation,
+  setError,
 }) {
   const { isEditing, handleAddNewLine, handleEditing, handleSave } =
-    useConversation(listPeople, conversation, setConversation);
+    useConversation(listPeople, conversation, setConversation, setError);
 
   return (
     <Grid2 container direction={"column"} sx={{ width: "100%" }}>

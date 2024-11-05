@@ -7,12 +7,13 @@ import SaveEditDeleteButton from "../common/button/SaveEditDeleteButton";
 import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useSpeakingInfo from "./useSpeakingInfo";
 
-export default function SpeakingInfo() {
+export default function SpeakingInfo({ setError }) {
   const {
     topic,
     isEditing,
     handleEditing,
     handleSave,
+    handleDelete,
     onChangeImage,
     onChangeTitle,
     onChangeSerial,
@@ -20,7 +21,7 @@ export default function SpeakingInfo() {
     onChangeDescription,
     onChangeTopic,
     onChangeDuration,
-  } = useSpeakingInfo();
+  } = useSpeakingInfo(setError);
   if (!topic) return <></>;
   return (
     <Grid2 container direction={"column"} spacing={4}>
@@ -99,6 +100,7 @@ export default function SpeakingInfo() {
         <Grid2 container direction={"row"} spacing={2}>
           <SaveEditDeleteButton
             showText
+            onDel={handleDelete}
             onEdit={handleEditing}
             onSave={handleSave}
           />
