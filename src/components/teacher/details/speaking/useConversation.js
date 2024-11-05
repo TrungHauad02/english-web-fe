@@ -8,7 +8,8 @@ import { useParams } from "react-router-dom";
 export default function useConversation(
   listPeople,
   conversation = [],
-  setConversation
+  setConversation,
+  setError
 ) {
   const [isEditing, setIsEditing] = useState(false);
   const { id } = useParams();
@@ -30,7 +31,14 @@ export default function useConversation(
   };
 
   const handleEditing = () => {
-    if (id === "-1" || listPeople.length === 0 || listPeople[0] === "") return;
+    if (id === "-1") {
+      setError("This lesson doesn't available yet.");
+      return;
+    }
+    if (listPeople.length === 0 || listPeople[0] === "") {
+      setError("Add people before add any conversation");
+      return;
+    }
     setIsEditing(true);
   };
 

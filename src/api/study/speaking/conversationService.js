@@ -1,10 +1,11 @@
 import apiClient from "api/apiClient";
 
-export async function getConversationInSpeaking(speakingId) {
+export async function getConversationInSpeaking(speakingId, status) {
   try {
-    const res = await apiClient.get(
-      `/speakingConversation?speakingId=${speakingId}`
-    );
+    const req = status
+      ? `/speakingConversation?speakingId=${speakingId}&status=${status}`
+      : `/speakingConversation?speakingId=${speakingId}`;
+    const res = await apiClient.get(req);
     return res.data;
   } catch (error) {
     console.error("Error fetch data conversation: ", error);

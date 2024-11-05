@@ -1,17 +1,33 @@
-import { createWriting, updateWriting } from "api/study/writing/writingService";
+import {
+  createWriting,
+  deleteWriting,
+  updateWriting,
+} from "api/study/writing/writingService";
 import { useNavigate, useParams } from "react-router-dom";
+import handleError from "shared/utils/handleError";
 
 export default function useWritingTopic(
   data,
   setData,
   isEditing,
-  setIsEditing
+  setIsEditing,
+  setError
 ) {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const handleEditing = () => {
     setIsEditing(true);
+  };
+
+  const handleDelete = async () => {
+    if (!isEditing) return;
+    try {
+      await deleteWriting(id);
+      navigate(`/teacher/writings`);
+    } catch (error) {
+      setError(error.response.data.message);
+    }
   };
 
   const handleSave = async () => {
@@ -24,7 +40,9 @@ export default function useWritingTopic(
       const newData = await updateWriting(id, data);
       setData(newData);
       setIsEditing(false);
-    } catch (error) {}
+    } catch (error) {
+      handleError(error, setError);
+    }
   };
 
   const onChangeDescription = (e) => {
@@ -37,5 +55,11 @@ export default function useWritingTopic(
     setData({ ...data, topic: e.target.value });
   };
 
-  return { handleEditing, handleSave, onChangeDescription, onChangeTopic };
+  return {
+    handleEditing,
+    handleSave,
+    handleDelete,
+    onChangeDescription,
+    onChangeTopic,
+  };
 }

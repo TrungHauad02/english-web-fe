@@ -19,6 +19,15 @@ export default function useLine(conversation, setConversation, index) {
     setConversation(newConversation);
   };
 
+  const onChangeStatus = (event) => {
+    const newConversation = [...conversation];
+    newConversation[index] = {
+      ...newConversation[index],
+      status: event.target.value,
+    };
+    setConversation(newConversation);
+  };
+
   const onDeleteLine = async () => {
     const lineToDelete = conversation[index];
 
@@ -57,5 +66,12 @@ export default function useLine(conversation, setConversation, index) {
     setConversation(newConversation);
   };
 
-  return { onChangeName, onChangeContent, onDeleteLine, moveUp, moveDown };
+  return {
+    onChangeName,
+    onChangeContent,
+    onChangeStatus,
+    onDeleteLine,
+    moveUp,
+    moveDown,
+  };
 }

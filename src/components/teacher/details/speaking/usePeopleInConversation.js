@@ -1,13 +1,16 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 export default function usePeopleInConversation(
   listPeople,
   setListPeople,
   conversation,
-  setConversation
+  setConversation,
+  setError
 ) {
   const [isEditing, setIsEditing] = useState(false);
   const [localData, setLocalData] = useState([...listPeople]);
+  const { id } = useParams();
 
   if (localData[localData.length - 1] !== "") localData.push("");
 
@@ -19,7 +22,7 @@ export default function usePeopleInConversation(
   const onDeletePeople = (index) => {
     const nameToDelete = localData[index];
     if (conversation.some((line) => line.name === nameToDelete)) {
-      alert(
+      setError(
         `Cannot delete "${nameToDelete}" as they are involved in the conversation.`
       );
       return;
@@ -36,7 +39,7 @@ export default function usePeopleInConversation(
     newLocalData.pop();
     newLocalData.push(name);
     if (hasDuplicates(newLocalData)) {
-      alert(
+      setError(
         "There are duplicate names. Please remove duplicates before saving."
       );
       return;
@@ -45,6 +48,10 @@ export default function usePeopleInConversation(
   };
 
   const handleEditing = () => {
+    if (id === "-1") {
+      setError("This lesson doesn't available yet.");
+      return;
+    }
     setIsEditing(true);
   };
   const hasDuplicates = (array) => {
@@ -53,7 +60,7 @@ export default function usePeopleInConversation(
   };
   const handleSave = () => {
     if (hasDuplicates(localData)) {
-      alert(
+      setError(
         "There are duplicate names. Please remove duplicates before saving."
       );
       return;

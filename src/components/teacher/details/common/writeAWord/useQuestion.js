@@ -4,10 +4,12 @@ import {
   updateWriteAWord,
 } from "api/study/listening/writeAWordService";
 import { useEffect, useState } from "react";
+import handleError from "shared/utils/handleError";
 
 export default function useQuestion(data, fetchData) {
   const [question, setQuestion] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!data) return;
@@ -26,24 +28,38 @@ export default function useQuestion(data, fetchData) {
       setQuestion(data);
     }
   }, [data]);
+
+  function handleCloseError() {
+    setError("");
+  }
+
   function handleEdit() {
     setIsEditing(true);
   }
 
   async function handleSave() {
-    if (question.id === "-1") {
-      await createWriteAWord(question);
-    } else {
-      await updateWriteAWord(question.id, question);
+    try {
+      if (question.id === "-1") {
+        await createWriteAWord(question);
+      } else {
+        await updateWriteAWord(question.id, question);
+      }
+      setIsEditing(false);
+      fetchData();
+    } catch (err) {
+      handleError(err, setError);
     }
-    setIsEditing(false);
-    fetchData();
   }
 
   async function handleDelete() {
-    if (question.id === "-1") return;
-    await deleteWriteAWord(question.id);
-    fetchData();
+    try {
+      if (!isEditing) return;
+      if (question.id === "-1") return;
+      await deleteWriteAWord(question.id);
+      fetchData();
+    } catch (err) {
+      handleError(err, setError);
+    }
   }
 
   function onChangeField(e, field) {
@@ -102,5 +118,7 @@ export default function useQuestion(data, fetchData) {
     onChangeSerial,
     onChangeSentence,
     onChangeFile,
+    error,
+    handleCloseError,
   };
 }

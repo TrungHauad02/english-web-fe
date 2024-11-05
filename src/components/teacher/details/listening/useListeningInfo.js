@@ -2,14 +2,17 @@ import {
   getListeningDetail,
   updateListening,
   createListening,
+  deleteListening,
 } from "api/study/listening/listeningService";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import handleError from "shared/utils/handleError";
 
 export default function useListeningInfo() {
   const { id } = useParams();
   const [topic, setTopic] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const emptyListening = {
@@ -36,8 +39,23 @@ export default function useListeningInfo() {
     fetchData();
   }, [id]);
 
+  const handleCloseError = () => {
+    setError("");
+  };
+
   const handleEditing = () => {
     setIsEditing(true);
+  };
+
+  const handleDelete = async () => {
+    try {
+      if (!isEditing) return;
+      if (id === "-1") setError("This lesson doesn't exist yet");
+      await deleteListening(id);
+      navigate(`/teacher/listenings`);
+    } catch (error) {
+      setError(error.response.data.message);
+    }
   };
 
   const handleSave = async () => {
@@ -50,7 +68,9 @@ export default function useListeningInfo() {
       const data = await updateListening(id, topic);
       setTopic(data);
       setIsEditing(false);
-    } catch (error) {}
+    } catch (error) {
+      handleError(error, setError);
+    }
   };
 
   const onChangeImage = (e) => {
@@ -96,11 +116,14 @@ export default function useListeningInfo() {
     isEditing,
     handleEditing,
     handleSave,
+    handleDelete,
     onChangeImage,
     onChangeTitle,
     onChangeSerial,
     onChangeStatus,
     onChangeDescription,
     onChangeFile,
+    error,
+    handleCloseError,
   };
 }

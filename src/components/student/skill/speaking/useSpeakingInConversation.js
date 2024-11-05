@@ -10,7 +10,7 @@ export default function useSpeakingInConversation() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getConversationInSpeaking(id);
+      const data = await getConversationInSpeaking(id, "ACTIVE");
       const sortedData = (data || []).sort((a, b) => a.serial - b.serial);
       setListConversation(sortedData);
       const uniquePeople = [
