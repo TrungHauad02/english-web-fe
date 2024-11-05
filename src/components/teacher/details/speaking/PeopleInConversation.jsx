@@ -9,6 +9,7 @@ export default function PeopleInConversation({
   setListPeople,
   conversation,
   setConversation,
+  setError,
 }) {
   const {
     isEditing,
@@ -22,7 +23,8 @@ export default function PeopleInConversation({
     listPeople,
     setListPeople,
     conversation,
-    setConversation
+    setConversation,
+    setError
   );
 
   return (

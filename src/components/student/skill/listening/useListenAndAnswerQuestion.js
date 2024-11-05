@@ -12,7 +12,7 @@ export default function useListenAndAnswerQuestion() {
     const fetchData = async () => {
       const [data, listQuestionData] = await Promise.all([
         getListeningDetail(id),
-        getAnswerQuestions("listening", id),
+        getAnswerQuestions("listening", id, "ACTIVE"),
       ]);
       setListening(data);
       setListQuestion(listQuestionData);

@@ -2,11 +2,13 @@ import {
   getSpeakingDetail,
   createSpeaking,
   updateSpeaking,
+  deleteSpeaking,
 } from "api/study/speaking/speakingService";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import handleError from "shared/utils/handleError";
 
-export default function useSpeakingInfo() {
+export default function useSpeakingInfo(setError) {
   const { id } = useParams();
   const [topic, setTopic] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -20,7 +22,7 @@ export default function useSpeakingInfo() {
       description: "",
       image: "",
       topic: "",
-      duration: "",
+      duration: 1,
       status: "ACTIVE",
     };
 
@@ -37,19 +39,37 @@ export default function useSpeakingInfo() {
     fetchData();
   }, [id]);
 
+  const handleDelete = async () => {
+    if (!isEditing) return;
+    if (id === "-1") {
+      setError("Cannot delete a topic that doesn't exist yet");
+      return;
+    }
+    try {
+      await deleteSpeaking(id);
+      navigate(`/teacher/speakings`);
+    } catch (err) {
+      setError(err.response.data.message);
+    }
+  };
+
   const handleEditing = () => {
     setIsEditing(true);
   };
 
   const handleSave = async () => {
-    if (id === "-1") {
-      const newData = await createSpeaking(topic);
-      navigate(`/teacher/speakings/${newData.id}`);
-      return;
+    try {
+      if (id === "-1") {
+        const newData = await createSpeaking(topic);
+        navigate(`/teacher/speakings/${newData.id}`);
+        return;
+      }
+      const newData = await updateSpeaking(id, topic);
+      setTopic(newData);
+      setIsEditing(false);
+    } catch (err) {
+      handleError(err, setError);
     }
-    const newData = await updateSpeaking(id, topic);
-    setTopic(newData);
-    setIsEditing(false);
   };
 
   const onChangeImage = (e) => {
@@ -97,6 +117,7 @@ export default function useSpeakingInfo() {
     isEditing,
     handleEditing,
     handleSave,
+    handleDelete,
     onChangeImage,
     onChangeTitle,
     onChangeSerial,

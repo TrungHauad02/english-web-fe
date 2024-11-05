@@ -12,7 +12,7 @@ export default function useListenAndWriteAWord() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getWriteAWordByListeningId(id);
+      const data = await getWriteAWordByListeningId(id, "ACTIVE");
       setListQuestion(data);
       setCurQuestionIndex(0);
     };
