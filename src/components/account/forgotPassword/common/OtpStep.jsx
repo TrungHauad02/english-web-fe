@@ -31,6 +31,7 @@ const OtpStep = ({ otp, setOtp, timer, handleVerifyOtp, handleResendOtp }) => (
       color="primary"
       style={{ marginTop: 8 }}
       onClick={handleResendOtp}
+      disabled={timer > 0} // Vô hiệu hóa khi timer > 0
     >
       Resend OTP
     </Button>

@@ -3,7 +3,7 @@ import { Box, Typography, Link } from '@mui/material';
 import EmailStep from './common/EmailStep';
 import OtpStep from './common/OtpStep';
 import ResetPasswordStep from './common/ResetPasswordStep';
-import { handleGetOtp, handleVerifyOtp, handleResetPassword, handleClickShowPassword,} from './common/HandleForgotPassword';
+import { handleGetOtp, handleVerifyOtp, handleResetPassword, handleClickShowPassword} from './common/HandleForgotPassword';
 
 const ForgotPassword = ({ toggleForm }) => {
   const [step, setStep] = useState(1);
@@ -11,13 +11,10 @@ const ForgotPassword = ({ toggleForm }) => {
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
-  const [fakeDatabase, setFakeDatabase] = useState({
-    email: 'web@gmail.com',
-    password: '123456',
-  });
-  const [generatedOtp, setGeneratedOtp] = useState('');
   const [timer, setTimer] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
+
+  const [error, setError] = useState('');
 
   useEffect(() => {
     let countdown;
@@ -46,9 +43,7 @@ const ForgotPassword = ({ toggleForm }) => {
         <EmailStep
           email={email}
           setEmail={setEmail}
-          handleGetOtp={() =>
-            handleGetOtp(email, setGeneratedOtp, setStep, setTimer, fakeDatabase)
-          }
+          handleGetOtp={() => handleGetOtp(email, setStep, setTimer, setError)}
         />
       )}
 
@@ -57,10 +52,8 @@ const ForgotPassword = ({ toggleForm }) => {
           otp={otp}
           setOtp={setOtp}
           timer={timer}
-          handleVerifyOtp={() => handleVerifyOtp(otp, generatedOtp, timer, setStep)}
-          handleResendOtp={() =>
-            handleGetOtp(email, setGeneratedOtp, setStep, setTimer, fakeDatabase)
-          }
+          handleVerifyOtp={() => handleVerifyOtp(email, otp, timer, setStep, setError)}
+          handleResendOtp={() => handleGetOtp(email, setStep, setTimer, setError)}
         />
       )}
 
@@ -71,13 +64,15 @@ const ForgotPassword = ({ toggleForm }) => {
           rePassword={rePassword}
           setRePassword={setRePassword}
           showPassword={showPassword}
-          handleClickShowPassword={() =>
-            handleClickShowPassword(showPassword, setShowPassword)
-          }
-          handleResetPassword={() =>
-            handleResetPassword(newPassword, rePassword, setFakeDatabase, fakeDatabase, toggleForm)
-          }
+          handleClickShowPassword={() => handleClickShowPassword(showPassword, setShowPassword)}
+          handleResetPassword={() => handleResetPassword(email, newPassword, rePassword, toggleForm, setError)}
         />
+      )}
+
+      {error && (
+        <Typography color={error.includes("successfully") ? 'green' : 'red'} align="center" mt={2}>
+          {error}
+        </Typography>
       )}
 
       <Box mt={2} display="flex" justifyContent="center">

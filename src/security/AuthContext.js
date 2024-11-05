@@ -1,33 +1,39 @@
-import { createContext, useContext, useState } from "react";
+import { is } from "date-fns/locale";
+import { createContext, useContext, useState, useEffect } from "react";
 
-//create context
 export const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
-// share the create context with orther components
-export default function AuthProvider({children}) {
-    //Put some start in the context
-    const [isAuthenticated, setAuthenticated] = useState(false);
+export default function AuthProvider({ children }) {
+  const [isAuthenticated, setAuthenticated] = useState(false);
+  const [authToken, setAuthToken] = useState(null);
 
-    function SignIn(email, password, setError) {
-        if (email === 'student@gmail.com' && password === '123') {
-            setAuthenticated(true);
-            return true;
-        } else {
-            setAuthenticated(false);
-            setError('Email or password Incorrect');
-            return false;
-        }
+  // Kiểm tra token trong localStorage khi ứng dụng tải
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      setAuthenticated(true); // Cập nhật trạng thái nếu token tồn tại
+      setAuthToken(token);
     }
-    
-    function Logout() {
-        setAuthenticated(false);
-    }
+  }, []);
 
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, SignIn, Logout }}>
-            {children}
-        </AuthContext.Provider>
-    )
+  // Hàm SignIn để cập nhật trạng thái xác thực
+  function SignIn(token) {
+    setAuthenticated(true); // Đặt trạng thái thành true
+    setAuthToken(token);
+    localStorage.setItem("authToken", token); // Lưu token vào localStorage
+  }  
+
+  function Logout() {
+    setAuthenticated(false); // Đặt trạng thái thành false khi đăng xuất
+    setAuthToken(null);
+    localStorage.removeItem("authToken");
+  }
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, SignIn, Logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }

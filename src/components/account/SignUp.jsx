@@ -1,21 +1,16 @@
-import React, { useState, useRef } from 'react';
-import { Box, Button, TextField, Typography, Link, IconButton, InputAdornment, } from '@mui/material';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { handleSignUp, validateEmail, validatePassword, handleClickShowPassword, } from './common/HandleSignUp';
+import React, { useState, useRef } from "react";
+import { Box, Button, TextField, Typography, Link, IconButton, InputAdornment } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { handleSignUp, handleClickShowPassword } from "./common/HandleSignUp";
 
 const SignUp = ({ toggleForm }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [rePassword, setRePassword] = useState('');
-  const [error, setError] = useState('');
-
-  const [fakeDatabase, setFakeDatabase] = useState([
-    { email: 'existinguser@gmail.com', password: 'Password@123' },
-  ]);
-
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
+  const [error, setError] = useState("");
   const emailInputRef = useRef(null);
 
   return (
@@ -30,7 +25,6 @@ const SignUp = ({ toggleForm }) => {
       <Typography variant="h5" align="center" mb={2}>
         Sign Up
       </Typography>
-      {error && <Typography color="error">{error}</Typography>}
       <TextField
         fullWidth
         variant="outlined"
@@ -49,13 +43,13 @@ const SignUp = ({ toggleForm }) => {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="example@gmail.com"
         margin="normal"
-        inputRef={emailInputRef} // Attach ref to email input field
+        inputRef={emailInputRef}
       />
       <TextField
         fullWidth
         variant="outlined"
         label="Password"
-        type={showPassword ? 'text' : 'password'}
+        type={showPassword ? "text" : "password"}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
@@ -63,9 +57,7 @@ const SignUp = ({ toggleForm }) => {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton
-                onClick={() => handleClickShowPassword(showPassword, setShowPassword)}
-              >
+              <IconButton onClick={() => handleClickShowPassword(showPassword, setShowPassword)}>
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </InputAdornment>
@@ -76,7 +68,7 @@ const SignUp = ({ toggleForm }) => {
         fullWidth
         variant="outlined"
         label="Re-enter Password"
-        type={showPassword ? 'text' : 'password'}
+        type={showPassword ? "text" : "password"}
         value={rePassword}
         onChange={(e) => setRePassword(e.target.value)}
         placeholder="Re-enter Password"
@@ -84,9 +76,7 @@ const SignUp = ({ toggleForm }) => {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton
-                onClick={() => handleClickShowPassword(showPassword, setShowPassword)}
-              >
+              <IconButton onClick={() => handleClickShowPassword(showPassword, setShowPassword)}>
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </InputAdornment>
@@ -98,18 +88,21 @@ const SignUp = ({ toggleForm }) => {
         variant="contained"
         color="primary"
         style={{ marginTop: 16, marginBottom: 16 }}
-        onClick={() =>
-          handleSignUp(name, email, password, rePassword, setError, setFakeDatabase, fakeDatabase, toggleForm, emailInputRef)
-        }
+        onClick={() => handleSignUp(name, email, password, rePassword, setError, toggleForm, emailInputRef)}
       >
         Sign Up
       </Button>
       <Box mt={2} display="flex" justifyContent="center">
-        Already have an account?{' '}
-        <Link href="#" variant="body2" onClick={() => toggleForm('signin')}>
+        Already have an account?{" "}
+        <Link href="#" variant="body2" onClick={() => toggleForm("signin")}>
           Sign In
         </Link>
       </Box>
+      {error && (
+        <Typography color={error === "Sign Up successful!" ? "green" : "red"} align="center" mb={2}>
+          {error}
+        </Typography>
+      )}
     </Box>
   );
 };

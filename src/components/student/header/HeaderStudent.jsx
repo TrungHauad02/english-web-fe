@@ -8,11 +8,10 @@ import { useAuth } from "security/AuthContext";
 
 function HeaderStudent() {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { isAuthenticated, setAuthenticated } = useAuth();
-  const auContext = useAuth();
+  const { isAuthenticated, Logout } = useAuth(); 
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // Hook để lấy đường dẫn hiện tại
+  const location = useLocation(); 
 
   const handleMenuClick = (event) => {
     if (isAuthenticated) {
@@ -21,13 +20,13 @@ function HeaderStudent() {
       navigate("/student/account");
     }
   };
-
+  
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
   const handleLogout = () => {
-    auContext.Logout();
+    Logout(); // Gọi `Logout` từ `AuthContext`
     handleMenuClose();
     navigate("/student/account");
   };

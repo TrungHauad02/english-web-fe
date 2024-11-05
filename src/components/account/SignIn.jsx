@@ -1,34 +1,24 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Divider,
-  IconButton,
-  InputAdornment,
-  Link,
-} from "@mui/material";
+import { Box, Button, TextField, Typography, Divider, IconButton, InputAdornment, Link } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
-import {
-  handleSignIn,
-  handleClickShowPassword,
-} from "./common/HandleSignIn";
-
+import { handleSignIn } from "./common/HandleSignIn"; 
 import { useAuth } from "../../security/AuthContext";
 
 const SignIn = ({ toggleForm }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("student");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
   const authContext = useAuth();
+
+  const handleSignInClick = async () => {
+    await handleSignIn(email, password, authContext, navigate, setError);
+  };  
 
   return (
     <Box
@@ -43,7 +33,11 @@ const SignIn = ({ toggleForm }) => {
       <Typography variant="h5" align="center" mb={2}>
         Sign In
       </Typography>
-      {error && <Typography color="error">{error}</Typography>}
+      {error && (
+        <Typography color="error" align="center" mb={2}>
+          {error}
+        </Typography>
+      )}
       <TextField
         fullWidth
         variant="outlined"
@@ -66,11 +60,7 @@ const SignIn = ({ toggleForm }) => {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton
-                onClick={() =>
-                  handleClickShowPassword(showPassword, setShowPassword)
-                }
-              >
+              <IconButton onClick={() => setShowPassword(!showPassword)}>
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </InputAdornment>
@@ -82,9 +72,7 @@ const SignIn = ({ toggleForm }) => {
         variant="contained"
         color="primary"
         style={{ marginTop: 16, marginBottom: 16 }}
-        onClick={() =>
-          handleSignIn(email, password, role, authContext, navigate, setError)
-        }
+        onClick={handleSignInClick}
       >
         Sign In
       </Button>
