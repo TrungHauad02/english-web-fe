@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Button, Stack, Menu, MenuItem, IconButton } from "@mui/material";
+import { Button, Stack, Menu, MenuItem, IconButton, Box } from "@mui/material";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import HeaderTypography from "shared/component/header/HeaderTypography";
 import SkillMenu from "./SkillMenu";
-import Profile from "./Profile";
+import Profile from "../menu/Profile";
 import { useAuth } from "security/AuthContext";
+
+const icon = "/icon.png";
 
 function HeaderStudent() {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { isAuthenticated, Logout } = useAuth(); 
+  const { isAuthenticated, Logout } = useAuth();
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
 
   const handleMenuClick = (event) => {
     if (isAuthenticated) {
@@ -20,7 +22,7 @@ function HeaderStudent() {
       navigate("/student/account");
     }
   };
-  
+
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -60,7 +62,7 @@ function HeaderStudent() {
     >
       <Stack direction={"row"} alignItems={"center"} spacing={5}>
         <img
-          src="icon.png"
+          src={icon}
           alt="icon"
           style={{ width: "50px", marginLeft: "1rem", cursor: "pointer" }}
           onClick={() => navigate("/student")}
@@ -121,21 +123,21 @@ function HeaderStudent() {
           <HeaderTypography>Grammar</HeaderTypography>
         </Button>
 
-        <SkillMenu />
+        <Box sx={{ width: 70, height: 40 }}>
+          <SkillMenu />
+        </Box>
 
         <Button
           component={NavLink}
-          to="/student/test"
+          to="/student/tests"
           sx={{
-            backgroundColor: isActivePath("/student/test")
-              ? "#fff"
-              : "transparent",
-            color: isActivePath("/student/test") ? "#4A475C" : "white",
+            backgroundColor: isActivePath("/student/tests") ? "#fff" : "transparent",
+            color: isActivePath("/student/tests") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: isActivePath("/student/test")
+              backgroundColor: isActivePath("/student/tests")
                 ? "#fff"
                 : "rgba(255, 255, 255, 0.2)",
             },

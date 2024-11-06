@@ -5,6 +5,8 @@ import HeaderTypography from "shared/component/header/HeaderTypography";
 import SkillMenu from "./SkillMenu";
 import Profile from "./Profile";
 
+const icon = "/icon.png";
+
 function HeaderTeacher() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -54,7 +56,7 @@ function HeaderTeacher() {
       direction={"row"}
       justifyContent={"space-between"}
       sx={{
-        backgroundColor: "#4A475C",
+        backgroundColor: "#6EC2F7",
         color: "#fff",
         padding: "0.5rem",
         position: "fixed",
@@ -67,9 +69,10 @@ function HeaderTeacher() {
     >
       <Stack direction={"row"} alignItems={"center"} spacing={5}>
         <img
-          src="icon.png"
+          src={icon}
           alt="icon"
           style={{ width: "50px", marginLeft: "1rem" }}
+          onClick={() => navigate("/teacher")}
         />
         <HeaderTypography
           variant="h4"
@@ -78,6 +81,7 @@ function HeaderTeacher() {
             fontWeight: "bold",
             fontSize: "2rem",
           }}
+          onClick={() => navigate("/teacher")}
         >
           English Web
         </HeaderTypography>

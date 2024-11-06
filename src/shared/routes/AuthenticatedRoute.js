@@ -7,5 +7,6 @@ export default function AuthenticatedRoute({ children }) {
   if (authContext.isAuthenticated) {
     return children;
   }
-  return <Navigate to="/" />;
+  else
+    return <Navigate to="/student" />;
 }

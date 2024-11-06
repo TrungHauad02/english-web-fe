@@ -1,4 +1,3 @@
-import { is } from "date-fns/locale";
 import { createContext, useContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
@@ -6,8 +5,10 @@ export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export default function AuthProvider({ children }) {
-  const [isAuthenticated, setAuthenticated] = useState(false);
-  const [authToken, setAuthToken] = useState(null);
+  const [isAuthenticated, setAuthenticated] = useState(
+    !!localStorage.getItem("authToken")
+  );
+  const [authToken, setAuthToken] = useState(localStorage.getItem("authToken"));
 
   // Kiểm tra token trong localStorage khi ứng dụng tải
   useEffect(() => {

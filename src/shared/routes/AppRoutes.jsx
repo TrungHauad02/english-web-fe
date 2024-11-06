@@ -5,8 +5,8 @@ import HomeStudent from "../../components/student/HomeStudent";
 import HomePageStudent from "../../components/student/content/HomePageStudent";
 import Skills from "../../components/student/skill/Skills";
 import Account from "../../components/account/Account";
-import HistoryTest from "../../components/student/header/HistoryTest";
-import StudySchedulePage from "../../components/student/header/studyschedule/StudySchedule";
+import HistoryTest from "components/student/menu/historytest/HistoryTest";
+import StudySchedulePage from "../../components/student/menu/studyschedule/StudySchedule";
 import site from "../../components/student/common/Pages";
 import HomeTeacher from "../../components/teacher/HomeTeacher";
 import HomeAdmin from "../../components/admin/HomeAdmin";
@@ -29,6 +29,7 @@ import TestSpeaking from "../../components/student/Test/TestSpeaking/TestSpeakin
 import TestMixing from "../../components/student/Test/TestMixing/TestMixing";
 import AuthenticatedRoute from "./AuthenticatedRoute";
 import TeacherManagement from "components/teacher/TeacherManagement";
+import AdminManagement from "components/admin/AdminManagement";
 
 export default function AppRoutes() {
   const router = createBrowserRouter([
@@ -149,6 +150,10 @@ export default function AppRoutes() {
       path: "/admin/*",
       element: <HomeAdmin />,
       children: [
+        {
+          path: "",
+          element: <AdminManagement />,
+        },
         {
           path: "teacher",
           element: <ManageTeacher />,

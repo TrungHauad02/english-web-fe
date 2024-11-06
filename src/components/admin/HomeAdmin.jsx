@@ -1,24 +1,23 @@
 import { Stack } from "@mui/material";
 import HeaderAdmin from "./header/HeaderAdmin";
 import Footer from "../../shared/footer/Footer";
-import { Route, Routes } from "react-router-dom";
-import ManageTeacher from "./teacher/ManageTeacher.jsx";
-import ManageStudent from "./student/ManageStudent.jsx";
-function HomeAdmin() {
+import { Outlet } from "react-router-dom";
+
+export default function HomeAdmin() {
   return (
     <Stack
       direction="column"
       justifyContent="space-between"
-      sx={{ height: "100%", pt: "4rem", marginBottom: "-5px" }}
+      sx={{
+        height: "100%",
+        pt: "4rem",
+        marginBottom: "-5px",
+        minHeight: "90vh",
+      }}
     >
       <HeaderAdmin />
-      <Routes>
-        <Route path="teacher" element={<ManageTeacher />} />
-        <Route path="student" element={<ManageStudent />} />
-      </Routes>
+      <Outlet />
       <Footer />
     </Stack>
   );
 }
-
-export default HomeAdmin;

@@ -4,6 +4,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import HeaderTypography from "../../../shared/component/header/HeaderTypography";
 import { useAuth } from "../../../security/AuthContext";
 
+const icon = "/icon.png";
+
 function HeaderAdmin() {
   const navigate = useNavigate();
   const auContext = useAuth();
@@ -18,7 +20,7 @@ function HeaderAdmin() {
       direction={"row"}
       justifyContent={"space-between"}
       sx={{
-        backgroundColor: "#4A475C",
+        backgroundColor: "#6EC2F7",
         color: "#fff",
         padding: "0.5rem",
         position: "fixed",
@@ -31,9 +33,10 @@ function HeaderAdmin() {
     >
       <Stack direction={"row"} alignItems={"center"} spacing={5}>
         <img
-          src="icon.png"
+          src={icon }
           alt="icon"
           style={{ width: "50px", marginLeft: "1rem" }}
+          onClick={() => navigate("/admin")}
         />
         <HeaderTypography
           variant="h4"
@@ -42,6 +45,7 @@ function HeaderAdmin() {
             fontWeight: "bold",
             fontSize: "2rem",
           }}
+          onClick={() => navigate("/admin")}
         >
           English Web
         </HeaderTypography>

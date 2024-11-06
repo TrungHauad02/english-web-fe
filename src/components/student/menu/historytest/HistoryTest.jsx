@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import { Box, Grid, Typography, Card, Pagination } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import MainPicture from "../common/listTopic/MainPicture";
-import Filter from "./Filter"; 
+import MainPicture from "../../common/listTopic/MainPicture";
+import Filter from "./Filter";
 
 const CardStyled = styled(Card)(({ theme }) => ({
   backgroundColor: "#f5f5f5",
@@ -86,7 +86,7 @@ const HistoryTest = () => {
               </Grid>
             ))}
           </Grid>
-  
+
           {/* Pagination */}
           <Box mt={2} display="flex" justifyContent="center">
             <Pagination
@@ -99,7 +99,7 @@ const HistoryTest = () => {
         </Box>
       </Box>
     </>
-  );  
+  );
 };
 
 export default HistoryTest;
