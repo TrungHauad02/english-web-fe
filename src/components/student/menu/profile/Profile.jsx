@@ -1,74 +1,48 @@
-import React, { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  Button,
-  Stack,
-  Box,
-  TextField,
-  Typography,
-} from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Dialog, DialogContent, Button, Stack, Box, TextField, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import ChangePassword from "./../../account/ChangePassword";
+import ChangePassword from "components/account/ChangePassword";
+import { handleEditProfile, handleSave, handleImageChange, handleChangePasswordOpen, handleChangePasswordClose } from "./HandleProfile";
+import { fetchUserInfo } from "api/user/infoUserService";
 
 const Profile = ({ open, handleClose }) => {
-  const [name, setName] = useState("Thái Thanh Hưng");
-  const [email] = useState("web@gmail.com");
-  const [userNote, setUserNote] = useState(
-    "I will be determined to learn the lessons and do the tests."
-  );
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [userNote, setUserNote] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const [image, setImage] = useState("/header_user.png");
+  const [image, setImage] = useState("");
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
-  const handleEditProfile = () => {
-    setEditMode(true);
-  };
+  useEffect(() => {
+    const loadUserInfo = async () => {
+      try {
+        const userInfo = await fetchUserInfo();
+        setName(userInfo.name || ""); // Đảm bảo giá trị không phải null
+        setEmail(userInfo.email || "");
+        setUserNote(userInfo.contentMotivation || "");
+        setImage(userInfo.avatar || "/header_user.png");
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
 
-  const handleSave = () => {
-    setEditMode(false);
-    console.log("Updated info:", { name, email, userNote, image });
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setImage(event.target.result);
-      };
-      reader.readAsDataURL(file);
+    if (open) {
+      loadUserInfo();
     }
-  };
-
-  const handleChangePasswordOpen = () => {
-    setChangePasswordOpen(true);
-  };
-  const handleChangePasswordClose = () => {
-    setChangePasswordOpen(false);
-  };
+  }, [open]);
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm" disableScrollLock>
       <DialogContent>
-        <Stack
-          direction="row"
-          spacing={2}
-          divider={<Box sx={{ width: 2, bgcolor: "grey.300" }} />}
-        >
-          <Stack
-            spacing={1}
-            alignItems="center"
-            sx={{ width: "40%", justifyContent: "center" }}
-          >
-            {/* Button containing image */}
+        <Stack direction="row" spacing={2} divider={<Box sx={{ width: 2, bgcolor: "grey.300" }} />}>
+          <Stack spacing={1} alignItems="center" sx={{ width: "40%", justifyContent: "center" }}>
             <label htmlFor="upload-button">
               <input
                 accept="image/*"
                 id="upload-button"
                 type="file"
                 style={{ display: "none" }}
-                onChange={handleImageChange}
+                onChange={(e) => handleImageChange(e, setImage)}
                 disabled={!editMode}
               />
               <Button component="span" sx={{ p: 0 }}>
@@ -83,27 +57,17 @@ const Profile = ({ open, handleClose }) => {
               variant="contained"
               startIcon={<EditIcon />}
               sx={{ mt: 2, bgcolor: "#FFF4CC", color: "#000" }}
-              onClick={handleEditProfile}
+              onClick={() => handleEditProfile(setEditMode)}
             >
               Edit profile
             </Button>
           </Stack>
 
           <Stack spacing={1} sx={{ width: "60%", pt: 2 }}>
-            <Typography sx={{ fontSize: 40, fontWeight: "bold" }}>
-              Hello Everyone
-            </Typography>
-            <Typography
-              sx={{ fontSize: 20, fontWeight: "light", fontStyle: "italic" }}
-            >
-              My name
-            </Typography>
+            <Typography sx={{ fontSize: 40, fontWeight: "bold" }}>Hello Everyone</Typography>
+            <Typography sx={{ fontSize: 20, fontWeight: "light", fontStyle: "italic" }}>My name</Typography>
             <Box sx={{ position: "relative", mt: 1, mb: 2 }}>
-              <img
-                src="/bg_name_profile.png"
-                alt="Name Background"
-                style={{ width: "100%" }}
-              />
+              <img src="/bg_name_profile.png" alt="Name Background" style={{ width: "100%" }} />
               <Box
                 sx={{
                   position: "absolute",
@@ -113,11 +77,10 @@ const Profile = ({ open, handleClose }) => {
                   fontWeight: "bold",
                 }}
               >
-                {name}
+                {name || ""}
               </Box>
             </Box>
 
-            {/* Switch between view and edit mode */}
             <Box
               sx={{
                 bgcolor: "grey.300",
@@ -131,14 +94,14 @@ const Profile = ({ open, handleClose }) => {
                   <>
                     <TextField
                       label="Name"
-                      value={name}
+                      value={name || ""}
                       onChange={(e) => setName(e.target.value)}
                       fullWidth
                       sx={{ padding: "0 0 .5rem 0" }}
                     />
                     <TextField
                       label="Email"
-                      value={email}
+                      value={email || ""}
                       fullWidth
                       sx={{ padding: "0 0 .5rem 0" }}
                       disabled
@@ -147,10 +110,10 @@ const Profile = ({ open, handleClose }) => {
                 ) : (
                   <>
                     <Box>
-                      <span style={{ fontWeight: "bold" }}>Name:</span> {name}
+                      <span style={{ fontWeight: "bold" }}>Name:</span> {name || ""}
                     </Box>
                     <Box>
-                      <span style={{ fontWeight: "bold" }}>Email:</span> {email}
+                      <span style={{ fontWeight: "bold" }}>Email:</span> {email || ""}
                     </Box>
                   </>
                 )}
@@ -163,7 +126,7 @@ const Profile = ({ open, handleClose }) => {
           multiline
           rows={4}
           fullWidth
-          value={userNote}
+          value={userNote || ""}
           onChange={(e) => setUserNote(e.target.value)}
           placeholder="Show us your determination to conquer English here"
           sx={{ mt: 2 }}
@@ -179,13 +142,17 @@ const Profile = ({ open, handleClose }) => {
             textDecoration: "underline",
             mt: 2,
           }}
-          onClick={handleChangePasswordOpen}
+          onClick={() => handleChangePasswordOpen(setChangePasswordOpen)}
         >
           Change Password
         </Button>
 
         <Button
-          onClick={editMode ? handleSave : handleClose}
+          onClick={
+            editMode
+              ? () => handleSave(name || "", userNote || "", image || "", setEditMode)
+              : handleClose
+          }
           variant="contained"
           color="primary"
           sx={{ mt: 3, float: "right", bottom: ".5rem", bgcolor: "#ACCD0A" }}
@@ -193,9 +160,10 @@ const Profile = ({ open, handleClose }) => {
           {editMode ? "Save" : "Close"}
         </Button>
 
+
         <ChangePassword
           open={changePasswordOpen}
-          handleClose={handleChangePasswordClose}
+          handleClose={() => handleChangePasswordClose(setChangePasswordOpen)}
           variant="text"
         />
       </DialogContent>

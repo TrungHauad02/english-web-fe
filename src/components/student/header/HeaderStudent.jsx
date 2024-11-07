@@ -3,7 +3,7 @@ import { Button, Stack, Menu, MenuItem, IconButton, Box } from "@mui/material";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import HeaderTypography from "shared/component/header/HeaderTypography";
 import SkillMenu from "./SkillMenu";
-import Profile from "../menu/Profile";
+import Profile from "../menu/profile/Profile";
 import { useAuth } from "security/AuthContext";
 
 const icon = "/icon.png";

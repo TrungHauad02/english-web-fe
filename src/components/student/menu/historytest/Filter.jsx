@@ -2,13 +2,7 @@ import React from "react";
 import { TextField, Button, MenuItem, Grid, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-const Filter = ({
-    filter,
-    setFilter,
-    searchText,
-    setSearchText,
-    handleSearch,
-}) => {
+const Filter = ({ filter, setFilter, searchText, setSearchText, handleSearch}) => {
     return (
         <Grid container spacing={2} alignItems="center" mb={2}>
             <Grid item xs={12} sm={6}>

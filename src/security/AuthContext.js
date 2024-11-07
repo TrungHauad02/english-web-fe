@@ -10,26 +10,37 @@ export default function AuthProvider({ children }) {
   );
   const [authToken, setAuthToken] = useState(localStorage.getItem("authToken"));
 
-  // Kiểm tra token trong localStorage khi ứng dụng tải
+  // Kiểm tra token và thời gian hết hạn khi ứng dụng tải
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-    if (token) {
-      setAuthenticated(true); // Cập nhật trạng thái nếu token tồn tại
+    const expirationTime = localStorage.getItem("tokenExpiration");
+
+    if (token && expirationTime && new Date() < new Date(expirationTime)) {
+      setAuthenticated(true);
       setAuthToken(token);
+    } else {
+      // Nếu hết hạn, xóa token và cập nhật trạng thái
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("tokenExpiration");
+      setAuthenticated(false);
+      setAuthToken(null);
     }
   }, []);
 
-  // Hàm SignIn để cập nhật trạng thái xác thực
+  // Hàm SignIn để cập nhật trạng thái xác thực và thời gian hết hạn
   function SignIn(token) {
-    setAuthenticated(true); // Đặt trạng thái thành true
+    const expirationTime = new Date(Date.now() + 3600 * 1000).toISOString(); // Thời hạn 1 giờ
+    setAuthenticated(true);
     setAuthToken(token);
-    localStorage.setItem("authToken", token); // Lưu token vào localStorage
-  }  
+    localStorage.setItem("authToken", token);
+    localStorage.setItem("tokenExpiration", expirationTime);
+  }
 
   function Logout() {
-    setAuthenticated(false); // Đặt trạng thái thành false khi đăng xuất
+    setAuthenticated(false);
     setAuthToken(null);
     localStorage.removeItem("authToken");
+    localStorage.removeItem("tokenExpiration");
   }
 
   return (

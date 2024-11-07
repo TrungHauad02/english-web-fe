@@ -42,16 +42,16 @@ export default function AppRoutes() {
       element: <HomeStudent />,
       children: [
         { path: "", element: <HomePageStudent /> },
-        { path: "skill", element: <Skills /> },
+        // { path: "skill", element: <Skills /> },
 
-        // {
-        //   path: "skill",
-        //   element: (
-        //     <AuthenticatedRoute>
-        //       <Skills />
-        //     </AuthenticatedRoute>
-        //   ),
-        // },
+        {
+          path: "skill",
+          element: (
+            <AuthenticatedRoute>
+              <Skills />
+            </AuthenticatedRoute>
+          ),
+        },
 
         { path: "account", element: <Account /> },
         { path: "history-test", element: <HistoryTest /> },

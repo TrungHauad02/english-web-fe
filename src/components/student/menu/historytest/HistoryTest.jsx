@@ -1,9 +1,9 @@
-// src/pages/HistoryTest.jsx
 import React, { useState } from "react";
 import { Box, Grid, Typography, Card, Pagination } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import MainPicture from "../../common/listTopic/MainPicture";
 import Filter from "./Filter";
+import { handleSearch } from "./HandleHistoryTest";
 
 const CardStyled = styled(Card)(({ theme }) => ({
   backgroundColor: "#f5f5f5",
@@ -25,33 +25,9 @@ const ITEMS_PER_PAGE = 10;
 
 const HistoryTest = () => {
   const [filter, setFilter] = useState("All");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [tests, setTests] = useState(testData); // Initial fake test data
-
-  const handleSearch = () => {
-    const filteredTests = filterTests();
-    setTests(filteredTests);
-    setCurrentPage(1); // Reset to page 1 after searching
-  };
-
-  const filterTests = () => {
-    return testData.filter((test) => {
-      const matchesName = searchText
-        ? test.name.toLowerCase().includes(searchText.toLowerCase())
-        : true;
-
-      const matchesType = filter === "All" || test.type === filter;
-
-      const matchesDate =
-        (!startDate || test.date >= startDate) &&
-        (!endDate || test.date <= endDate);
-
-      return matchesName && matchesType && matchesDate;
-    });
-  };
+  const [tests, setTests] = useState(testData);
 
   const currentTests = tests.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -66,13 +42,9 @@ const HistoryTest = () => {
           <Filter
             filter={filter}
             setFilter={setFilter}
-            startDate={startDate}
-            setStartDate={setStartDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
             searchText={searchText}
             setSearchText={setSearchText}
-            handleSearch={handleSearch}
+            handleSearch={() => handleSearch(testData, searchText, filter, setTests, setCurrentPage)}
           />
           <Grid container spacing={2}>
             {currentTests.map((test, index) => (
@@ -87,7 +59,6 @@ const HistoryTest = () => {
             ))}
           </Grid>
 
-          {/* Pagination */}
           <Box mt={2} display="flex" justifyContent="center">
             <Pagination
               count={Math.ceil(tests.length / ITEMS_PER_PAGE)}
