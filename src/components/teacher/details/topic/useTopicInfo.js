@@ -5,6 +5,7 @@ import {
   updateTopic,
 } from "api/study/topic/topicService";
 import { useNavigate, useParams } from "react-router-dom";
+import handleError from "shared/utils/handleError";
 
 export default function useTopicInfo(data, setError) {
   const { id } = useParams();
@@ -47,19 +48,7 @@ export default function useTopicInfo(data, setError) {
       setError("");
       setIsEditing(false);
     } catch (err) {
-      console.error("Error updating topic:", err);
-      if (err.response && err.response.data && err.response.data.details) {
-        const details = err.response.data.details;
-        const errorMessages = [];
-
-        Object.keys(details).forEach((key) => {
-          if (details[key]) {
-            errorMessages.push(details[key]);
-          }
-        });
-
-        setError(errorMessages.join(".\n"));
-      }
+      handleError(err, setError);
     }
   };
 

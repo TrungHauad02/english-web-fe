@@ -6,6 +6,7 @@ import {
   updateAnswer,
   updateQuestion,
 } from "api/study/answerQuestion/answerQuestionService";
+import handleError from "shared/utils/handleError";
 
 export default function useQuestion(data, fetchData, setError, path) {
   const [question, setQuestion] = useState(data);
@@ -18,15 +19,7 @@ export default function useQuestion(data, fetchData, setError, path) {
   function handleEdit() {
     setIsEditing(true);
   }
-  function handleError(err) {
-    if (err.response?.data?.details) {
-      const details = err.response.data.details;
-      const errorMessages = Object.values(details).filter(Boolean).join(".\n");
-      setError(errorMessages);
-    } else {
-      setError("An unexpected error occurred.");
-    }
-  }
+
   async function handleUpdateAnswer(newQuestion) {
     const updatedAnswers = question.answers.map((answer) => {
       return { ...answer, questionId: newQuestion.id };
@@ -41,8 +34,8 @@ export default function useQuestion(data, fetchData, setError, path) {
     });
     try {
       await Promise.all(promises);
-    } catch (error) {
-      handleError(error);
+    } catch (err) {
+      handleError(err, setError);
     }
   }
 
@@ -59,7 +52,7 @@ export default function useQuestion(data, fetchData, setError, path) {
       await fetchData();
       setIsEditing(false);
     } catch (error) {
-      handleError(error);
+      handleError(error, setError);
     }
   }
 
