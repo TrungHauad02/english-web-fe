@@ -72,7 +72,7 @@ export default function Question({
           <CustomTextField
             value={question.serial}
             type="number"
-            disabled={true}
+            disabled={!isEditing}
             onChange={onChangeQuestionSerial}
             sx={{
               width: "4rem",
