@@ -1,12 +1,18 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "security/AuthContext";
+import ErrorPage from "shared/utils/ErrorPage";
 
-export default function AuthenticatedRoute({ children }) {
+export default function AuthenticatedRoute({ children, role }) {
   const authContext = useAuth();
 
-  if (authContext.isAuthenticated) {
-    return children;
+  if (!authContext.isAuthenticated) {
+    return <Navigate to="/student/account" />;
   }
-  else
-    return <Navigate to="/student" />;
+
+  // Kiểm tra nếu người dùng có vai trò phù hợp
+  if (role && authContext.userRole !== role) {
+    return <ErrorPage />
+  }
+
+  return children;
 }
