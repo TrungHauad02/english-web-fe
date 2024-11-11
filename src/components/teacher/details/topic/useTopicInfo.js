@@ -7,7 +7,7 @@ import {
 } from "api/study/topic/topicService";
 import { useNavigate, useParams } from "react-router-dom";
 import handleError from "shared/utils/handleError";
-import { deleteFile, uploadFile } from "api/feature/uploadFile/uploadFile";
+import { deleteFile, uploadFile } from "api/feature/uploadFile/uploadFileService";
 
 export default function useTopicInfo(data, setError) {
   const { id } = useParams();
