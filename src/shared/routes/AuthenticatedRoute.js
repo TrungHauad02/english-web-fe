@@ -6,7 +6,7 @@ export default function AuthenticatedRoute({ children, role }) {
   const authContext = useAuth();
 
   if (!authContext.isAuthenticated) {
-    return <Navigate to="/student/account" />;
+    return <Navigate to="/account" />;
   }
 
   // Kiểm tra nếu người dùng có vai trò phù hợp

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogTitle, TextField, Button, Stack, IconButton, InputAdornment } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, TextField, Button, Stack, IconButton, InputAdornment, Typography} from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { handlePasswordChange, handleClickShowNewPassword, handleClickShowReEnterPassword } from "./common/HandleChangePassword";
@@ -10,14 +10,18 @@ const ChangePassword = ({ open, handleClose }) => {
   const [reEnterPassword, setReEnterPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showReEnterPassword, setShowReEnterPassword] = useState(false);
-
-  const fakeCurrentPassword = "123"; // Fake current password
+  const [error, setError] = useState("");
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
       <DialogTitle>Change Password</DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
+        {error && (
+            <Typography color="error" align="center" mb={2}>
+              {error}
+            </Typography>
+          )}
           <TextField
             label="Old Password"
             type="password"
@@ -37,7 +41,12 @@ const ChangePassword = ({ open, handleClose }) => {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => handleClickShowNewPassword(showNewPassword, setShowNewPassword)}
+                    onClick={() =>
+                      handleClickShowNewPassword(
+                        showNewPassword,
+                        setShowNewPassword
+                      )
+                    }
                   >
                     {showNewPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
@@ -56,7 +65,12 @@ const ChangePassword = ({ open, handleClose }) => {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => handleClickShowReEnterPassword(showReEnterPassword, setShowReEnterPassword)}
+                    onClick={() =>
+                      handleClickShowReEnterPassword(
+                        showReEnterPassword,
+                        setShowReEnterPassword
+                      )
+                    }
                   >
                     {showReEnterPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
@@ -67,7 +81,9 @@ const ChangePassword = ({ open, handleClose }) => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => handlePasswordChange(oldPassword, newPassword, reEnterPassword, fakeCurrentPassword, handleClose)}
+            onClick={() =>
+              handlePasswordChange(oldPassword, newPassword, reEnterPassword, setError, handleClose)
+            }
           >
             Change Password
           </Button>

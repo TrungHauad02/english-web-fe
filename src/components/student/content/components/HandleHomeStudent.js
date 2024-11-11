@@ -13,7 +13,7 @@ export const HandleHomeStudent = (isAuthenticated) => {
 
   const handleCloseDialog = (setRequiredLoginDialog) => {
     setRequiredLoginDialog(false);
-    navigate('/student/account');
+    navigate('/account');
   };
 
   return { handleButtonClick, handleCloseDialog };
