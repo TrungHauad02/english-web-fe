@@ -9,5 +9,4 @@ export default function AuthenticatedRoute({ children }) {
   }
   else
     return <Navigate to="/student" />;
-  // Comment
 }
