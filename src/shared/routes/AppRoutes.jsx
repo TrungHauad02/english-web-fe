@@ -32,199 +32,6 @@ import TeacherManagement from "components/teacher/TeacherManagement";
 import AdminManagement from "components/admin/AdminManagement";
 import ErrorPage from "shared/utils/ErrorPage";
 
-// export default function AppRoutes() {
-//   const router = createBrowserRouter([
-//     {
-//       path: "/",
-//       element: <Home />,
-//     },
-//     {
-//       path: "/student",
-//       element: <HomePageStudent />,
-//     },
-//     {
-//       path: "/student/account",
-//       element: <Account />
-//     },
-//     {
-//       path: "/student/*",
-//       element: (
-//         <AuthenticatedRoute role="STUDENT">
-//           <HomeStudent />
-//         </AuthenticatedRoute>
-//       ),
-//       errorElement: <ErrorPage />,
-//       children: [
-//         {
-//           path: "skill",
-//           element: <Skills />
-//         },
-//         {
-//           path: "history-test",
-//           element: <HistoryTest />
-//         },
-//         {
-//           path: "study-schedule",
-//           element: <StudySchedulePage />
-//         },
-//         {
-//           path: "tests",
-//           element: <ListTest />
-//         },
-//         {
-//           path: "tests/listening",
-//           element: <TestListening />
-//         },
-//         {
-//           path: "tests/speaking",
-//           element: <TestSpeaking />
-//         },
-//         {
-//           path: "tests/reading",
-//           element: <TestReading />
-//         },
-//         {
-//           path: "tests/writing",
-//           element: <TestWriting />
-//         },
-//         {
-//           path: "tests/mixing",
-//           element: <TestMixing />
-//         },
-//         ...site.map((page) => ({
-//           path: page.path,
-//           element: (
-//             <page.file
-//               bg={page.bg}
-//               title={page.title}
-//               quote={page.quote}
-//               path={page.path}
-//             />
-//           ),
-//         })),
-//         ...site.map((page) => ({
-//           path: `${page.path}/:id`,
-//           element: <page.detail />,
-//         })),
-//       ],
-//     },
-//     {
-//       path: "/teacher",
-//       element: (
-//         <AuthenticatedRoute role="TEACHER">
-//           <HomeTeacher />
-//         </AuthenticatedRoute>
-//       ),
-//       errorElement: <ErrorPage />,
-//     },
-//     {
-//       path: "/teacher/*",
-//       element: (
-//         <AuthenticatedRoute role="TEACHER">
-//           <HomeTeacher />
-//         </AuthenticatedRoute>
-//       ),
-//       errorElement: <ErrorPage />,
-//       children: [
-//         {
-//           path: "",
-//           element: <TeacherManagement />,
-//         },
-//         {
-//           path: "topics",
-//           element: <ListTopicManagement title="topics" />,
-//         },
-//         {
-//           path: "topics/:id",
-//           element: <TopicDetail />,
-//         },
-//         {
-//           path: "grammars",
-//           element: <ListTopicManagement title="grammars" />,
-//         },
-//         {
-//           path: "grammars/:id",
-//           element: <GrammarDetail />,
-//         },
-//         {
-//           path: "readings",
-//           element: <ListTopicManagement title="readings" />,
-//         },
-//         {
-//           path: "readings/:id",
-//           element: <ReadingDetail />,
-//         },
-//         {
-//           path: "listenings",
-//           element: <ListTopicManagement title="listenings" />,
-//         },
-//         {
-//           path: "listenings/:id",
-//           element: <ListeningDetail />,
-//         },
-//         {
-//           path: "writings",
-//           element: <ListTopicManagement title="writings" />,
-//         },
-//         {
-//           path: "writings/:id",
-//           element: <WritingDetail />,
-//         },
-//         {
-//           path: "speakings",
-//           element: <ListTopicManagement title="speakings" />,
-//         },
-//         {
-//           path: "speakings/:id",
-//           element: <SpeakingDetail />,
-//         },
-//         {
-//           path: "test/mixing",
-//           element: <Mixing />,
-//         },
-//         {
-//           path: "test",
-//           element: <HomeTest />,
-//         },
-//       ],
-//     },
-//     {
-//       path: "/admin",
-//       element: (
-//         <AuthenticatedRoute role="ADMIN">
-//           <HomeAdmin />
-//         </AuthenticatedRoute>
-//       ),
-//       errorElement: <ErrorPage />,
-//     },
-//     {
-//       path: "/admin/*",
-//       element: (
-//         <AuthenticatedRoute role="ADMIN">
-//           <HomeAdmin />
-//         </AuthenticatedRoute>
-//       ),
-//       errorElement: <ErrorPage />,
-//       children: [
-//         {
-//           path: "",
-//           element: <AdminManagement />,
-//         },
-//         {
-//           path: "teacher",
-//           element: <ManageTeacher />,
-//         },
-//         {
-//           path: "student",
-//           element: <ManageStudent />,
-//         },
-//       ],
-//     },
-//   ]);
-//   return <RouterProvider router={router} />;
-// }
-
-
 export default function AppRoutes() {
   const router = createBrowserRouter([
     {
@@ -232,20 +39,58 @@ export default function AppRoutes() {
       element: <Home />,
     },
     {
+      path: "/student",
+      element: <HomePageStudent />,
+    },
+    {
+      path: "/account",
+      element: <Account />
+    },
+    {
       path: "/student/*",
-      element: <HomeStudent />,
+      element: (
+        <AuthenticatedRoute role="STUDENT">
+          <HomeStudent />
+        </AuthenticatedRoute>
+      ),
+      errorElement: <ErrorPage errorType={404}/>,
       children: [
-        { path: "", element: <HomePageStudent /> },
-        { path: "skill", element: <Skills /> },
-        { path: "account", element: <Account /> },
-        { path: "history-test", element: <HistoryTest /> },
-        { path: "study-schedule", element: <StudySchedulePage /> },
-        { path: "tests", element: <ListTest /> },
-        { path: "tests/listening", element: <TestListening /> },
-        { path: "tests/speaking", element: <TestSpeaking /> },
-        { path: "tests/reading", element: <TestReading /> },
-        { path: "tests/writing", element: <TestWriting /> },
-        { path: "tests/mixing", element: <TestMixing /> },
+        {
+          path: "skill",
+          element: <Skills />
+        },
+        {
+          path: "history-test",
+          element: <HistoryTest />
+        },
+        {
+          path: "study-schedule",
+          element: <StudySchedulePage />
+        },
+        {
+          path: "tests",
+          element: <ListTest />
+        },
+        {
+          path: "tests/listening",
+          element: <TestListening />
+        },
+        {
+          path: "tests/speaking",
+          element: <TestSpeaking />
+        },
+        {
+          path: "tests/reading",
+          element: <TestReading />
+        },
+        {
+          path: "tests/writing",
+          element: <TestWriting />
+        },
+        {
+          path: "tests/mixing",
+          element: <TestMixing />
+        },
         ...site.map((page) => ({
           path: page.path,
           element: (
@@ -257,7 +102,6 @@ export default function AppRoutes() {
             />
           ),
         })),
-
         ...site.map((page) => ({
           path: `${page.path}/:id`,
           element: <page.detail />,
@@ -265,8 +109,22 @@ export default function AppRoutes() {
       ],
     },
     {
+      path: "/teacher",
+      element: (
+        <AuthenticatedRoute role="TEACHER">
+          <HomeTeacher />
+        </AuthenticatedRoute>
+      ),
+      errorElement: <ErrorPage errorType={404}/>,
+    },
+    {
       path: "/teacher/*",
-      element: <HomeTeacher />,
+      element: (
+        <AuthenticatedRoute role="TEACHER">
+          <HomeTeacher />
+        </AuthenticatedRoute>
+      ),
+      errorElement: <ErrorPage errorType={404}/>,
       children: [
         {
           path: "",
@@ -331,8 +189,22 @@ export default function AppRoutes() {
       ],
     },
     {
+      path: "/admin",
+      element: (
+        <AuthenticatedRoute role="ADMIN">
+          <HomeAdmin />
+        </AuthenticatedRoute>
+      ),
+      errorElement: <ErrorPage errorType={404}/>,
+    },
+    {
       path: "/admin/*",
-      element: <HomeAdmin />,
+      element: (
+        <AuthenticatedRoute role="ADMIN">
+          <HomeAdmin />
+        </AuthenticatedRoute>
+      ),
+      errorElement: <ErrorPage errorType={404}/>,
       children: [
         {
           path: "",
@@ -348,7 +220,139 @@ export default function AppRoutes() {
         },
       ],
     },
+    {
+      path: "*",
+      element: <ErrorPage errorType={404}/>,
+    },
   ]);
   return <RouterProvider router={router} />;
 }
+
+
+// export default function AppRoutes() {
+//   const router = createBrowserRouter([
+//     {
+//       path: "/",
+//       element: <Home />,
+//     },
+//     {
+//       path: "/student/*",
+//       element: <HomeStudent />,
+//       children: [
+//         { path: "", element: <HomePageStudent /> },
+//         { path: "skill", element: <Skills /> },
+//         { path: "account", element: <Account /> },
+//         { path: "history-test", element: <HistoryTest /> },
+//         { path: "study-schedule", element: <StudySchedulePage /> },
+//         { path: "tests", element: <ListTest /> },
+//         { path: "tests/listening", element: <TestListening /> },
+//         { path: "tests/speaking", element: <TestSpeaking /> },
+//         { path: "tests/reading", element: <TestReading /> },
+//         { path: "tests/writing", element: <TestWriting /> },
+//         { path: "tests/mixing", element: <TestMixing /> },
+//         ...site.map((page) => ({
+//           path: page.path,
+//           element: (
+//             <page.file
+//               bg={page.bg}
+//               title={page.title}
+//               quote={page.quote}
+//               path={page.path}
+//             />
+//           ),
+//         })),
+
+//         ...site.map((page) => ({
+//           path: `${page.path}/:id`,
+//           element: <page.detail />,
+//         })),
+//       ],
+//     },
+//     {
+//       path: "/teacher/*",
+//       element: <HomeTeacher />,
+//       children: [
+//         {
+//           path: "",
+//           element: <TeacherManagement />,
+//         },
+//         {
+//           path: "topics",
+//           element: <ListTopicManagement title="topics" />,
+//         },
+//         {
+//           path: "topics/:id",
+//           element: <TopicDetail />,
+//         },
+//         {
+//           path: "grammars",
+//           element: <ListTopicManagement title="grammars" />,
+//         },
+//         {
+//           path: "grammars/:id",
+//           element: <GrammarDetail />,
+//         },
+//         {
+//           path: "readings",
+//           element: <ListTopicManagement title="readings" />,
+//         },
+//         {
+//           path: "readings/:id",
+//           element: <ReadingDetail />,
+//         },
+//         {
+//           path: "listenings",
+//           element: <ListTopicManagement title="listenings" />,
+//         },
+//         {
+//           path: "listenings/:id",
+//           element: <ListeningDetail />,
+//         },
+//         {
+//           path: "writings",
+//           element: <ListTopicManagement title="writings" />,
+//         },
+//         {
+//           path: "writings/:id",
+//           element: <WritingDetail />,
+//         },
+//         {
+//           path: "speakings",
+//           element: <ListTopicManagement title="speakings" />,
+//         },
+//         {
+//           path: "speakings/:id",
+//           element: <SpeakingDetail />,
+//         },
+//         {
+//           path: "test/mixing",
+//           element: <Mixing />,
+//         },
+//         {
+//           path: "test",
+//           element: <HomeTest />,
+//         },
+//       ],
+//     },
+//     {
+//       path: "/admin/*",
+//       element: <HomeAdmin />,
+//       children: [
+//         {
+//           path: "",
+//           element: <AdminManagement />,
+//         },
+//         {
+//           path: "teacher",
+//           element: <ManageTeacher />,
+//         },
+//         {
+//           path: "student",
+//           element: <ManageStudent />,
+//         },
+//       ],
+//     },
+//   ]);
+//   return <RouterProvider router={router} />;
+// }
 

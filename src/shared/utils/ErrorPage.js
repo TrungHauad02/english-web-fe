@@ -13,8 +13,9 @@ const ErrorPage = ({ errorType }) => {
       case "ADMIN":
         return "/admin";
       case "STUDENT":
+        return "/student"
       default:
-        return "/student";
+        return "/account";
     }
   };
 
