@@ -23,7 +23,6 @@ export default function useTopicDetail() {
           return;
         }
         const dataRes = await getTopicDetail(id);
-        console.log(dataRes);
         setData(dataRes);
       } catch (error) {
         setError(error.response.data.message);
