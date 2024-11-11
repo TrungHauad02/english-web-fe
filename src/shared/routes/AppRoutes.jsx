@@ -38,21 +38,19 @@ export default function AppRoutes() {
       element: <Home />,
     },
     {
-      path: "/student/*",
+      path: "/student",
       element: <HomeStudent />,
+    },
+    {
+      path: "/student/*",
+      element: (
+        <AuthenticatedRoute>
+          <HomeStudent />
+        </AuthenticatedRoute>
+      ),
       children: [
         { path: "", element: <HomePageStudent /> },
-        // { path: "skill", element: <Skills /> },
-
-        {
-          path: "skill",
-          element: (
-            <AuthenticatedRoute>
-              <Skills />
-            </AuthenticatedRoute>
-          ),
-        },
-
+        { path: "skill", element: <Skills /> },
         { path: "account", element: <Account /> },
         { path: "history-test", element: <HistoryTest /> },
         { path: "study-schedule", element: <StudySchedulePage /> },
@@ -81,8 +79,20 @@ export default function AppRoutes() {
       ],
     },
     {
+      path: "/teacher",
+      element: (
+        <AuthenticatedRoute>
+          <HomeTeacher />
+        </AuthenticatedRoute>
+      ),
+    },
+    {
       path: "/teacher/*",
-      element: <HomeTeacher />,
+      element: (
+        <AuthenticatedRoute>
+          <HomeTeacher />
+        </AuthenticatedRoute>
+      ),
       children: [
         {
           path: "",
@@ -147,8 +157,20 @@ export default function AppRoutes() {
       ],
     },
     {
+      path: "/admin",
+      element: (
+        <AuthenticatedRoute>
+          <HomeAdmin />
+        </AuthenticatedRoute>
+      ),
+    },
+    {
       path: "/admin/*",
-      element: <HomeAdmin />,
+      element: (
+        <AuthenticatedRoute>
+          <HomeAdmin />
+        </AuthenticatedRoute>
+      ),
       children: [
         {
           path: "",
