@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import {
   createTopic,
   deleteTopic,
+  getTopicDetail,
   updateTopic,
 } from "api/study/topic/topicService";
 import { useNavigate, useParams } from "react-router-dom";
 import handleError from "shared/utils/handleError";
+import { deleteFile, uploadFile } from "api/feature/uploadFile/uploadFile";
 
 export default function useTopicInfo(data, setError) {
   const { id } = useParams();
@@ -38,12 +40,30 @@ export default function useTopicInfo(data, setError) {
 
   const handleSaveClick = async () => {
     try {
+      if (topic.image === "") {
+        setError("Image cannot be empty"); 
+        return;
+      }
+      let updatedTopic = topic;
+      const oldTopic = await getTopicDetail(id);
+      if (oldTopic.image !== topic.image) {
+
+        const sanitizedFileName = topic.title.replace(/\s+/g, '_');
+        const [,resImage] = await Promise.all([
+          deleteFile(oldTopic.image),
+          uploadFile("topic", sanitizedFileName.toLowerCase(), topic.image)
+        ])
+        updatedTopic = { ...topic, image: resImage.url };
+    }
+      
+
       if (topic.id === "-1") {
-        const res = await createTopic(topic);
+        const res = await createTopic(updatedTopic);
         navigate(`/teacher/topics/${res.id}`);
         return;
       }
-      const res = await updateTopic(id, topic);
+      const res = await updateTopic(id, updatedTopic);
+      console.log(res);
       setTopic(res);
       setError("");
       setIsEditing(false);
@@ -71,8 +91,11 @@ export default function useTopicInfo(data, setError) {
   const onChangeImage = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, image: imageUrl });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setTopic({ ...topic, image: reader.result });
+      };
+      reader.readAsDataURL(file);
     }
   };
 
