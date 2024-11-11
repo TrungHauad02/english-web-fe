@@ -37,7 +37,6 @@ export default function AppRoutes() {
       path: "/",
       element: <Home />,
     },
-
     {
       path: "/student/*",
       element: <HomeStudent />,
