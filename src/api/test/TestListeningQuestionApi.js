@@ -38,7 +38,7 @@ export function updateTestListeningQuestion(id, testListeningQuestion) {
 
 export function deleteTestListeningQuestion(tesListeningQuestionId) {
   return apiClient
-    .delete("/listeningquestion/" + tesListeningQuestionId)
+    .delete("/testlisteningquestion/" + tesListeningQuestionId)
     .then((response) => {
       return response.status === 204;
     })

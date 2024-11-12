@@ -7,7 +7,7 @@ import { useAuth } from "../../../security/AuthContext";
 function HeaderAdmin() {
   const navigate = useNavigate();
   const auContext = useAuth();
-
+  console.log("refresing headers")
   const handleLogout = () => {
     auContext.Logout();
     navigate("/student/account");

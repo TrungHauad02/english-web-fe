@@ -12,12 +12,12 @@ import {
 } from "@mui/material";
 import { Trash, PlusCircle } from "lucide-react";
 import { styled } from "@mui/material/styles";
-import { updateTestReadingQuestion } from "api/test/TestReadingQuestionApi";
+import { updateTestListeningQuestion } from "api/test/TestListeningQuestionApi";
 import {
-  createTestReadingAnswer,
-  updateTestReadingAnswer,
-  deleteTestReadingAnswer,
-} from "api/test/TestReadingAnswerApi";
+  createTestListeningAnswer,
+  updateTestListeningAnswer,
+  deleteTestListeningAnswer,
+} from "api/test/TestListeningAnswerApi";
 import { AddQuestionTest } from "../Mixing/AddQuestionTest";
 
 const ButtonContainer = styled(Box)(({ theme }) => ({
@@ -43,13 +43,8 @@ const findCorrectAnswerId = (answers = []) => {
   return correctAnswer ? correctAnswer.id : null;
 };
 
-const FormContainer = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  backgroundColor: "#fff5e6",
-  borderRadius: theme.spacing(2),
-}));
 
-const QuestionReadingDetails = ({ question = {}, handleSaveSelectedQuestion }) => {
+const QuestionListeningDetails = ({ question = {}, handleSaveSelectedQuestion }) => {
   return (
     <Box sx={{ p: 3, bgcolor: "#fff9e6", minHeight: "100vh" }}>
       <ContentQuestion question={question} handleSaveSelectedQuestion={handleSaveSelectedQuestion} />
@@ -72,7 +67,7 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion }) => {
       content: "",
       isCorrect: !hasCorrectAnswer,
       status: "ACTIVE",
-      testQuestionReadingId: questionData.id,
+      testQuestionListeningId: questionData.id,
     };
     setQuestionData({
       ...questionData,
@@ -109,10 +104,8 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion }) => {
 
   const handleSave = async (questionData) => {
     
-    setSelectedAnswer(findCorrectAnswerId(questionData.answers));
     handleSaveSelectedQuestion(questionData);
     setBackupData(questionData);
-
     setIsEditMode(false);
   };
 
@@ -219,27 +212,6 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion }) => {
           ))}
         </RadioGroup>
 
-        {question?.isExplain !== "false" && (
-          <>
-            <Typography variant="h6" sx={{ mt: 2 }}>
-              Explain:
-            </Typography>
-            <TextField
-              sx={{ width: "90%" }}
-              multiline
-              rows={2}
-              value={questionData.explanation || ""}
-              onChange={(e) => {
-                setQuestionData({
-                  ...questionData,
-                  explanation: e.target.value,
-                });
-              }}
-              disabled={!isEditMode}
-            />
-          </>
-        )}
-
         <Box sx={{ display: "flex", marginTop: "1rem" }}>
           <Button
             variant="contained"
@@ -248,7 +220,7 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion }) => {
             sx={{
               bgcolor: "#9dc45f",
               "&:hover": { bgcolor: "#8ab54e" },
-              marginLeft: question?.isExplain === "false" ? 0 : "1rem",
+              marginLeft: "1rem",
               whiteSpace: "nowrap",
               height: "auto",
               padding: "0.1rem 1.5rem",
@@ -284,4 +256,4 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion }) => {
   );
 };
 
-export default QuestionReadingDetails;
+export default QuestionListeningDetails;
