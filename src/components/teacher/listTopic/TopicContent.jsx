@@ -53,7 +53,7 @@ export default function TopicContent({ topic, path }) {
           variant="contained"
           sx={{
             color: "#fff",
-            backgroundColor: "#000",
+            backgroundColor: "#555",
             fontSize: "1rem",
             padding: "0.5rem 1rem",
             textTransform: "capitalize",

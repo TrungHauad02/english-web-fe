@@ -1,4 +1,5 @@
 import { Button } from "@mui/material";
+import useColor from "shared/color/Color";
 
 function BasicButton({
   onClick,
@@ -6,20 +7,22 @@ function BasicButton({
   variant = "contained",
   startIcon,
   endIcon,
-  sx = {
-    margin: "1rem",
-    padding: "0.5rem 1rem",
-    fontSize: "1rem",
-    borderRadius: "0.25rem",
-    backgroundColor: "#6EC2F7",
-    color: "#000",
-  },
+  sx,
 }) {
+  const { Color2_1 } = useColor();
+  const complexSx = {
+    borderRadius: "0.25rem",
+    backgroundColor: Color2_1,
+    color: "#000",
+    textTransform:"none",
+    ...sx
+  }
+
   return (
     <Button
       onClick={onClick}
       variant={variant}
-      sx={sx}
+      sx={complexSx}
       startIcon={startIcon}
       endIcon={endIcon}
     >

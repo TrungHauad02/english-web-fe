@@ -26,7 +26,7 @@ function ConfirmAndSubmit({ submitContent, scoreContent, sx, onSubmit }) {
   };
   return (
     <Box>
-      <BasicButton onClick={handleConfirmDialogOpen} sx={sx} />
+      <BasicButton onClick={handleConfirmDialogOpen} sx={sx}/>
       <ConfirmDialog
         open={confirmDialogOpen}
         onClose={handleConfirmDialogClose}

@@ -4,6 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import useColor from "shared/color/Color";
 
 export default function ConfirmDialog({
   open,
@@ -14,6 +15,7 @@ export default function ConfirmDialog({
   cancelText,
   agreeText,
 }) {
+  const {Color2_1} = useColor();
   return (
     <Dialog
       open={open}
@@ -52,7 +54,7 @@ export default function ConfirmDialog({
             onClick={onAgree}
             sx={{
               boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-              backgroundColor: "#6EC2F7",
+              backgroundColor: Color2_1,
               color: "#000",
               textTransform: "capitalize",
             }}
