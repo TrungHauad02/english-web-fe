@@ -1,14 +1,15 @@
 import React from 'react';
 import { Avatar, Button, Card, Grid, Typography } from '@mui/material';
 
-const StudentTeacherList = ({ listData, handleClick, handleDetailClick, role }) => {
+const StudentTeacherList = ({ listData, handleClick, handleDetailClick, lastTeacherElementRef }) => {
     return (
-        <Card sx={{ height: 500, overflow: 'auto', padding: 2, bgcolor: '#F5F5F5' }}>
-            {listData.map((item) => (
+        <Card sx={{ height: 450, overflow: 'auto', padding: 2, bgcolor: '#F5F5F5' }}>
+            {listData.map((item, index) => (
                 <Card
                     key={item.id}
                     sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 2, marginBottom: 2, cursor: 'pointer' }}
                     onClick={() => handleClick(item)}
+                    ref={listData.length === index + 1 ? lastTeacherElementRef : null} // Áp dụng ref cho phần tử cuối cùng
                 >
                     <Grid container alignItems="center">
                         <Avatar src={item.avatar} sx={{ marginRight: 2 }} />
@@ -19,9 +20,6 @@ const StudentTeacherList = ({ listData, handleClick, handleDetailClick, role }) 
                     </Grid>
 
                     <Grid container alignItems="center" justifyContent="flex-end">
-                        <Button variant="contained" color={item.status === 'Active' ? 'success' : 'warning'}>
-                            {item.status}
-                        </Button>
                         <Button variant="outlined" sx={{ marginLeft: 2 }} onClick={() => handleDetailClick(item)}>
                             Detail
                         </Button>

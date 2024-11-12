@@ -21,13 +21,13 @@ export const handleSignIn = async (email, password, authContext, navigate, setEr
         navigate("/teacher");
         break;
       case "ADMIN":
-        navigate("/admin/teacher");
+        navigate("/admin");
         break;
       default:
         throw new Error("Invalid role");
     }
 
-    return role; // Trả về role nếu cần
+    return role;
   } catch (error) {
     setError("Email hoặc mật khẩu không đúng. Vui lòng thử lại.");
   }

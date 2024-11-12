@@ -2,15 +2,7 @@ import React, { useEffect } from 'react';
 import { Grid, TextField, Button } from '@mui/material';
 import { Search } from '@mui/icons-material';
 
-const SearchPanel = ({ 
-    searchName, 
-    setSearchName, 
-    searchStartDate, 
-    setSearchStartDate, 
-    searchEndDate, 
-    setSearchEndDate, 
-    handleSearch 
-}) => {
+const SearchPanel = ({  searchName,  setSearchName,   searchStartDate,   setSearchStartDate,   searchEndDate,   setSearchEndDate,   handleSearch }) => {
     useEffect(() => {
         if (searchStartDate && searchEndDate && new Date(searchStartDate) > new Date(searchEndDate)) {
             setSearchEndDate(searchStartDate);
@@ -20,7 +12,7 @@ const SearchPanel = ({
     const isEndDateDisabled = !searchStartDate || new Date(searchStartDate) >= new Date();
 
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={1}>
             <Grid item xs={5}>
                 <TextField
                     fullWidth

@@ -1,24 +1,10 @@
 import React from 'react';
 import { Grid, Card, Avatar, TextField, FormControl, InputLabel, Select, MenuItem, Typography, Button } from '@mui/material';
 
-const TeacherInfo = ({
-    selectedTeacher,
-    setSelectedTeacher,
-    isEditing,
-    isNew,
-    levelsForForm,
-    handleImageChange,
-    setConfirmDeleteOpen,
-    handleEditToggle,
-    handleSaveEdit,
-    handleAddTeacher,
-    handleNewToggle,
-    handleClear,
-}) => {
+const TeacherInfo = ({ selectedTeacher, setSelectedTeacher, isEditing, isNew, levelsForForm, handleImageChange, setConfirmDeleteOpen, handleEditToggle, handleSaveEdit, handleAddTeacher,handleNewToggle, handleClear}) => {
     return (
         <Grid item xs={12} md={4}>
-            <Card sx={{ height: 500, padding: 2, bgcolor: "#F5F5F5" }}>
-                {/* Avatar */}
+            <Card sx={{ height: 450, padding: 2, bgcolor: "#F5F5F5" }}>
                 <Grid item xs={12} textAlign="center">
                     <Avatar
                         alt={selectedTeacher?.name || 'Teacher Avatar'}
@@ -84,7 +70,6 @@ const TeacherInfo = ({
                             color="error"
                             sx={{ bgcolor: '#FF6655' }}
                             onClick={() => setConfirmDeleteOpen(true)} 
-                            disabled={!selectedTeacher.id || !selectedTeacher.name.trim() || selectedTeacher.status !== 'Active'}
                         >
                             Delete
                         </Button>
@@ -96,7 +81,6 @@ const TeacherInfo = ({
                             color="warning"
                             sx={{ bgcolor: '#FFD014' }}
                             onClick={isEditing ? handleSaveEdit : handleEditToggle}
-                            disabled={!selectedTeacher.id || !selectedTeacher.name.trim() || selectedTeacher.status !== 'Active'}
                         >
                             {isEditing ? 'Save Edit' : 'Edit'}
                         </Button>

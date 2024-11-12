@@ -1,51 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import ProfileStudent from './common/ProfileStudent';
 import SearchPanel from '../common/Filter';
 import StudentTeacherList from '../common/StudentTeacherList';
 import DeleteConfirmationDialog from '../common/DeleteConfirmationDialog';
 import StudentInfo from './common/StudentInfo';
-import { handleSearch, handleDeleteStudent, handleClearSelection } from './common/HandleStudent';
+import { handleDeleteStudent, handleClearSelection, useStudentData } from './common/HandleStudent';
 
 function ManageStudent() {
-    const initialStudents = [
-        {
-            id: 1,
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-            startDate: '2023-01-01',
-            endDate: '',
-            status: 'Active',
-            avatar: '/icon.png',
-        },
-        {
-            id: 2,
-            name: 'Jane Smith',
-            email: 'jane.smith@example.com',
-            startDate: '2023-05-15',
-            endDate: '',
-            status: 'Active',
-            avatar: '/header_user.png',
-        },
-        {
-            id: 3,
-            name: 'Chris Evans',
-            email: 'chris.evans@example.com',
-            startDate: '2022-10-10',
-            endDate: '',
-            status: 'Inactive',
-            avatar: '/icon.png',
-        },
-    ];
-
-    const [students, setStudents] = useState(initialStudents);
-    const [filteredStudents, setFilteredStudents] = useState(initialStudents);
-    const [selectedStudent, setSelectedStudent] = useState(initialStudents[0]);
     const [searchName, setSearchName] = useState('');
     const [searchStartDate, setSearchStartDate] = useState('');
     const [searchEndDate, setSearchEndDate] = useState('');
+    const [size, setSize] = useState(10);
     const [openProfile, setOpenProfile] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const [selectedStudent, setSelectedStudent] = useState({
+        name: '',
+        email: '',
+        password: '',
+        startDate: '',
+        endDate: '',
+        avatar: '',
+        status: '',
+        id: null,
+    });
+
+    const {
+        students,
+        setStudents,
+        filteredStudents,
+        setFilteredStudents,
+        loadStudents,
+        lastStudentElementRef,
+        setPage,
+    } = useStudentData(searchName, searchStartDate, searchEndDate, size);
+
+    useEffect(() => {
+        setPage(0);
+        loadStudents();
+    }, [searchName, searchStartDate, searchEndDate, size]);
 
     return (
         <Grid container spacing={2} style={{ paddingTop: '2rem', paddingRight: '5%', paddingLeft: '5%', paddingBottom: '3rem' }}>
@@ -57,7 +50,10 @@ function ManageStudent() {
                     setSearchStartDate={setSearchStartDate}
                     searchEndDate={searchEndDate}
                     setSearchEndDate={setSearchEndDate}
-                    handleSearch={() => handleSearch(students, searchName, searchStartDate, searchEndDate, setFilteredStudents)}
+                    handleSearch={() => {
+                        setPage(0); // Reset về trang đầu tiên khi tìm kiếm mới
+                        loadStudents();
+                    }}
                 />
             </Grid>
 
@@ -72,6 +68,7 @@ function ManageStudent() {
             <Grid item xs={12} md={8}>
                 <StudentTeacherList
                     listData={filteredStudents}
+                    lastStudentElementRef={lastStudentElementRef}
                     handleClick={(student) => setSelectedStudent(student)}
                     handleDetailClick={(student) => {
                         setSelectedStudent(student);

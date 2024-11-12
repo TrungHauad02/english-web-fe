@@ -1,12 +1,70 @@
+import { useState, useRef, useCallback } from 'react';
+import { getTeachers } from 'api/admin/teacher/TeacherService';
+
+export const useTeacherData = (searchName, searchLevel, searchStartDate, searchEndDate, size) => {
+    const [teachers, setTeachers] = useState([]);
+    const [filteredTeachers, setFilteredTeachers] = useState([]);
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [error, setError] = useState('');
+    const observer = useRef();
+
+    const loadTeachers = async () => {
+        try {
+            const filters = {
+                name: searchName,
+                startDate: searchStartDate ? new Date(searchStartDate).toISOString().split('T')[0] : undefined,
+                endDate: searchEndDate ? new Date(searchEndDate).toISOString().split('T')[0] : undefined,
+                level: searchLevel === 'ALL' ? undefined : searchLevel,
+            };
+            const data = await getTeachers(page, size, "id", "asc", filters);
+            
+            const validData = data.content.map(teacher => ({
+                ...teacher,
+                name: teacher.name || '',
+                email: teacher.email || '',
+                level: teacher.level || '',
+                avatar: teacher.avatar || '/header_user.png',
+                startDate: teacher.startDate || '',
+                endDate: teacher.endDate || '',
+                status: teacher.status || 'Active',
+            }));
+
+            setTeachers(prevTeachers => page === 0 ? validData : [...prevTeachers, ...validData]);
+            setFilteredTeachers(prevTeachers => page === 0 ? validData : [...prevTeachers, ...validData]);
+            setHasMore(data.content.length > 0);
+        } catch (error) {
+            setError("Không thể tải danh sách giáo viên. Vui lòng thử lại sau.");
+        }
+    };
+
+    const lastTeacherElementRef = useCallback(node => {
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [hasMore]);
+
+    return {
+        teachers,
+        filteredTeachers,
+        setFilteredTeachers,
+        loadTeachers,
+        lastTeacherElementRef,
+        setPage,
+        error,
+    };
+};
+
 export const handleImageChange = (e, selectedTeacher, setSelectedTeacher, setAvatarFile) => {
     const file = e.target.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            setSelectedTeacher({ ...selectedTeacher, avatar: event.target.result }); // Update avatar in selectedTeacher
-            setAvatarFile(file); // Store the file to update later
-        };
-        reader.readAsDataURL(file);
+        const imageUrl = URL.createObjectURL(file);
+        setSelectedTeacher({ ...selectedTeacher, avatar: imageUrl }); 
+        setAvatarFile(file); 
     }
 };
 
@@ -22,7 +80,7 @@ export const handleTeacherClick = (teacher, setSelectedTeacher, setAvatar) => {
         status: teacher.status,
         id: teacher.id,
     });
-    setAvatar(teacher.avatar); // Set the avatar when clicking on a teacher
+    setAvatar(teacher.avatar);
 };
 
 export const handleDetailClick = (teacher, setOpenProfile, handleTeacherClick) => {
@@ -83,33 +141,6 @@ export const handleDeleteTeacher = (selectedTeacher, teachers, setTeachers, setF
     setConfirmDeleteOpen(false);
 
     handleClear(setSelectedTeacher); 
-};
-
-export const handleSearch = (teachers, searchName, searchStartDate, searchEndDate, searchLevel, setFilteredTeachers) => {
-    const filtered = teachers.filter(teacher => {
-        const isNameMatch = searchName === '' || teacher.name.toLowerCase().includes(searchName.toLowerCase());
-        const isLevelMatch = searchLevel === 'All' || !searchLevel || teacher.level === searchLevel; // Check if level matches or is 'All'
-
-        const teacherStartDate = new Date(teacher.startDate);
-        const teacherEndDate = teacher.endDate ? new Date(teacher.endDate) : null;
-        const searchStart = searchStartDate ? new Date(searchStartDate) : null;
-        const searchEnd = searchEndDate ? new Date(searchEndDate) : null;
-        const today = new Date(); 
-
-        const isDateMatch = (
-            (searchStart && !searchEnd && teacherStartDate >= searchStart && (!teacherEndDate || teacherEndDate >= today)) ||
-
-            (!searchStart && searchEnd && teacherStartDate <= searchEnd) ||
-
-            (searchStart && searchEnd && teacherStartDate >= searchStart && teacherStartDate <= searchEnd) ||
-
-            (!searchStart && !searchEnd)
-        );
-
-        return isNameMatch && isLevelMatch && isDateMatch; 
-    });
-
-    setFilteredTeachers(filtered);
 };
 
 export const handleClear = (setSelectedTeacher) => {

@@ -2,12 +2,12 @@ import React from 'react';
 import { Grid, TextField, Avatar, Button, Card } from '@mui/material';
 
 const StudentInfo = ({ selectedStudent, handleClearSelection, setConfirmDeleteOpen }) => (
-    <Card sx={{ height: 500, padding: 2, bgcolor: "#F5F5F5" }}>
-        <Grid container spacing={2} style={{ marginTop: '10px' }}>
+    <Card sx={{ height: 450, padding: 2, bgcolor: "#F5F5F5" }}>
+        <Grid container spacing={2}>
             <Grid item xs={12} textAlign="center">
                 <Avatar
                     alt={selectedStudent?.name || 'Student Avatar'}
-                    src={selectedStudent?.avatar || '/icon.png'}
+                    src={selectedStudent?.avatar || '/header_user.png'}
                     sx={{ width: 100, height: 100, margin: '0 auto' }}
                 />
             </Grid>
@@ -41,7 +41,7 @@ const StudentInfo = ({ selectedStudent, handleClearSelection, setConfirmDeleteOp
                     fullWidth
                     label="Start Date"
                     type="date"
-                    value={selectedStudent?.startDate || ''}
+                    value={selectedStudent?.startDate || '//'}
                     variant="outlined"
                     InputProps={{
                         readOnly: true,
