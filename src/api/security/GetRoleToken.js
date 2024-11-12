@@ -7,7 +7,7 @@ export const getRoleFromToken = () => {
   
     try {
       const payload = JSON.parse(atob(payloadBase64));
-      return payload.scope; // Sử dụng `scope` để lấy vai trò
+      return payload.scope; // Sử dụng `scope` để lấy vai trò  
     } catch (error) {
       console.error("Lỗi khi giải mã token:", error);
       return null;
