@@ -1,5 +1,5 @@
 import apiClient from "api/apiClient";
-import { getIdToken } from "api/security/getIdToken";
+import { getIdToken } from "api/security/GetIdToken";
 
 export const updateUser = async (userData) => {
   const token = localStorage.getItem("authToken");

@@ -89,7 +89,7 @@ function HeaderTeacher() {
       <Stack direction={"row"} alignItems={"center"} spacing={2}>
         <Button
           component={NavLink}
-          to="/student"
+          to="/teacher"
           sx={{
             backgroundColor: "transparent",
             color: "white",
