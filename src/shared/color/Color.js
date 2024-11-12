@@ -8,3 +8,4 @@ export default function useColor() {
         HeaderBg: "#00796b",
     };
 }
+    

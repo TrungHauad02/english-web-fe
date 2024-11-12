@@ -1,8 +1,9 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import SoundViewer from "shared/component/soundViewer/SoundViewer";
 import PrevNextSubmitButton from "shared/component/button/PrevNextSubmitButton";
 import Explanation from "../../common/answerQuestion/Explanation";
 import useListenAndWriteAWord from "./useListenAndWriteAWord";
+import useColor from "shared/color/Color";
 
 export default function ListenAndWriteWord() {
   const {
@@ -17,7 +18,10 @@ export default function ListenAndWriteWord() {
     getSubmitContent,
     getScoreContent,
     onSubmit,
+    setIsSubmit,
+    handleReset
   } = useListenAndWriteAWord();
+  const color = useColor();
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -49,7 +53,7 @@ export default function ListenAndWriteWord() {
               explanation={curQuestion.correctAnswer}
               sx={{
                 marginRight: "1rem",
-                backgroundColor: "#bee6ff",
+                backgroundColor: color.Color1,
               }}
             />
           )}
@@ -60,7 +64,7 @@ export default function ListenAndWriteWord() {
               sx={{
                 margin: "1rem",
                 width: "12rem",
-                backgroundColor: "#6EC2F7",
+                backgroundColor: color.Color2_1,
                 position: "absolute",
                 bottom: "-1",
                 textTransform: "capitalize",
@@ -71,13 +75,30 @@ export default function ListenAndWriteWord() {
           )}
         </>
       )}
-      <PrevNextSubmitButton
-        handlePrevious={handlePrevious}
-        handleNext={handleNext}
-        submitContent={getSubmitContent()}
-        scoreContent={getScoreContent()}
-        onSubmit={onSubmit}
-      />
+      <Stack
+        direction={"row"}
+        alignItems={"flex-end"}
+        justifyContent={"flex-end"}
+        spacing={2}
+        sx={{ marginTop: "1rem" }}
+      >
+        {isSubmit && (
+          <Button
+            variant="contained"
+            sx={{ bgcolor: color.Color2_1, textTransform: "capitalize" }}
+            onClick={handleReset}
+          >
+            Reset
+          </Button>
+        )}
+        <PrevNextSubmitButton
+          handleNext={handleNext}
+          handlePrevious={handlePrevious}
+          submitContent={getSubmitContent()}
+          scoreContent={getScoreContent()}
+          onSubmit={onSubmit}
+        />
+      </Stack>
     </Box>
   );
 }

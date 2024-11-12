@@ -31,12 +31,14 @@ export default function useListenAndWriteAWord() {
   const handlePrevious = () => {
     if (curQuestionIndex > 0) {
       setCurQuestionIndex(curQuestionIndex - 1);
+      setIsShowExplain(false);
     }
   };
 
   const handleNext = () => {
     if (curQuestionIndex < listQuestion.length - 1) {
       setCurQuestionIndex(curQuestionIndex + 1);
+      setIsShowExplain(false);
     }
   };
 
@@ -64,6 +66,13 @@ export default function useListenAndWriteAWord() {
     setIsSubmit(true);
   };
 
+  const handleReset = () => {
+    setIsSubmit(false);
+    setIsShowExplain(false);
+    setUserAnswer(null);
+    setCurQuestionIndex(0);
+  };
+
   return {
     listQuestion,
     curQuestion,
@@ -78,5 +87,7 @@ export default function useListenAndWriteAWord() {
     getSubmitContent,
     getScoreContent,
     onSubmit,
+    setIsSubmit,
+    handleReset
   };
 }

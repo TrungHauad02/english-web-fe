@@ -1,7 +1,9 @@
 import { Grid2 } from "@mui/material";
 import MultiLineTextField from "../common/textField/MultiLineTextField";
-import SaveEditDeleteButton from "../common/button/SaveEditDeleteButton";
 import useWritingTopic from "./useWritingTopic";
+import SaveButton from "../common/button/SaveButton";
+import EditButton from "../common/button/EditButton";
+import DeleteButton from "../common/button/DeleteButton";
 
 export default function WritingTopic({
   data,
@@ -39,12 +41,9 @@ export default function WritingTopic({
           disabled={!isEditing}
         />
         <Grid2 container direction={"row"} spacing={2}>
-          <SaveEditDeleteButton
-            showText
-            onDel={handleDelete}
-            onEdit={handleEditing}
-            onSave={handleSave}
-          />
+          <EditButton onEdit={handleEditing} disabled={isEditing} showText/>
+          <DeleteButton onDel={handleDelete} disabled={!isEditing} showText/>
+          <SaveButton onSave={handleSave} disabled={!isEditing} showText />
         </Grid2>
       </Grid2>
     </Grid2>

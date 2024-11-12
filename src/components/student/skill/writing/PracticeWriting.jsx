@@ -27,25 +27,10 @@ export default function PracticeWriting() {
                 zIndex: 2,
               }}
             />
-            <Tab
-              label="Score: 0/0"
-              value="2"
-              disabled
-              sx={{
-                color: "#000!important",
-                backgroundColor: value === "2" ? "#6EC2F7" : "#bee6ff",
-                borderTopRightRadius: "999px",
-                borderBottom: value === "2" ? "none" : "1px solid white",
-                padding: "0.5rem 2.5rem",
-                paddingLeft: "4rem",
-                marginLeft: "-3rem",
-                zIndex: 1,
-              }}
-            />
           </TabList>
         </Box>
         <TabPanel value="1" sx={{ backgroundColor: "#f1f1f1" }}>
-          <WritingAboutTopic />
+          
         </TabPanel>
       </TabContext>
     </Card>

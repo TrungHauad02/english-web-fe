@@ -1,38 +1,16 @@
-import React, { useState } from "react";
 import MatchImageWithWord from "./MatchImageWithWord/MatchImageWithWord";
-import Introduction from "./introduction/Introduction";
+import Introduction from "../common/introduction/Introduction";
 import ListFlashcard from "./listFlashcard/ListFlashcard";
 import MainPicture from "../common/listTopic/MainPicture";
 import AnswerQuestion from "../common/answerQuestion/AnswerQuestion";
 import LoadingComponent from "../common/loadingPage/LoadingComponent";
-import { Grid, Button, Collapse } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { Grid } from "@mui/material";
 import useVocabulary from "./useVocabulary";
 import ErrorComponent from "shared/component/error/ErrorComponent";
+import CollapsibleSection from "shared/collapsible/CollapsibleSection";  // Import CollapsibleSection
 
 function Vocabulary() {
   const { topic, stateVocab, listQuestion, error, setError, handleCloseError } = useVocabulary();
-  const [showMatchImageWithWord, setShowMatchImageWithWord] = useState(false);
-  const [showFlashcards, setShowFlashcards] = useState(false);
-  const [showAnswerQuestions, setShowAnswerQuestions] = useState(false);
-
-  const buttonStyles = {
-    margin: "1rem 2%",
-    backgroundColor: "#f1f1f1",
-    color: "#000",
-    justifyContent: "space-between",
-    display: "flex",
-    width: "96%",
-    textAlign: "left",
-    textTransform: "capitalize",
-    fontSize: "1.25rem",
-    padding: "1rem 1.5rem",
-  };
-
-  const collapseStyles = {
-    paddingX: "1.5rem",
-  };
 
   if (error) {
     return <ErrorComponent errorMessage={error} onClose={handleCloseError} />;
@@ -60,40 +38,23 @@ function Vocabulary() {
     <>
       <MainPicture title={topic.title} src={topic.image} />
 
-      <Button
-        onClick={() => setShowMatchImageWithWord(!showMatchImageWithWord)}
-        sx={buttonStyles}
-      >
-        Image And Word
-        {showMatchImageWithWord ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-      </Button>
-      <Collapse in={showMatchImageWithWord} timeout={{ enter: 1000, exit: 500 }} sx={collapseStyles}>
+      <CollapsibleSection buttonText="Image And Word">
         <MatchImageWithWord stateVocab={stateVocab} />
-      </Collapse>
+      </CollapsibleSection>
 
-      <Introduction />
+      <Introduction 
+        title="Welcome to the Vocabulary Adventure!" 
+        subtitle="Dive into new words and expressions that will help you explore and understand English in depth."
+        bodyText="Each word is a step closer to mastering this topic. Take your time, review the flashcards, and see how your understanding grows!"
+      />
 
-      <Button
-        onClick={() => setShowFlashcards(!showFlashcards)}
-        sx={buttonStyles}
-      >
-        Flashcards
-        {showFlashcards ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-      </Button>
-      <Collapse in={showFlashcards} timeout={{ enter: 1000, exit: 500 }} sx={collapseStyles}>
+      <CollapsibleSection buttonText="Flashcards">
         <ListFlashcard topicId={topic.id} setError={setError} />
-      </Collapse>
+      </CollapsibleSection>
 
-      <Button
-        onClick={() => setShowAnswerQuestions(!showAnswerQuestions)}
-        sx={buttonStyles}
-      >
-        Answer Questions
-        {showAnswerQuestions ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-      </Button>
-      <Collapse in={showAnswerQuestions} timeout={{ enter: 1000, exit: 500 }} sx={collapseStyles}>
+      <CollapsibleSection buttonText="Answer Questions">
         <AnswerQuestion listQuestion={listQuestion} />
-      </Collapse>
+      </CollapsibleSection>
 
       {error && <ErrorComponent errorMessage={error} onClose={handleCloseError} />}
     </>
