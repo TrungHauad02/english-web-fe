@@ -1,27 +1,60 @@
-export const handleSearch = (students, searchName, searchStartDate, searchEndDate, setFilteredStudents) => {
-    const filtered = students.filter(student => {
-        const isNameMatch = searchName === '' || student.name.toLowerCase().includes(searchName.toLowerCase());
+import { useState, useRef, useCallback } from 'react';
+import { getStudents } from 'api/admin/student/StudentService';
 
-        const studentStartDate = new Date(student.startDate);
-        const studentEndDate = student.endDate ? new Date(student.endDate) : null;
-        const searchStart = searchStartDate ? new Date(searchStartDate) : null;
-        const searchEnd = searchEndDate ? new Date(searchEndDate) : null;
-        const today = new Date(); 
+export const useStudentData = (searchName, searchStartDate, searchEndDate, size) => {
+    const [students, setStudents] = useState([]);
+    const [filteredStudents, setFilteredStudents] = useState([]);
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [error, setError] = useState('');
+    const observer = useRef();
 
-        const isDateMatch = (
-            (searchStart && !searchEnd && studentStartDate >= searchStart && (!studentEndDate || studentEndDate >= today)) ||
+    const loadStudents = async () => {
+        try {
+            const filters = {
+                name: searchName,
+                startDate: searchStartDate ? new Date(searchStartDate).toISOString().split('T')[0] : undefined,
+                endDate: searchEndDate ? new Date(searchEndDate).toISOString().split('T')[0] : undefined,
+            };
+            const data = await getStudents(page, size, "id", "asc", filters);
 
-            (!searchStart && searchEnd && studentStartDate <= searchEnd) ||
+            const validData = data.content.map(student => ({
+                ...student,
+                name: student.name || '',
+                email: student.email || '',
+                avatar: student.avatar || '/header_user.png',
+                startDate: student.startDate || '',
+                endDate: student.endDate || '',
+                status: student.status || 'Active',
+            }));
 
-            (searchStart && searchEnd && studentStartDate >= searchStart && studentStartDate <= searchEnd) ||
+            setStudents(prevStudents => page === 0 ? validData : [...prevStudents, ...validData]);
+            setFilteredStudents(prevStudents => page === 0 ? validData : [...prevStudents, ...validData]);
+            setHasMore(data.content.length > 0);
+        } catch (error) {
+            setError("Không thể tải danh sách sinh viên. Vui lòng thử lại sau.");
+        }
+    };
 
-            (!searchStart && !searchEnd)
-        );
+    const lastStudentElementRef = useCallback(node => {
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [hasMore]);
 
-        return isNameMatch && isDateMatch;
-    });
-
-    setFilteredStudents(filtered);
+    return {
+        students,
+        filteredStudents,
+        setFilteredStudents,
+        loadStudents,
+        lastStudentElementRef,
+        setPage,
+        error,
+    };
 };
 
 export const handleDeleteStudent = (students, selectedStudent, setStudents, setFilteredStudents, setConfirmDeleteOpen, setSelectedStudent) => {

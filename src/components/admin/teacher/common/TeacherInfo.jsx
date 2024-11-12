@@ -1,24 +1,10 @@
 import React from 'react';
 import { Grid, Card, Avatar, TextField, FormControl, InputLabel, Select, MenuItem, Typography, Button } from '@mui/material';
 
-const TeacherInfo = ({
-    selectedTeacher,
-    setSelectedTeacher,
-    isEditing,
-    isNew,
-    levelsForForm,
-    handleImageChange,
-    setConfirmDeleteOpen,
-    handleEditToggle,
-    handleSaveEdit,
-    handleAddTeacher,
-    handleNewToggle,
-    handleClear,
-}) => {
+const TeacherInfo = ({ selectedTeacher, setSelectedTeacher, isEditing, isNew, levelsForForm, handleImageChange, setConfirmDeleteOpen, handleEditToggle, handleSaveEdit, handleAddTeacher,handleNewToggle, handleClear}) => {
     return (
         <Grid item xs={12} md={4}>
             <Card sx={{ height: 450, padding: 2, bgcolor: "#F5F5F5" }}>
-                {/* Avatar */}
                 <Grid item xs={12} textAlign="center">
                     <Avatar
                         alt={selectedTeacher?.name || 'Teacher Avatar'}
