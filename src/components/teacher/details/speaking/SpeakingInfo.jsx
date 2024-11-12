@@ -3,9 +3,11 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import BasicTextField from "../common/textField/BasicTextField";
 import BasicSelect from "../common/select/BasicSelect";
 import MultiLineTextField from "../common/textField/MultiLineTextField";
-import SaveEditDeleteButton from "../common/button/SaveEditDeleteButton";
 import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useSpeakingInfo from "./useSpeakingInfo";
+import SaveButton from "../common/button/SaveButton";
+import EditButton from "../common/button/EditButton";
+import DeleteButton from "../common/button/DeleteButton";
 
 export default function SpeakingInfo({ setError }) {
   const {
@@ -91,19 +93,16 @@ export default function SpeakingInfo({ setError }) {
           disabled={!isEditing}
         />
         <BasicTextField
-          label={"Duration"}
+          label={"Duration (seconds)"}
           value={topic.duration}
           onChange={onChangeDuration}
           type="number"
           disabled={!isEditing}
         />
         <Grid2 container direction={"row"} spacing={2}>
-          <SaveEditDeleteButton
-            showText
-            onDel={handleDelete}
-            onEdit={handleEditing}
-            onSave={handleSave}
-          />
+          <EditButton onEdit={handleEditing} disabled={isEditing} showText/>
+          <DeleteButton onDel={handleDelete} disabled={!isEditing} showText/>
+          <SaveButton onSave={handleSave} disabled={!isEditing} showText />
         </Grid2>
       </Grid2>
     </Grid2>

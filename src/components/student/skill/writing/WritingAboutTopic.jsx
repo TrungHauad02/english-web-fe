@@ -10,6 +10,8 @@ import React from "react";
 import BasicButton from "shared/component/button/BasicButton";
 import Comment from "./Comment";
 import useWritingAboutTopic from "./useWritingAboutTopic";
+import useColor from "shared/color/Color";
+import CollapsibleSection from "shared/collapsible/CollapsibleSection";
 
 export const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -17,16 +19,18 @@ export const StyledPaper = styled(Paper)(({ theme }) => ({
   borderRadius: "8px",
 }));
 
-export default function WritingAboutTopic() {
-  const { writing, essay, wordCount, handleEssayChange } =
+export default function WritingAboutTopic({writing}) {
+  const {  essay, wordCount, handleEssayChange, comment, handleSubmit } =
     useWritingAboutTopic();
+
+  const color = useColor();
 
   if (!writing) return;
 
   return (
     <Grid2 container direction={"column"} spacing={2}>
       <Grid2 item xs={12}>
-        <Typography variant="h6">{writing.topic}</Typography>
+        <Typography variant="h6">Write about topic: {writing.topic}</Typography>
       </Grid2>
       <Grid2 item xs={12}>
         <StyledPaper elevation={3}>
@@ -61,17 +65,22 @@ export default function WritingAboutTopic() {
         <BasicButton
           sx={{
             color: "#fff",
-            backgroundColor: "#6EC2F7",
+            backgroundColor: color.Color2_1,
             borderRadius: "0rem",
             paddingX: "2rem",
           }}
+          onClick={handleSubmit}
         >
           Submit
         </BasicButton>
       </Grid2>
-      <Grid2 item xs={12}>
-        <Comment />
-      </Grid2>
+      {comment && (
+        <Grid2 item xs={12} sx={{ bgcolor: "rgba(0, 0, 0, 0.05)", borderRadius: "0.5rem"}}>
+          <CollapsibleSection buttonText="Comments">
+            <Comment content={comment}/>
+          </CollapsibleSection>
+        </Grid2>
+      )}
     </Grid2>
   );
 }

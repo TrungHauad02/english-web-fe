@@ -1,20 +1,20 @@
+import Introduction from "components/student/common/introduction/Introduction";
 import MainPicture from "../../common/listTopic/MainPicture";
-import Introduction from "./Introduction";
 import PracticeSpeaking from "./PracticeSpeaking";
+import useSpeaking from "./useSpeaking";
 
-function Speaking({ topic }) {
-  topic = {
-    title: "The Environment",
-    img: "/bg_speaking.png",
-  };
-
-  const content =
-    "This part will help you practice your speaking skill, which is very important in learning English. You will listen to a conversation and answer some questions about it. You can listen to the conversation as many times as you want. Good luck!";
-
+function Speaking() {
+  const { topic } = useSpeaking();
+  if (!topic) return <></>;
   return (
     <>
-      <MainPicture src={topic.img} title={topic.title} />
-      <Introduction content={content} />
+      <MainPicture src={topic.image} title={topic.title} />
+      <Introduction
+        title="Master Your Speaking Skills!"
+        subtitle="Enhance your ability to communicate in English with engaging speaking exercises."
+        bodyText="Speaking fluently is one of the most important skills to master. Practice speaking with confidence, improve your pronunciation, and boost your ability to express yourself clearly in conversations."
+      />
+
       <PracticeSpeaking />
     </>
   );
