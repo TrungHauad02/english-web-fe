@@ -25,6 +25,8 @@ export function createTestMixingQuestion(testmixingquestion) {
 }
 
 export function updateTestMixingQuestion(id, testmixingquestion) {
+  console.log(id, testmixingquestion);
+
   return apiClient
     .put(`/testmixingquestion/${id}`, testmixingquestion)
     .then((response) => {

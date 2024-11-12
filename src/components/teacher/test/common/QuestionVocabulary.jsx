@@ -20,6 +20,7 @@ import {
   updateTestMixingAnswer,
   deleteTestMixingAnswer
 } from "api/test/TestMixingAnswerApi";
+import { AddQuestionTest } from "../Mixing/AddQuestionTest";
 
 const ButtonContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -50,37 +51,42 @@ const FormContainer = styled(Paper)(({ theme }) => ({
   borderRadius: theme.spacing(2),
 }));
 
-const MixingQuiz = ({ question }) => {
+const MixingQuiz = ({ question,handleQuestion }) => {
   return (
     <>
       <FormContainer sx={{ p: 3, bgcolor: "#fff9e6", minHeight: "100vh" }}>
-        <ContentQuestion question={question} />
+        <ContentQuestion question={question} handleQuestion={handleQuestion}/>
       </FormContainer>
     </>
   );
 };
 
-const ContentQuestion = ({ question }) => {
+const ContentQuestion = ({ question,handleQuestion }) => {
+
+
   const [questionMixing, setQuestionMixing] = useState(question);
   const [selectedAnswer, setSelectedAnswer] = useState(
     findCorrectAnswerId(question.answers)
   );
   const [isEditMode, setIsEditMode] = useState(false);
+  const [answerCounter, setAnswerCounter] = useState(1);
 
   const handleAddAnswer = () => {
     const hasCorrectAnswer = questionMixing.answers.some((answer) => answer.isCorrect === true);
     const newAnswer = {
-      id: `temp`,
+      id: `add_${answerCounter}`,
       content: "",
       isCorrect: !hasCorrectAnswer, 
       status: "ACTIVE",
       testQuestionMixingId: questionMixing.id,
     };
-  
+
     setQuestionMixing({
       ...questionMixing,
       answers: [...questionMixing.answers, newAnswer],
     });
+    setSelectedAnswer(findCorrectAnswerId([...questionMixing.answers, newAnswer]));
+    setAnswerCounter(answerCounter + 1);
 
   };
 
@@ -98,9 +104,7 @@ const ContentQuestion = ({ question }) => {
   const handleDeleteAnswer = async (answer) => {
 
     const isCorrectAnswer = answer.isCorrect;
-  
-    await deleteTestMixingAnswer(answer.id);
-  
+    
 
     const updatedAnswers = questionMixing.answers.filter((a) => a.id !== answer.id);
 
@@ -109,8 +113,6 @@ const ContentQuestion = ({ question }) => {
       updatedAnswers[0].isCorrect = true;
       setSelectedAnswer(findCorrectAnswerId(updatedAnswers))
     }
-    
-
 
     setQuestionMixing({
       ...questionMixing,
@@ -119,37 +121,61 @@ const ContentQuestion = ({ question }) => {
   };
 
   const handleSave = async () => {
-    try {
-
-      
-      await updateTestMixingQuestion(questionMixing.id,questionMixing);
-
-      const answerPromises = questionMixing.answers.map((answer) => {
-        if (answer.id.startsWith("temp")) {
-          return createTestMixingAnswer({
-            ...answer,
-          }).then((newAnswer) => {
-            const updatedAnswers = questionMixing.answers.map((a) =>
-              a.id === answer.id ? newAnswer : a
-            );
-            setQuestionMixing({ ...questionMixing, answers: updatedAnswers });
-          });
-        } else {
-          return updateTestMixingAnswer(answer.id,answer);
-        }
-      });
-
-      await Promise.all(answerPromises);
+    if(question.id==='')
+    {
       setIsEditMode(false);
-    } catch (error) {
-      console.error("Error saving question or answers:", error);
+      questionMixing.id = await AddQuestionTest(questionMixing.test.id, questionMixing.type, questionMixing);
+      await Promise.all(
+        questionMixing.answers.map(async (answer) => {
+          answer.testQuestionMixingId = questionMixing.id;
+          await createTestMixingAnswer(answer);            
+        })
+      );
+        
+        handleQuestion(questionMixing);
     }
-  };
+      else
+      {
+        try {
+      
+          await updateTestMixingQuestion(questionMixing.id, questionMixing);
+        
+
+          const answersToDelete = question.answers.filter(
+            (answer) =>
+              !questionMixing.answers.some((newAnswer) => newAnswer.id === answer.id)
+          );
+          await Promise.all(
+            answersToDelete.map((answer) => deleteTestMixingAnswer(answer.id))
+          );
+          await Promise.all(
+            questionMixing.answers.map(async (answer) => {
+              if (answer.id.startsWith("add")) {
+                await createTestMixingAnswer(answer);
+              } else {
+                await updateTestMixingAnswer(answer.id, answer);
+            
+              }              
+            })
+          );
+
+
+          setSelectedAnswer(findCorrectAnswerId(questionMixing.answers));
+          setIsEditMode(false);
+          handleQuestion(questionMixing);
+        
+        } catch (error) {
+          console.error("Error saving question or answers:", error);
+        }
+        
+      };
+      }
+   
 
   const handleCancel = () => {
     setIsEditMode(false);
     setQuestionMixing(question);
-    setSelectedAnswer(findCorrectAnswerId(questionMixing.answers));
+    setSelectedAnswer(findCorrectAnswerId(question.answers));
   };
 
   const handleEdit = () => {

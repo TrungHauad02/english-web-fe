@@ -8,7 +8,8 @@ import {
 } from '@mui/material';
 import { PlusCircle } from 'lucide-react';
 import { styled } from '@mui/material/styles';
-
+import { AddQuestionTest } from "../Mixing/AddQuestionTest";
+import { updateTestWriting } from "api/test/TestWritingApi";
 
 
 const ButtonContainer = styled(Box)(({ theme }) => ({
@@ -29,17 +30,26 @@ const ButtonContainer = styled(Box)(({ theme }) => ({
     },
   }));
 
-const QuestionWriting = ({data}) => {
+const QuestionWriting = ({data,handleWriting}) => {
   const [content, setContent] = useState(data?.content || '');
   const [serialNumber, setSerialNumber] = useState(data.serial);
-
-  const handleSave = () => {
-    // Handle saving logic here
-    console.log('Saving writing content:', content);
+  const handleSave = async () => {
+    data.content = content;
+    if (data.id === '') {
+      const id  = await AddQuestionTest(data.test.id, "WRITING", data);
+      data.id = id;
+      data.type = "WRITING";
+      handleWriting(data);
+    } else {
+      const testwriting  =  await updateTestWriting(data.id, data);
+      testwriting.type = "WRITING";
+      handleWriting(testwriting);
+    }
   };
+  
 
   const handleCancel = () => {
-    // Handle cancel logic here
+
     setContent(data?.content || '');
   };
 
@@ -47,13 +57,7 @@ const QuestionWriting = ({data}) => {
     <Box sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
         <Typography variant="h4">Writing</Typography>
-        <Button 
-          variant="contained" 
-          startIcon={<PlusCircle />}
-          sx={{ bgcolor: '#9dc45f', '&:hover': { bgcolor: '#8ab54e' } }}
-        >
-          Add new topic question
-        </Button>
+     
       </Box>
 
       <Box sx={{ mb: 3 }}>
@@ -74,16 +78,18 @@ const QuestionWriting = ({data}) => {
         </Paper>
 
         <ButtonContainer>
-        <ColorButton color="#F08080" variant="contained">
+        <ColorButton color="#F08080" variant="contained"
+        onClick={handleCancel}>
             Cancel
         </ColorButton>
         <ColorButton color="#FFD700" variant="contained">
             Upload
         </ColorButton>
-        <ColorButton color="#98FB98" variant="contained">
+        <ColorButton color="#98FB98" variant="contained"  onClick={handleSave}>
             Save
         </ColorButton>
         </ButtonContainer>
+       
       </Box>
     </Box>
   );

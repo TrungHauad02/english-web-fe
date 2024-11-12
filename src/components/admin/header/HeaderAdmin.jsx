@@ -9,7 +9,7 @@ const icon = "/icon.png";
 function HeaderAdmin() {
   const navigate = useNavigate();
   const auContext = useAuth();
-
+  console.log("refresing headers")
   const handleLogout = () => {
     auContext.Logout();
     navigate("/account");

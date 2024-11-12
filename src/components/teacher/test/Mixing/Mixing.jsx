@@ -23,7 +23,9 @@ function Mixing() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [questionUpdate, setQuestionUpdate] = useState();
-
+  const [type, setType] = useState("");
+  const [questionData, setQuestionData] = useState();
+  const [version,setVersion] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,47 +43,69 @@ function Mixing() {
     };
 
     fetchData();
-  }, [state.id, questionUpdate]);
-
-  const [type, setType] = useState("");
-  const [dataitemtest, setdataitemtest] = useState();
-  const [questionData, setQuestionData] = useState(); // State to hold the question data
+  }, [state.id, questionUpdate,version]);
 
   const handleRowClick = async (question) => {
-    setType(question.type);
-    console.log(question);
+    setQuestionUpdate(question);
 
-    if (question.new) {
-      setQuestionUpdate(question);
-    }
-    setdataitemtest(question);
+    
+    
+    
+    
+    
     try {
       let fetchedData;
       switch (question.type) {
         case "GRAMMAR":
-          fetchedData = await getTestMixingQuestion(question.id);
+          if(question.id==='')
+            fetchedData = question;
+          else
+            fetchedData = await getTestMixingQuestion(question.id);
           break;
         case "VOCABULARY":
-          fetchedData = await getTestMixingQuestion(question.id);
+          if(question.id==='')
+            fetchedData = question;
+          else
+            fetchedData = await getTestMixingQuestion(question.id);
           break;
         case "LISTENING":
-          fetchedData = await getTestListening(question.id);
+          if(question.id==='')
+            fetchedData = question;
+          else
+          {
+            fetchedData = await getTestListening(question.id);
+          }
+           
           break;
         case "READING":
-          fetchedData = await getTestReading(question.id);
+          if(question.id==='')
+            fetchedData = question;
+          else
+            fetchedData = await getTestReading(question.id);
           break;
         case "SPEAKING":
-          fetchedData = await getTestSpeaking(question.id);
+          if(question.id==='')
+            fetchedData = question;
+          else
+            fetchedData = await getTestSpeaking(question.id);
           break;
         case "WRITING":
-          fetchedData = await getTestWriting(question.id);
+          if(question.id==='')
+            fetchedData = question;
+          else
+            fetchedData = await getTestWriting(question.id);
           break;
         default:
           fetchedData = null;
       }
-      console.log(fetchedData);
+      fetchedData.test = datatest;
+
 
       setQuestionData(fetchedData);
+      setType(question.type);
+      setVersion((prevData) => (prevData || 0) + 1);
+
+      
     } catch (err) {
       setError("Failed to fetch question data");
     }
@@ -96,25 +120,25 @@ function Mixing() {
 
   const renderQuestionComponent = () => {
     if (!questionData) return null; 
-
     switch (type) {
       case "VOCABULARY":
         return (
-          <QuestionVocabulary key={questionData.id} question={questionData} />
+          <QuestionVocabulary key={`${questionData.id}-${version}`} question={questionData} handleQuestion = {handleRowClick} />
         );
       case "GRAMMAR":
         return (
-          <QuestionGrammar key={questionData.id} question={questionData} />
+          <QuestionVocabulary key={`${questionData.id}-${version}`} question={questionData} handleQuestion = {handleRowClick} />
         );
       case "LISTENING":
-        return <QuestionListening key={questionData.id} data={questionData} />;
+        return <QuestionListening key={`${questionData.id}-${version}`} data={questionData} handleListening = {handleRowClick}/>;
       case "READING":
-        return <QuestionReading key={questionData.id} data={questionData} />;
+        return <QuestionReading key={`${questionData.id}-${version}`} data={questionData} handleReading = {handleRowClick} />;
       case "WRITING":
-        return <QuestionWriting key={questionData.id} data={questionData} />;
+        return <QuestionWriting key={`${questionData.id}-${version}`} data={questionData}
+        handleWriting = {handleRowClick} />;
       case "SPEAKING":
         return (
-          <QuestionSpeaking key={questionData.id} initialData={questionData} />
+          <QuestionSpeaking key={`${questionData.id}-${version}`} initialData={questionData}  handleSpeaking = {handleRowClick}/>
         );
       default:
         return null;

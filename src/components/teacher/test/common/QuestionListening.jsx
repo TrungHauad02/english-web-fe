@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  Button, 
+import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  Paper,
+  Button,
   TextField,
   Table,
   TableBody,
@@ -12,143 +12,499 @@ import {
   TableHead,
   TableRow,
   IconButton,
-} from '@mui/material';
-import { Trash, Edit, Save, Upload, PlusCircle } from 'lucide-react';
-import { styled } from '@mui/material/styles';
-import QuestionVocabulary from "./QuestionVocabulary"
+} from "@mui/material";
+import { Trash, Upload, PlusCircle } from "lucide-react";
+import { styled } from "@mui/material/styles";
+import QuestionListeningDetails from "./QuestionListeningDetails";
+import { createTestListening, updateTestListening } from "api/test/TestListeningApi";
+import { deleteQuestionTest, addQuestionTest } from "api/test/TestApi";
+import { DeleteQuestionTest } from "../Mixing/DeleteQuestionTest";
+import TestListening from "components/student/Test/TestListening";
+import { updateTestListeningQuestion } from "api/test/TestListeningQuestionApi";
+import {
+  createTestListeningAnswer,
+  updateTestListeningAnswer,
+  deleteTestListeningAnswer,
+} from "api/test/TestListeningAnswerApi";
+import { AddQuestionTest } from "../Mixing/AddQuestionTest";
+import { Create } from "@mui/icons-material";
+
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
-  backgroundColor: '#fff5e6',
+  backgroundColor: "#fff5e6",
   borderRadius: theme.spacing(2),
 }));
+const ButtonContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  gap: theme.spacing(2),
+  marginTop: theme.spacing(4),
+}));
+const ColorButton = styled(Button)(({ color }) => ({
+  borderRadius: "8px",
+  padding: "8px 24px",
+  backgroundColor: color,
+  color: color === "#98FB98" ? "black" : "white",
+  "&:hover": {
+    backgroundColor: color,
+    opacity: 0.9,
+  },
+}));
 
-const ListeningQuiz = ({data}) => {
-  const [audioUrl, setAudioUrl] = useState(data.content);
-  const [transcript, setTranscript] = useState(data.transcript);
-  const [questions, setQuestions] = useState(data.questions);
-  const [selectedQuestion, setSelectedQuestion] = useState(data.questions[0]);
+function QuestionListening({ data, handleListening }) {
+  const initialData = data || {};
+  const questions = initialData.questions || [];
+
+  const [formData, setFormData] = useState({
+    ...initialData,
+    questions: questions,
+    selectedQuestion: questions.length > 0 ? questions[0] : null,
+  });
+
   const [isEditing, setIsEditing] = useState(false);
+  const [questionSelected, setQuestionSelected] = useState(
+    questions.length > 0 ? questions[0] : null
+  );
 
   const handleAudioUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       const url = URL.createObjectURL(file);
-      setAudioUrl(url);
+      setFormData((prev) => ({ ...prev, content: url }));
     }
   };
 
   const handleQuestionSelect = (id) => {
-    data.questions.forEach((item) => {
+    const item = formData.questions.find((item) => item.id === id);
+    if (item) {
+      setFormData((prev) => ({ ...prev, selectedQuestion: item }));
+      setQuestionSelected(item);
+    }
+  };
 
-      if (item.id === id) {
- 
-        setSelectedQuestion(item);
+  const handleSaveSelectedQuestion = (newQuestion) => {
+    setFormData((prev) => {
+      const existingIndex = prev.questions.findIndex(
+        (question) => question.id === newQuestion.id
+      );
+  
+      if (existingIndex !== -1) {
+
+        const updatedQuestions = [...prev.questions];
+        updatedQuestions[existingIndex] = newQuestion;
+  
+        return {
+          ...prev,
+          questions: updatedQuestions,
+          selectedQuestion: newQuestion,
+        };
+      } else {
+        return {
+          ...prev,
+          questions: [...prev.questions, newQuestion],
+          selectedQuestion: newQuestion,
+        };
       }
     });
-    
-  
-    setIsEditing(false); 
   };
+  
+
 
   const handleEditToggle = () => {
-    setIsEditing((prev) => !prev);
+    setIsEditing(true);
   };
 
-  const handleSave = () => {
+  const handleCancel = () => {
+    setIsEditing(false);
+    setFormData({
+      ...formData,
+      content: initialData.content,
+      transcript: initialData.transcript,
+    });
+  };
 
+  const handleSave = async () => {
+    formData.type = "LISTENING";
+    const updatedData = {
+      ...initialData,
+      content: formData.content,
+      transcript: formData.transcript,
+    };
+    if (formData.id === '') { 
+      try {
+  
+        const testListening = await createTestListening(updatedData);
+        formData.id = testListening.id;
+ 
+        try {
+
+          for (const questionData of formData.questions) {
+            if (questionData.id?.startsWith('add')) {
+              questionData.testListeningId = formData.id;
+         
+              const id = await AddQuestionTest(initialData.test.id, "LISTENING", questionData);
+        
+              await Promise.all(
+                (questionData.answers || []).map(async (answer) => {
+                  answer.testQuestionListeningId = id;
+                  if (answer.id.startsWith("add")) {
+                    try {
+                      await createTestListeningAnswer(answer);
+                    } catch (error) {
+                      console.error(`Error adding answer ${answer.id}:`, error);
+                    }
+                  }
+                })
+              );
+            }
+          }
+        } catch (error) {
+          console.error("Error saving questions or answers:", error);
+        }
+        
+      } catch (error) {
+        console.error("Error saving questions or answers:", error);
+      }
+
+    }
+    else
+    {
+    try {
+      await updateTestListening(updatedData.id, updatedData)
+       
+     
+      await Promise.all(
+        formData.questions
+          .filter((questionData) => !questionData.id?.startsWith('add'))
+          .map(async (questionData) => {
+            // Update câu hỏi cũ
+            await updateTestListeningQuestion(questionData.id, questionData);
+      
+            const answersToDelete =
+              initialData.questions
+                ?.find((q) => q.id === questionData.id)
+                ?.answers?.filter(
+                  (initialAnswer) =>
+                    !questionData.answers?.some(
+                      (currentAnswer) => currentAnswer.id === initialAnswer.id
+                    )
+                ) || [];
+      
+            await Promise.all(
+              answersToDelete.map((answer) => deleteTestListeningAnswer(answer.id))
+            );
+      
+            await Promise.all(
+              (questionData.answers || []).map(async (answer) => {
+                if (answer.id.startsWith('add')) {
+                  await createTestListeningAnswer(answer);
+                } else {
+                  await updateTestListeningAnswer(answer.id, answer);
+                }
+              })
+            );
+          })
+      );
+      await Promise.all(
+        questionsDelete.map(async (questiondelete) => {
+          await updateTestListeningQuestion(
+            questiondelete.id,questiondelete
+          );
+        })
+      );
+      for (const questiondelete of questionsDelete) {
+        await DeleteQuestionTest(
+          initialData.test.id,
+          "LISTENING",
+          questiondelete,
+          questiondelete.serial,
+          1
+        );
+      }
+      
+
+      try {
+        for (const questionData of formData.questions.filter((questionData) => questionData.id?.startsWith('add'))) {
+          questionData.testListeningId = formData.id;
+          console.log(questionData);
+      
+          // Thêm câu hỏi mới
+          const id = await AddQuestionTest(initialData.test.id, 'LISTENING', questionData);
+      
+          // Thêm từng câu trả lời một
+          for (const answer of (questionData.answers || [])) {
+            answer.testQuestionListeningId = id;
+            if (answer.id.startsWith('add')) {
+              try {
+                await createTestListeningAnswer(answer);
+              } catch (error) {
+                console.error(`Error adding answer ${answer.id}:`, error);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error saving questions or answers:", error);
+      }
+       
+    } catch (error) {
+      console.error("Error saving questions or answers:", error);
+    }
+
+  
+     
+  }
+
+    handleListening(formData);
     setIsEditing(false);
   };
 
+  const [questionsDelete, setQuestionsDelete] = useState([]);
+
+  const handleDeleteQuestion = async (questionToDelete) => {
+    setFormData((prev) => {
+  
+      const filteredQuestions = prev.questions.filter((q) => !q.id.startsWith("add"));
+  
+   
+      const maxSerial = filteredQuestions.length > 0
+        ? Math.max(...filteredQuestions.map((q) => q.serial))
+        : 0;
+  
+  
+      if (!questionToDelete.id.startsWith("add")) {
+        const updatedQuestionToDelete = {
+          ...questionToDelete,
+          serial: maxSerial,
+        };
+        setQuestionsDelete((prevDeleted) => [...prevDeleted, updatedQuestionToDelete]);
+      }
+  
+      const updatedQuestions = prev.questions.filter(
+        (question) => question.id !== questionToDelete.id
+      );
+  
+      if (updatedQuestions.length === 0) {
+        return {
+          ...prev,
+          questions: [],
+        };
+      }
+  
+      const reOrderedQuestions = updatedQuestions.map((question) => {
+        if (question.serial > questionToDelete.serial) {
+          return {
+            ...question,
+            serial: question.serial - 1,
+          };
+        }
+        return question;
+      });
+  
+      return {
+        ...prev,
+        questions: reOrderedQuestions,
+      };
+    });
+    if (questionToDelete.id === questionSelected?.id) {
+      setQuestionSelected(null);
+    }
+  };
+  
+  const handleAddQuestion = () => {
+   
+    const newQuestion = {
+      id: `add-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      serial: formData.questions && formData.questions.length > 0
+  ? Math.max(...formData.questions.map((q) => q.serial)) + 1
+  : (() => {
+      const smallerListenings = (formData.test.testListenings || []).filter(
+        (listening) => listening.serial < formData.serial
+      );
+
+      if (smallerListenings.length > 0) {
+        const allQuestions = smallerListenings.flatMap((listening) => listening.questions || []);
+        if (allQuestions.length > 0) {
+          return Math.max(...allQuestions.map((q) => q.serial)) + 1;
+        }
+      }
+
+      if (formData.test.testReadings && formData.test.testReadings.length > 0) {
+        const allQuestions = formData.test.testReadings.flatMap((reading) => reading.questions || []);
+        if (allQuestions.length > 0) {
+          return Math.max(...allQuestions.map((q) => q.serial)) + 1;
+        }
+      }
+
+      if (formData.test.testMixingQuestions && formData.test.testMixingQuestions.length > 0) {
+        return Math.max(...formData.test.testMixingQuestions.map((q) => q.serial)) + 1;
+      }
+
+      return 1;
+    })(),
+      content: "",
+      status: "ACTIVE",
+      testListeningId: formData.id,
+      test: initialData.test,
+      answers: [
+        {
+          id: "add",
+          content: "",
+          isCorrect: true,
+          status: "ACTIVE",
+          testQuestionListeningId: "",
+        },
+      ],
+    };
+
+    setQuestionSelected(newQuestion);
+  };
+
   return (
-    <FormContainer sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h4">Listening</Typography>
-    
-      </Box>
-
-      <Box sx={{ display: 'flex', gap: 4 }}>
-        <Box sx={{ flex: 1 }}>
-          <Typography variant="h6" sx={{ mb: 2 }}>Content</Typography>
-          <Box sx={{ mb: 2 }}>
-            <audio controls src={audioUrl} style={{ width: '100%' }} />
-            <Button
-              variant="contained"
-              component="label"
-              startIcon={<Upload />}
-              sx={{ mt: 1 }}
-            >
-              Upload
-              <input
-                type="file"
-                hidden
-                accept="audio/*"
-                onChange={handleAudioUpload}
-              />
-            </Button>
-          </Box>
-
-          <Typography variant="h6" sx={{ mb: 2 }}>Transcript</Typography>
-          <TextField
-            multiline
-            rows={6}
-            fullWidth
-            value={transcript}
-            onChange={(e) => setTranscript(e.target.value)}
-            sx={{ mb: 3 }}
-          />
-
-          <Typography variant="h6" sx={{ mb: 2  }} >Question listening</Typography>
-          <TableContainer component={Paper} sx={{ maxHeight: 200, overflowY: 'auto' }}>
-            <Table stickyHeader>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Serial</TableCell>
-                  <TableCell align='center'>Question content</TableCell>
-                  <TableCell>Delete</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {questions.map((question) => (
-                  <TableRow 
-                    key={question.id}
-                    onClick={() => handleQuestionSelect(question.id)}
-                    sx={{ cursor: 'pointer' }}
-                  >
-                    <TableCell>{question.id}</TableCell>
-                    <TableCell>{question.content}</TableCell>
-                    <TableCell>
-                      <IconButton>
-                        <Trash />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Button 
-          variant="contained" 
-          onClick={{}}
-          startIcon={<PlusCircle />}
-          sx={{ bgcolor: '#9dc45f', '&:hover': { bgcolor: '#8ab54e' },marginTop:'1rem'} }
-        >
-          Add new question
-        </Button>
+    <FormContainer sx={{ p: 3, bgcolor: "#fff9e6", minHeight: "100vh" }}>
+      <Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+          <Typography variant="h4">Listening</Typography>
         </Box>
 
-        <Box sx={{ flex: 1 }}>
-       <QuestionVocabulary 
-            question={{ 
-              ...selectedQuestion, 
-              type: "Question detail" ,
-              isExplain: "false",
-              details: "true"
-            }} 
-          />
+        <Box sx={{ display: "flex", gap: 4 }}>
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Audio
+            </Typography>
+            <Box sx={{ mb: 2 }}>
+              {formData.content && (
+                <audio
+                  controls
+                  src={formData.content}
+                  style={{ width: "100%" }}
+                />
+              )}
+              <Button
+                variant="contained"
+                component="label"
+                startIcon={<Upload />}
+              >
+                Upload
+                <input type="file" hidden accept="audio/*" onChange={handleAudioUpload} />
+              </Button>
+            </Box>
+
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Transcript
+            </Typography>
+            <TextField
+              multiline
+              rows={6}
+              fullWidth
+              value={formData.transcript || ""}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, transcript: e.target.value }))
+              }
+              sx={{ mb: 3 }}
+              disabled={!isEditing}
+            />
+
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Questions
+            </Typography>
+            <TableContainer
+              component={Paper}
+              sx={{ maxHeight: 200, overflowY: "auto" }}
+            >
+              <Table stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Serial</TableCell>
+                    <TableCell align="center">Question Content</TableCell>
+                    <TableCell>{isEditing ? "Actions" : ""}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {formData.questions.map((question) => (
+                    <TableRow
+                      key={question.id}
+                      sx={{ cursor: "pointer" }}
+                    >
+                      <TableCell   onClick={() => handleQuestionSelect(question.id)}>{question.serial}</TableCell>
+                      <TableCell   onClick={() => handleQuestionSelect(question.id)}>{question.content}</TableCell>
+                      <TableCell>
+                        {isEditing ? (
+                          <IconButton
+                            onClick={() => handleDeleteQuestion(question)}
+                            color="error"
+                          >
+                            <Trash />
+                          </IconButton>
+                        ) : null}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Button
+              variant="contained"
+              startIcon={<PlusCircle />}
+              sx={{
+                bgcolor: "#9dc45f",
+                "&:hover": { bgcolor: "#8ab54e" },
+                marginTop: "1rem",
+              }}
+              onClick={handleAddQuestion}
+              disabled={!isEditing }
+            >
+              Add new question
+            </Button>
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            {questionSelected && (
+              <QuestionListeningDetails
+                question={{
+                  ...questionSelected,
+                  type: "Question detail",
+                  details: "true",
+                }}
+                iseditlistening={isEditing}
+                key={questionSelected.id}
+                handleSaveSelectedQuestion={handleSaveSelectedQuestion}
+              />
+            )}
+          </Box>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            marginTop: "1rem",
+            justifyContent: "center",
+          }}
+        >
+          <ButtonContainer>
+            <ColorButton color="#F08080" variant="contained" onClick={handleCancel}>
+              Cancel
+            </ColorButton>
+            <ColorButton
+              color="#FFD700"
+              variant="contained"
+              onClick={handleEditToggle}
+              disabled={isEditing}
+            >
+              Edit
+            </ColorButton>
+            <ColorButton
+              color="#98FB98"
+              variant="contained"
+              onClick={handleSave}
+              disabled={!isEditing}
+            >
+              Save
+            </ColorButton>
+          </ButtonContainer>
         </Box>
       </Box>
     </FormContainer>
   );
-};
+}
 
-export default ListeningQuiz;
+export default QuestionListening;

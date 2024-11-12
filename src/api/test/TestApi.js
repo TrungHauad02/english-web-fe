@@ -24,22 +24,13 @@ export function createTest(test) {
     });
 }
 export function updateTest(id, test) {
-  console.log(test);
-
   return apiClient
     .put(`/test/${id}`, test)
     .then((response) => {
       return response.data;
     })
     .catch((error) => {
-      console.error("Error updating test:", error);
-      if (error.response) {
-        console.error("Status Code:", error.response.status); // Mã lỗi từ server (ví dụ: 400, 404, 500)
-        console.error("Response Data:", error.response.data); // Chi tiết lỗi từ server
-        console.error("Headers:", error.response.headers); // Headers từ server
-      }
-
-      throw error; // Ném lỗi ra để xử lý tiếp (nếu cần)
+      throw error;
     });
 }
 export function deleteTest(testId) {
@@ -53,3 +44,47 @@ export function deleteTest(testId) {
       throw error;
     });
 }
+
+export const deleteQuestionTest = async (
+  testid,
+  type,
+  testdeleteid,
+  serial
+) => {
+  try {
+    const response = await apiClient.post("/test/question/delete", {
+      testid: testid,
+      type: type,
+      testdeleteid: testdeleteid,
+      serial: serial,
+    });
+
+    if (response.status === 204) {
+      console.log("Question deleted successfully");
+    } else {
+      console.error("Failed to delete question");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+export const addQuestionTest = async (testid, type, testadd) => {
+  try {
+    const response = await apiClient.post("/test/question/add", {
+      testid: testid,
+      type: type,
+      testadd: testadd,
+    });
+
+    if (response.status === 200) {
+      console.log("Question added successfully");
+      return response.data;
+    } else {
+      console.error("Failed to add question");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error adding question:", error);
+    return null;
+  }
+};
