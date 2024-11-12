@@ -7,7 +7,7 @@ import Skills from "../../components/student/skill/Skills";
 import Account from "../../components/account/Account";
 import HistoryTest from "components/student/menu/historytest/HistoryTest";
 import StudySchedulePage from "../../components/student/menu/studyschedule/StudySchedule";
-import site from "../../components/student/common/Pages";
+import site from "./Pages";
 import HomeTeacher from "../../components/teacher/HomeTeacher";
 import HomeAdmin from "../../components/admin/HomeAdmin";
 import ManageTeacher from "../../components/admin/teacher/ManageTeacher";

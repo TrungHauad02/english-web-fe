@@ -7,7 +7,10 @@ import {
 } from "api/study/topic/topicService";
 import { useNavigate, useParams } from "react-router-dom";
 import handleError from "shared/utils/handleError";
-import { deleteFile, uploadFile } from "api/feature/uploadFile/uploadFileService";
+import {
+  handleImageChange,
+  handleImageUpload,
+} from "shared/utils/uploadImageUtils";
 
 export default function useTopicInfo(data, setError) {
   const { id } = useParams();
@@ -41,21 +44,22 @@ export default function useTopicInfo(data, setError) {
   const handleSaveClick = async () => {
     try {
       if (topic.image === "") {
-        setError("Image cannot be empty"); 
+        setError("Image cannot be empty");
         return;
       }
+
       let updatedTopic = topic;
       const oldTopic = await getTopicDetail(id);
-      if (oldTopic.image !== topic.image) {
+      const newImage = await handleImageUpload(
+        oldTopic.image,
+        topic.image,
+        topic.title,
+        "study/topic"
+      );
 
-        const sanitizedFileName = topic.title.replace(/\s+/g, '_');
-        const [,resImage] = await Promise.all([
-          deleteFile(oldTopic.image),
-          uploadFile("topic", sanitizedFileName.toLowerCase(), topic.image)
-        ])
-        updatedTopic = { ...topic, image: resImage.url };
-    }
-      
+      if (newImage !== oldTopic.image) {
+        updatedTopic = { ...topic, image: newImage };
+      }
 
       if (topic.id === "-1") {
         const res = await createTopic(updatedTopic);
@@ -89,14 +93,9 @@ export default function useTopicInfo(data, setError) {
   };
 
   const onChangeImage = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setTopic({ ...topic, image: reader.result });
-      };
-      reader.readAsDataURL(file);
-    }
+    handleImageChange(e, (result) => {
+      setTopic((prevTopic) => ({ ...prevTopic, image: result }));
+    });
   };
 
   return {

@@ -4,6 +4,7 @@ import MicIcon from "@mui/icons-material/Mic";
 import BasicButton from "shared/component/button/BasicButton";
 import SoundViewer from "shared/component/soundViewer/SoundViewer";
 import useSpeakingTopic from "./useSpeakingTopic";
+import useColor from "shared/color/Color";
 
 export default function SpeakingInTopic() {
   const {
@@ -17,6 +18,9 @@ export default function SpeakingInTopic() {
     handleStop,
     handleClearAudio,
   } = useSpeakingTopic();
+
+  const color = useColor();
+
   if (!speaking) return;
   return (
     <Grid2 container alignItems={"center"} direction={"column"} spacing={2}>
@@ -74,7 +78,7 @@ export default function SpeakingInTopic() {
             className="sound-wave"
             onStop={handleStop}
             strokeColor="#fff"
-            backgroundColor="#6EC2F7"
+            backgroundColor={color.Color2}
           />
           {audioSrc && (
             <Grid2 item xs={12} sx={{ width: "100%" }}>
@@ -101,7 +105,7 @@ export default function SpeakingInTopic() {
             <BasicButton
               sx={{
                 color: "#fff",
-                backgroundColor: "#6EC2F7",
+                backgroundColor: color.Color2_1,
                 borderRadius: "0rem",
                 paddingX: "2rem",
               }}
@@ -112,7 +116,7 @@ export default function SpeakingInTopic() {
           <BasicButton
             sx={{
               color: "#fff",
-              backgroundColor: "#6EC2F7",
+              backgroundColor: color.Color2_1,
               borderRadius: "0rem",
               paddingX: "2rem",
               textTransform: "capitalize",
