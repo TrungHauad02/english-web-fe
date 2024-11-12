@@ -49,7 +49,10 @@ export default function useTopicInfo(data, setError) {
       }
 
       let updatedTopic = topic;
-      const oldTopic = await getTopicDetail(id);
+      let oldTopic = {image:null};
+      if(id !== "-1"){
+        oldTopic = await getTopicDetail(id);
+      }
       const newImage = await handleImageUpload(
         oldTopic.image,
         topic.image,
@@ -61,7 +64,7 @@ export default function useTopicInfo(data, setError) {
         updatedTopic = { ...topic, image: newImage };
       }
 
-      if (topic.id === "-1") {
+      if (id === "-1") {
         const res = await createTopic(updatedTopic);
         navigate(`/teacher/topics/${res.id}`);
         return;
