@@ -51,7 +51,7 @@ function ManageStudent() {
                     searchEndDate={searchEndDate}
                     setSearchEndDate={setSearchEndDate}
                     handleSearch={() => {
-                        setPage(0); // Reset về trang đầu tiên khi tìm kiếm mới
+                        setPage(0); 
                         loadStudents();
                     }}
                 />
