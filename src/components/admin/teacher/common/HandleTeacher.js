@@ -85,33 +85,6 @@ export const handleDeleteTeacher = (selectedTeacher, teachers, setTeachers, setF
     handleClear(setSelectedTeacher); 
 };
 
-export const handleSearch = (teachers, searchName, searchStartDate, searchEndDate, searchLevel, setFilteredTeachers) => {
-    const filtered = teachers.filter(teacher => {
-        const isNameMatch = searchName === '' || teacher.name.toLowerCase().includes(searchName.toLowerCase());
-        const isLevelMatch = searchLevel === 'All' || !searchLevel || teacher.level === searchLevel; // Check if level matches or is 'All'
-
-        const teacherStartDate = new Date(teacher.startDate);
-        const teacherEndDate = teacher.endDate ? new Date(teacher.endDate) : null;
-        const searchStart = searchStartDate ? new Date(searchStartDate) : null;
-        const searchEnd = searchEndDate ? new Date(searchEndDate) : null;
-        const today = new Date(); 
-
-        const isDateMatch = (
-            (searchStart && !searchEnd && teacherStartDate >= searchStart && (!teacherEndDate || teacherEndDate >= today)) ||
-
-            (!searchStart && searchEnd && teacherStartDate <= searchEnd) ||
-
-            (searchStart && searchEnd && teacherStartDate >= searchStart && teacherStartDate <= searchEnd) ||
-
-            (!searchStart && !searchEnd)
-        );
-
-        return isNameMatch && isLevelMatch && isDateMatch; 
-    });
-
-    setFilteredTeachers(filtered);
-};
-
 export const handleClear = (setSelectedTeacher) => {
     setSelectedTeacher({
         name: '',

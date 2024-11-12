@@ -9,7 +9,7 @@ export default function AuthProvider({ children }) {
     !!localStorage.getItem("authToken")
   );
   const [authToken, setAuthToken] = useState(localStorage.getItem("authToken"));
-  const [userRole, setUserRole] = useState(getRoleFromToken());
+  const [userRole, setUserRole] = useState(() => getRoleFromToken());
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -26,10 +26,10 @@ export default function AuthProvider({ children }) {
       setAuthToken(null);
       setUserRole(null);
     }
-  }, []);
+  }, [authToken]);
 
   function SignIn(token) {
-    const expirationTime = new Date(Date.now() + 3600 * 1000).toISOString();
+    const expirationTime = new Date(Date.now() + 9800 * 1000).toISOString();
     setAuthenticated(true);
     setAuthToken(token);
     localStorage.setItem("authToken", token);

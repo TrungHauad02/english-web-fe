@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { TextField, Button, Grid, Card, Typography, Select, MenuItem, FormControl, InputLabel, Avatar } from '@mui/material';
 import ProfileTeacher from './common/ProfileTeacher';
 import SearchPanel from '../common/Filter';
@@ -14,50 +14,27 @@ import {
     handleImageChange,
     handleNewToggle,
     handleSaveEdit,
-    handleSearch,
     handleTeacherClick,
 } from './common/HandleTeacher';
 
-function ManageTeacher() {
-    const initialTeachers = [
-        {
-            id: 1,
-            name: 'Dr. John Doe',
-            email: 'johndoe@example.com',
-            password: 'password123',
-            level: 'PhD',
-            startDate: '2021-09-01',
-            endDate: '',
-            status: 'Active',
-            avatar: '/header_user.png',
-        },
-        {
-            id: 2,
-            name: 'Ms. Jane Smith',
-            email: 'janesmith@example.com',
-            password: 'password456',
-            level: 'Master',
-            startDate: '2022-02-15',
-            endDate: '',
-            status: 'Active',
-            avatar: '/icon.png',
-        },
-        {
-            id: 3,
-            name: 'Mr. Chris Evans',
-            email: 'chrisevans@example.com',
-            password: 'password789',
-            level: 'Bachelor',
-            startDate: '2020-08-10',
-            endDate: '',
-            status: 'Inactive',
-            avatar: '/header_icon.png',
-        },
-    ];
+import { getTeachers } from 'api/admin/teacher/TeacherService';
 
-    const [teachers, setTeachers] = useState(initialTeachers);
-    const [filteredTeachers, setFilteredTeachers] = useState(initialTeachers);
-    const [selectedTeacher, setSelectedTeacher] = useState(initialTeachers[0]);
+function ManageTeacher() {
+    const [teachers, setTeachers] = useState([]);
+    const [filteredTeachers, setFilteredTeachers] = useState([]);
+    const [selectedTeacher, setSelectedTeacher] = useState({
+        name: '',
+        email: '',
+        password: '',
+        level: '',
+        startDate: '',
+        endDate: '',
+        avatar: '',
+        status: '',
+        id: null,
+    });
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(10);
     const [searchName, setSearchName] = useState('');
     const [searchStartDate, setSearchStartDate] = useState('');
     const [searchEndDate, setSearchEndDate] = useState('');
@@ -68,33 +45,55 @@ function ManageTeacher() {
     const [isNew, setIsNew] = useState(false);
     const [avatar, setAvatar] = useState('/header_user.png');
     const [avatarFile, setAvatarFile] = useState(null);
-    const levelsForSearch = ['All', 'PhD', 'Master', 'Bachelor'];
-    const levelsForForm = ['PhD', 'Master', 'Bachelor'];
+    const levelsForSearch = ['ALL', 'BACHELOR', 'MASTER', 'DOCTOR', 'PROFESSOR'];
+    const levelsForForm = ['BACHELOR', 'MASTER', 'DOCTOR', 'PROFESSOR'];
+    const [hasMore, setHasMore] = useState(true);
+    const observer = useRef();
+    const [error, setError] = useState('');
+
+    const lastTeacherElementRef = useCallback(node => {
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [hasMore]);
+
+    const loadTeachers = async () => {
+        try {
+            const filters = {
+                name: searchName,
+                startDate: searchStartDate ? new Date(searchStartDate).toISOString().split('T')[0] : undefined,
+                endDate: searchEndDate ? new Date(searchEndDate).toISOString().split('T')[0] : undefined,
+                level: searchLevel === 'ALL' ? undefined : searchLevel,
+            };
+            const data = await getTeachers(page, size, "id", "asc", filters);
+            
+            const validData = data.content.map(teacher => ({
+                ...teacher,
+                name: teacher.name || '',
+                email: teacher.email || '',
+                level: teacher.level || '',
+                avatar: teacher.avatar || '/header_user.png',
+                startDate: teacher.startDate || '',
+                endDate: teacher.endDate || '',
+                status: teacher.status || 'Active',
+            }));
+        
+            setTeachers(prevTeachers => page === 0 ? validData : [...prevTeachers, ...validData]);
+            setFilteredTeachers(prevTeachers => page === 0 ? validData : [...prevTeachers, ...validData]);
+            setHasMore(data.content.length > 0);
+        } catch (error) {
+            setError("Không thể tải danh sách giáo viên. Vui lòng thử lại sau.");
+        }
+    };        
 
     useEffect(() => {
-        setFilteredTeachers(teachers);
-    }, [teachers]);
-
-    const handleClearSelection = () => {
-        setSelectedTeacher({
-            name: '',
-            email: '',
-            password: '',
-            level: '',
-            startDate: '',
-            endDate: '',
-            avatar: '',
-            status: 'Active', // Assuming default status is 'Active'
-            id: null, // Resetting the id as well
-        });
-        setAvatarFile(null); // Reset avatar file
-        setSearchName('');
-        setSearchStartDate('');
-        setSearchEndDate('');
-        setSearchLevel('All'); // Resetting search level to default
-        setIsEditing(false); // Resetting edit mode
-        setIsNew(false); // Resetting new mode
-    };
+        setPage(0); // Reset page về 0 khi thay đổi bộ lọc
+        loadTeachers();
+    }, [searchName, searchLevel, searchStartDate, searchEndDate, size, page]);
 
     return (
         <Grid container spacing={2} style={{ paddingTop: '3rem', paddingRight: '5%', paddingLeft: '5%', paddingBottom: '3rem' }}>
@@ -104,13 +103,12 @@ function ManageTeacher() {
                         <InputLabel>Search by Level</InputLabel>
                         <Select
                             value={searchLevel}
-                            onChange={(e) => setSearchLevel(e.target.value)}
-                            disableScrollLock
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    handleSearch(teachers, searchName, searchStartDate, searchEndDate, searchLevel, setFilteredTeachers);
-                                }
+                            onChange={(e) => {
+                                setSearchLevel(e.target.value);
+                                setPage(0); // Reset về trang đầu tiên khi thay đổi bộ lọc
+                                loadTeachers(); // Gọi loadTeachers để thực hiện tìm kiếm mới
                             }}
+                            disableScrollLock                        
                             label="Search by Level"
                             MenuProps={{
                                 PaperProps: {
@@ -129,15 +127,19 @@ function ManageTeacher() {
                 </Grid>
 
                 <Grid item xs={8.5} >
-                    <SearchPanel
+                <SearchPanel
                         searchName={searchName}
                         setSearchName={setSearchName}
                         searchStartDate={searchStartDate}
                         setSearchStartDate={setSearchStartDate}
                         searchEndDate={searchEndDate}
                         setSearchEndDate={setSearchEndDate}
-                        handleSearch={() => handleSearch(teachers, searchName, searchStartDate, searchEndDate, searchLevel, setFilteredTeachers)}
+                        handleSearch={() => {
+                            setPage(0); // Reset về trang đầu tiên khi tìm kiếm mới
+                            loadTeachers();
+                        }}
                     />
+
                 </Grid>
             </Grid>
 
@@ -162,7 +164,8 @@ function ManageTeacher() {
             <Grid item xs={12} md={8}>
                 <StudentTeacherList
                     listData={filteredTeachers}
-                    handleClick={(teacher) => handleTeacherClick(teacher, setSelectedTeacher, setAvatar)}
+                    lastTeacherElementRef={lastTeacherElementRef}
+                    handleClick={(teacher) => setSelectedTeacher(teacher)}
                     handleDetailClick={(teacher) => handleDetailClick(teacher, setOpenProfile, (t) => handleTeacherClick(t, setSelectedTeacher, setAvatar))}
                     role="teacher"
                 />

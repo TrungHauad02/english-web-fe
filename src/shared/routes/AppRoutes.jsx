@@ -36,7 +36,7 @@ export default function AppRoutes() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Home />,
+      element: <HomePageStudent />,
     },
     {
       path: "/student",
