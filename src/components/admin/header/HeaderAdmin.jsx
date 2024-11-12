@@ -12,7 +12,7 @@ function HeaderAdmin() {
 
   const handleLogout = () => {
     auContext.Logout();
-    navigate("/student/account");
+    navigate("/account");
   };
 
   return (

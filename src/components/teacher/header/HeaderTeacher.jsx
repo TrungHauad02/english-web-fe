@@ -39,7 +39,7 @@ function HeaderTeacher() {
     localStorage.removeItem("isSignIn");
     setIsLoggedIn(false);
     handleMenuClose();
-    navigate("/student/account");
+    navigate("/account");
   };
 
   const handleProfileOpen = () => {
@@ -216,7 +216,7 @@ function HeaderTeacher() {
         ) : (
           <Button
             component={NavLink}
-            to="/student/account"
+            to="/account"
             sx={{
               backgroundColor: "transparent",
               color: "white",

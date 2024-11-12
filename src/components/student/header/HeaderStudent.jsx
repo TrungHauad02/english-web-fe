@@ -1,51 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Stack, Menu, MenuItem, IconButton, Box } from "@mui/material";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import HeaderTypography from "shared/component/header/HeaderTypography";
 import SkillMenu from "./SkillMenu";
 import Profile from "../menu/profile/Profile";
 import { useAuth } from "security/AuthContext";
 import useColor from "shared/color/Color";
+import { useHeaderStudentHandlers } from "./common/HandleHeaderStudent"
 
 const icon = "/icon.png";
 
 function HeaderStudent() {
   const {HeaderBg} = useColor();
+  const {
+    anchorEl,
+    openProfileDialog,
+    handleMenuClick,
+    handleMenuClose,
+    handleLogout,
+    handleProfileOpen,
+    handleProfileClose,
+    isActivePath,
+    navigate, 
+    isAuthenticated, 
+  } = useHeaderStudentHandlers();
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const { isAuthenticated, Logout } = useAuth();
-  const [openProfileDialog, setOpenProfileDialog] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
-
-  const handleMenuClick = (event) => {
-    if (isAuthenticated) {
-      setAnchorEl(event.currentTarget);
-    } else {
-      navigate("/student/account");
-    }
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    Logout(); // Gọi `Logout` từ `AuthContext`
-    handleMenuClose();
-    navigate("/student/account");
-  };
-
-  const handleProfileOpen = () => {
-    setOpenProfileDialog(true);
-    handleMenuClose();
-  };
-
-  const handleProfileClose = () => {
-    setOpenProfileDialog(false);
-  };
-
-  const isActivePath = (path) => location.pathname === path; // Kiểm tra xem đường dẫn hiện tại có phải là đường dẫn của nút không
 
   return (
     <Stack
@@ -89,17 +69,13 @@ function HeaderStudent() {
           component={NavLink}
           to="/student/topics"
           sx={{
-            backgroundColor: isActivePath("/student/topics")
-              ? "#fff"
-              : "transparent",
-            color: isActivePath("/student/topics") ? "#4A475C" : "white",
+            backgroundColor: isActivePath(location, "/student/topics") ? "#fff" : "transparent",
+            color: isActivePath(location, "/student/topics") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: isActivePath("/student/topics")
-                ? "#fff"
-                : "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath(location, "/student/topics") ? "#fff" : "rgba(255, 255, 255, 0.2)",
             },
           }}
         >
@@ -109,17 +85,13 @@ function HeaderStudent() {
           component={NavLink}
           to="/student/grammars"
           sx={{
-            backgroundColor: isActivePath("/student/grammars")
-              ? "#fff"
-              : "transparent",
-            color: isActivePath("/student/grammars") ? "#4A475C" : "white",
+            backgroundColor: isActivePath(location, "/student/grammars") ? "#fff" : "transparent",
+            color: isActivePath(location, "/student/grammars") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: isActivePath("/student/grammars")
-                ? "#fff"
-                : "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath(location, "/student/grammars") ? "#fff" : "rgba(255, 255, 255, 0.2)",
             },
           }}
         >
@@ -134,15 +106,13 @@ function HeaderStudent() {
           component={NavLink}
           to="/student/tests"
           sx={{
-            backgroundColor: isActivePath("/student/tests") ? "#fff" : "transparent",
-            color: isActivePath("/student/tests") ? "#4A475C" : "white",
+            backgroundColor: isActivePath(location, "/student/tests") ? "#fff" : "transparent",
+            color: isActivePath(location, "/student/tests") ? "#4A475C" : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             "&:hover": {
-              backgroundColor: isActivePath("/student/tests")
-                ? "#fff"
-                : "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath(location, "/student/tests") ? "#fff" : "rgba(255, 255, 255, 0.2)",
             },
           }}
         >
@@ -150,11 +120,7 @@ function HeaderStudent() {
         </Button>
 
         <IconButton onClick={handleMenuClick}>
-          <img
-            src="/header_user.png"
-            alt="User Icon"
-            style={{ width: "40px" }}
-          />
+          <img src="/header_user.png" alt="User Icon" style={{ width: "40px" }} />
         </IconButton>
         <Menu
           anchorEl={anchorEl}
@@ -169,41 +135,17 @@ function HeaderStudent() {
             },
           }}
         >
-          <MenuItem
-            onClick={handleProfileOpen}
-            sx={{
-              borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-              color: "white",
-            }}
-          >
+          <MenuItem onClick={handleProfileOpen} sx={{ borderBottom: "1px solid rgba(255, 255, 255, 0.5)", color: "white" }}>
             Profile
           </MenuItem>
-          <MenuItem
-            onClick={() => navigate("/student/study-schedule")}
-            sx={{
-              borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-              color: "white",
-            }}
-          >
+          <MenuItem onClick={() => navigate("/student/study-schedule")} sx={{ borderBottom: "1px solid rgba(255, 255, 255, 0.5)", color: "white" }}>
             Study Schedule
           </MenuItem>
-          <MenuItem
-            onClick={() => navigate("/student/history-test")}
-            sx={{
-              borderBottom: "3px solid #ffff",
-              color: "white",
-            }}
-          >
+          <MenuItem onClick={() => navigate("/student/history-test")} sx={{ borderBottom: "3px solid #ffff", color: "white" }}>
             History Test
           </MenuItem>
           {isAuthenticated && (
-            <MenuItem
-              onClick={handleLogout}
-              sx={{
-                color: "red",
-                fontWeight: "bold",
-              }}
-            >
+            <MenuItem onClick={handleLogout} sx={{ color: "red", fontWeight: "bold" }}>
               Logout
             </MenuItem>
           )}
