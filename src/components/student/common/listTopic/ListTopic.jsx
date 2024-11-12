@@ -6,8 +6,8 @@ import useListTopic from "./useListTopic";
 import useColor from "shared/color/Color";
 import "./ListTopic.css";
 
-function ListTopic({ path, quote, title, bg }) {
-  const { list, totalPage, onChangePage } = useListTopic(path);
+function ListTopic({ path, title, bg }) {
+  const { list, totalPage, onChangePage, quote, author } = useListTopic(path);
   const { Color1, Color2, Color3, Color4 } = useColor();
 
   return (
@@ -36,7 +36,7 @@ function ListTopic({ path, quote, title, bg }) {
               fontStyle: "italic",
             }}
           >
-            "{quote}"
+            "{quote}" - {author}
           </Typography>
           <Typography
             variant="body1"
