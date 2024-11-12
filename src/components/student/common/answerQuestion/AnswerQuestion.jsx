@@ -6,6 +6,7 @@ import ListOptions from "./ListOptions";
 import Explanation from "./Explanation";
 import Question from "./Question";
 import useAnswerQuestion from "./useAnswerQuestion";
+import useColor from "shared/color/Color";
 
 const Title = styled("h4")({
   fontSize: "1.5rem",
@@ -39,12 +40,16 @@ function AnswerQuestion({ listQuestion }) {
     handlePrevious,
     handleReset,
   } = useAnswerQuestion(listQuestion);
+
+  const { Color1, Color2_1 } = useColor();
+
   if (!listQuestion || listQuestion.length === 0)
     return (
       <Card sx={containerStyle}>
         <Title>Answer Question</Title>
       </Card>
     );
+
   return (
     <Card sx={containerStyle}>
       <Title>Answer Question</Title>
@@ -66,7 +71,7 @@ function AnswerQuestion({ listQuestion }) {
               explanation={question.explanation}
               sx={{
                 marginRight: "1rem",
-                backgroundColor: "#6ec3f77f",
+                backgroundColor: Color1,
               }}
             />
           )}
@@ -78,7 +83,7 @@ function AnswerQuestion({ listQuestion }) {
             sx={{
               margin: "1rem",
               width: "12rem",
-              backgroundColor: "#6EC2F7",
+              backgroundColor: Color2_1,
               position: "absolute",
               bottom: "0",
               textTransform: "capitalize",
@@ -98,7 +103,7 @@ function AnswerQuestion({ listQuestion }) {
         {isSubmit && (
           <Button
             variant="contained"
-            sx={{ bgcolor: "#6EC2F7", textTransform: "capitalize" }}
+            sx={{ bgcolor: Color2_1, textTransform: "capitalize" }}
             onClick={handleReset}
           >
             Reset

@@ -37,7 +37,7 @@ export default function TopicList({ title }) {
             color={"primary"}
             onClick={handleAddNewTopic}
             sx={{
-              backgroundColor: "#6EC2F7",
+              backgroundColor: "#000",
               padding: "1rem 1.5rem",
               color: "#fff",
               textTransform: "capitalize",

@@ -10,6 +10,7 @@ function ResetButton({
     borderRadius: "0.25rem",
     backgroundColor: "#D9D9D9",
     color: "#000",
+    textTransform:"none"
   },
 }) {
   return (

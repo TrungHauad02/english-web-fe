@@ -1,6 +1,8 @@
 import { CardMedia, Stack, Typography } from "@mui/material";
+import useColor from "shared/color/Color";
 
 function MainPicture({ src, title }) {
+  const {Color1, Color2} = useColor();
   return (
     <Stack
       direction="column"
@@ -23,7 +25,7 @@ function MainPicture({ src, title }) {
           bottom: "0",
           left: "0",
           color: "#fff",
-          background: "linear-gradient(90deg, #6ec3f78f 0%, #6EC2F7 80%)",
+          background: `linear-gradient(90deg, ${Color1} 0%, ${Color2} 80%)`,
           paddingY: "1rem",
           paddingX: "4rem",
           borderRadius: "0 1rem 0 0",

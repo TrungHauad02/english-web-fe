@@ -3,6 +3,7 @@ import BasicButton from "./BasicButton";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ConfirmAndSubmit from "../confirmDialog/ConfirmAndSubmit";
+import useColor from "shared/color/Color";
 
 function PrevNextSubmitButton({
   handlePrevious,
@@ -12,6 +13,8 @@ function PrevNextSubmitButton({
   onSubmit,
   sx = { marginTop: "1rem", justifyContent: "flex-end", paddingRight: "1rem" },
 }) {
+  const {Color2_1} = useColor();
+
   return (
     <Grid2 container spacing={3} sx={sx}>
       <BasicButton
@@ -20,7 +23,7 @@ function PrevNextSubmitButton({
         startIcon={<ArrowBackIosNewRoundedIcon />}
         sx={{
           color: "#fff",
-          backgroundColor: "#6EC2F7",
+          backgroundColor: Color2_1,
           textTransform: "capitalize",
         }}
       />
@@ -30,7 +33,7 @@ function PrevNextSubmitButton({
         endIcon={<ArrowForwardIosRoundedIcon />}
         sx={{
           color: "#fff",
-          backgroundColor: "#6EC2F7",
+          backgroundColor: Color2_1,
           textTransform: "capitalize",
         }}
       />
@@ -40,7 +43,7 @@ function PrevNextSubmitButton({
         onSubmit={onSubmit}
         sx={{
           color: "#fff",
-          backgroundColor: "#6EC2F7",
+          backgroundColor: Color2_1,
           textTransform: "capitalize",
         }}
       />

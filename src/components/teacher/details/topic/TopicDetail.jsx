@@ -42,7 +42,7 @@ export default function TopicDetail() {
       container
       direction={"column"}
       spacing={2}
-      sx={{ margin: "2rem 4% 2rem 4%" }}
+      sx={{ margin: "2rem 4% 2rem 4%", bgcolor:"#fff" }}
     >
       <Grid2 container direction={"row"} justifyContent={"space-between"}>
         <Grid2 item>

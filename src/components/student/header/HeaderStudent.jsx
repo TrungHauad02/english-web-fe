@@ -5,10 +5,13 @@ import HeaderTypography from "shared/component/header/HeaderTypography";
 import SkillMenu from "./SkillMenu";
 import Profile from "../menu/profile/Profile";
 import { useAuth } from "security/AuthContext";
+import useColor from "shared/color/Color";
 
 const icon = "/icon.png";
 
 function HeaderStudent() {
+  const {HeaderBg} = useColor();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const { isAuthenticated, Logout } = useAuth();
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
@@ -49,7 +52,7 @@ function HeaderStudent() {
       direction={"row"}
       justifyContent={"space-between"}
       sx={{
-        backgroundColor: "#6EC2F7",
+        backgroundColor: HeaderBg,
         color: "#fff",
         padding: "0.5rem",
         position: "fixed",
