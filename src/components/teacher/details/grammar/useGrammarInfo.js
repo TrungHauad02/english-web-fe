@@ -38,6 +38,12 @@ export default function useGrammarInfo(data, setData) {
         setError("Image cannot be empty");
         return;
       }
+
+      if (topic.file === "") {
+        setError("File cannot be empty");
+        return;
+      }
+
       setIsEditing(false);
 
       let topicDetail = { image: "", file: "" };
@@ -60,11 +66,11 @@ export default function useGrammarInfo(data, setData) {
       );
 
       if (newImage !== topicDetail.image) {
-        updateTopic = { ...topic, image: newImage };
+        updateTopic = { ...updateTopic, image: newImage };
       }
 
       if (newFile !== topicDetail.file) {
-        updateTopic = { ...topic, file: newFile };
+        updateTopic = { ...updateTopic, file: newFile };
       }
 
       if (id === "-1") {

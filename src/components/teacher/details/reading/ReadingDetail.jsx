@@ -43,7 +43,7 @@ export default function ReadingDetail() {
         {/** Reading info*/}
         <ReadingInfo data={localData} setData={setLocalData} />
       </Grid2>
-      <Grid2 container direction={"column"} spacing={2} size={7}>
+      <Grid2 container direction={"column"} spacing={2} size={7.3}>
         <Grid2 item sx={answerQuestionContainerStyle}>
           <AnswerQuestionManagement path={"reading"} />
         </Grid2>

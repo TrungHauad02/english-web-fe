@@ -20,6 +20,10 @@ const PDFViewer = ({ file, title, height = "100%" }) => {
   useEffect(() => {
     const fetchFileData = async () => {
       try {
+        if (file && file.startsWith("data:application/pdf;base64,")) {
+          setFileUrl(file);
+          return;
+        }
         const data = await downloadFile(file);
         const uint8Array = new Uint8Array(data);
         const blob = new Blob([uint8Array], { type: "application/pdf" });

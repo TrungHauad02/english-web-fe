@@ -3,9 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   createReading,
   deleteReading,
+  getReadingDetail,
   updateReading,
 } from "api/study/reading/readingService";
 import handleError from "shared/utils/handleError";
+import {
+  handleFileChange,
+  handleFileUpload,
+} from "shared/utils/uploadImageUtils";
 
 export default function useReadingInfo(data, setData) {
   const { id } = useParams();
@@ -38,14 +43,55 @@ export default function useReadingInfo(data, setData) {
 
   const handleSave = async () => {
     try {
+      if (topic.image === "") {
+        setError("Image cannot be empty");
+        return;
+      }
+
+      if (topic.file === "") {
+        setError("File cannot be empty");
+        return;
+      }
+
+      setIsEditing(false);
+
+      let readingDetail = { image: "", file: "" };
+      if (id !== "-1") {
+        readingDetail = await getReadingDetail(id);
+        readingDetail = readingDetail ? readingDetail : { image: "", file: "" };
+      }
+
+      const newImage = await handleFileUpload(
+        readingDetail.image,
+        topic.image,
+        topic.title,
+        "study/reading"
+      );
+
+      const newFile = await handleFileUpload(
+        readingDetail.file,
+        topic.file,
+        topic.title,
+        "study/reading"
+      );
+      let updateTopic = topic;
+      if (newImage !== readingDetail.image) {
+        updateTopic = { ...updateTopic, image: newImage };
+      }
+
+      if (newFile !== readingDetail.file) {
+        updateTopic = { ...updateTopic, file: newFile };
+      }
+
       if (id === "-1") {
-        const data = await createReading(topic);
+        const data = await createReading(updateTopic);
+        setTopic(data);
         navigate(`/teacher/readings/${data.id}`);
         return;
       }
-      const data = await updateReading(id, topic);
+
+      const data = await updateReading(id, updateTopic);
       setTopic(data);
-      setIsEditing(false);
     } catch (error) {
       handleError(error, setError);
     }
@@ -53,11 +99,9 @@ export default function useReadingInfo(data, setData) {
 
   const onChangeImage = (e) => {
     if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, image: imageUrl });
-    }
+    handleFileChange(e, (imageData) => {
+      setTopic((prevTopic) => ({ ...prevTopic, image: imageData }));
+    });
   };
 
   const onChangeTitle = (e) => {
@@ -82,12 +126,10 @@ export default function useReadingInfo(data, setData) {
 
   const onChangeFile = (e) => {
     if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const fileUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, file: fileUrl });
-      setData({ ...topic, file: fileUrl });
-    }
+    handleFileChange(e, (data) => {
+      setTopic((prevTopic) => ({ ...prevTopic, file: data }));
+      setData((prevTopic) => ({ ...prevTopic, file: data }));
+    });
   };
 
   return {

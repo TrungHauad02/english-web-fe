@@ -1,12 +1,14 @@
-import { Button, CardMedia, Grid2, Typography } from "@mui/material";
+import { Button, CardMedia, Grid2, Stack, Typography } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import BasicTextField from "../common/textField/BasicTextField";
 import BasicSelect from "../common/select/BasicSelect";
 import MultiLineTextField from "../common/textField/MultiLineTextField";
-import SaveEditDeleteButton from "../common/button/SaveEditDeleteButton";
 import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useReadingInfo from "./useReadingInfo";
 import ErrorComponent from "shared/component/error/ErrorComponent";
+import EditButton from "../common/button/EditButton";
+import DeleteButton from "../common/button/DeleteButton";
+import SaveButton from "../common/button/SaveButton";
 
 export default function ReadingInfo({ data, setData }) {
   const {
@@ -86,7 +88,7 @@ export default function ReadingInfo({ data, setData }) {
           onChange={onChangeDescription}
           disabled={!isEditing}
         />
-        <Grid2 container direction={"row"} spacing={2}>
+        <Grid2 container direction={"column"} spacing={2}>
           <Button
             component="label"
             role={undefined}
@@ -110,12 +112,11 @@ export default function ReadingInfo({ data, setData }) {
               onChange={onChangeFile}
             />
           </Button>
-          <SaveEditDeleteButton
-            showText
-            onDel={handleDelete}
-            onEdit={handleEditing}
-            onSave={handleSave}
-          />
+          <Stack direction={"row"} spacing={2}>
+            <EditButton onEdit={handleEditing} disabled={isEditing} showText />
+            <DeleteButton onDel={handleDelete} disabled={!isEditing} showText />
+            <SaveButton onSave={handleSave} disabled={!isEditing} showText />
+          </Stack>
         </Grid2>
       </Grid2>
       {/* Hiện thị khi có lỗi */}
