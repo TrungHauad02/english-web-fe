@@ -49,6 +49,7 @@ export default function useConversation(
         else return updateConversation(line.id, line);
       });
       const newData = await Promise.all(listRequest);
+      console.log(newData);
       setConversation(newData);
       setIsEditing(false);
     } catch (error) {

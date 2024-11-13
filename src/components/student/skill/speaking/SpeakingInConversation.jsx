@@ -5,6 +5,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import MicIcon from "@mui/icons-material/Mic";
 import useSpeakingInConversation from "./useSpeakingInConversation";
+import SoundViewer from "shared/component/soundViewer/SoundViewer";
 
 export default function SpeakingInConversation() {
   const { listConversation, person, listPeople, handleChange } =
@@ -58,7 +59,7 @@ export default function SpeakingInConversation() {
                   <Typography variant="h6">{conver.name} :</Typography>
                 </Grid2>
                 <Grid2 item size={11}>
-                  <Typography variant="body1">{conver.content}</Typography>
+                  <SoundViewer audioSrc={conver.audioUrl} />
                 </Grid2>
               </>
             )}
