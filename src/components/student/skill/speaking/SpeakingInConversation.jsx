@@ -4,7 +4,6 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import MicIcon from "@mui/icons-material/Mic";
-import TextToSpeechViewer from "shared/component/soundViewer/TextToSpeechViewer";
 import useSpeakingInConversation from "./useSpeakingInConversation";
 
 export default function SpeakingInConversation() {
@@ -59,7 +58,7 @@ export default function SpeakingInConversation() {
                   <Typography variant="h6">{conver.name} :</Typography>
                 </Grid2>
                 <Grid2 item size={11}>
-                  <TextToSpeechViewer text={conver.content} />
+                  <Typography variant="body1">{conver.content}</Typography>
                 </Grid2>
               </>
             )}
