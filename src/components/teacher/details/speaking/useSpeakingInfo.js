@@ -7,6 +7,10 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import handleError from "shared/utils/handleError";
+import {
+  handleFileChange,
+  handleFileUpload,
+} from "shared/utils/uploadImageUtils";
 
 export default function useSpeakingInfo(setError) {
   const { id } = useParams();
@@ -59,14 +63,42 @@ export default function useSpeakingInfo(setError) {
 
   const handleSave = async () => {
     try {
+      if (!isEditing) return;
+
+      if (topic.image === "") {
+        setError("Image cannot be empty");
+        return;
+      }
+      setIsEditing(false);
+
+      let speakingDetail = { image: "" };
+
+      if (id !== "-1") {
+        speakingDetail = await getSpeakingDetail(id);
+        speakingDetail = speakingDetail ? speakingDetail : { image: "" };
+      }
+
+      const newImage = await handleFileUpload(
+        speakingDetail.image,
+        topic.image,
+        topic.title,
+        "study/speaking"
+      );
+
+      let updatedTopic = topic;
+      if (newImage !== speakingDetail.image) {
+        updatedTopic = { ...updatedTopic, image: newImage };
+      }
+
       if (id === "-1") {
-        const newData = await createSpeaking(topic);
+        const newData = await createSpeaking(updatedTopic);
+        setTopic(newData);
         navigate(`/teacher/speakings/${newData.id}`);
         return;
       }
-      const newData = await updateSpeaking(id, topic);
+
+      const newData = await updateSpeaking(id, updatedTopic);
       setTopic(newData);
-      setIsEditing(false);
     } catch (err) {
       handleError(err, setError);
     }
@@ -74,11 +106,9 @@ export default function useSpeakingInfo(setError) {
 
   const onChangeImage = (e) => {
     if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, image: imageUrl });
-    }
+    handleFileChange(e, (imageData) => {
+      setTopic((prevTopic) => ({ ...prevTopic, image: imageData }));
+    });
   };
 
   const onChangeTitle = (e) => {
