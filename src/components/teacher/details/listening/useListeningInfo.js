@@ -7,6 +7,10 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import handleError from "shared/utils/handleError";
+import {
+  handleFileChange,
+  handleFileUpload,
+} from "shared/utils/uploadImageUtils";
 
 export default function useListeningInfo() {
   const { id } = useParams();
@@ -15,17 +19,16 @@ export default function useListeningInfo() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const emptyListening = {
-    id: "-1",
-    title: "",
-    serial: 1,
-    description: "",
-    image: "",
-    audioUrl: "",
-    status: "ACTIVE",
-  };
-
   useEffect(() => {
+    const emptyListening = {
+      id: "-1",
+      title: "",
+      serial: 1,
+      description: "",
+      image: "",
+      audioUrl: "",
+      status: "ACTIVE",
+    };
     const fetchData = async () => {
       if (id === "-1") {
         setTopic(emptyListening);
@@ -60,14 +63,58 @@ export default function useListeningInfo() {
 
   const handleSave = async () => {
     try {
+      if (topic.image === "") {
+        setError("Image cannot be empty");
+        return;
+      }
+
+      if (topic.audioUrl === "") {
+        setError("Audio URL cannot be empty");
+        return;
+      }
+
+      setIsEditing(false);
+
+      let listeningDetail = { image: "", audioUrl: "" };
+      if (id !== "-1") {
+        listeningDetail = await getListeningDetail(id);
+        listeningDetail = listeningDetail
+          ? listeningDetail
+          : { image: "", audioUrl: "" };
+      }
+
+      const newImage = await handleFileUpload(
+        listeningDetail.image,
+        topic.image,
+        topic.title,
+        "study/listening"
+      );
+
+      const newAudioUrl = await handleFileUpload(
+        listeningDetail.audioUrl,
+        topic.audioUrl,
+        topic.title,
+        "study/listening"
+      );
+
+      let updateTopic = topic;
+      if (newImage !== listeningDetail.image) {
+        updateTopic = { ...updateTopic, image: newImage };
+      }
+
+      if (newAudioUrl !== listeningDetail.audioUrl) {
+        updateTopic = { ...updateTopic, audioUrl: newAudioUrl };
+      }
+
       if (id === "-1") {
-        const data = await createListening(topic);
+        const data = await createListening(updateTopic);
+        setTopic(data);
         navigate(`/teacher/listenings/${data.id}`);
         return;
       }
-      const data = await updateListening(id, topic);
+
+      const data = await updateListening(id, updateTopic);
       setTopic(data);
-      setIsEditing(false);
     } catch (error) {
       handleError(error, setError);
     }
@@ -75,11 +122,9 @@ export default function useListeningInfo() {
 
   const onChangeImage = (e) => {
     if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, image: imageUrl });
-    }
+    handleFileChange(e, (imageData) => {
+      setTopic((prevTopic) => ({ ...prevTopic, image: imageData }));
+    });
   };
 
   const onChangeTitle = (e) => {
@@ -104,11 +149,9 @@ export default function useListeningInfo() {
 
   function onChangeFile(e) {
     if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const audioUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, audioUrl: audioUrl });
-    }
+    handleFileChange(e, (fileData) => {
+      setTopic((prevTopic) => ({ ...prevTopic, audioUrl: fileData }));
+    });
   }
 
   return {

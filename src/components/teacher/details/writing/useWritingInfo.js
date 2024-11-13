@@ -1,11 +1,11 @@
+import { handleFileChange } from "shared/utils/uploadImageUtils";
+
 export default function useWritingInfo(data, setData, isEditing, setIsEditing) {
   const onChangeImage = (e) => {
     if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setData({ ...data, image: imageUrl });
-    }
+    handleFileChange(e, (imageData) => {
+      setData((prevTopic) => ({ ...prevTopic, image: imageData }));
+    });
   };
 
   const onChangeTitle = (e) => {

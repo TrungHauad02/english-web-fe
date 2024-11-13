@@ -1,15 +1,22 @@
 import {
   createWriteAWord,
   deleteWriteAWord,
+  getWriteAWordById,
   updateWriteAWord,
 } from "api/study/listening/writeAWordService";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import handleError from "shared/utils/handleError";
+import {
+  handleFileChange,
+  handleFileUpload,
+} from "shared/utils/uploadImageUtils";
 
 export default function useQuestion(data, fetchData) {
   const [question, setQuestion] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState("");
+  const { id } = useParams();
 
   useEffect(() => {
     if (!data) return;
@@ -39,10 +46,34 @@ export default function useQuestion(data, fetchData) {
 
   async function handleSave() {
     try {
+      if (!isEditing) return;
+
+      if (question.audioUrl === "") {
+        setError("Audio URL cannot be empty");
+        return;
+      }
+
+      let updatedQuestion = question;
+      let oldQuestion = { audioUrl: "" };
+      if (question.id !== "-1") {
+        const questionDetail = await getWriteAWordById(question.id);
+        oldQuestion = questionDetail ? questionDetail : { audioUrl: "" };
+      }
+      const newAudioUrl = await handleFileUpload(
+        oldQuestion.audioUrl,
+        question.audioUrl,
+        id,
+        "study/listening/write-a-word"
+      );
+
+      if (newAudioUrl !== question.audioUrl) {
+        updatedQuestion = { ...question, audioUrl: newAudioUrl };
+      }
+
       if (question.id === "-1") {
-        await createWriteAWord(question);
+        await createWriteAWord(updatedQuestion);
       } else {
-        await updateWriteAWord(question.id, question);
+        await updateWriteAWord(question.id, updatedQuestion);
       }
       setIsEditing(false);
       fetchData();
@@ -100,11 +131,9 @@ export default function useQuestion(data, fetchData) {
 
   function onChangeFile(e) {
     if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const audioUrl = URL.createObjectURL(file);
-      setQuestion({ ...question, audioUrl: audioUrl });
-    }
+    handleFileChange(e, (fileData) => {
+      setQuestion((prevQuestion) => ({ ...prevQuestion, audioUrl: fileData }));
+    });
   }
 
   return {
