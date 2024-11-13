@@ -13,3 +13,13 @@ export const textToSpeech = async (text, voice) => {
     throw error;
   }
 };
+
+export const getVoices = async () => {
+  try {
+    const response = await apiClient.get("/text-to-speech/voices");
+    return response.data;
+  } catch (error) {
+    console.error("Error retrieving voices", error);
+    throw error;
+  }
+};
