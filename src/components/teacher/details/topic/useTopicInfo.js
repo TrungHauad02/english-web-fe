@@ -8,8 +8,8 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import handleError from "shared/utils/handleError";
 import {
-  handleImageChange,
-  handleImageUpload,
+  handleFileChange,
+  handleFileUpload,
 } from "shared/utils/uploadImageUtils";
 
 export default function useTopicInfo(data, setError) {
@@ -55,7 +55,7 @@ export default function useTopicInfo(data, setError) {
         const topicDetail = await getTopicDetail(id);
         oldTopic = topicDetail ? topicDetail : { image: "" };
       }
-      const newImage = await handleImageUpload(
+      const newImage = await handleFileUpload(
         oldTopic.image,
         topic.image,
         topic.title,
@@ -97,7 +97,7 @@ export default function useTopicInfo(data, setError) {
   };
 
   const onChangeImage = (e) => {
-    handleImageChange(e, (result) => {
+    handleFileChange(e, (result) => {
       setTopic((prevTopic) => ({ ...prevTopic, image: result }));
     });
   };

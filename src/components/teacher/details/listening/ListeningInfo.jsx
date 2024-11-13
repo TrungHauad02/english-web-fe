@@ -8,6 +8,9 @@ import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHidden
 import useListeningInfo from "./useListeningInfo";
 import SoundViewer from "shared/component/soundViewer/SoundViewer";
 import ErrorComponent from "shared/component/error/ErrorComponent";
+import EditButton from "../common/button/EditButton";
+import DeleteButton from "../common/button/DeleteButton";
+import SaveButton from "../common/button/SaveButton";
 
 export default function ListeningInfo() {
   const {
@@ -122,12 +125,9 @@ export default function ListeningInfo() {
           <SoundViewer audioSrc={topic.audioUrl} />
         </Grid2>
         <Grid2 container direction={"row"} spacing={2}>
-          <SaveEditDeleteButton
-            showText
-            onDel={handleDelete}
-            onEdit={handleEditing}
-            onSave={handleSave}
-          />
+          <EditButton onEdit={handleEditing} disabled={isEditing} showText />
+          <DeleteButton onDel={handleDelete} disabled={!isEditing} showText />
+          <SaveButton onSave={handleSave} disabled={!isEditing} showText />
         </Grid2>
       </Grid2>
       {/**Hiển thị khi có lỗi */}
