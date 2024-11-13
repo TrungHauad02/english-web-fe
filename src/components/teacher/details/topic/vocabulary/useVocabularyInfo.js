@@ -7,8 +7,8 @@ import {
 } from "api/study/topic/vocabularyService";
 import { useParams } from "react-router-dom";
 import {
-  handleImageChange,
-  handleImageUpload,
+  handleFileChange,
+  handleFileUpload,
 } from "shared/utils/uploadImageUtils";
 
 export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
@@ -28,7 +28,7 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
       try {
         if (!isEditing) return;
         if (fieldName === "image") {
-          handleImageChange(event, (imageData) => {
+          handleFileChange(event, (imageData) => {
             setCurVocab((prev) => ({ ...prev, image: imageData }));
           });
         } else {
@@ -104,7 +104,7 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
       }
 
       // Handle image change and get the new image URL
-      const newImage = await handleImageUpload(
+      const newImage = await handleFileUpload(
         oldVocab.image,
         curVocab.image,
         curVocab.word,

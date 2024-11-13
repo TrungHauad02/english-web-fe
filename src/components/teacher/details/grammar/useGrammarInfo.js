@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import {
   createGrammar,
   deleteGrammar,
+  getGrammarDetail,
   updateGrammar,
 } from "api/study/grammar/grammarService";
 import { useNavigate, useParams } from "react-router-dom";
 import handleError from "shared/utils/handleError";
+import {
+  handleFileChange,
+  handleFileUpload,
+} from "shared/utils/uploadImageUtils";
 
 export default function useGrammarInfo(data, setData) {
   const { id } = useParams();
@@ -28,15 +33,48 @@ export default function useGrammarInfo(data, setData) {
 
   const handleSave = async () => {
     try {
+      let updateTopic = topic;
+      if (topic.image === "") {
+        setError("Image cannot be empty");
+        return;
+      }
+      setIsEditing(false);
+
+      let topicDetail = { image: "", file: "" };
+      if (id !== "-1") {
+        topicDetail = await getGrammarDetail(id);
+        updateTopic = topicDetail ? topicDetail : { image: "", file: "" };
+      }
+      const newImage = await handleFileUpload(
+        topicDetail.image,
+        topic.image,
+        topic.title,
+        "study/grammar"
+      );
+
+      const newFile = await handleFileUpload(
+        topicDetail.file,
+        topic.file,
+        topic.title,
+        "study/grammar"
+      );
+
+      if (newImage !== topicDetail.image) {
+        updateTopic = { ...topic, image: newImage };
+      }
+
+      if (newFile !== topicDetail.file) {
+        updateTopic = { ...topic, file: newFile };
+      }
+
       if (id === "-1") {
-        const data = await createGrammar(topic);
+        const data = await createGrammar(updateTopic);
         setData(data);
         navigate(`/teacher/grammars/${data.id}`);
         return;
       }
-      const data = await updateGrammar(id, topic);
+      const data = await updateGrammar(id, updateTopic);
       setData(data);
-      setIsEditing(false);
     } catch (error) {
       handleError(error, setError);
     }
@@ -54,11 +92,9 @@ export default function useGrammarInfo(data, setData) {
 
   const onChangeImage = (e) => {
     if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, image: imageUrl });
-    }
+    handleFileChange(e, (imageData) => {
+      setTopic((prevTopic) => ({ ...prevTopic, image: imageData }));
+    });
   };
 
   const onChangeTitle = (e) => {
@@ -93,12 +129,10 @@ export default function useGrammarInfo(data, setData) {
 
   const onChangeFile = (e) => {
     if (!isEditing) return;
-    const file = e.target.files[0];
-    if (file) {
-      const fileUrl = URL.createObjectURL(file);
-      setTopic({ ...topic, file: fileUrl });
-      setData({ ...topic, file: fileUrl });
-    }
+    handleFileChange(e, (imageData) => {
+      setTopic((prevTopic) => ({ ...prevTopic, file: imageData }));
+      setData((prevTopic) => ({ ...prevTopic, file: imageData }));
+    });
   };
 
   return {

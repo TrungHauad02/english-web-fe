@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Button, Typography, AppBar, Toolbar, Stack } from "@mui/material";
 import { ArrowBack, ArrowForward, Download } from "@mui/icons-material";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
+import { downloadFile } from "api/feature/uploadFile/uploadFileService";
 
 // Set up the PDF worker.
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -14,6 +15,23 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 const PDFViewer = ({ file, title, height = "100%" }) => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+  const [fileUrl, setFileUrl] = useState(null);
+
+  useEffect(() => {
+    const fetchFileData = async () => {
+      try {
+        const data = await downloadFile(file);
+        const uint8Array = new Uint8Array(data);
+        const blob = new Blob([uint8Array], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+        setFileUrl(url);
+      } catch (error) {
+        console.error("Error downloading file:", error);
+      }
+    };
+
+    fetchFileData();
+  }, [file]);
 
   const complexSx = {
     height: "100%",
@@ -62,13 +80,15 @@ const PDFViewer = ({ file, title, height = "100%" }) => {
           alignItems: "center",
         }}
       >
-        <Document
-          file={file}
-          onLoadSuccess={onDocumentLoadSuccess}
-          style={{ width: "100%", maxHeight: "200px", overflow: "hidden" }}
-        >
-          <Page pageNumber={pageNumber} />
-        </Document>
+        {fileUrl && (
+          <Document
+            file={fileUrl}
+            onLoadSuccess={onDocumentLoadSuccess}
+            style={{ width: "100%", maxHeight: "200px", overflow: "hidden" }}
+          >
+            <Page pageNumber={pageNumber} />
+          </Document>
+        )}
       </Stack>
       <Stack
         direction="row"
