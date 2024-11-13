@@ -3,10 +3,12 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import MultiLineTextField from "../../common/textField/MultiLineTextField";
 import BasicTextField from "../../common/textField/BasicTextField";
 import BasicSelect from "../../common/select/BasicSelect";
-import SaveEditDeleteButton from "../../common/button/SaveEditDeleteButton";
 import { VisuallyHiddenInput } from "../../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useVocabularyInfo from "./useVocabularyInfo";
 import ErrorComponent from "../../../../../shared/component/error/ErrorComponent";
+import EditButton from "../../common/button/EditButton";
+import DeleteButton from "../../common/button/DeleteButton";
+import SaveButton from "../../common/button/SaveButton";
 
 export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
   const {
@@ -108,13 +110,9 @@ export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
         spacing={2}
         justifyContent={"flex-end"}
       >
-        <SaveEditDeleteButton
-          showText
-          spacing={3}
-          onEdit={onHandleEdit}
-          onDel={onHandleDelete}
-          onSave={onHandleSave}
-        />
+        <EditButton onEdit={onHandleEdit} showText disabled={isEditing} />
+        <DeleteButton onDel={onHandleDelete} showText disabled={!isEditing} />
+        <SaveButton onSave={onHandleSave} showText disabled={!isEditing} />
       </Grid2>
       {/**Hiển thị khi có lỗi */}
       {error && (
