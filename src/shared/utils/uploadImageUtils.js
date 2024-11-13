@@ -4,7 +4,7 @@ import {
 } from "api/feature/uploadFile/uploadFileService";
 
 export const handleImageUpload = async (oldImage, newImage, title, path) => {
-  if (oldImage !== newImage) {
+  if (oldImage && oldImage !== newImage) {
     const sanitizedFileName = title.replace(/\s+/g, "_");
     const [, resImage] = await Promise.all([
       deleteFile(oldImage),
@@ -12,7 +12,14 @@ export const handleImageUpload = async (oldImage, newImage, title, path) => {
     ]);
     return resImage.url;
   }
-  return oldImage;
+  return (
+    oldImage ||
+    (await uploadFile(
+      path,
+      title.replace(/\s+/g, "_").toLowerCase(),
+      newImage
+    ).then((res) => res.url))
+  );
 };
 
 export const handleImageChange = (event, setImage) => {

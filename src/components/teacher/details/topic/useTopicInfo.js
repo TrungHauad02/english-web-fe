@@ -47,11 +47,13 @@ export default function useTopicInfo(data, setError) {
         setError("Image cannot be empty");
         return;
       }
+      setIsEditing(false);
 
       let updatedTopic = topic;
-      let oldTopic = {image:null};
-      if(id !== "-1"){
-        oldTopic = await getTopicDetail(id);
+      let oldTopic = { image: "" };
+      if (id !== "-1") {
+        const topicDetail = await getTopicDetail(id);
+        oldTopic = topicDetail ? topicDetail : { image: "" };
       }
       const newImage = await handleImageUpload(
         oldTopic.image,
@@ -73,7 +75,6 @@ export default function useTopicInfo(data, setError) {
       console.log(res);
       setTopic(res);
       setError("");
-      setIsEditing(false);
     } catch (err) {
       handleError(err, setError);
     }
