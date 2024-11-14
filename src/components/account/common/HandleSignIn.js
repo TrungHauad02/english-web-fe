@@ -1,6 +1,7 @@
 import { signInUser } from "api/account/signInService";
+import { toast } from "react-toastify";
 
-export const handleSignIn = async (email, password, authContext, navigate, setError) => {
+export const handleSignIn = async (email, password, authContext, navigate) => {
   try {
     const response = await signInUser({ email, password });
     const { token, authenticate, role } = response;
@@ -29,6 +30,6 @@ export const handleSignIn = async (email, password, authContext, navigate, setEr
 
     return role;
   } catch (error) {
-    setError("Email hoặc mật khẩu không đúng. Vui lòng thử lại.");
-  }
+    toast.error(error.response.data.message);
+    }
 };

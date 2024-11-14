@@ -11,7 +11,7 @@ const Profile = ({ open, handleClose, type, data = {} }) => {
                         <img
                             src={data.avatar || '/header_user.png'}
                             alt="User"
-                            style={{ width: 180, height: 180, borderRadius: '50%' }}
+                            style={{ width: 200, height: 200, borderRadius: "50%" }}
                         />
                     </Stack>
                     <Stack spacing={1} sx={{ width: '60%', pt: 2 }}>
@@ -31,18 +31,14 @@ const Profile = ({ open, handleClose, type, data = {} }) => {
                                 {type === 'Student' ? (
                                     <>
                                         <Box><span style={{ fontWeight: 'bold' }}>Start Date:</span> {data.startDate || ""}</Box>
-                                        {data.status === 'Inactive' && (
-                                            <Box><span style={{ fontWeight: 'bold' }}>End Date:</span> {data.endDate || ""}</Box>
-                                        )}
+                                        <Box><span style={{ fontWeight: 'bold' }}>End Date:</span> {data.endDate || ""}</Box>
                                         <Box><span style={{ fontWeight: 'bold' }}>Status:</span> {data.status || ""}</Box>
                                     </>
                                 ) : (
                                     <>
                                         <Box><span style={{ fontWeight: 'bold' }}>Level:</span> {data.level || ""}</Box>
                                         <Box><span style={{ fontWeight: 'bold' }}>Start Date:</span> {data.startDate || ""}</Box>
-                                        {data.endDate && (
-                                            <Box><span style={{ fontWeight: 'bold' }}>End Date:</span> {data.endDate || ""}</Box>
-                                        )}
+                                        <Box><span style={{ fontWeight: 'bold' }}>End Date:</span> {data.endDate || ""}</Box>
                                     </>
                                 )}
                             </Stack>

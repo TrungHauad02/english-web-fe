@@ -20,4 +20,18 @@ export const getTeachers = async (page = 0, size = 10, sortBy = "id", sortDir = 
     }
 };
 
+export const createTeacher = async (teacherData) => {
+    const token = localStorage.getItem("authToken");
+
+    try {
+        const response = await apiClient.post("/users/teacher/signup", teacherData, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error creating teacher:", error);
+        throw error;
+    }
+};
+
 

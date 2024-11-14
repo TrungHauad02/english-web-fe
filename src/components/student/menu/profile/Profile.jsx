@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, Button, Stack, Box, TextField, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ChangePassword from "components/account/ChangePassword";
-import { handleEditProfile, handleSave, handleImageChange, handleChangePasswordOpen, handleChangePasswordClose } from "./HandleProfile";
-import { fetchUserInfo } from "api/user/infoUserService";
+import { handleEditProfile, handleSave, handleChangePasswordOpen, handleChangePasswordClose } from "./HandleProfile";
+import { fetchUserInfo } from "api/user/userService";
+import { handleImageChange } from "shared/utils/uploadImageUtils";
 
 const Profile = ({ open, handleClose }) => {
   const [name, setName] = useState("");
@@ -17,7 +18,7 @@ const Profile = ({ open, handleClose }) => {
     const loadUserInfo = async () => {
       try {
         const userInfo = await fetchUserInfo();
-        setName(userInfo.name || ""); // Đảm bảo giá trị không phải null
+        setName(userInfo.name || "");
         setEmail(userInfo.email || "");
         setUserNote(userInfo.contentMotivation || "");
         setImage(userInfo.avatar || "/header_user.png");
@@ -150,10 +151,10 @@ const Profile = ({ open, handleClose }) => {
         <Button
           onClick={
             editMode
-              ? () => handleSave(name || "", userNote || "", image || "", setEditMode)
-              : handleClose
-          }
-          variant="contained"
+            ? () => handleSave(name || "", userNote || "", image, setEditMode)
+            : handleClose
+        }
+        riant="contained"
           color="primary"
           sx={{ mt: 3, float: "right", bottom: ".5rem", bgcolor: "#ACCD0A" }}
         >

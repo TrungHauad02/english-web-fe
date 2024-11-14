@@ -10,7 +10,6 @@ const SignUp = ({ toggleForm }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
-  const [error, setError] = useState("");
   const emailInputRef = useRef(null);
 
   return (
@@ -88,7 +87,7 @@ const SignUp = ({ toggleForm }) => {
         variant="contained"
         color="primary"
         style={{ marginTop: 16, marginBottom: 16 }}
-        onClick={() => handleSignUp(name, email, password, rePassword, setError, toggleForm, emailInputRef)}
+        onClick={() => handleSignUp(name, email, password, rePassword, toggleForm, emailInputRef)}
       >
         Sign Up
       </Button>
@@ -98,11 +97,6 @@ const SignUp = ({ toggleForm }) => {
           Sign In
         </Link>
       </Box>
-      {error && (
-        <Typography color={error === "Sign Up successful!" ? "green" : "red"} align="center" mb={2}>
-          {error}
-        </Typography>
-      )}
     </Box>
   );
 };

@@ -1,12 +1,12 @@
 import { useState, useRef, useCallback } from 'react';
 import { getStudents } from 'api/admin/student/StudentService';
+import { toast } from 'react-toastify';
 
 export const useStudentData = (searchName, searchStartDate, searchEndDate, size) => {
     const [students, setStudents] = useState([]);
     const [filteredStudents, setFilteredStudents] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
-    const [error, setError] = useState('');
     const observer = useRef();
 
     const loadStudents = async () => {
@@ -32,7 +32,7 @@ export const useStudentData = (searchName, searchStartDate, searchEndDate, size)
             setFilteredStudents(prevStudents => page === 0 ? validData : [...prevStudents, ...validData]);
             setHasMore(data.content.length > 0);
         } catch (error) {
-            setError("Không thể tải danh sách sinh viên. Vui lòng thử lại sau.");
+            toast.error("Không thể tải danh sách sinh viên. Vui lòng thử lại sau.");
         }
     };
 
@@ -53,20 +53,5 @@ export const useStudentData = (searchName, searchStartDate, searchEndDate, size)
         loadStudents,
         lastStudentElementRef,
         setPage,
-        error,
     };
-};
-
-export const handleDeleteStudent = (students, selectedStudent, setStudents, setFilteredStudents, setConfirmDeleteOpen, setSelectedStudent) => {
-    const updatedStudents = students.map(student =>
-        student.id === selectedStudent.id ? { ...student, status: 'Inactive', endDate: new Date().toISOString().split('T')[0] } : student
-    );
-    setStudents(updatedStudents);
-    setFilteredStudents(updatedStudents);
-    setConfirmDeleteOpen(false);
-    setSelectedStudent(null);
-};
-
-export const handleClearSelection = (setSelectedStudent) => {
-    setSelectedStudent(null);
 };

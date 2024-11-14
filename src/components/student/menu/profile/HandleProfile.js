@@ -1,4 +1,7 @@
-import { updateUser } from "api/user/updateUserService";
+import { updateUser } from "api/user/userService";
+import { handleImageUpload } from "shared/utils/uploadImageUtils";
+import { fetchUserInfo } from "api/user/userService";
+import { toast } from "react-toastify";
 
 export const handleEditProfile = (setEditMode) => {
     setEditMode(true);
@@ -6,23 +9,28 @@ export const handleEditProfile = (setEditMode) => {
 
 export const handleSave = async (name, userNote, image, setEditMode) => {
     try {
+        let user = await fetchUserInfo();
+        let id = user.id;
+
+        const newImage = await handleImageUpload( user.avatar, image, name, "user/profile");
+
+        let updatedUser = { ...user, avatar: newImage };
+        if (newImage !== user.avatar) {
+            updatedUser = { ...user, avatar: newImage };
+        }
+
         const userData = {
             name: name || "",
             contentMotivation: userNote || "",
-            avatar: image,
+            avatar: updatedUser.avatar, 
         };
-        const updatedUser = await updateUser(userData);
+
+        await updateUser(userData, id)
+        toast.success("Update infomation successfully!")
         setEditMode(false);
     } catch (error) {
-        console.error(error);
-    }
-};
-
-export const handleImageChange = (e, setImage) => {
-    const file = e.target.files[0];
-    if (file) {
-        const imageUrl = URL.createObjectURL(file);
-        setImage(imageUrl); 
+        console.error("Error while saving:", error);
+        toast.error("Update failure information");
     }
 };
 

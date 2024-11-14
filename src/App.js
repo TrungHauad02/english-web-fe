@@ -2,6 +2,8 @@
 import CustomTheme from "./theme/CustomTheme";
 import AppRoutes from "./shared/routes/AppRoutes";
 import AuthProvider from "./security/AuthContext";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // function App() {
 //   return (
@@ -15,6 +17,7 @@ function App() {
   return (
     <AuthProvider theme={CustomTheme}>
       <AppRoutes />
+      <ToastContainer />
     </AuthProvider>
   );
 }

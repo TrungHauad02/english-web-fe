@@ -1,27 +1,27 @@
-import { changePassword } from "api/user/changePassword";
-import handleError from "shared/utils/handleError";
+import { changePassword } from "api/user/userService";
+import { toast } from "react-toastify";
 
-export const handlePasswordChange = async (oldPassword, newPassword, reEnterPassword, setError, handleClose) => {
+export const handlePasswordChange = async (oldPassword, newPassword, reEnterPassword, handleClose) => {
   try {
+    // Giả sử kiểm tra mật khẩu cũ thành công
     await changePassword(oldPassword, oldPassword);
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     if (newPassword !== reEnterPassword) {
-      setError("New passwords do not match!");
+      toast.error("New passwords do not match!");
       return;
     }
     if (!passwordRegex.test(newPassword)) {
-      setError("New password must be at least 9 characters long and include uppercase, lowercase, a number, and a special character.");
+      toast.error("New password must be at least 9 characters long and include uppercase, lowercase, a number, and a special character.");
       return;
     }
 
     await changePassword(oldPassword, newPassword);
-    setError("");
-    alert("Password changed successfully!");
+    toast.success("Password changed successfully!");
     handleClose();
   } catch (error) {
-    handleError(error, setError);
+    toast.error("An error occurred while changing the password.");
   }
 };
 

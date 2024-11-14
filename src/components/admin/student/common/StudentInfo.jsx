@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, TextField, Avatar, Button, Card } from '@mui/material';
 
-const StudentInfo = ({ selectedStudent, handleClearSelection, setConfirmDeleteOpen }) => (
+const StudentInfo = ({ selectedStudent, setConfirmDeleteOpen, handleDelete, handleClear, setReload, setPage }) => (
     <Card sx={{ height: 450, padding: 2, bgcolor: "#F5F5F5" }}>
         <Grid container spacing={2}>
             <Grid item xs={12} textAlign="center">
@@ -11,7 +11,6 @@ const StudentInfo = ({ selectedStudent, handleClearSelection, setConfirmDeleteOp
                     sx={{ width: 100, height: 100, margin: '0 auto' }}
                 />
             </Grid>
-
             <Grid item xs={12}>
                 <TextField
                     fullWidth
@@ -21,6 +20,7 @@ const StudentInfo = ({ selectedStudent, handleClearSelection, setConfirmDeleteOp
                     InputProps={{
                         readOnly: true,
                     }}
+                    disabled
                 />
             </Grid>
 
@@ -33,6 +33,7 @@ const StudentInfo = ({ selectedStudent, handleClearSelection, setConfirmDeleteOp
                     InputProps={{
                         readOnly: true,
                     }}
+                    disabled
                 />
             </Grid>
 
@@ -46,6 +47,7 @@ const StudentInfo = ({ selectedStudent, handleClearSelection, setConfirmDeleteOp
                     InputProps={{
                         readOnly: true,
                     }}
+                    disabled
                 />
             </Grid>
 
@@ -58,22 +60,33 @@ const StudentInfo = ({ selectedStudent, handleClearSelection, setConfirmDeleteOp
                     InputProps={{
                         readOnly: true,
                     }}
+                    disabled
                 />
             </Grid>
 
-            <Grid item xs={12} textAlign="center">
-                <Button 
-                    variant="contained"
-                    color="error"
-                    style={{ marginRight: '10px' }}
-                    onClick={() => setConfirmDeleteOpen(true)}
-                    disabled={!selectedStudent}
-                >
-                    Delete
-                </Button>
-                <Button variant="outlined" onClick={handleClearSelection}>
-                    Clear
-                </Button>
+            <Grid item xs={12}>
+                <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            color={selectedStudent.status === "INACTIVE" ? "primary" : "error"}
+                            sx={{ bgcolor: selectedStudent.status === "INACTIVE" ? '#64FF64' : '#FF6655' }}
+                            onClick={selectedStudent.status === "INACTIVE" ? handleDelete : () => setConfirmDeleteOpen(true)}
+                        >
+                            {selectedStudent.status === "INACTIVE" ? "Restore" : "Delete"}
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button
+                            fullWidth
+                            variant="outlined"
+                            onClick={handleClear}
+                        >
+                            Clear
+                        </Button>
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     </Card>
