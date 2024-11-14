@@ -28,17 +28,28 @@ export async function DeleteQuestionTest(idtest, type, testDelete, serialQuestio
                     }
                     break;
                 case 'GRAMMAR':
-                    if (type === 'GRAMMAR') {
-                        await deleteTestMixingQuestion(testDelete.id);
-                    }
                     await Promise.all(testMixingQuestions.map(async (question) => {
                         if (question.serial > serialQuestionUpdateOfQuestionMaxTest) {
                             question.serial -= minus;
                             await updateTestMixingQuestion(question.id, question);
                         }
                     }));
+                    if (type === 'GRAMMAR') {
+                        await deleteTestMixingQuestion(testDelete.id);
+                    }
                     break;
                 case 'READING':
+                    await Promise.all(testReadings.map(async (testReading) => {
+                        await Promise.all(testReading.questions.map(async (question) => {
+                            if (question.serial > serialQuestionUpdateOfQuestionMaxTest) {
+                             
+                            
+                                question.serial -= minus;
+                                await updateTestReadingQuestion(question.id, question);
+                        
+                            }
+                        }));
+                    }));
                     if (type === 'READING') {
                         if (testDelete.test === true) {
                             deleteTestReading(testDelete.id);
@@ -60,20 +71,18 @@ export async function DeleteQuestionTest(idtest, type, testDelete, serialQuestio
                             await deleteTestReadingQuestion(testDelete.id);
                         }
                     }
-                    await Promise.all(testReadings.map(async (testReading) => {
-                        await Promise.all(testReading.questions.map(async (question) => {
+                    break;
+                case 'LISTENING':
+                    await Promise.all(testListenings.map(async (testListening) => {
+                        await Promise.all(testListening.questions.map(async (question) => {
                             if (question.serial > serialQuestionUpdateOfQuestionMaxTest) {
-                             
-                            
+                          
                                 question.serial -= minus;
-                                await updateTestReadingQuestion(question.id, question);
-                        
+                                await updateTestListeningQuestion(question.id, question);
+                           
                             }
                         }));
                     }));
-               
-                    break;
-                case 'LISTENING':
                     if (type === 'LISTENING') {
                         if (testDelete.test === true) {
                             deleteTestListening(testDelete.id);
@@ -95,21 +104,17 @@ export async function DeleteQuestionTest(idtest, type, testDelete, serialQuestio
                             await deleteTestListeningQuestion(testDelete.id);
                         }
                     }
-                    await Promise.all(testListenings.map(async (testListening) => {
-                        await Promise.all(testListening.questions.map(async (question) => {
+                    break;
+                case 'SPEAKING':
+                    await Promise.all(testSpeakings.map(async (testSpeaking) => {
+                        await Promise.all(testSpeaking.questions.map(async (question) => {
                             if (question.serial > serialQuestionUpdateOfQuestionMaxTest) {
-                          
                                 question.serial -= minus;
-                                await updateTestListeningQuestion(question.id, question);
-                           
+                                await updateTestSpeakingQuestion(question.id, question);
                             }
                         }));
                     }));
-                    break;
-                case 'SPEAKING':
                     if (type === 'SPEAKING') {
-                    
-                        
                         if (testDelete.test === true) {
                             deleteTestSpeaking(testDelete.id);
                             await Promise.all(testSpeakings.map(async (testSpeaking) => {
@@ -130,25 +135,17 @@ export async function DeleteQuestionTest(idtest, type, testDelete, serialQuestio
                             await deleteTestSpeakingQuestion(testDelete.id);
                         }
                     }
-                    await Promise.all(testSpeakings.map(async (testSpeaking) => {
-                        await Promise.all(testSpeaking.questions.map(async (question) => {
-                            if (question.serial > serialQuestionUpdateOfQuestionMaxTest) {
-                                question.serial -= minus;
-                                await updateTestSpeakingQuestion(question.id, question);
-                            }
-                        }));
-                    }));
                     break;
                 case 'WRITING':
-                    if (type === 'WRITING') {
-                        await deleteTestWriting(testDelete.id);
-                    }
                     await Promise.all(testWritings.map(async (testWriting) => {
                         if (testWriting.serial > serialQuestionUpdateOfQuestionMaxTest) {
                             testWriting.serial -= minus;
                             await updateTestWriting(testWriting.id, testWriting);
                         }
                     }));
+                    if (type === 'WRITING') {
+                        await deleteTestWriting(testDelete.id);
+                    }
                     break;
                 default:
                     throw new Error('Invalid question type');

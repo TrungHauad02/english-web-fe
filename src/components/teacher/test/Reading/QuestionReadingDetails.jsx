@@ -12,14 +12,12 @@ import {
 } from "@mui/material";
 import { Trash, PlusCircle } from "lucide-react";
 import { styled } from "@mui/material/styles";
+import { updateTestReadingQuestion } from "api/test/TestReadingQuestionApi";
 import {
-  updateTestMixingQuestion,
-} from "api/test/TestMixingQuestionApi";
-import {
-  createTestMixingAnswer,
-  updateTestMixingAnswer,
-  deleteTestMixingAnswer
-} from "api/test/TestMixingAnswerApi";
+  createTestReadingAnswer,
+  updateTestReadingAnswer,
+  deleteTestReadingAnswer,
+} from "api/test/TestReadingAnswerApi";
 import { AddQuestionTest } from "../Mixing/AddQuestionTest";
 
 const ButtonContainer = styled(Box)(({ theme }) => ({
@@ -40,7 +38,7 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-const findCorrectAnswerId = (answers) => {
+const findCorrectAnswerId = (answers = []) => {
   const correctAnswer = answers.find((answer) => answer.isCorrect === true);
   return correctAnswer ? correctAnswer.id : null;
 };
@@ -51,142 +49,88 @@ const FormContainer = styled(Paper)(({ theme }) => ({
   borderRadius: theme.spacing(2),
 }));
 
-const MixingQuiz = ({ question,handleQuestion }) => {
+const QuestionReadingDetails = ({ question = {}, handleSaveSelectedQuestion }) => {
   return (
-    <>
-      <FormContainer sx={{ p: 3, bgcolor: "#fff9e6", minHeight: "100vh" }}>
-        <ContentQuestion question={question} handleQuestion={handleQuestion}/>
-      </FormContainer>
-    </>
+    <Box sx={{ p: 3, bgcolor: "#fff9e6", minHeight: "100vh" }}>
+      <ContentQuestion question={question} handleSaveSelectedQuestion={handleSaveSelectedQuestion} />
+    </Box>
   );
 };
 
-const ContentQuestion = ({ question,handleQuestion }) => {
-
-
-  const [questionMixing, setQuestionMixing] = useState(question);
+const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion }) => {
+  const [questionData, setQuestionData] = useState(question || {});
+  const [backupData, setBackupData] = useState(question || {});
   const [selectedAnswer, setSelectedAnswer] = useState(
-    findCorrectAnswerId(question.answers)
+    findCorrectAnswerId(questionData.answers)
   );
   const [isEditMode, setIsEditMode] = useState(false);
-  const [answerCounter, setAnswerCounter] = useState(1);
 
   const handleAddAnswer = () => {
-    const hasCorrectAnswer = questionMixing.answers.some((answer) => answer.isCorrect === true);
+    const hasCorrectAnswer = questionData.answers?.some((answer) => answer.isCorrect === true);
     const newAnswer = {
       id: `add-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       content: "",
-      isCorrect: !hasCorrectAnswer, 
+      isCorrect: !hasCorrectAnswer,
       status: "ACTIVE",
-      testQuestionMixingId: questionMixing.id,
+      testQuestionReadingId: questionData.id,
     };
-
-    setQuestionMixing({
-      ...questionMixing,
-      answers: [...questionMixing.answers, newAnswer],
+    setQuestionData({
+      ...questionData,
+      answers: [...(questionData.answers || []), newAnswer],
     });
-    setSelectedAnswer(findCorrectAnswerId([...questionMixing.answers, newAnswer]));
-    setAnswerCounter(answerCounter + 1);
-
+    setSelectedAnswer(findCorrectAnswerId([...(questionData.answers || []), newAnswer]));
   };
 
   const handleRadioChange = (answerId) => {
     setSelectedAnswer(answerId);
-    setQuestionMixing({
-      ...questionMixing,
-      answers: questionMixing.answers.map((a) => ({
+    setQuestionData({
+      ...questionData,
+      answers: questionData.answers?.map((a) => ({
         ...a,
         isCorrect: a.id === answerId,
-      })),
+      })) || [],
     });
   };
 
-  const handleDeleteAnswer = async (answer) => {
-
+  const handleDeleteAnswer = (answer) => {
     const isCorrectAnswer = answer.isCorrect;
-    
-
-    const updatedAnswers = questionMixing.answers.filter((a) => a.id !== answer.id);
+    const updatedAnswers = questionData.answers?.filter((a) => a.id !== answer.id) || [];
 
     if (isCorrectAnswer && updatedAnswers.length > 0) {
-
       updatedAnswers[0].isCorrect = true;
-      setSelectedAnswer(findCorrectAnswerId(updatedAnswers))
+      setSelectedAnswer(findCorrectAnswerId(updatedAnswers));
     }
 
-    setQuestionMixing({
-      ...questionMixing,
+    setQuestionData({
+      ...questionData,
       answers: updatedAnswers,
     });
   };
 
-  const handleSave = async () => {
-    if(question.id==='')
-    {
-      setIsEditMode(false);
-      questionMixing.id = await AddQuestionTest(questionMixing.test.id, questionMixing.type, questionMixing);
-      await Promise.all(
-        questionMixing.answers.map(async (answer) => {
-          answer.testQuestionMixingId = questionMixing.id;
-          await createTestMixingAnswer(answer);            
-        })
-      );
-        
-        handleQuestion(questionMixing);
-    }
-      else
-      {
-        try {
-      
-          await updateTestMixingQuestion(questionMixing.id, questionMixing);
-        
+  const handleSave = async (questionData) => {
+    
+    setSelectedAnswer(findCorrectAnswerId(questionData.answers));
+    handleSaveSelectedQuestion(questionData);
+    setBackupData(questionData);
 
-          const answersToDelete = question.answers.filter(
-            (answer) =>
-              !questionMixing.answers.some((newAnswer) => newAnswer.id === answer.id)
-          );
-          await Promise.all(
-            answersToDelete.map((answer) => deleteTestMixingAnswer(answer.id))
-          );
-          await Promise.all(
-            questionMixing.answers.map(async (answer) => {
-              if (answer.id.startsWith("add")) {
-                await createTestMixingAnswer(answer);
-              } else {
-                await updateTestMixingAnswer(answer.id, answer);
-            
-              }              
-            })
-          );
-
-
-          setSelectedAnswer(findCorrectAnswerId(questionMixing.answers));
-          setIsEditMode(false);
-          handleQuestion(questionMixing);
-        
-        } catch (error) {
-          console.error("Error saving question or answers:", error);
-        }
-        
-      };
-      }
-   
+    setIsEditMode(false);
+  };
 
   const handleCancel = () => {
     setIsEditMode(false);
-    setQuestionMixing(question);
-    setSelectedAnswer(findCorrectAnswerId(question.answers));
+    setQuestionData(backupData || {});
+    setSelectedAnswer(findCorrectAnswerId(backupData.answers));
   };
 
   const handleEdit = () => {
     setIsEditMode(true);
-    setSelectedAnswer(findCorrectAnswerId(questionMixing.answers));
+    setSelectedAnswer(findCorrectAnswerId(backupData.answers));
   };
 
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-        <Typography variant="h4">{question.type}</Typography>
+        <Typography variant="h4">{question?.type || ""}</Typography>
       </Box>
 
       <Paper sx={{ mb: 3, p: 2, boxShadow: 3 }}>
@@ -207,7 +151,7 @@ const ContentQuestion = ({ question,handleQuestion }) => {
               padding: "0.5rem",
             }}
           >
-            {question.serial}
+            {question?.serial || ""}
           </Box>
           <Typography variant="h6" sx={{ mr: 1 }}>
             :
@@ -215,9 +159,9 @@ const ContentQuestion = ({ question,handleQuestion }) => {
           <TextField
             fullWidth
             disabled={!isEditMode}
-            value={questionMixing.content || ""}
+            value={questionData.content || ""}
             onChange={(e) => {
-              setQuestionMixing({ ...questionMixing, content: e.target.value });
+              setQuestionData({ ...questionData, content: e.target.value });
             }}
           />
         </Box>
@@ -230,7 +174,7 @@ const ContentQuestion = ({ question,handleQuestion }) => {
           value={selectedAnswer}
           onChange={(e) => handleRadioChange(e.target.value)}
         >
-          {questionMixing.answers.map((answer) => (
+          {(questionData.answers || []).map((answer) => (
             <Box
               key={answer.id}
               sx={{
@@ -244,14 +188,14 @@ const ContentQuestion = ({ question,handleQuestion }) => {
               <TextField
                 disabled={!isEditMode}
                 sx={{ flexGrow: 1 }}
-                value={answer.content}
+                value={answer.content || ""}
                 onChange={(e) => {
-                  const updatedOptions = questionMixing.answers.map((opt) =>
+                  const updatedOptions = (questionData.answers || []).map((opt) =>
                     opt.id === answer.id
                       ? { ...opt, content: e.target.value }
                       : opt
                   );
-                  setQuestionMixing({ ...questionMixing, answers: updatedOptions });
+                  setQuestionData({ ...questionData, answers: updatedOptions });
                 }}
               />
               <FormControlLabel
@@ -268,7 +212,6 @@ const ContentQuestion = ({ question,handleQuestion }) => {
               <IconButton
                 onClick={() => handleDeleteAnswer(answer)}
                 color="error"
-                sx={{ display: isEditMode ? 'inline-flex' : 'none' }}
               >
                 <Trash />
               </IconButton>
@@ -276,7 +219,7 @@ const ContentQuestion = ({ question,handleQuestion }) => {
           ))}
         </RadioGroup>
 
-        {question.isExplain === "false" ? null : (
+        {question?.isExplain !== "false" && (
           <>
             <Typography variant="h6" sx={{ mt: 2 }}>
               Explain:
@@ -285,10 +228,10 @@ const ContentQuestion = ({ question,handleQuestion }) => {
               sx={{ width: "90%" }}
               multiline
               rows={2}
-              value={questionMixing.explanation || ""}
+              value={questionData.explanation || ""}
               onChange={(e) => {
-                setQuestionMixing({
-                  ...questionMixing,
+                setQuestionData({
+                  ...questionData,
                   explanation: e.target.value,
                 });
               }}
@@ -305,13 +248,12 @@ const ContentQuestion = ({ question,handleQuestion }) => {
             sx={{
               bgcolor: "#9dc45f",
               "&:hover": { bgcolor: "#8ab54e" },
-              marginLeft: question.isExplain === "false" ? 0 : "1rem",
+              marginLeft: question?.isExplain === "false" ? 0 : "1rem",
               whiteSpace: "nowrap",
               height: "auto",
               padding: "0.1rem 1.5rem",
-              display: isEditMode ? 'inline-flex' : 'none'
             }}
-  
+            disabled={!isEditMode}
           >
             Add new answer
           </Button>
@@ -331,7 +273,7 @@ const ContentQuestion = ({ question,handleQuestion }) => {
           <ColorButton
             color="#98FB98"
             variant="contained"
-            onClick={handleSave}
+            onClick={() => handleSave(questionData)}
             disabled={!isEditMode}
           >
             Save
@@ -342,4 +284,4 @@ const ContentQuestion = ({ question,handleQuestion }) => {
   );
 };
 
-export default MixingQuiz;
+export default QuestionReadingDetails;

@@ -17,10 +17,10 @@ import {
 import { Trash, Upload, PlusCircle } from "lucide-react";
 import { styled } from "@mui/material/styles";
 import QuestionReadingDetails from "./QuestionReadingDetails";
-import { createTestReading, updateTestReading } from "api/test/TestReadingApi"; // import API
+import { createTestReading, updateTestReading } from "api/test/TestReadingApi"; 
 
-import { DeleteQuestionTest } from "../Mixing/DeleteQuestionTest";
-import { AddQuestionTest } from "../Mixing/AddQuestionTest";
+import { DeleteQuestionReadingTest } from "./DeleteQuestionReadingTest";
+import { AddQuestionReadingTest } from "./AddQuestionReadingTest";
 import { updateTestReadingQuestion } from "api/test/TestReadingQuestionApi";
 import {
   createTestReadingAnswer,
@@ -55,7 +55,7 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-function QuestionReading({ data, handleReading }) {
+function QuestionReadingTest({ data, handleReading }) {
   const initialData = data || {};
   const questions = initialData.questions || [];
 
@@ -132,15 +132,11 @@ function QuestionReading({ data, handleReading }) {
       content: formData.content,
       image: formData.image,
     };
-
-
-  
-      
     if (formData.id === '') { 
       try {
 
         const dataImage = await uploadFile(
-                "test/mixing/reading",
+                "test/reading",
                 initialData.testId.replace(/\s+/g, "_"),
                 image,
         );
@@ -160,8 +156,9 @@ function QuestionReading({ data, handleReading }) {
             if (questionData.id?.startsWith('add')) {
               questionData.testReadingId = formData.id;
          
-              const id = await AddQuestionTest(initialData.test.id, "READING", questionData);
-       
+              const id = await AddQuestionReadingTest(initialData.test.id, questionData);
+              console.log(id);
+              
               
               await Promise.all(
                 (questionData.answers || []).map(async (answer) => {
@@ -192,7 +189,7 @@ function QuestionReading({ data, handleReading }) {
           initialData.image,
           image,
           initialData.testId,
-          "test/mixing/reading"
+          "test/reading"
         );
     
         if (newImage !== initialData.image) {
@@ -207,7 +204,7 @@ function QuestionReading({ data, handleReading }) {
           formData.questions
             .filter((questionData) => !questionData.id?.startsWith('add'))
             .map(async (questionData) => {
-       
+           
               await updateTestReadingQuestion(questionData.id, questionData);
         
               const answersToDelete =
@@ -245,25 +242,22 @@ function QuestionReading({ data, handleReading }) {
           })
         );
         for (const questiondelete of questionsDelete) {
-          await DeleteQuestionTest(
+          await DeleteQuestionReadingTest(
             initialData.test.id,
-            "READING",
+
             questiondelete,
             questiondelete.serial,
             1
           );
         }
-        
-
         try {
           for (const questionData of formData.questions.filter((questionData) => questionData.id?.startsWith('add'))) {
             questionData.testReadingId = formData.id;
             console.log(questionData);
         
-            // Thêm câu hỏi mới
-            const id = await AddQuestionTest(initialData.test.id, 'READING', questionData);
+
+            const id = await AddQuestionReadingTest(initialData.test.id,  questionData);
         
-            // Thêm từng câu trả lời một
             for (const answer of (questionData.answers || [])) {
               answer.testQuestionReadingId = id;
               if (answer.id.startsWith('add')) {
@@ -360,11 +354,6 @@ const handleDeleteQuestion = async (questionToDelete) => {
               return Math.max(...allQuestions.map((q) => q.serial)) + 1;
             }
           }
-    
-          if (formData.test.testMixingQuestions && formData.test.testMixingQuestions.length > 0) {
-            return Math.max(...formData.test.testMixingQuestions.map((q) => q.serial)) + 1;
-          }
-    
           return 1;
         })(),
      
@@ -532,4 +521,4 @@ const handleDeleteQuestion = async (questionToDelete) => {
   );
 }
 
-export default QuestionReading;
+export default QuestionReadingTest;

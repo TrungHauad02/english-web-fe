@@ -22,6 +22,7 @@ export const deleteFile = async (fileUrl) => {
   }
 };
 
+
 export const downloadFile = async (fileUrl) => {
   try {
     const res = await apiClient.post(
@@ -37,3 +38,4 @@ export const downloadFile = async (fileUrl) => {
     throw error;
   }
 };
+

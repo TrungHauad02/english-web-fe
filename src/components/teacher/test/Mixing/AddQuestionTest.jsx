@@ -58,10 +58,6 @@ export  async function AddQuestionTest(idTest, type, testAdd) {
             break;
   
           case 'LISTENING':
-            if (type === 'LISTENING') {
-                const response = await createTestListeningQuestion(testAdd);
-                idNew = response.id;
-              }
             await Promise.all(testListenings.map(async (testListening) => {
                 await Promise.all(testListening.questions.map(async (question) => {
                   if (question.serial >= serialTestAdd) {
@@ -70,13 +66,13 @@ export  async function AddQuestionTest(idTest, type, testAdd) {
                   }
                 }));
               }));
+              if (type === 'LISTENING') {
+                const response = await createTestListeningQuestion(testAdd);
+                idNew = response.id;
+              }
             break;
   
           case 'SPEAKING':
-            if (type === 'SPEAKING') {
-                const response = await createTestSpeakingQuestion(testAdd);
-                idNew = response.id;
-              }
             await Promise.all(testSpeakings.map(async (testSpeaking) => {
                 await Promise.all(testSpeaking.questions.map(async (question) => {
                   if (question.serial >= serialTestAdd) {
@@ -85,20 +81,23 @@ export  async function AddQuestionTest(idTest, type, testAdd) {
                   }
                 }));
               }));
+              if (type === 'SPEAKING') {
+                const response = await createTestSpeakingQuestion(testAdd);
+                idNew = response.id;
+              }
             break;
   
           case 'WRITING':
-            if (type === 'WRITING') {
-                const response = await createTestWriting(testAdd);
-                idNew = response.id;
-              }
-            
             await Promise.all(testWritings.map(async (testWriting) => {
                 if (testWriting.serial > serialTestAdd) {
                   testWriting.serial += 1;
                   await updateTestWriting(testWriting.id, testWriting);
                 }
               }));
+              if (type === 'WRITING') {
+                const response = await createTestWriting(testAdd);
+                idNew = response.id;
+              }
               break;
           default:
             throw new Error('Invalid question type');
@@ -110,4 +109,6 @@ export  async function AddQuestionTest(idTest, type, testAdd) {
   
     return idNew;
   }
+
+  
   
