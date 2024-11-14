@@ -21,7 +21,7 @@ import { useEffect } from "react";
 import { getListTestByType, getListTest } from "api/test/listTestApi";
 import CustomPagination from "shared/component/pagination/CustomPagination";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import NewTest from "./NewTest";
 const ColorButton = styled(Button)(({ color }) => ({
   borderRadius: "8px",
   padding: "8px 24px",
@@ -48,6 +48,21 @@ const TestManagement = () => {
   const [currtype, setCurrtype] = useState(type.mixing);
   const [totalPage, setTotalPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const [open, setOpen] = useState(false);
+  const [newTestSerial, setNewTestSerial] = useState(1);
+  const [version, setVersion] = useState(1);
+
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+
+    setOpen(false);
+    setVersion(version+1);
+   
+  };
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -61,8 +76,11 @@ const TestManagement = () => {
     const fetchData = async () => {
       const data = await getListTest(page, currtype);
       const tests = data.content;
-      setalltest(await getListTestByType(currtype));
-      console.log(tests);
+      const allTestsByType = await getListTestByType(currtype);
+      setalltest(allTestsByType);
+      const maxSerial = allTestsByType.reduce((max, test) => Math.max(max, test.serial), 0);
+      setNewTestSerial(maxSerial + 1);
+
       setTotalPage(data.totalPages);
 
       if (tests) {
@@ -70,7 +88,10 @@ const TestManagement = () => {
       } else {
         setList([]);
       }
+      
     };
+
+   
 
     fetchData();
   }, [page, currtype]);
@@ -123,7 +144,7 @@ const TestManagement = () => {
       >
         TEST MANAGEMENT
       </Typography>
-
+      <NewTest key={version} open={open} onClose={handleClose} serial = {newTestSerial} type = {currtype}  handlebtnDetail ={handlebtnDetail}/>
       <Box
         sx={{
           display: "flex",
@@ -159,6 +180,7 @@ const TestManagement = () => {
           color="#FFD700"
           variant="contained"
           sx={{ marginLeft: 2, whiteSpace: "nowrap" }}
+          onClick={handleOpen}
         >
           Add new test
         </ColorButton>

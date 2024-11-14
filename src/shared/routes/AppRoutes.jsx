@@ -20,6 +20,10 @@ import ListeningDetail from "../../components/teacher/details/listening/Listenin
 import WritingDetail from "../../components/teacher/details/writing/WritingDetail";
 import SpeakingDetail from "../../components/teacher/details/speaking/SpeakingDetail";
 import Mixing from "../../components/teacher/test/Mixing/Mixing";
+import Reading from "../../components/teacher/test/Reading/Reading";
+import Speaking from "../../components/teacher/test/Speaking/Speaking";
+import Listening from "../../components/teacher/test/Listening/Listening";
+import Writing from "../../components/teacher/test/Writing/Writing";
 import HomeTest from "../../components/teacher/test/HomeTest";
 import ListTest from "../../components/student/Test/ListTest";
 import TestListening from "../../components/student/Test/TestListening";
@@ -181,6 +185,22 @@ export default function AppRoutes() {
         {
           path: "test/mixing",
           element: <Mixing />,
+        },
+        {
+          path: "test/reading",
+          element: <Reading />,
+        },
+        {
+          path: "test/speaking",
+          element: <Speaking />,
+        },
+        {
+          path: "test/listening",
+          element: <Listening />,
+        },
+        {
+          path: "test/writing",
+          element: <Writing />,
         },
         {
           path: "test",

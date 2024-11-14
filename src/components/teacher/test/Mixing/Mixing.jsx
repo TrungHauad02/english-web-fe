@@ -47,12 +47,6 @@ function Mixing() {
 
   const handleRowClick = async (question) => {
     setQuestionUpdate(question);
-
-    
-    
-    
-    
-    
     try {
       let fetchedData;
       switch (question.type) {

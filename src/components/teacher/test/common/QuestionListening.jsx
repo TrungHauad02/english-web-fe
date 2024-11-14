@@ -17,16 +17,22 @@ import { Trash, Upload, PlusCircle } from "lucide-react";
 import { styled } from "@mui/material/styles";
 import QuestionListeningDetails from "./QuestionListeningDetails";
 import { createTestListening, updateTestListening } from "api/test/TestListeningApi";
-import { deleteQuestionTest, addQuestionTest } from "api/test/TestApi";
+
 import { DeleteQuestionTest } from "../Mixing/DeleteQuestionTest";
-import TestListening from "components/student/Test/TestListening";
+
 import { updateTestListeningQuestion } from "api/test/TestListeningQuestionApi";
 import {
   createTestListeningAnswer,
   updateTestListeningAnswer,
   deleteTestListeningAnswer,
 } from "api/test/TestListeningAnswerApi";
+import {
+  deleteFile,
+  uploadFile,
+} from "api/feature/uploadFile/uploadFileService";
+import {handleImageUpload,handleImageChange} from "../../../../shared/utils/uploadImageUtils"
 import { AddQuestionTest } from "../Mixing/AddQuestionTest";
+
 import { Create } from "@mui/icons-material";
 
 const FormContainer = styled(Paper)(({ theme }) => ({
@@ -54,7 +60,7 @@ const ColorButton = styled(Button)(({ color }) => ({
 function QuestionListening({ data, handleListening }) {
   const initialData = data || {};
   const questions = initialData.questions || [];
-
+  const [audio, setAudio] = useState(initialData?.content)
   const [formData, setFormData] = useState({
     ...initialData,
     questions: questions,
@@ -67,11 +73,7 @@ function QuestionListening({ data, handleListening }) {
   );
 
   const handleAudioUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setFormData((prev) => ({ ...prev, content: url }));
-    }
+    handleImageChange(event,setAudio)
   };
 
   const handleQuestionSelect = (id) => {
@@ -125,14 +127,27 @@ function QuestionListening({ data, handleListening }) {
 
   const handleSave = async () => {
     formData.type = "LISTENING";
-    const updatedData = {
+    let updatedData = {
       ...initialData,
-      content: formData.content,
+      content: audio,
       transcript: formData.transcript,
     };
     if (formData.id === '') { 
       try {
-  
+
+        const dataAudio = await uploadFile(
+          "test/mixing/listening",
+          initialData.testId.replace(/\s+/g, "_"),
+          audio,
+        );
+      
+        if (dataAudio.url !== initialData.content) {
+          updatedData = {
+            ...updatedData,
+            content: dataAudio.url,
+          };
+        }
+        
         const testListening = await createTestListening(updatedData);
         formData.id = testListening.id;
  
@@ -170,6 +185,21 @@ function QuestionListening({ data, handleListening }) {
     else
     {
     try {
+     
+      const newAudio = await handleImageUpload(
+        initialData.content,
+        audio,
+        initialData.testId,
+        "test/mixing/listening"
+      );
+  
+      if (newAudio !== initialData.content) {
+        updatedData = {
+          ...updatedData,
+          content: newAudio,
+        };
+      }
+
       await updateTestListening(updatedData.id, updatedData)
        
      
@@ -226,12 +256,9 @@ function QuestionListening({ data, handleListening }) {
       try {
         for (const questionData of formData.questions.filter((questionData) => questionData.id?.startsWith('add'))) {
           questionData.testListeningId = formData.id;
-          console.log(questionData);
-      
-          // Thêm câu hỏi mới
+     
           const id = await AddQuestionTest(initialData.test.id, 'LISTENING', questionData);
-      
-          // Thêm từng câu trả lời một
+    
           for (const answer of (questionData.answers || [])) {
             answer.testQuestionListeningId = id;
             if (answer.id.startsWith('add')) {
@@ -310,7 +337,7 @@ function QuestionListening({ data, handleListening }) {
       setQuestionSelected(null);
     }
   };
-  
+
   const handleAddQuestion = () => {
    
     const newQuestion = {
@@ -373,10 +400,10 @@ function QuestionListening({ data, handleListening }) {
               Audio
             </Typography>
             <Box sx={{ mb: 2 }}>
-              {formData.content && (
+              {audio && (
                 <audio
                   controls
-                  src={formData.content}
+                  src={audio}
                   style={{ width: "100%" }}
                 />
               )}

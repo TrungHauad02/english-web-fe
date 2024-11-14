@@ -189,32 +189,24 @@ function InformationTest({ data }) {
         </Box>
 
         <ButtonContainer>
-          {editMode ? (
-            <>
-              <ColorButton
-                color="#F08080"
-                variant="contained"
-                onClick={handleCancel}
-              >
-                Cancel
-              </ColorButton>
-              <ColorButton
-                color="#98FB98"
-                variant="contained"
-                onClick={handleSave}
-              >
-                Save
-              </ColorButton>
-            </>
-          ) : (
-            <ColorButton
-              color="#FFD700"
-              variant="contained"
-              onClick={handleEdit}
-            >
-              Edit
-            </ColorButton>
-          )}
+          <ColorButton
+            color="#F08080"
+            variant="contained"
+            onClick={handleCancel}
+          >
+            Cancel
+          </ColorButton>
+          <ColorButton color="#FFD700" variant="contained" onClick={handleEdit}>
+            Edit
+          </ColorButton>
+          <ColorButton
+            color="#98FB98"
+            variant="contained"
+            onClick={handleSave}
+            disabled={!editMode}
+          >
+            Save
+          </ColorButton>
         </ButtonContainer>
       </FormContainer>
     </Box>

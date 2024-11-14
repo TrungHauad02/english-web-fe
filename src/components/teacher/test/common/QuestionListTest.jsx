@@ -17,17 +17,6 @@ import { styled } from "@mui/material/styles";
 import { PlusCircle } from "lucide-react";
 import DeleteIcon from "@mui/icons-material/DeleteOutline";
 import { DeleteQuestionTest } from "../Mixing/DeleteQuestionTest";
-import { createTestMixingQuestion, updateTestMixingQuestion, deleteTestMixingQuestion } from "api/test/TestMixingQuestionApi";
-
-import { updateTestReadingQuestion } from "api/test/TestReadingQuestionApi";
-import { updateTestListeningQuestion } from "api/test/TestListeningQuestionApi";
-import { updateTestSpeakingQuestion } from "api/test/TestSpeakingQuestionApi";
-
-import { createTestListening, deleteTestListening } from "api/test/TestListeningApi";
-import { createTestReading, deleteTestReading } from "api/test/TestReadingApi";
-import { createTestSpeaking, deleteTestSpeaking } from "api/test/TestSpeakingApi";
-import { createTestWriting, updateTestWriting, deleteTestWriting } from "api/test/TestWritingApi";
-import { deleteQuestionTest, addQuestionTest } from "api/test/TestApi";
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
