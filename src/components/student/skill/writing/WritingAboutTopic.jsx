@@ -19,9 +19,9 @@ export const StyledPaper = styled(Paper)(({ theme }) => ({
   borderRadius: "8px",
 }));
 
-export default function WritingAboutTopic({writing}) {
-  const {  essay, wordCount, handleEssayChange, comment, handleSubmit } =
-    useWritingAboutTopic();
+export default function WritingAboutTopic({ writing }) {
+  const { essay, wordCount, handleEssayChange, comment, handleSubmit, score } =
+    useWritingAboutTopic(writing.topic);
 
   const color = useColor();
 
@@ -74,10 +74,25 @@ export default function WritingAboutTopic({writing}) {
           Submit
         </BasicButton>
       </Grid2>
+      {score && (
+        <Grid2
+          item
+          xs={12}
+          sx={{ bgcolor: "rgba(0, 0, 0, 0.05)", borderRadius: "0.5rem" }}
+        >
+          <CollapsibleSection buttonText="Score">
+            <Comment content={"Score: " + score} />
+          </CollapsibleSection>
+        </Grid2>
+      )}
       {comment && (
-        <Grid2 item xs={12} sx={{ bgcolor: "rgba(0, 0, 0, 0.05)", borderRadius: "0.5rem"}}>
+        <Grid2
+          item
+          xs={12}
+          sx={{ bgcolor: "rgba(0, 0, 0, 0.05)", borderRadius: "0.5rem" }}
+        >
           <CollapsibleSection buttonText="Comments">
-            <Comment content={comment}/>
+            <Comment content={"Comment: " + comment} />
           </CollapsibleSection>
         </Grid2>
       )}
