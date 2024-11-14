@@ -5,13 +5,15 @@ import SearchPanel from '../common/Filter';
 import StudentTeacherList from '../common/StudentTeacherList';
 import DeleteConfirmationDialog from '../common/DeleteConfirmationDialog';
 import TeacherInfo from './common/TeacherInfo';
-import { handleAddTeacher, handleClear, handleDeleteTeacher, handleDetailClick, handleEditToggle, handleImageChange, handleNewToggle, handleSaveEdit, handleTeacherClick, useTeacherData} from './common/HandleTeacher';
+import { handleImageChange, handleAddTeacher, handleDetailClick, handleEditToggle, handleNewToggle, handleSaveEdit, handleTeacherClick, useTeacherData } from './common/HandleTeacher';
+import { handleClear } from '../common/handleClear';
+import { handleDelete } from '../common/handleDelete';
 
 function ManageTeacher() {
     const [searchName, setSearchName] = useState('');
     const [searchStartDate, setSearchStartDate] = useState('');
     const [searchEndDate, setSearchEndDate] = useState('');
-    const [searchLevel, setSearchLevel] = useState('All');
+    const [searchLevel, setSearchLevel] = useState('ALL');
     const [size, setSize] = useState(10);
     const [openProfile, setOpenProfile] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
@@ -19,8 +21,10 @@ function ManageTeacher() {
     const [isNew, setIsNew] = useState(false);
     const [avatar, setAvatar] = useState('/header_user.png');
     const [avatarFile, setAvatarFile] = useState(null);
+    const [reload, setReload] = useState(false);
     const levelsForSearch = ['ALL', 'BACHELOR', 'MASTER', 'DOCTOR', 'PROFESSOR'];
     const levelsForForm = ['BACHELOR', 'MASTER', 'DOCTOR', 'PROFESSOR'];
+    const [teachers, setTeachers] = useState([]);
     const [selectedTeacher, setSelectedTeacher] = useState({
         name: '',
         email: '',
@@ -33,12 +37,12 @@ function ManageTeacher() {
         id: null,
     });
 
-    const { teachers, filteredTeachers, setFilteredTeachers, loadTeachers, lastTeacherElementRef, setPage} = useTeacherData(searchName, searchLevel, searchStartDate, searchEndDate, size);
+    const { filteredTeachers, setFilteredTeachers, loadTeachers, lastTeacherElementRef, setPage } = useTeacherData(searchName, searchLevel, searchStartDate, searchEndDate, size);
 
     useEffect(() => {
-        setPage(0); 
+        setPage(0);
         loadTeachers();
-    }, [searchName, searchLevel, searchStartDate, searchEndDate, size]);
+    }, [reload, searchName, searchLevel, searchStartDate, searchEndDate, size]);
 
     return (
         <Grid container spacing={2} style={{ paddingTop: '3rem', paddingRight: '5%', paddingLeft: '5%', paddingBottom: '3rem' }}>
@@ -97,11 +101,13 @@ function ManageTeacher() {
                 handleImageChange={(e) => handleImageChange(e, selectedTeacher, setSelectedTeacher, setAvatarFile)}
                 setConfirmDeleteOpen={setConfirmDeleteOpen}
                 handleEditToggle={() => handleEditToggle(selectedTeacher, setIsEditing)}
-                handleSaveEdit={() => handleSaveEdit(selectedTeacher, teachers, setFilteredTeachers, setIsEditing, avatarFile)}
-                handleAddTeacher={() => handleAddTeacher(selectedTeacher, teachers, setFilteredTeachers, setSelectedTeacher, setAvatarFile, setIsNew)}
+                handleSaveEdit={() => handleSaveEdit(selectedTeacher, teachers, setTeachers, setFilteredTeachers, setIsEditing, avatarFile, setReload, setPage)}
+                handleAddTeacher={() => handleAddTeacher(selectedTeacher, teachers, setTeachers, setFilteredTeachers, setSelectedTeacher, avatarFile, setIsNew, setReload, setPage)}
                 handleNewToggle={() => handleNewToggle(setIsNew, setSelectedTeacher, setAvatarFile)}
-                handleClear={() => handleClear(setSelectedTeacher)}
-                handleDeleteTeacher={() => handleDeleteTeacher(selectedTeacher, teachers, setFilteredTeachers, setConfirmDeleteOpen, setSelectedTeacher)}
+                handleClear={() => handleClear(setSelectedTeacher, setIsNew)}
+                handleDeleteTeacher={() => handleDelete(selectedTeacher, teachers, setTeachers, setFilteredTeachers, setConfirmDeleteOpen, setSelectedTeacher, handleClear, setIsNew, setReload, setPage)}
+                setReload={setReload}
+                setPage={setPage}      
             />
 
             {/* Right Panel: List of Teachers */}
@@ -116,16 +122,21 @@ function ManageTeacher() {
             </Grid>
 
             <ProfileTeacher open={openProfile} handleClose={() => setOpenProfile(false)} teacher={selectedTeacher} />
+            
             <DeleteConfirmationDialog
                 open={confirmDeleteOpen}
                 handleClose={() => setConfirmDeleteOpen(false)}
-                handleDelete={() => handleDeleteTeacher(
+                handleDelete={() => handleDelete(
                     selectedTeacher,
                     teachers,
+                    setTeachers,
                     setFilteredTeachers,
                     setConfirmDeleteOpen,
                     setSelectedTeacher,
-                    handleClear
+                    handleClear,  
+                    setIsNew,
+                    setReload, 
+                    setPage
                 )}
             />
         </Grid>

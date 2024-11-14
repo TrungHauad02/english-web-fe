@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogTitle, TextField, Button, Stack, IconButton, InputAdornment, Typography} from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, TextField, Button, Stack, IconButton, InputAdornment, Typography } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { handlePasswordChange, handleClickShowNewPassword, handleClickShowReEnterPassword } from "./common/HandleChangePassword";
@@ -10,18 +10,12 @@ const ChangePassword = ({ open, handleClose }) => {
   const [reEnterPassword, setReEnterPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showReEnterPassword, setShowReEnterPassword] = useState(false);
-  const [error, setError] = useState("");
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
       <DialogTitle>Change Password</DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
-        {error && (
-            <Typography color="error" align="center" mb={2}>
-              {error}
-            </Typography>
-          )}
           <TextField
             label="Old Password"
             type="password"
@@ -82,7 +76,7 @@ const ChangePassword = ({ open, handleClose }) => {
             variant="contained"
             color="primary"
             onClick={() =>
-              handlePasswordChange(oldPassword, newPassword, reEnterPassword, setError, handleClose)
+              handlePasswordChange(oldPassword, newPassword, reEnterPassword, handleClose)
             }
           >
             Change Password

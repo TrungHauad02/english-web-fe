@@ -4,7 +4,6 @@ import { NavLink, useLocation } from "react-router-dom";
 import HeaderTypography from "shared/component/header/HeaderTypography";
 import SkillMenu from "./SkillMenu";
 import Profile from "../menu/profile/Profile";
-import { useAuth } from "security/AuthContext";
 import useColor from "shared/color/Color";
 import { useHeaderStudentHandlers } from "./common/HandleHeaderStudent"
 

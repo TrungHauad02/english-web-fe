@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Card, Avatar, TextField, FormControl, InputLabel, Select, MenuItem, Typography, Button } from '@mui/material';
 
-const TeacherInfo = ({ selectedTeacher, setSelectedTeacher, isEditing, isNew, levelsForForm, handleImageChange, setConfirmDeleteOpen, handleEditToggle, handleSaveEdit, handleAddTeacher,handleNewToggle, handleClear}) => {
+const TeacherInfo = ({ setAvatarFile, selectedTeacher, setSelectedTeacher, isEditing, isNew, levelsForForm, handleImageChange, setConfirmDeleteOpen, handleEditToggle, handleSaveEdit, handleAddTeacher, handleNewToggle, handleClear, handleDeleteTeacher, setReload, setPage }) => {
     return (
         <Grid item xs={12} md={4}>
             <Card sx={{ height: 450, padding: 2, bgcolor: "#F5F5F5" }}>
@@ -16,7 +16,7 @@ const TeacherInfo = ({ selectedTeacher, setSelectedTeacher, isEditing, isNew, le
                     fullWidth
                     label="Name"
                     margin="normal"
-                    value={selectedTeacher.name}
+                    value={selectedTeacher.name || ""}
                     onChange={(e) => setSelectedTeacher({ ...selectedTeacher, name: e.target.value })}
                     disabled={!isEditing && !isNew}
                 />
@@ -31,7 +31,7 @@ const TeacherInfo = ({ selectedTeacher, setSelectedTeacher, isEditing, isNew, le
                 <FormControl fullWidth margin="normal" disabled={!isEditing && !isNew}>
                     <InputLabel>Level</InputLabel>
                     <Select
-                        value={selectedTeacher.level}
+                        value={selectedTeacher.level || ""}
                         onChange={(e) => setSelectedTeacher({ ...selectedTeacher, level: e.target.value })}
                         disablePortal
                         MenuProps={{
@@ -57,7 +57,7 @@ const TeacherInfo = ({ selectedTeacher, setSelectedTeacher, isEditing, isNew, le
                     id="upload-button"
                     type="file"
                     sx={{ marginBottom: 2 }}
-                    onChange={handleImageChange}
+                    onChange={(e) => handleImageChange(e, selectedTeacher, setSelectedTeacher, setAvatarFile)}
                     disabled={!isEditing && !isNew}
                 />
                 <Button component="span" sx={{ pb: 5 }} />
@@ -67,11 +67,11 @@ const TeacherInfo = ({ selectedTeacher, setSelectedTeacher, isEditing, isNew, le
                         <Button
                             fullWidth
                             variant="contained"
-                            color="error"
-                            sx={{ bgcolor: '#FF6655' }}
-                            onClick={() => setConfirmDeleteOpen(true)} 
+                            color={selectedTeacher.status === "INACTIVE" ? "primary" : "error"}
+                            sx={{ bgcolor: selectedTeacher.status === "INACTIVE" ? '#64FF64' : '#FF6655' }}
+                            onClick={selectedTeacher.status === "INACTIVE" ? handleDeleteTeacher : () => setConfirmDeleteOpen(true)}
                         >
-                            Delete
+                            {selectedTeacher.status === "INACTIVE" ? "Restore" : "Delete"}
                         </Button>
                     </Grid>
                     <Grid item xs={3}>

@@ -3,24 +3,25 @@ import { Button, Stack } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 import HeaderTypography from "../../../shared/component/header/HeaderTypography";
 import { useAuth } from "../../../security/AuthContext";
+import useColor from "shared/color/Color";
 
 const icon = "/icon.png";
 
 function HeaderAdmin() {
   const navigate = useNavigate();
   const auContext = useAuth();
-  console.log("refresing headers")
   const handleLogout = () => {
     auContext.Logout();
     navigate("/account");
   };
+  const {HeaderBg} = useColor();
 
   return (
     <Stack
       direction={"row"}
       justifyContent={"space-between"}
       sx={{
-        backgroundColor: "#6EC2F7",
+        backgroundColor: HeaderBg,
         color: "#fff",
         padding: "0.5rem",
         position: "fixed",

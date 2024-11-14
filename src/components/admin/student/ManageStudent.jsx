@@ -5,7 +5,9 @@ import SearchPanel from '../common/Filter';
 import StudentTeacherList from '../common/StudentTeacherList';
 import DeleteConfirmationDialog from '../common/DeleteConfirmationDialog';
 import StudentInfo from './common/StudentInfo';
-import { handleDeleteStudent, handleClearSelection, useStudentData } from './common/HandleStudent';
+import { useStudentData } from './common/HandleStudent';
+import { handleDelete } from '../common/handleDelete';
+import { handleClear } from '../common/handleClear';
 
 function ManageStudent() {
     const [searchName, setSearchName] = useState('');
@@ -14,6 +16,9 @@ function ManageStudent() {
     const [size, setSize] = useState(10);
     const [openProfile, setOpenProfile] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const [isNew, setIsNew] = useState(false);
+    const [reload, setReload] = useState(false);
+    const [students, setStudents] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState({
         name: '',
         email: '',
@@ -26,8 +31,6 @@ function ManageStudent() {
     });
 
     const {
-        students,
-        setStudents,
         filteredStudents,
         setFilteredStudents,
         loadStudents,
@@ -38,7 +41,7 @@ function ManageStudent() {
     useEffect(() => {
         setPage(0);
         loadStudents();
-    }, [searchName, searchStartDate, searchEndDate, size]);
+    }, [reload, searchName, searchStartDate, searchEndDate, size]);
 
     return (
         <Grid container spacing={2} style={{ paddingTop: '2rem', paddingRight: '5%', paddingLeft: '5%', paddingBottom: '3rem' }}>
@@ -51,7 +54,7 @@ function ManageStudent() {
                     searchEndDate={searchEndDate}
                     setSearchEndDate={setSearchEndDate}
                     handleSearch={() => {
-                        setPage(0); 
+                        setPage(0);
                         loadStudents();
                     }}
                 />
@@ -60,8 +63,22 @@ function ManageStudent() {
             <Grid item xs={12} md={4}>
                 <StudentInfo
                     selectedStudent={selectedStudent}
-                    handleClearSelection={() => handleClearSelection(setSelectedStudent)}
                     setConfirmDeleteOpen={setConfirmDeleteOpen}
+                    handleDelete={() => handleDelete(
+                        selectedStudent,
+                        students,
+                        setStudents,
+                        setFilteredStudents,
+                        setConfirmDeleteOpen,
+                        setSelectedStudent,
+                        handleClear,
+                        setIsNew,
+                        setReload,
+                        setPage
+                    )}
+                    handleClear={() => handleClear(setSelectedStudent, setIsNew)}
+                    setReload={setReload}
+                    setPage={setPage}
                 />
             </Grid>
 
@@ -78,14 +95,23 @@ function ManageStudent() {
                 />
             </Grid>
 
-            {selectedStudent && (
-                <ProfileStudent open={openProfile} handleClose={() => setOpenProfile(false)} student={selectedStudent} />
-            )}
+            <ProfileStudent open={openProfile} handleClose={() => setOpenProfile(false)} student={selectedStudent} />
 
             <DeleteConfirmationDialog
                 open={confirmDeleteOpen}
                 handleClose={() => setConfirmDeleteOpen(false)}
-                handleDelete={() => handleDeleteStudent(students, selectedStudent, setStudents, setFilteredStudents, setConfirmDeleteOpen, setSelectedStudent)}
+                handleDelete={() => handleDelete(
+                    selectedStudent,
+                    students,
+                    setStudents,
+                    setFilteredStudents,
+                    setConfirmDeleteOpen,
+                    setSelectedStudent,
+                    handleClear,
+                    setIsNew,
+                    setReload,
+                    setPage
+                )}
             />
         </Grid>
     );

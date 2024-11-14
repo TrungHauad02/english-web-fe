@@ -11,13 +11,12 @@ const SignIn = ({ toggleForm }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const navigate = useNavigate();
   const authContext = useAuth();
 
   const handleSignInClick = async () => {
-    await handleSignIn(email, password, authContext, navigate, setError);
+    await handleSignIn(email, password, authContext, navigate);
   };  
 
   return (
@@ -33,11 +32,6 @@ const SignIn = ({ toggleForm }) => {
       <Typography variant="h5" align="center" mb={2}>
         Sign In
       </Typography>
-      {error && (
-        <Typography color="error" align="center" mb={2}>
-          {error}
-        </Typography>
-      )}
       <TextField
         fullWidth
         variant="outlined"

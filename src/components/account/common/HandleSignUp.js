@@ -1,4 +1,5 @@
 import { signUpStudent } from "api/account/signUpStudentService";
+import { toast } from "react-toastify";
 
 export const validateEmail = (email) => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -14,14 +15,14 @@ export const handleClickShowPassword = (showPassword, setShowPassword) => {
   setShowPassword(!showPassword);
 };
 
-export const handleSignUp = async (name, email, password, rePassword, setError, toggleForm, emailInputRef) => {
+export const handleSignUp = async (name, email, password, rePassword, toggleForm, emailInputRef) => {
   if (!name || !email || !password || !rePassword) {
-    setError("Please fill in all fields.");
+    toast.error("Please fill in all fields.");
     return;
   }
 
   if (!validateEmail(email)) {
-    setError("Invalid email format. Please enter a valid email address.");
+    toast.error("Invalid email format. Please enter a valid email address.");
     if (emailInputRef.current) {
       emailInputRef.current.focus();
     }
@@ -29,14 +30,14 @@ export const handleSignUp = async (name, email, password, rePassword, setError, 
   }
 
   if (!validatePassword(password)) {
-    setError(
+    toast.error(
       "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character."
     );
     return;
   }
 
   if (password !== rePassword) {
-    setError("Passwords do not match.");
+    toast.error("Passwords do not match.");
     return;
   }
 
@@ -44,10 +45,9 @@ export const handleSignUp = async (name, email, password, rePassword, setError, 
     const data = { name, email, password, role: "STUDENT" };
     await signUpStudent(data);
 
-    setError("Sign Up successful!"); 
+    toast.success("Sign Up successful!"); 
     toggleForm("signin"); 
   } catch (error) {
-    console.error("Error during sign up:", error);
-    setError("Sign Up failed. Please try again."); 
+    toast.error("Sign Up failed. Please try again."); 
   }
 };

@@ -1,12 +1,16 @@
 import { useState, useRef, useCallback } from 'react';
 import { getTeachers } from 'api/admin/teacher/TeacherService';
+import { updateUser } from 'api/user/userService';
+import { handleImageUpload } from 'shared/utils/uploadImageUtils';
+import { createTeacher } from 'api/admin/teacher/TeacherService';
+import { fetchUserInfo } from 'api/user/userService';
+import { toast } from 'react-toastify';
 
 export const useTeacherData = (searchName, searchLevel, searchStartDate, searchEndDate, size) => {
     const [teachers, setTeachers] = useState([]);
     const [filteredTeachers, setFilteredTeachers] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
-    const [error, setError] = useState('');
     const observer = useRef();
 
     const loadTeachers = async () => {
@@ -18,7 +22,7 @@ export const useTeacherData = (searchName, searchLevel, searchStartDate, searchE
                 level: searchLevel === 'ALL' ? undefined : searchLevel,
             };
             const data = await getTeachers(page, size, "id", "asc", filters);
-            
+
             const validData = data.content.map(teacher => ({
                 ...teacher,
                 name: teacher.name || '',
@@ -34,7 +38,7 @@ export const useTeacherData = (searchName, searchLevel, searchStartDate, searchE
             setFilteredTeachers(prevTeachers => page === 0 ? validData : [...prevTeachers, ...validData]);
             setHasMore(data.content.length > 0);
         } catch (error) {
-            setError("Không thể tải danh sách giáo viên. Vui lòng thử lại sau.");
+            toast.error("Unable to load teacher list. Please try again later.");
         }
     };
 
@@ -55,17 +59,7 @@ export const useTeacherData = (searchName, searchLevel, searchStartDate, searchE
         loadTeachers,
         lastTeacherElementRef,
         setPage,
-        error,
     };
-};
-
-export const handleImageChange = (e, selectedTeacher, setSelectedTeacher, setAvatarFile) => {
-    const file = e.target.files[0];
-    if (file) {
-        const imageUrl = URL.createObjectURL(file);
-        setSelectedTeacher({ ...selectedTeacher, avatar: imageUrl }); 
-        setAvatarFile(file); 
-    }
 };
 
 export const handleTeacherClick = (teacher, setSelectedTeacher, setAvatar) => {
@@ -75,7 +69,7 @@ export const handleTeacherClick = (teacher, setSelectedTeacher, setAvatar) => {
         password: teacher.password,
         level: teacher.level,
         startDate: teacher.startDate,
-        endDate: teacher.status === 'Inactive' ? teacher.endDate : '',
+        endDate: teacher.endDate,
         avatar: teacher.avatar,
         status: teacher.status,
         id: teacher.id,
@@ -97,69 +91,67 @@ export const generatePassword = () => {
     return password;
 };
 
-export const handleAddTeacher = (selectedTeacher, teachers, setTeachers, setFilteredTeachers, setSelectedTeacher, setAvatarFile, setIsNew) => {
-    if (selectedTeacher.name.trim() === '' || selectedTeacher.email.trim() === '' || selectedTeacher.level.trim() === '') {
-        alert('Please fill in all required fields: Name, Email, and Level.');
+export const handleImageChange = (event, selectedTeacher, setSelectedTeacher, setAvatarFile) => {
+    const file = event.target.files[0];
+    if (file) {
+        setAvatarFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setSelectedTeacher({
+                ...selectedTeacher,
+                avatar: reader.result,
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
+export const handleAddTeacher = async ( selectedTeacher, teachers, setTeachers,  setFilteredTeachers, setSelectedTeacher, avatarFile, setIsNew, setReload, setPage) => {
+    if (!selectedTeacher.name.trim() || !selectedTeacher.email.trim() || !selectedTeacher.level.trim()) {
+        toast.error('Please fill in all required fields: Name, Email, and Level.');
         return;
     }
 
-    const newTeacher = {
-        id: teachers.length + 1,
-        name: selectedTeacher.name,
-        password: generatePassword(),
-        startDate: new Date().toISOString().split('T')[0],
-        status: 'Active',
-        level: selectedTeacher.level,
-        email: selectedTeacher.email,
-        avatar: selectedTeacher.avatar ? selectedTeacher.avatar : '/header_user.png',
-        endDate: '',
-    };
+    try {
+        let newavatar = null;
+        if (avatarFile) {
+            newavatar = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = (error) => reject(error);
+                reader.readAsDataURL(avatarFile);
+            });
+        }
 
-    setTeachers([...teachers, newTeacher]);
-    setFilteredTeachers([...teachers, newTeacher]);
-    setSelectedTeacher({ name: '', email: '', level: '', startDate: '', endDate: '', avatar: '', status: '' });
-    setAvatarFile(null);
-    setIsNew(false);
-};
+        const newImage = await handleImageUpload(null, newavatar, selectedTeacher.email, "teacher/signup");
 
-export const handleDeleteTeacher = (selectedTeacher, teachers, setTeachers, setFilteredTeachers, setConfirmDeleteOpen, setSelectedTeacher, handleClear) => {
-    if (!Array.isArray(teachers)) {
-        console.error("Teachers is not an array:", teachers);
-        return; // Stop execution if teachers is not an array
+        const newTeacherData = {
+            name: selectedTeacher.name,
+            email: selectedTeacher.email,
+            password: generatePassword(),
+            startDate: new Date().toISOString().split("T")[0],
+            level: selectedTeacher.level,
+            avatar: newImage,
+            status: "ACTIVE",
+        };
+
+        const createdTeacher = await createTeacher(newTeacherData);
+        setTeachers([...teachers, createdTeacher]);
+        setFilteredTeachers([...teachers, createdTeacher]);
+        setSelectedTeacher({ name: "", email: "", level: "", avatar: "", status: "" });
+        setIsNew(false);
+        setReload(prev => !prev); 
+        setPage(0);
+    } catch (error) {
+        toast.error(error.response?.data?.message || "An unexpected error occurred. Please try again.");
     }
-
-    const updatedTeachers = teachers.map(teacher =>
-        teacher.id === selectedTeacher.id ? {
-            ...teacher,
-            status: 'Inactive',
-            endDate: new Date().toISOString().split('T')[0]
-        } : teacher
-    );
-
-    setTeachers(updatedTeachers);
-    setFilteredTeachers(updatedTeachers);
-    setConfirmDeleteOpen(false);
-
-    handleClear(setSelectedTeacher); 
-};
-
-export const handleClear = (setSelectedTeacher) => {
-    setSelectedTeacher({
-        name: '',
-        email: '',
-        password: '',
-        level: '',
-        startDate: '',
-        endDate: '',
-        avatar: '', 
-        status: 'Active', 
-        id: null, 
-    });
 };
 
 export const handleEditToggle = (selectedTeacher, setIsEditing) => {
-    if (selectedTeacher.id && selectedTeacher.name.trim() && selectedTeacher.level.trim()) {
+    if (selectedTeacher.id && selectedTeacher.name?.trim() && selectedTeacher.email?.trim()) {
         setIsEditing((prev) => !prev);
+    } else {
+        toast.error("Please ensure all required fields are filled before editing.");
     }
 };
 
@@ -169,25 +161,57 @@ export const handleNewToggle = (setIsNew, setSelectedTeacher, setAvatarFile) => 
     setAvatarFile(null);
 };
 
-export const handleSaveEdit = (selectedTeacher, teachers, setTeachers, setFilteredTeachers, setIsEditing, avatarFile) => {
-    if (selectedTeacher.name.trim() === '' || selectedTeacher.level.trim() === '') {
-        alert('Please fill in all required fields.');
-        return;
+export const handleSaveEdit = async (selectedTeacher, teachers, setTeachers, setFilteredTeachers, setIsEditing, avatarFile, setReload, setPage) => {
+    try {
+        // Lấy thông tin người dùng hiện tại
+        let userInfo = await fetchUserInfo();
+        let id = selectedTeacher.id;
+
+        // Đọc file avatar nếu có
+        let newAvatar = null;
+        if (avatarFile) {
+            newAvatar = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = (error) => reject(error);
+                reader.readAsDataURL(avatarFile);
+            });
+        }
+
+        // Upload hình ảnh mới nếu có, nếu không giữ nguyên avatar cũ
+        const newImage = newAvatar
+            ? await handleImageUpload(userInfo.avatar, newAvatar, selectedTeacher.email, "teacher/signup")
+            : userInfo.avatar;
+
+        // Dữ liệu người dùng được cập nhật
+        const updatedUserData = {
+            id: selectedTeacher.id,
+            name: selectedTeacher.name,
+            level: selectedTeacher.level,
+            avatar: newImage,
+        };
+
+        // Cập nhật thông tin người dùng
+        await updateUser(updatedUserData, id);
+
+        // Cập nhật danh sách giáo viên
+        const updatedTeachers = teachers.map((teacher) =>
+            teacher.id === selectedTeacher.id
+                ? { ...selectedTeacher, avatar: newImage }
+                : teacher
+        );
+
+        // Cập nhật state
+        setTeachers(updatedTeachers);
+        setFilteredTeachers(updatedTeachers);
+        toast.success('Teacher information updated successfully!');
+        setIsEditing(false);
+        setReload(prev => !prev); 
+        setPage(0);
+    } catch (error) {
+        console.error("Error updating teacher:", error);
+        toast.error("An error occurred while updating the teacher's information. Please try again.");
     }
-
-    const updatedTeachers = teachers.map(teacher =>
-        teacher.id === selectedTeacher.id
-            ? {
-                ...selectedTeacher,
-                avatar: avatarFile ? URL.createObjectURL(avatarFile) : teacher.avatar, 
-            }
-            : teacher
-    );
-
-    setTeachers(updatedTeachers);
-    setFilteredTeachers(updatedTeachers);
-    alert('Teacher information updated successfully!');
-    setIsEditing(false);
 };
 
 
