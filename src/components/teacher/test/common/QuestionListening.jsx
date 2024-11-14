@@ -30,7 +30,7 @@ import {
   deleteFile,
   uploadFile,
 } from "api/feature/uploadFile/uploadFileService";
-import {handleImageUpload,handleImageChange} from "../../../../shared/utils/uploadImageUtils"
+import {handleFileUpload,handleFileChange} from "../../../../shared/utils/uploadImageUtils"
 import { AddQuestionTest } from "../Mixing/AddQuestionTest";
 
 import { Create } from "@mui/icons-material";
@@ -73,7 +73,7 @@ function QuestionListening({ data, handleListening }) {
   );
 
   const handleAudioUpload = (event) => {
-    handleImageChange(event,setAudio)
+    handleFileChange(event,setAudio)
   };
 
   const handleQuestionSelect = (id) => {
@@ -186,7 +186,7 @@ function QuestionListening({ data, handleListening }) {
     {
     try {
      
-      const newAudio = await handleImageUpload(
+      const newAudio = await handleFileUpload(
         initialData.content,
         audio,
         initialData.testId,

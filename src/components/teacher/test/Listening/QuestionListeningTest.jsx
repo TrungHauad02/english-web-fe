@@ -21,7 +21,7 @@ import {
   deleteFile,
   uploadFile,
 } from "api/feature/uploadFile/uploadFileService";
-import {handleImageUpload,handleImageChange} from "../../../../shared/utils/uploadImageUtils"
+import {handleFileUpload,handleFileChange} from "../../../../shared/utils/uploadImageUtils"
 import { DeleteQuestionListeningTest } from "./DeleteQuestionListeningTest";
 
 import { updateTestListeningQuestion } from "api/test/TestListeningQuestionApi";
@@ -71,7 +71,7 @@ function QuestionListeningTest({ data, handleListening }) {
   );
 
   const handleAudioUpload = (event) => {
-    handleImageChange(event,setAudio);
+    handleFileChange(event,setAudio);
   };
 
   const handleQuestionSelect = (id) => {
@@ -184,7 +184,7 @@ function QuestionListeningTest({ data, handleListening }) {
     try {
 
        
-      const newAudio = await handleImageUpload(
+      const newAudio = await handleFileUpload(
         initialData.content,
         audio,
         initialData.testId,

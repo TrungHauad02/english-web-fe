@@ -27,7 +27,7 @@ import {
   updateTestReadingAnswer,
   deleteTestReadingAnswer,
 } from "api/test/TestReadingAnswerApi";
-import {handleImageUpload,handleImageChange} from "../../../../shared/utils/uploadImageUtils"
+import {handleFileUpload,handleFileChange} from "../../../../shared/utils/uploadImageUtils"
 import {
   deleteFile,
   uploadFile,
@@ -72,7 +72,7 @@ function QuestionReadingTest({ data, handleReading }) {
   const [image,setImage] = useState(formData.image);
 
   const handleImageUploadData = (event) => {
-    handleImageChange(event,setImage)
+    handleFileChange(event,setImage)
   };
 
   const handleQuestionSelect = (id) => {
@@ -185,7 +185,7 @@ function QuestionReadingTest({ data, handleReading }) {
     } else {
       try {
 
-        const newImage = await handleImageUpload(
+        const newImage = await handleFileUpload(
           initialData.image,
           image,
           initialData.testId,
