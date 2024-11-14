@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe0f51bb-9b1c-4bec-ae16-df10e97e9a53" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/api/study/listTopic/listTopicService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/study/listTopic/listTopicService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/student/common/listTopic/ListTopic.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/student/common/listTopic/ListTopic.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/grammar/useGrammarInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/grammar/useGrammarInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/topic/useTopicInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/topic/useTopicInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/topic/vocabulary/useVocabularyInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/topic/vocabulary/useVocabularyInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/utils/uploadImageUtils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/utils/uploadImageUtils.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,21 +30,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "trunghau",
-    "last_opened_file_path": "D:/study/Nam4_HK1/CongNghePhanMemMoi/CuoiKy/backside-quiz-app",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;trunghau&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/study/Nam4_HK1/CongNghePhanMemMoi/CuoiKy/backside-quiz-app&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -60,6 +63,8 @@
       <workItem from="1728373650444" duration="3000" />
       <workItem from="1729948835739" duration="1846000" />
       <workItem from="1730421757992" duration="37000" />
+      <workItem from="1731483315177" duration="63000" />
+      <workItem from="1731483494393" duration="591000" />
     </task>
     <servers />
   </component>

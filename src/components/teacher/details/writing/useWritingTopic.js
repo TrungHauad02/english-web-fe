@@ -1,10 +1,12 @@
 import {
   createWriting,
   deleteWriting,
+  getWritingDetail,
   updateWriting,
 } from "api/study/writing/writingService";
 import { useNavigate, useParams } from "react-router-dom";
 import handleError from "shared/utils/handleError";
+import { handleFileUpload } from "shared/utils/uploadImageUtils";
 
 export default function useWritingTopic(
   data,
@@ -32,12 +34,39 @@ export default function useWritingTopic(
 
   const handleSave = async () => {
     try {
+      if (data.image === "") {
+        setError("Image cannot be empty");
+        return;
+      }
+
+      setIsEditing(false);
+
+      let writingDetail = { image: "" };
+      if (id !== "-1") {
+        writingDetail = await getWritingDetail(id);
+        writingDetail = writingDetail ? writingDetail : { image: "" };
+      }
+
+      const newImage = await handleFileUpload(
+        writingDetail.image,
+        data.image,
+        data.title,
+        "study/writing"
+      );
+
+      let updatedData = data;
+      if (newImage !== writingDetail.image) {
+        updatedData = { ...updatedData, image: newImage };
+      }
+
       if (id === "-1") {
-        const newData = await createWriting(data);
+        const newData = await createWriting(updatedData);
+        setData(newData);
         navigate(`/teacher/writings/${newData.id}`);
         return;
       }
-      const newData = await updateWriting(id, data);
+
+      const newData = await updateWriting(id, updatedData);
       setData(newData);
       setIsEditing(false);
     } catch (error) {

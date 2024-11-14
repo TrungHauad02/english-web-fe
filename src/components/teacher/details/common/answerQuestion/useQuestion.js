@@ -41,6 +41,7 @@ export default function useQuestion(data, fetchData, setError, path) {
 
   async function handleSave() {
     try {
+      if (!isEditing) return;
       let newQuestion;
       if (question.id === "-1") {
         newQuestion = await createQuestion(path, question);
@@ -52,6 +53,10 @@ export default function useQuestion(data, fetchData, setError, path) {
       await fetchData();
       setIsEditing(false);
     } catch (error) {
+      if (typeof error.response?.data?.details === "string") {
+        setError(error.response.data.details);
+        return;
+      }
       handleError(error, setError);
     }
   }

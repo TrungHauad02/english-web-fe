@@ -8,7 +8,7 @@ import ErrorComponent from "shared/component/error/ErrorComponent";
 export default function SpeakingDetail() {
   const {
     people,
-    setPeople,
+    voices,
     conversation,
     setConversation,
     error,
@@ -49,13 +49,7 @@ export default function SpeakingDetail() {
       </Grid2>
       <Grid2 container xs={12} sm={7} direction="column" spacing={4}>
         <Grid2 item sx={{ ...scrollableContainerStyles, height: "50vh" }}>
-          <PeopleInConversation
-            listPeople={people}
-            setListPeople={setPeople}
-            conversation={conversation}
-            setConversation={setConversation}
-            setError={setError}
-          />
+          <PeopleInConversation voices={voices} />
         </Grid2>
         <Grid2 item sx={{ ...scrollableContainerStyles, height: "72vh" }}>
           <Conversation

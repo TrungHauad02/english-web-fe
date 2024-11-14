@@ -21,3 +21,21 @@ export const deleteFile = async (fileUrl) => {
     throw error;
   }
 };
+
+
+export const downloadFile = async (fileUrl) => {
+  try {
+    const res = await apiClient.post(
+      "/upload-file/download",
+      { fileUrl },
+      {
+        responseType: "arraybuffer",
+      }
+    );
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+

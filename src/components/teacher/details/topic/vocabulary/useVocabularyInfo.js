@@ -2,9 +2,14 @@ import { useEffect, useState } from "react";
 import {
   createVocab,
   deleteVocab,
+  getVocabById,
   updateVocab,
 } from "api/study/topic/vocabularyService";
 import { useParams } from "react-router-dom";
+import {
+  handleFileChange,
+  handleFileUpload,
+} from "shared/utils/uploadImageUtils";
 
 export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
   const { id } = useParams();
@@ -22,11 +27,14 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
     return (event) => {
       try {
         if (!isEditing) return;
-        const newValue =
-          fieldName === "image"
-            ? URL.createObjectURL(event.target.files[0])
-            : event.target.value;
-        setCurVocab({ ...curVocab, [fieldName]: newValue });
+        if (fieldName === "image") {
+          handleFileChange(event, (imageData) => {
+            setCurVocab((prev) => ({ ...prev, image: imageData }));
+          });
+        } else {
+          const newValue = event.target.value;
+          setCurVocab((prev) => ({ ...prev, [fieldName]: newValue }));
+        }
       } catch (error) {
         console.error(error);
         setError(error.message);
@@ -77,13 +85,37 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
 
   async function onHandleSave() {
     try {
+      setIsEditing(false);
       if (id === "-1") {
         setError(
           "Cannot create vocabulary. Please, create lesson and try again"
         );
         return;
       }
-      const vocab = { ...curVocab, topicId: id };
+
+      // Prepare the vocabulary object with the current topic ID
+      let vocab = { ...curVocab, topicId: id };
+      let oldVocab = { image: "" };
+
+      // Fetch existing vocabulary details if it is not new
+      if (curVocab.id !== "-1") {
+        const vocabDetail = await getVocabById(curVocab.id);
+        oldVocab = vocabDetail ? vocabDetail : { image: "" };
+      }
+
+      // Handle image change and get the new image URL
+      const newImage = await handleFileUpload(
+        oldVocab.image,
+        curVocab.image,
+        curVocab.word,
+        "study/topic/vocabulary"
+      );
+
+      // Update the vocabulary object with the new image if it has changed
+      if (newImage !== oldVocab.image) {
+        vocab = { ...vocab, image: newImage };
+      }
+
       let newData = vocab;
       if (curVocab.id === "-1") {
         newData = await createVocab(vocab);
@@ -91,9 +123,9 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
         newData = await updateVocab(curVocab.id, vocab);
       }
       setCurVocab(newData);
-      setIsEditing(false);
       await fetchData();
     } catch (err) {
+      console.log(err);
       handleError(err);
     }
   }

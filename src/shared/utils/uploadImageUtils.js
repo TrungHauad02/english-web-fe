@@ -3,19 +3,26 @@ import {
   uploadFile,
 } from "api/feature/uploadFile/uploadFileService";
 
-export const handleImageUpload = async (oldImage, newImage, title, path) => {
-  if (oldImage !== newImage) {
+export const handleFileUpload = async (oldFile, newFile, title, path) => {
+  if (oldFile && oldFile !== newFile) {
     const sanitizedFileName = title.replace(/\s+/g, "_");
-    const [, resImage] = await Promise.all([
-      deleteFile(oldImage),
-      uploadFile(path, sanitizedFileName.toLowerCase(), newImage),
+    const [, resFile] = await Promise.all([
+      deleteFile(oldFile),
+      uploadFile(path, sanitizedFileName.toLowerCase(), newFile),
     ]);
-    return resImage.url;
+    return resFile.url;
   }
-  return oldImage;
+  return (
+    oldFile ||
+    (await uploadFile(
+      path,
+      title.replace(/\s+/g, "_").toLowerCase(),
+      newFile
+    ).then((res) => res.url))
+  );
 };
 
-export const handleImageChange = (event, setImage) => {
+export const handleFileChange = (event, setImage) => {
   const file = event.target.files[0];
   if (file) {
     const reader = new FileReader();

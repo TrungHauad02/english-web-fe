@@ -8,8 +8,8 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import handleError from "shared/utils/handleError";
 import {
-  handleImageChange,
-  handleImageUpload,
+  handleFileChange,
+  handleFileUpload,
 } from "shared/utils/uploadImageUtils";
 
 export default function useTopicInfo(data, setError) {
@@ -47,13 +47,15 @@ export default function useTopicInfo(data, setError) {
         setError("Image cannot be empty");
         return;
       }
+      setIsEditing(false);
 
       let updatedTopic = topic;
-      let oldTopic = {image:null};
-      if(id !== "-1"){
-        oldTopic = await getTopicDetail(id);
+      let oldTopic = { image: "" };
+      if (id !== "-1") {
+        const topicDetail = await getTopicDetail(id);
+        oldTopic = topicDetail ? topicDetail : { image: "" };
       }
-      const newImage = await handleImageUpload(
+      const newImage = await handleFileUpload(
         oldTopic.image,
         topic.image,
         topic.title,
@@ -73,7 +75,6 @@ export default function useTopicInfo(data, setError) {
       console.log(res);
       setTopic(res);
       setError("");
-      setIsEditing(false);
     } catch (err) {
       handleError(err, setError);
     }
@@ -96,7 +97,7 @@ export default function useTopicInfo(data, setError) {
   };
 
   const onChangeImage = (e) => {
-    handleImageChange(e, (result) => {
+    handleFileChange(e, (result) => {
       setTopic((prevTopic) => ({ ...prevTopic, image: result }));
     });
   };
