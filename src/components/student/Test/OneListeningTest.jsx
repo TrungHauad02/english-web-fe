@@ -11,10 +11,6 @@ function OneListeningTest({ onelistening, audioRef, status, onAudioEnd ,title,fo
 
   return (
     <>
-    {
-      console.log(onelistening.content+onelistening.id)
-      
-    }
       {status === 'Testing' 
         ? <audio ref={audioRef} src={onelistening.content} onEnded={onAudioEnd} autoPlay style={{ display: 'none' }} /> 
         

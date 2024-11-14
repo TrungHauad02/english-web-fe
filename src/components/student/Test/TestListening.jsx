@@ -5,6 +5,10 @@ import { Box, Typography, Button, duration } from "@mui/material";
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ScoreGrid from "./ScoreGrid";
 import { useLocation } from 'react-router-dom';
+import {createSubmitTest} from "../../../api/test/submitTest"
+import { fetchUserInfo } from "../../../api/user/infoUserService";
+import {createSubmitTestListeningAnswer} from "../../..//api/test/submitTestListeningAnswer"
+
 
 
 function TestListening() {
@@ -33,7 +37,7 @@ function TestListening() {
       {status === 'Begin'
         ? <IntroduceTest setStatus={setStatus} datatest= {datatest}/>
         : <TestingListening key={renderKey} audioRef={audioRef} status={status} setStatus={setStatus} title={title}
-        onClickTestAgain ={onClickTestAgain} data ={datatest.testListenings} duration={datatest.duration}
+        onClickTestAgain ={onClickTestAgain} datatest ={datatest} duration={datatest.duration}
         />
         
       }
@@ -88,7 +92,8 @@ function IntroduceTest({ setStatus,datatest }) {
   );
 }
 
-function TestingListening({ audioRef, status, setStatus,title,onClickTestAgain,data,duration}) {
+function TestingListening({ audioRef, status, setStatus,title,onClickTestAgain,datatest,duration}) {
+  const data = datatest.testListenings;
   const [indexVisible, setIndexVisible] = useState(0);
 
   const [selectedAnswers, setSelectedAnswers] = useState({});
@@ -133,17 +138,52 @@ function TestingListening({ audioRef, status, setStatus,title,onClickTestAgain,d
       audioRef.current.currentTime = 0;
     }
   }, [status]);
-  const handleSubmit = async () => {
-    // Đặt trạng thái là 'Submit'
-    setStatus('Submit');
 
-    // Lấy câu trả lời đã lưu từ local storage
+  const handleSubmit = async () => {
+
+    setStatus('Submit');
+    
     const savedAnswers = localStorage.getItem('selectedAnswers' + title);
 
     if (savedAnswers) {
         setSelectedAnswers(JSON.parse(savedAnswers));
     }
+    let user = await fetchUserInfo();
+  
 
+    const submitTest = await createSubmitTest(
+      {
+        id: '',
+        testId: datatest.id,
+        userId: user.id,
+        score:  score,
+        status: "ACTIVE",
+        submitTime: new Date().toISOString()
+
+      }
+    );
+    data.forEach((dataitem) => {
+      dataitem.questions.forEach((question) => {
+        const userAnswerContent = selectedAnswers[question.id];
+        const userAnswer = question.answers.find(answer => answer.content === userAnswerContent);
+        const correctAnswer = question.answers.find(answer => answer.isCorrect);
+    
+    
+        if (userAnswer) {
+          createSubmitTestListeningAnswer({
+            id: '', // ID tự động sinh bởi hệ thống
+            submitTestId: submitTest.id,
+            questionId: question.id,
+            answerId: userAnswer.id, // ID của câu trả lời người dùng chọn
+            comment: correctAnswer && userAnswer.id === correctAnswer.id ? 'Correct' : 'Incorrect',
+            status: "ACTIVE"
+          }).catch((error) => {
+            console.error("Error saving answer:", error);
+          });
+        }
+      });
+    });
+    
 };
 useEffect(() => {
   if(status==="Submit")
@@ -157,25 +197,36 @@ useEffect(() => {
   
 }, [selectedAnswers]); 
 
-  const calculateScore = () => {
-    let score = 0;
+const calculateScore = () => {
+  let score = 0;
 
-    if (!Array.isArray(data)) {
-      console.error("DataListQuestion is not an array");
-      return score;
-    }
-
-    data.forEach((dataitem) => {
-      dataitem.questions.forEach((question) => {
-        const correctAnswer = question.answers.find(answer => answer.isCorrect);
-        if (correctAnswer && selectedAnswers[question.id] === correctAnswer.content) {
-          score += 1;
-        }
-      });
-    });
-
+  if (!Array.isArray(data)) {
+    console.error("DataListQuestion is not an array");
     return score;
-  };
+  }
+  let totalQuestions = 0;
+  data.forEach(dataitem => {
+    totalQuestions += dataitem.questions.length;
+  });
+
+  if (totalQuestions === 0) {
+    console.warn("No questions available");
+    return score;
+  }
+
+  const pointsPerQuestion = 100 / totalQuestions;
+
+  data.forEach((dataitem) => {
+    dataitem.questions.forEach((question) => {
+      const correctAnswer = question.answers.find(answer => answer.isCorrect);
+      if (correctAnswer && selectedAnswers[question.id] === correctAnswer.content) {
+        score += pointsPerQuestion; 
+      }
+    });
+  });
+
+  return Math.round(score);
+};
 
   const generateGridData = () => {
    
@@ -295,11 +346,8 @@ const onItemClick = useCallback((serial) => {
 }
 
 function CountdownTimer({ setStatus, duration }) {
-  const [timeLeft, setTimeLeft] = useState(() => duration); // Khởi tạo với giá trị 
- (
-  console.log(duration)
-  
- )
+  const [timeLeft, setTimeLeft] = useState(() => duration); 
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(prevTime => {
