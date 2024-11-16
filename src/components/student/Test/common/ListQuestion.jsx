@@ -7,11 +7,11 @@ function ListQuestion({dataTest,status,focusId,title,onAnswerChange}){
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const questionRefs = useRef({}); 
     const [isFocused, setIsFocused] = useState({});
-    const [isFirstRender, setIsFirstRender] = useState(true); 
-
 
     useEffect(() => {
-      const savedAnswers = localStorage.getItem('selectedAnswers'+title);
+      console.log(dataTest);
+      
+      const savedAnswers = localStorage.getItem('selectedAnswers'+dataTest.testId);
 
       
       if (savedAnswers) {
@@ -23,7 +23,7 @@ function ListQuestion({dataTest,status,focusId,title,onAnswerChange}){
   const handleAnswerChange = (questionId, answer) => {
     const updatedAnswers = { ...selectedAnswers, [questionId]: answer };
     setSelectedAnswers(updatedAnswers);
-    localStorage.setItem('selectedAnswers'+title, JSON.stringify(updatedAnswers));
+    localStorage.setItem('selectedAnswers'+dataTest.testId, JSON.stringify(updatedAnswers));
     if (typeof onAnswerChange === 'function') 
     {
       onAnswerChange();

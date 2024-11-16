@@ -28,7 +28,7 @@ function OneListeningTest({ onelistening, audioRef, status, onAudioEnd ,title,fo
           </Button>
           {showTranscript && (
         <Typography variant="body2" sx={{ marginTop: '0.5rem', color: '#000' ,padding: '0.5rem' }}>
-          Đây là nội dung của transcript!
+          {onelistening.transcript}
         </Typography>
       )}
           </Box>

@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect,useRef } from 'react';
 import { Box, Typography, Button, Grid, Fab } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MicIcon from '@mui/icons-material/Mic';
 import GridSerials from './GridSerials';
+import { ReactMic } from 'react-mic'; 
+import MicNoneIcon from '@mui/icons-material/MicNone';
 
 export default function InterviewInstruction({ dataList, status }) {
   const [indexSpeaking, setIndexSpeaking] = useState(0);
   const [indexQuestion, setIndexQuestion] = useState(0);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordings, setRecordings] = useState({}); 
+  
 
   const currentSpeaking = dataList[indexSpeaking];
   const currentQuestion = currentSpeaking?.questions[indexQuestion];
@@ -15,6 +20,17 @@ export default function InterviewInstruction({ dataList, status }) {
   const getSerialNumber = () => indexSpeaking * currentSpeaking.questions.length + indexQuestion + 1;
 
   const handleNextQuestion = () => {
+    if (isRecording) {
+      const shouldSave = window.confirm('Bạn có muốn lưu bản ghi âm hiện tại không?');
+      if (shouldSave) {
+        // Lưu lại bản ghi âm nếu người dùng đồng ý
+        setIsRecording(false);
+      } else {
+        // Không lưu bản ghi âm
+        setIsRecording(false);
+      }
+    }
+  
     if (indexQuestion < currentSpeaking.questions.length - 1) {
       setIndexQuestion(indexQuestion + 1);
     } else if (indexSpeaking < dataList.length - 1) {
@@ -22,8 +38,19 @@ export default function InterviewInstruction({ dataList, status }) {
       setIndexQuestion(0);
     }
   };
-
+  
   const handlePreviousQuestion = () => {
+    if (isRecording) {
+      const shouldSave = window.confirm('Bạn có muốn lưu bản ghi âm hiện tại không?');
+      if (shouldSave) {
+        // Lưu lại bản ghi âm nếu người dùng đồng ý
+        setIsRecording(false);
+      } else {
+        // Không lưu bản ghi âm
+        setIsRecording(false);
+      }
+    }
+  
     if (indexQuestion > 0) {
       setIndexQuestion(indexQuestion - 1);
     } else if (indexSpeaking > 0) {
@@ -31,11 +58,22 @@ export default function InterviewInstruction({ dataList, status }) {
       setIndexQuestion(dataList[indexSpeaking - 1].questions.length - 1);
     }
   };
-
+  
   const handleSerialClick = (serial) => {
+    if (isRecording) {
+      const shouldSave = window.confirm('Bạn có muốn lưu bản ghi âm hiện tại không?');
+      if (shouldSave) {
+        // Lưu lại bản ghi âm nếu người dùng đồng ý
+        setIsRecording(false);
+      } else {
+        // Không lưu bản ghi âm
+        setIsRecording(false);
+      }
+    }
+  
     let speakingIndex = 0;
     let questionIndex = 0;
-
+  
     for (let i = 0; i < dataList.length; i++) {
       const speaking = dataList[i];
       for (let j = 0; j < speaking.questions.length; j++) {
@@ -46,10 +84,11 @@ export default function InterviewInstruction({ dataList, status }) {
         }
       }
     }
-
+  
     setIndexSpeaking(speakingIndex);
     setIndexQuestion(questionIndex);
   };
+  
 
   const getListSerials = () => {
     const serials = [];
@@ -63,12 +102,45 @@ export default function InterviewInstruction({ dataList, status }) {
     return serials;
   };
 
+  const currentRecordingIdRef = useRef(null);
+  const [serialSet, setSerialSet] = useState(new Set());
+  const handleStartRecording = () => {
+
+    currentRecordingIdRef.current = {
+      id: currentQuestion.id,
+      serial: currentQuestion.serial,
+    };
+    
+    setIsRecording(true);
+  
+   
+  };
+  
+  const handleStopRecording = (recordedBlob) => {
+    console.log('Stop recording', recordedBlob);
+   
+    if (currentRecordingIdRef.current !== null && recordedBlob && recordedBlob.blobURL) {
+      setRecordings((prev) => ({
+        ...prev,
+        [currentRecordingIdRef.current.id]: recordedBlob.blobURL, // Dùng giá trị từ ref
+      }));
+      setSerialSet((prev) => new Set(prev).add(currentRecordingIdRef.current.serial));
+    } else {
+      console.error('Invalid currentRecordingIdRef or recordedBlob:', currentRecordingIdRef.current, recordedBlob);
+    }
+    setIsRecording(false);
+ 
+  };
+  useEffect(() => {
+    console.log('Recordings state updated:', recordings);
+  }, [recordings]);
+  
+
   const isLastQuestion =
     indexSpeaking === dataList.length - 1 && indexQuestion === currentSpeaking?.questions.length - 1;
 
   return (
     <Grid container spacing={4} sx={{ padding: '2rem' }}>
-      {/* Câu hỏi hiện tại */}
       <Grid item xs={12} md={9}>
         <Box
           sx={{
@@ -109,13 +181,46 @@ export default function InterviewInstruction({ dataList, status }) {
                 <Typography variant="h6" sx={{ marginBottom: '1.5rem' }}>
                   {currentQuestion.content}
                 </Typography>
-                <Fab
-                  color="error" // Chuyển sang màu đỏ
-                  aria-label="mic"
-                  sx={{ marginBottom: '1.5rem', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}
-                >
-                  <MicIcon sx={{ fontSize: '3rem' }} />
-                </Fab>
+                <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                    }}
+                  >
+                    <ReactMic
+                      record={isRecording}
+                      onStop={handleStopRecording}
+                      strokeColor="#000000"
+                      backgroundColor="#f5f5f5"
+                    />
+                    <Fab
+                      color={isRecording ? "secondary" : "error"}
+                      aria-label="mic"
+                      onClick={() => {
+                        if (!isRecording) {
+                          handleStartRecording(); // Gọi hàm này khi bắt đầu ghi âm
+                        } else {
+                          setIsRecording(false);
+                        }
+                      }}
+                      sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                      }}
+                    >
+                      <MicNoneIcon sx={{ fontSize: '3rem' }} />
+                    </Fab>
+                  </Box>
+                  {currentQuestion && recordings[currentQuestion.id] && (
+                      <audio controls src={recordings[currentQuestion.id]} />
+                    )}
+
+
               </>
             ) : (
               <>
@@ -147,11 +252,11 @@ export default function InterviewInstruction({ dataList, status }) {
                 variant="contained"
                 endIcon={<ArrowForwardIcon />}
                 onClick={handleNextQuestion}
-                disabled={isLastQuestion} // Disable khi đến câu hỏi cuối cùng
+                disabled={isLastQuestion}
                 sx={{
                   borderRadius: '1rem',
                   padding: '0.8rem 2rem',
-                  backgroundColor: isLastQuestion ? '#ccc' : '#007bff', // Màu xám khi disable
+                  backgroundColor: isLastQuestion ? '#ccc' : '#007bff',
                   color: '#fff',
                   '&:hover': {
                     backgroundColor: isLastQuestion ? '#ccc' : '#0056b3',
@@ -170,6 +275,7 @@ export default function InterviewInstruction({ dataList, status }) {
           status={status}
           key={indexSpeaking + '-' + indexQuestion}
           onItemClick={handleSerialClick}
+          serialSet = {serialSet}
         />
       </Grid>
     </Grid>
