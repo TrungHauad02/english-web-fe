@@ -47,24 +47,24 @@ function ListTestContent({list}){
     
     const handleClick = (datatest) => {
 
-        const currentPath = location.pathname; 
+        const currentPath = location.pathname.replace(/\/+/g, '/');; 
         let newPath = '';
 
         switch (datatest.type) {
             case type.mixing:
-                newPath = `${currentPath}mixing`; 
+                newPath = `${currentPath}/mixing`; 
                 break;
             case type.skills.reading:
-                newPath = `${currentPath}reading`; 
+                newPath = `${currentPath}/reading`; 
                 break;
             case type.skills.listening:
-                newPath = `${currentPath}listening`; 
+                newPath = `${currentPath}/listening`; 
                 break;
             case type.skills.speaking:
-                newPath = `${currentPath}speaking`; 
+                newPath = `${currentPath}/speaking`; 
                 break;
             case type.skills.writing:
-                newPath = `${currentPath}writing`; 
+                newPath = `${currentPath}/writing`; 
                 break;
             default:
                 break;

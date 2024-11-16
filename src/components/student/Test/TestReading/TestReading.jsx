@@ -5,7 +5,10 @@ import OneReadingTest from './OneReadingTest';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import BtnPreviousNextContentTest from '../common/BtnPreviousNextContentTest'
 import { useLocation } from 'react-router-dom';
-
+import { getTest } from "api/test/TestApi";
+import {createSubmitTest} from "../../../../api/test/submitTest"
+import { fetchUserInfo } from "../../../../api/user/infoUserService";
+import {createSubmitTestReadingAnswer} from "../../../../api/test/submitTestReadingAnswer"
 
 
 const DurationContainer = styled(Paper)(({ theme }) => ({
@@ -21,34 +24,102 @@ const DurationContainer = styled(Paper)(({ theme }) => ({
 function TestReading() {
   const [status, setStatus] = useState('Testing');
   const [indexVisible, setIndexVisible] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [score, setScore] = useState(0); 
+
+
   const [renderKey, setRenderKey] = useState(0);
   const location = useLocation();
-  const { state } = location; 
-  const datatest = state;
-  const title = datatest.type;
-  console.log(datatest);
+    const { state } = location; 
+    const [datatest, setdatatest] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const  [score, setSCore] = useState(null);
+    const title = datatest ? datatest.type : ''; 
   
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const data = await getTest(state.id);
+            if (data) {
+                setdatatest(data);
+            } else {
+                setdatatest(null);
+            }
+        } catch (err) {
+            setError("Failed to fetch test data");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    fetchData();
+}, [state.id]); 
+
+if (loading) {
+    return <div>Loading...</div>;
+}
+
+if (error) {
+    return <div>{error}</div>;
+}
   
+
   const onClickTestAgain = () => {
-    localStorage.removeItem('selectedAnswers' + title);
-    setSelectedAnswers([]);
+
+
     setStatus('Testing');
 
     setRenderKey(renderKey + 1);
 };
 
-  const handlebtnSubmit = () => {
+  const handlebtnSubmit = async () => {
     setStatus('Submit');
-    const savedAnswers = localStorage.getItem('selectedAnswers'+title);
-
+    const savedAnswers = localStorage.getItem('selectedAnswers'+datatest.id);
+    let selectedAnswers = [];
     if (savedAnswers) {
-        setSelectedAnswers(JSON.parse(savedAnswers));
+        selectedAnswers= JSON.parse(savedAnswers);
     }
+
+    localStorage.removeItem('selectedAnswers' + datatest.id);
+    const score = calculateScore(selectedAnswers);
+    setSCore(score);
+    let user =  await fetchUserInfo();
+    const submitTest = await createSubmitTest(
+      {
+        id: '',
+        testId: datatest.id,
+        userId: user.id,
+        score:  score,
+        status: "ACTIVE",
+        submitTime: new Date().toISOString()
+
+      }
+    );
+    datatest.testReadings.forEach((dataitem) => {
+      dataitem.questions.forEach((question) => {
+        const userAnswerContent = selectedAnswers[question.id];
+        const userAnswer = question.answers.find(answer => answer.content === userAnswerContent);
+
+        if (userAnswer) {
+          createSubmitTestReadingAnswer({
+            id: '', 
+            submitTestId: submitTest.id,
+            questionId: question.id,
+            answerId: userAnswer.id, 
+            comment: "tan",
+            status: "ACTIVE"
+          }).catch((error) => {
+            console.error("Error saving answer:", error);
+          });
+        }
+      });
+    });
+    localStorage.removeItem('selectedAnswers' + datatest.id);
+
   };
 
-  const calculateScore = () => {
+
+
+  const calculateScore = (selectedAnswers) => {
     let score = 0;
 
     datatest.testReadings.forEach((data) => {
@@ -80,7 +151,7 @@ function TestReading() {
           <OneReadingTest key= {renderKey} status={status} onereading={ datatest.testReadings[indexVisible]} handlebtnSubmit={handlebtnSubmit} 
           title = {title}
           onClickTestAgain ={onClickTestAgain}
-          calculateScore = {calculateScore}
+          score = {score}
           />
 </Box>
 

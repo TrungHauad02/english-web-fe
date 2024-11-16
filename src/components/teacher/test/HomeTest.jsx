@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useEffect } from "react";
-import { getListTestByType, getListTest } from "api/test/listTestApi";
+import { getListTest } from "api/test/listTestApi";
 import CustomPagination from "shared/component/pagination/CustomPagination";
 import { useLocation, useNavigate } from "react-router-dom";
 import NewTest from "./NewTest";
@@ -51,7 +51,7 @@ const TestManagement = () => {
   const [open, setOpen] = useState(false);
   const [newTestSerial, setNewTestSerial] = useState(1);
   const [version, setVersion] = useState(1);
-
+  const [versionPage, setVersionPage] = useState(1);
 
   const handleOpen = () => {
     setOpen(true);
@@ -74,12 +74,15 @@ const TestManagement = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getListTest(page, currtype);
+      const data = await getListTest(page, currtype,searchTerm);
       const tests = data.content;
-      const allTestsByType = await getListTestByType(currtype);
-      setalltest(allTestsByType);
-      const maxSerial = allTestsByType.reduce((max, test) => Math.max(max, test.serial), 0);
+      setVersionPage(versionPage+1);
+      // const allTestsByType = await getListTestByType(currtype);
+      // setalltest(allTestsByType);
+      const maxSerial = 100;
+      // allTestsByType.reduce((max, test) => Math.max(max, test.serial), 0);
       setNewTestSerial(maxSerial + 1);
+      console.log(data);
 
       setTotalPage(data.totalPages);
 
@@ -91,43 +94,38 @@ const TestManagement = () => {
       
     };
 
-   
+    
 
     fetchData();
-  }, [page, currtype]);
+  }, [page, currtype,searchTerm]);
 
-  useEffect(() => {
-    const filtered = alltest.filter((test) =>
-      test.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredList(filtered);
-  }, [searchTerm, alltest]);
   const onChangePage = (event, value) => {
     setPage(value);
-    setSearchTerm("");
+
   };
   const navigate = useNavigate();
   const location = useLocation();
 
   const handlebtnDetail = (datatest) => {
-    const currentPath = location.pathname;
+    const currentPath = location.pathname.replace(/\/+/g, '/');
+    
     let newPath = "";
 
     switch (datatest.type) {
       case type.mixing:
-        newPath = `${currentPath}mixing`;
+        newPath = `${currentPath}/mixing`;
         break;
       case type.reading:
-        newPath = `${currentPath}reading`;
+        newPath = `${currentPath}/reading`;
         break;
       case type.listening:
-        newPath = `${currentPath}listening`;
+        newPath = `${currentPath}/listening`;
         break;
       case type.speaking:
-        newPath = `${currentPath}speaking`;
+        newPath = `${currentPath}/speaking`;
         break;
       case type.writing:
-        newPath = `${currentPath}writing`;
+        newPath = `${currentPath}/writing`;
         break;
       default:
         break;
@@ -196,7 +194,7 @@ const TestManagement = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {(searchTerm === "" ? list : filteredList).map((test) => (
+            {list.map((test) => (
               <TableRow key={test.serial}>
                 <TableCell>{test.serial}</TableCell>
                 <TableCell>{test.title}</TableCell>

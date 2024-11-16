@@ -1,20 +1,56 @@
 import MainTitle from "../MainTitle";
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef,useEffect } from 'react';
 import { Box, Button, Typography, IconButton } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import StopIcon from '@mui/icons-material/Stop';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SpeakingTesting from "./SpeakingTesting";
-import DataTestSpeaking from "./DataTestSpeaking";
+import { getTest } from "api/test/TestApi";
+import {createSubmitTest} from "../../../../api/test/submitTest"
+import { fetchUserInfo } from "../../../../api/user/infoUserService";
+import {createSubmitTestSpeaking} from "../../../../api/test/submitTestSpeaking"
 import { useLocation } from 'react-router-dom';
 
 function TestSpeaking() {
     const location = useLocation();
     const { state } = location; 
-    const datatest = state;
-    const title = datatest.type;
+    const [datatest, setdatatest] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const  [score, setSCore] = useState(null);
+    const title = datatest ? datatest.type : ''; 
+
     const [status, setStatus] = useState('Testing');
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await getTest(state.id);
+                if (data) {
+                    setdatatest(data);
+                } else {
+                    setdatatest(null);
+                }
+            } catch (err) {
+                setError("Failed to fetch test data");
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        fetchData();
+    }, [state.id]); 
+    
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    
+    if (error) {
+        return <div>{error}</div>;
+    }
+
+
+
     return(
         <Box>
             <MainTitle title={title} bg={"/bg_test.png"} />

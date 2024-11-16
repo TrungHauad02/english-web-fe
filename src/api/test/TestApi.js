@@ -2,7 +2,7 @@ import apiClient from "../apiClient";
 
 export function getTest(Testid) {
   return apiClient
-    .get("/tests/" + Testid)
+    .get("/test/" + Testid)
     .then((response) => {
       return response.data;
     })
@@ -44,47 +44,3 @@ export function deleteTest(testId) {
       throw error;
     });
 }
-
-export const deleteQuestionTest = async (
-  testid,
-  type,
-  testdeleteid,
-  serial
-) => {
-  try {
-    const response = await apiClient.post("/test/question/delete", {
-      testid: testid,
-      type: type,
-      testdeleteid: testdeleteid,
-      serial: serial,
-    });
-
-    if (response.status === 204) {
-      console.log("Question deleted successfully");
-    } else {
-      console.error("Failed to delete question");
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
-export const addQuestionTest = async (testid, type, testadd) => {
-  try {
-    const response = await apiClient.post("/test/question/add", {
-      testid: testid,
-      type: type,
-      testadd: testadd,
-    });
-
-    if (response.status === 200) {
-      console.log("Question added successfully");
-      return response.data;
-    } else {
-      console.error("Failed to add question");
-      return null;
-    }
-  } catch (error) {
-    console.error("Error adding question:", error);
-    return null;
-  }
-};

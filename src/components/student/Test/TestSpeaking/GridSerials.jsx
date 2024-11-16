@@ -10,26 +10,20 @@ const StyledBox = styled(Box)({
   boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
 });
 
-const GridItem = styled(Box)(({ color }) => ({
+const GridItem = styled(Box)(({ hasAudio }) => ({
   padding: '8px',
   textAlign: 'center',
   color: '#757575',
-  backgroundColor: color === 'red' ? '#f44336' : color === 'green' ? '#4caf50' : 'white',
+  backgroundColor: hasAudio ? '#4caf50' : 'white', // Xanh nếu có audio, trắng nếu không
   border: '1px solid #000',
   transition: 'background-color 0.3s ease',
   cursor: 'pointer',
   '&:hover': {
-    backgroundColor: color === 'red' ? '#ff7961' : color === 'green' ? '#81c784' : '#f0f0f0',
+    backgroundColor: hasAudio ? '#81c784' : '#f0f0f0', // Màu xanh nhạt khi hover nếu có audio
   },
 }));
 
-const getStatusColor = (status) => {
-  if (status === 'FAILED') return 'red';
-  if (status === 'PASSED') return 'green';
-  return 'white';
-};
-
-const ScoreGrid = ({ score, gridData = [], serials = [], onItemClick, onClickTestAgain, status, handleBtnSubmit }) => {
+const ScoreGrid = ({ score, gridData = [], serials = [], serialSet = {}, onItemClick, onClickTestAgain, status, handleBtnSubmit }) => {
   return (
     <StyledBox>
       <Typography variant={status === 'Testing' ? 'h6' : 'h5'} gutterBottom>
@@ -41,7 +35,7 @@ const ScoreGrid = ({ score, gridData = [], serials = [], onItemClick, onClickTes
           serials.map((item, index) => (
             <Grid item xs={4} sm={3} md={2} key={index}>
               <GridItem
-                color={getStatusColor(gridData.find((q) => q.serial === item)?.status)}
+                hasAudio={serialSet.has(item)} // Sửa dấu `;` thành `=`
                 onClick={() => onItemClick(item)}
               >
                 <Typography variant="body2">{item}</Typography>
@@ -68,16 +62,6 @@ const ScoreGrid = ({ score, gridData = [], serials = [], onItemClick, onClickTes
       </Button>
     </StyledBox>
   );
-};
-
-ScoreGrid.propTypes = {
-  score: PropTypes.number.isRequired,
-  gridData: PropTypes.array.isRequired,
-  serials: PropTypes.array.isRequired,
-  onItemClick: PropTypes.func.isRequired,
-  onClickTestAgain: PropTypes.func.isRequired,
-  handleBtnSubmit: PropTypes.func.isRequired,
-  status: PropTypes.string.isRequired,
 };
 
 export default ScoreGrid;

@@ -1,14 +1,31 @@
 import apiClient from "../apiClient";
 
-export function getListTest(page, type) {
+export function getListTest(page = 1, type = "", searchTerm = "", status = "") {
+  const params = new URLSearchParams({
+    page: page - 1, // Backend sử dụng page bắt đầu từ 0
+    type,
+    title: searchTerm,
+    status,
+  });
+  console.log(params.toString());
+
   return apiClient
-    .get("/tests?page=" + page + "&type=" + type)
+    .get(`/test?${params.toString()}`)
     .then((response) => {
       let data = response.data;
-      if (typeof data === "string") {
-        data = JSON.parse(data);
+      try {
+        if (typeof data === "string" && data.trim().startsWith("{")) {
+          data = JSON.parse(data);
+        }
+        return data;
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        throw new Error("Invalid JSON response from API");
       }
-      return data;
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      throw error;
     });
 }
 export function getListTestByType(type) {

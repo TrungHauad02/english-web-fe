@@ -8,27 +8,56 @@ import { useLocation } from 'react-router-dom';
 import {createSubmitTest} from "../../../api/test/submitTest"
 import { fetchUserInfo } from "../../../api/user/infoUserService";
 import {createSubmitTestListeningAnswer} from "../../..//api/test/submitTestListeningAnswer"
+import { getTest } from "api/test/TestApi";
 
 
 
 function TestListening() {
   const location = useLocation();
     const { state } = location; 
-    const datatest = state;
-    const title = datatest.type;
+    const [datatest, setdatatest] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const title = datatest ? datatest.type : ''; 
+    
 
   const [status, setStatus] = useState('Begin');
   const [renderKey, setRenderKey] = useState(0);
 
   const onClickTestAgain = () => {
-    localStorage.removeItem('selectedAnswers' + datatest.type);
+  
     setStatus('Testing');
 
     setRenderKey(renderKey + 1);
 };
 
   const audioRef = useRef(null);
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const data = await getTest(state.id);
+            if (data) {
+                setdatatest(data);
+            } else {
+                setdatatest(null);
+            }
+        } catch (err) {
+            setError("Failed to fetch test data");
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    fetchData();
+}, [state.id]); 
+
+if (loading) {
+    return <div>Loading...</div>;
+}
+
+if (error) {
+    return <div>{error}</div>;
+}
   
 
   return (
@@ -96,7 +125,6 @@ function TestingListening({ audioRef, status, setStatus,title,onClickTestAgain,d
   const data = datatest.testListenings;
   const [indexVisible, setIndexVisible] = useState(0);
 
-  const [selectedAnswers, setSelectedAnswers] = useState({});
   const [score, setScore] = useState(0); 
   const [gridData, setGridData] = useState([]); 
   const [focusId,setfocusId] = useState();
@@ -142,15 +170,20 @@ function TestingListening({ audioRef, status, setStatus,title,onClickTestAgain,d
   const handleSubmit = async () => {
 
     setStatus('Submit');
-    
-    const savedAnswers = localStorage.getItem('selectedAnswers' + title);
+    const savedAnswers = localStorage.getItem('selectedAnswers' + datatest.id);
 
+    let selectedAnswers = [];
     if (savedAnswers) {
-        setSelectedAnswers(JSON.parse(savedAnswers));
+       selectedAnswers = JSON.parse(savedAnswers);
     }
-    let user = await fetchUserInfo();
-  
 
+    const score = calculateScore(selectedAnswers);
+    setScore(score);
+   
+    setGridData(generateGridData(selectedAnswers)); 
+
+
+    let user = await fetchUserInfo();
     const submitTest = await createSubmitTest(
       {
         id: '',
@@ -166,16 +199,14 @@ function TestingListening({ audioRef, status, setStatus,title,onClickTestAgain,d
       dataitem.questions.forEach((question) => {
         const userAnswerContent = selectedAnswers[question.id];
         const userAnswer = question.answers.find(answer => answer.content === userAnswerContent);
-        const correctAnswer = question.answers.find(answer => answer.isCorrect);
-    
-    
+
         if (userAnswer) {
           createSubmitTestListeningAnswer({
-            id: '', // ID tự động sinh bởi hệ thống
+            id: '', 
             submitTestId: submitTest.id,
             questionId: question.id,
-            answerId: userAnswer.id, // ID của câu trả lời người dùng chọn
-            comment: correctAnswer && userAnswer.id === correctAnswer.id ? 'Correct' : 'Incorrect',
+            answerId: userAnswer.id, 
+            comment: "tan",
             status: "ACTIVE"
           }).catch((error) => {
             console.error("Error saving answer:", error);
@@ -183,21 +214,11 @@ function TestingListening({ audioRef, status, setStatus,title,onClickTestAgain,d
         }
       });
     });
+    localStorage.removeItem('selectedAnswers' + datatest.id);
     
 };
-useEffect(() => {
-  if(status==="Submit")
-  {
-    const score = calculateScore();
-    setScore(score);
-    setGridData(generateGridData()); 
-  }
 
-
-  
-}, [selectedAnswers]); 
-
-const calculateScore = () => {
+const calculateScore = (selectedAnswers) => {
   let score = 0;
 
   if (!Array.isArray(data)) {
@@ -228,7 +249,7 @@ const calculateScore = () => {
   return Math.round(score);
 };
 
-  const generateGridData = () => {
+  const generateGridData = (selectedAnswers) => {
    
     return data.flatMap(dataitem =>
       dataitem.questions.map(question => {

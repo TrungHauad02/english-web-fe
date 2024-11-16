@@ -13,10 +13,9 @@ function BtnPreviousNextContentTest({setIndexVisible,sumcontent,indexVisible}){
       };
     
       const handlebtnNext = () => {
-        console.log('tan');
+
         setIndexVisible((prevIndex) => {
-        console.log('tan');
-        
+ 
           if (sumcontent > prevIndex + 1) {
             return prevIndex + 1;
           }

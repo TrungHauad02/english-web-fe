@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import ListQuestion from '../common/ListQuestion';
 
 
-function OneReadingTest({onereading,status,onAnswerChange,handlebtnSubmit,title,onClickTestAgain,calculateScore}){
+function OneReadingTest({onereading,status,onAnswerChange,handlebtnSubmit,title,onClickTestAgain,score}){
 
   const TestContainer = styled(Grid)(({ theme }) => ({
     width: '100%',
@@ -44,7 +44,7 @@ function OneReadingTest({onereading,status,onAnswerChange,handlebtnSubmit,title,
     {
       status === 'Submit' ?  <Box sx={{float:'left',borderRadius: '1rem',border:'solid 0.02rem',padding:'1rem 2rem'}}>
       <Typography align="center">
-          Score: {calculateScore()}
+          Score: {score}
           </Typography>
       </Box> : null
     }
