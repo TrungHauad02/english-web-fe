@@ -4,7 +4,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ChangePassword from "components/account/ChangePassword";
 import { handleEditProfile, handleSave, handleChangePasswordOpen, handleChangePasswordClose } from "./HandleProfile";
 import { fetchUserInfo } from "api/user/userService";
-import { handleImageChange } from "shared/utils/uploadImageUtils";
+import { handleFileChange } from "shared/utils/uploadImageUtils";
 
 const Profile = ({ open, handleClose }) => {
   const [name, setName] = useState("");
@@ -43,7 +43,7 @@ const Profile = ({ open, handleClose }) => {
                 id="upload-button"
                 type="file"
                 style={{ display: "none" }}
-                onChange={(e) => handleImageChange(e, setImage)}
+                onChange={(e) => handleFileChange(e, setImage)}
                 disabled={!editMode}
               />
               <Button component="span" sx={{ p: 0 }}>
