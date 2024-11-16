@@ -8,7 +8,7 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SpeakingTesting from "./SpeakingTesting";
 import { getTest } from "api/test/TestApi";
 import {createSubmitTest} from "../../../../api/test/submitTest"
-import { fetchUserInfo } from "../../../../api/user/infoUserService";
+import { fetchUserInfo } from "../../../../api/user/userService";
 import {createSubmitTestSpeaking} from "../../../../api/test/submitTestSpeaking"
 import { useLocation } from 'react-router-dom';
 

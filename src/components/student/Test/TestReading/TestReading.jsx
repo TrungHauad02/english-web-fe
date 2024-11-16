@@ -7,7 +7,7 @@ import BtnPreviousNextContentTest from '../common/BtnPreviousNextContentTest'
 import { useLocation } from 'react-router-dom';
 import { getTest } from "api/test/TestApi";
 import {createSubmitTest} from "../../../../api/test/submitTest"
-import { fetchUserInfo } from "../../../../api/user/infoUserService";
+import { fetchUserInfo } from "../../../../api/user/userService";
 import {createSubmitTestReadingAnswer} from "../../../../api/test/submitTestReadingAnswer"
 
 

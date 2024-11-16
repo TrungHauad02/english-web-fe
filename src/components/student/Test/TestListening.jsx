@@ -6,7 +6,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ScoreGrid from "./ScoreGrid";
 import { useLocation } from 'react-router-dom';
 import {createSubmitTest} from "../../../api/test/submitTest"
-import { fetchUserInfo } from "../../../api/user/infoUserService";
+import { fetchUserInfo } from "../../../api/user/userService";
 import {createSubmitTestListeningAnswer} from "../../..//api/test/submitTestListeningAnswer"
 import { getTest } from "api/test/TestApi";
 
