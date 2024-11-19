@@ -9,25 +9,24 @@ const StyledBox = styled(Box)({
   borderRadius: '1rem',
   boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
 });
-
-const GridItem = styled(Box)(({ hasAudio }) => ({
+const GridItem = styled(Box)(({ isAudioContent }) => ({
   padding: '8px',
   textAlign: 'center',
-  color: '#757575',
-  backgroundColor: hasAudio ? '#4caf50' : 'white',
+  color: '#ffffff',
+  backgroundColor: isAudioContent ? '#4caf50' : '#f44336', 
   border: '1px solid #000',
   transition: 'background-color 0.3s ease',
   cursor: 'pointer',
   '&:hover': {
-    backgroundColor: hasAudio ? '#81c784' : '#f0f0f0',
+    backgroundColor: isAudioContent ? '#81c784' : '#e57373',
   },
 }));
 
-const ScoreGrid = ({ score, serials = [], serialSet = {}, handleSerialClick, handleBtnSubmit }) => {
+const SubmitTestSpeakingGrid = ({ score, serials = [], submitResults = {}, handleSerialClick, onClickTestAgain }) => {
   return (
     <StyledBox>
       <Typography variant="h6" gutterBottom>
-        Time remaining: 60:00
+       Score: {score}
       </Typography>
 
       <Grid container spacing={1} sx={{ marginBottom: 2, marginTop: '1rem' }}>
@@ -35,10 +34,12 @@ const ScoreGrid = ({ score, serials = [], serialSet = {}, handleSerialClick, han
           serials.map((item, index) => (
             <Grid item xs={4} sm={3} md={2} key={index}>
               <GridItem
-                hasAudio={serialSet.has(item)}
+                isAudioContent={submitResults[item]?.isAudioContent} 
                 onClick={() => handleSerialClick(item)}
               >
-                <Typography variant="body2">{item}</Typography>
+                <Typography variant="body2">
+                  {item} 
+                </Typography>
               </GridItem>
             </Grid>
           ))
@@ -52,24 +53,25 @@ const ScoreGrid = ({ score, serials = [], serialSet = {}, handleSerialClick, han
       <Button
         sx={{
           borderRadius: '1rem',
-          backgroundColor: '#FFD984',
-          color: 'black',
+          backgroundColor: '#4A90E2',
+          color: 'white',
           padding: '1rem 2rem',
+          marginTop: '1rem',
         }}
-        onClick={handleBtnSubmit}
+        onClick={onClickTestAgain}
       >
-        SUBMIT
+        TEST AGAIN
       </Button>
     </StyledBox>
   );
 };
 
-ScoreGrid.propTypes = {
+SubmitTestSpeakingGrid.propTypes = {
   score: PropTypes.number.isRequired,
   serials: PropTypes.array,
-  serialSet: PropTypes.object,
+  submitResults: PropTypes.object.isRequired, 
   handleSerialClick: PropTypes.func.isRequired,
-  handleBtnSubmit: PropTypes.func.isRequired,
+  onClickTestAgain: PropTypes.func.isRequired,
 };
 
-export default ScoreGrid;
+export default SubmitTestSpeakingGrid;

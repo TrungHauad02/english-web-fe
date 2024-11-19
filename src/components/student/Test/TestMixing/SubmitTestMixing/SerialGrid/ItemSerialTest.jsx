@@ -31,7 +31,7 @@ const ItemSerialTest = ({ gridData = [], serials = [], onItemClick, title }) => 
               <GridItem
                 color={
                    gridData[item - 1] === -1
-                      ? 'white'
+                      ? 'red'
                       : 'green'
                 }
                 onClick={() => onItemClick(serials[index])}

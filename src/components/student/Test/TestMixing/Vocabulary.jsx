@@ -1,11 +1,12 @@
 import ListQuestion from "../common/ListQuestion";
 
-function Vocabulary({status,dataTest,onAnswerChange,focusId,title}) 
+function Vocabulary({dataTest,onAnswerChange,focusId,title,answers,setAnswers}) 
 {
     return(
         <>
-        <ListQuestion status = {status} dataTest={dataTest} onAnswerChange={onAnswerChange} 
+        <ListQuestion dataTest={dataTest} onAnswerChange={onAnswerChange} 
         focusId ={focusId} title= {title} 
+        answers = {answers} setAnswers = {setAnswers}
         />
         </>
     );

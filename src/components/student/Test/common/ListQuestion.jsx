@@ -2,43 +2,31 @@ import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl ,Butt
 import { useEffect, useState,useRef } from 'react';
 
 
-function ListQuestion({dataTest,status,focusId,title,onAnswerChange}){
+function ListQuestion({dataTest,focusId,answers,setAnswers}){
 
-    const [selectedAnswers, setSelectedAnswers] = useState({});
+    const [selectedAnswers, setSelectedAnswers] = useState(answers || {});
     const questionRefs = useRef({}); 
     const [isFocused, setIsFocused] = useState({});
 
-    useEffect(() => {
-      console.log(dataTest);
-      
-      const savedAnswers = localStorage.getItem('selectedAnswers'+dataTest.testId);
-
-      
-      if (savedAnswers) {
-          setSelectedAnswers(JSON.parse(savedAnswers));
-      }
-    }, [status]);
-
-
   const handleAnswerChange = (questionId, answer) => {
+    
     const updatedAnswers = { ...selectedAnswers, [questionId]: answer };
     setSelectedAnswers(updatedAnswers);
-    localStorage.setItem('selectedAnswers'+dataTest.testId, JSON.stringify(updatedAnswers));
-    if (typeof onAnswerChange === 'function') 
-    {
-      onAnswerChange();
-    }
+    setAnswers(updatedAnswers)
+    
+    
   };
 
 
-  
+  useEffect(() => {
+    setSelectedAnswers(answers);
+
+  }, [answers]);
 
     useEffect(() => {
         if (focusId && questionRefs.current[focusId]) {
             questionRefs.current[focusId].focus();
             setIsFocused((prev) => ({ ...prev, [focusId]: true }));
-
-        
             setTimeout(() => {
                 questionRefs.current[focusId].blur(); 
                 setIsFocused((prev) => ({ ...prev, [focusId]: false })); 
@@ -79,26 +67,23 @@ function ListQuestion({dataTest,status,focusId,title,onAnswerChange}){
     <RadioGroup
       sx={{ marginLeft: '1.5rem' }}
       value={selectedAnswers[questionNumber.id] || ''}
-      onChange={(e) => status !== 'Submit' && handleAnswerChange(questionNumber.id, e.target.value)
-  
+      onChange={(e) => handleAnswerChange(questionNumber.id, e.target.value)
 
       }
  
     >
       {questionNumber.answers.map((answer) => {
         const isCorrect = answer.isCorrect; 
-        const isSelected = selectedAnswers[questionNumber.id] === answer.content;
+        const isSelected = selectedAnswers[questionNumber.id] === answer.id;
 
         return (
           <FormControlLabel
             key={answer.id}
-            value={answer.content}
+            value={answer.id}
             control={<Radio />}
-            label={`${answer.id}. ${answer.content}`}
+            label={`${answer.content}`}
             sx={{
-              color: status === 'Submit' 
-                ? (isSelected ? (isCorrect ? 'green' : 'red') : (isCorrect ? 'green' : 'inherit')) 
-                : 'inherit', 
+       
               fontWeight: isSelected ? 'bold' : 'normal', 
             }}
         

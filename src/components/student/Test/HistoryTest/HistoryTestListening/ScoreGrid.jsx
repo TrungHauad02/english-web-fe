@@ -21,7 +21,7 @@ const GridItem = styled(Paper)(({ theme, color }) => ({
   },
 }));
 
-const ScoreGrid = ({ score, gridData = [], serials = [], onItemClick, onClickTestAgain }) => {
+const ScoreGrid = ({ score, gridData = [], serials = [], onItemClick, handleTestAgain }) => {
   return (
     <StyledPaper elevation={3}>
       <Typography variant="h5" gutterBottom>
@@ -31,14 +31,12 @@ const ScoreGrid = ({ score, gridData = [], serials = [], onItemClick, onClickTes
       <Grid container spacing={1} sx={{ marginBottom: 2 }}>
         {serials.length > 0 ? (
           serials.map((item, index) => (
-            <Grid item xs={2} key={index}>
+            <Grid item xs={4} key={index}>
               <GridItem
                 color={
-                  gridData[serials[index] - 1] === 0
-                    ? 'red'
-                    : gridData[serials[index] - 1] === 1
+                  gridData[serials[index] - 1] === 1
                     ? 'green'
-                    : 'white'
+                    : 'red'
                 }
                 onClick={() => onItemClick(serials[index])}
               >
@@ -63,7 +61,7 @@ const ScoreGrid = ({ score, gridData = [], serials = [], onItemClick, onClickTes
           },
           borderRadius: '0.5rem',
         }}
-        onClick={onClickTestAgain}
+        onClick={handleTestAgain}
       >
         TEST AGAIN
       </Button>

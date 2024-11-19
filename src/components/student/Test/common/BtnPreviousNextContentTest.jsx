@@ -3,7 +3,6 @@ import { Box, Button } from '@mui/material';
 function BtnPreviousNextContentTest({setIndexVisible,sumcontent,indexVisible}){
 
     const handlebtnPrevious = () => {
-        console.log('tan');
         setIndexVisible((prevIndex) => {
           if (prevIndex > 0) {
             return prevIndex - 1;
