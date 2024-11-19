@@ -27,7 +27,10 @@ import {
   updateTestReadingAnswer,
   deleteTestReadingAnswer,
 } from "api/test/TestReadingAnswerApi";
-import {handleFileUpload,handleFileChange} from "../../../../shared/utils/uploadImageUtils"
+import {
+  handleFileUpload,
+  handleFileChange,
+} from "../../../../shared/utils/uploadFileUtils";
 import {
   deleteFile,
   uploadFile,
@@ -69,10 +72,10 @@ function QuestionReading({ data, handleReading }) {
   const [questionSelected, setQuestionSelected] = useState(
     questions.length > 0 ? questions[0] : null
   );
-  const [image,setImage] = useState(formData.image);
+  const [image, setImage] = useState(formData.image);
 
   const handleImageUploadData = (event) => {
-    handleFileChange(event,setImage)
+    handleFileChange(event, setImage);
   };
 
   const handleQuestionSelect = (id) => {
@@ -88,12 +91,11 @@ function QuestionReading({ data, handleReading }) {
       const existingIndex = prev.questions.findIndex(
         (question) => question.id === newQuestion.id
       );
-  
-      if (existingIndex !== -1) {
 
+      if (existingIndex !== -1) {
         const updatedQuestions = [...prev.questions];
         updatedQuestions[existingIndex] = newQuestion;
-  
+
         return {
           ...prev,
           questions: updatedQuestions,
@@ -108,11 +110,10 @@ function QuestionReading({ data, handleReading }) {
       }
     });
   };
-  
 
   const handleEditToggle = () => {
     console.log(image);
-    
+
     setIsEditing(true);
   };
 
@@ -133,16 +134,12 @@ function QuestionReading({ data, handleReading }) {
       image: formData.image,
     };
 
-
-  
-      
-    if (formData.id === '') { 
+    if (formData.id === "") {
       try {
-
         const dataImage = await uploadFile(
-                "test/mixing/reading",
-                initialData.testId.replace(/\s+/g, "_"),
-                image,
+          "test/mixing/reading",
+          initialData.testId.replace(/\s+/g, "_"),
+          image
         );
         if (dataImage.url !== initialData.image) {
           updatedData = {
@@ -150,19 +147,21 @@ function QuestionReading({ data, handleReading }) {
             image: dataImage.url,
           };
         }
-        
+
         const testReading = await createTestReading(updatedData);
         formData.id = testReading.id;
-        
-        try {
 
+        try {
           for (const questionData of formData.questions) {
-            if (questionData.id?.startsWith('add')) {
+            if (questionData.id?.startsWith("add")) {
               questionData.testReadingId = formData.id;
-         
-              const id = await AddQuestionTest(initialData.test.id, "READING", questionData);
-       
-              
+
+              const id = await AddQuestionTest(
+                initialData.test.id,
+                "READING",
+                questionData
+              );
+
               await Promise.all(
                 (questionData.answers || []).map(async (answer) => {
                   answer.testQuestionReadingId = id;
@@ -180,21 +179,18 @@ function QuestionReading({ data, handleReading }) {
         } catch (error) {
           console.error("Error saving questions or answers:", error);
         }
-        
       } catch (error) {
         console.error("Error saving questions or answers:", error);
       }
-
     } else {
       try {
-
         const newImage = await handleFileUpload(
           initialData.image,
           image,
           initialData.testId,
           "test/mixing/reading"
         );
-    
+
         if (newImage !== initialData.image) {
           updatedData = {
             ...updatedData,
@@ -205,11 +201,10 @@ function QuestionReading({ data, handleReading }) {
         await updateTestReading(updatedData.id, updatedData);
         await Promise.all(
           formData.questions
-            .filter((questionData) => !questionData.id?.startsWith('add'))
+            .filter((questionData) => !questionData.id?.startsWith("add"))
             .map(async (questionData) => {
-       
               await updateTestReadingQuestion(questionData.id, questionData);
-        
+
               const answersToDelete =
                 initialData.questions
                   ?.find((q) => q.id === questionData.id)
@@ -219,14 +214,16 @@ function QuestionReading({ data, handleReading }) {
                         (currentAnswer) => currentAnswer.id === initialAnswer.id
                       )
                   ) || [];
-        
+
               await Promise.all(
-                answersToDelete.map((answer) => deleteTestReadingAnswer(answer.id))
+                answersToDelete.map((answer) =>
+                  deleteTestReadingAnswer(answer.id)
+                )
               );
-        
+
               await Promise.all(
                 (questionData.answers || []).map(async (answer) => {
-                  if (answer.id.startsWith('add')) {
+                  if (answer.id.startsWith("add")) {
                     await createTestReadingAnswer(answer);
                   } else {
                     await updateTestReadingAnswer(answer.id, answer);
@@ -236,12 +233,9 @@ function QuestionReading({ data, handleReading }) {
             })
         );
 
-
         await Promise.all(
           questionsDelete.map(async (questiondelete) => {
-            await updateTestReadingQuestion(
-              questiondelete.id,questiondelete
-            );
+            await updateTestReadingQuestion(questiondelete.id, questiondelete);
           })
         );
         for (const questiondelete of questionsDelete) {
@@ -253,20 +247,25 @@ function QuestionReading({ data, handleReading }) {
             1
           );
         }
-        
 
         try {
-          for (const questionData of formData.questions.filter((questionData) => questionData.id?.startsWith('add'))) {
+          for (const questionData of formData.questions.filter((questionData) =>
+            questionData.id?.startsWith("add")
+          )) {
             questionData.testReadingId = formData.id;
             console.log(questionData);
-        
+
             // Thêm câu hỏi mới
-            const id = await AddQuestionTest(initialData.test.id, 'READING', questionData);
-        
+            const id = await AddQuestionTest(
+              initialData.test.id,
+              "READING",
+              questionData
+            );
+
             // Thêm từng câu trả lời một
-            for (const answer of (questionData.answers || [])) {
+            for (const answer of questionData.answers || []) {
               answer.testQuestionReadingId = id;
-              if (answer.id.startsWith('add')) {
+              if (answer.id.startsWith("add")) {
                 try {
                   await createTestReadingAnswer(answer);
                 } catch (error) {
@@ -278,96 +277,104 @@ function QuestionReading({ data, handleReading }) {
         } catch (error) {
           console.error("Error saving questions or answers:", error);
         }
-         
       } catch (error) {
         console.error("Error saving questions or answers:", error);
       }
-
-    
-       
     }
     handleReading(formData);
-  
+
     setIsEditing(false);
   };
-  
+
   const [questionsDelete, setQuestionsDelete] = useState([]);
 
-const handleDeleteQuestion = async (questionToDelete) => {
-  setFormData((prev) => {
+  const handleDeleteQuestion = async (questionToDelete) => {
+    setFormData((prev) => {
+      const filteredQuestions = prev.questions.filter(
+        (q) => !q.id.startsWith("add")
+      );
 
-    const filteredQuestions = prev.questions.filter((q) => !q.id.startsWith("add"));
+      const maxSerial =
+        filteredQuestions.length > 0
+          ? Math.max(...filteredQuestions.map((q) => q.serial))
+          : 0;
 
- 
-    const maxSerial = filteredQuestions.length > 0
-      ? Math.max(...filteredQuestions.map((q) => q.serial))
-      : 0;
+      if (!questionToDelete.id.startsWith("add")) {
+        const updatedQuestionToDelete = {
+          ...questionToDelete,
+          serial: maxSerial,
+        };
+        setQuestionsDelete((prevDeleted) => [
+          ...prevDeleted,
+          updatedQuestionToDelete,
+        ]);
+      }
 
+      const updatedQuestions = prev.questions.filter(
+        (question) => question.id !== questionToDelete.id
+      );
 
-    if (!questionToDelete.id.startsWith("add")) {
-      const updatedQuestionToDelete = {
-        ...questionToDelete,
-        serial: maxSerial,
-      };
-      setQuestionsDelete((prevDeleted) => [...prevDeleted, updatedQuestionToDelete]);
-    }
-
-    const updatedQuestions = prev.questions.filter(
-      (question) => question.id !== questionToDelete.id
-    );
-
-    if (updatedQuestions.length === 0) {
-      return {
-        ...prev,
-        questions: [],
-      };
-    }
-
-    const reOrderedQuestions = updatedQuestions.map((question) => {
-      if (question.serial > questionToDelete.serial) {
+      if (updatedQuestions.length === 0) {
         return {
-          ...question,
-          serial: question.serial - 1,
+          ...prev,
+          questions: [],
         };
       }
-      return question;
-    });
 
-    return {
-      ...prev,
-      questions: reOrderedQuestions,
-    };
-  });
-  if (questionToDelete.id === questionSelected?.id) {
-    setQuestionSelected(null);
-  }
-};
+      const reOrderedQuestions = updatedQuestions.map((question) => {
+        if (question.serial > questionToDelete.serial) {
+          return {
+            ...question,
+            serial: question.serial - 1,
+          };
+        }
+        return question;
+      });
+
+      return {
+        ...prev,
+        questions: reOrderedQuestions,
+      };
+    });
+    if (questionToDelete.id === questionSelected?.id) {
+      setQuestionSelected(null);
+    }
+  };
 
   const handleAddQuestion = () => {
-    
     const newQuestion = {
       id: `add-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      serial: formData.questions.length > 0
-      ? Math.max(...formData.questions.map((q) => q.serial)) + 1
-      : (() => {
-          const smallerReadings = (formData.test.testReadings || []).filter(
-            (reading) => reading.serial < formData.serial
-          );
-    
-          if (smallerReadings.length > 0) {
-            const allQuestions = smallerReadings.flatMap((reading) => reading.questions || []);
-            if (allQuestions.length > 0) {
-              return Math.max(...allQuestions.map((q) => q.serial)) + 1;
-            }
-          }
-    
-          if (formData.test.testMixingQuestions && formData.test.testMixingQuestions.length > 0) {
-            return Math.max(...formData.test.testMixingQuestions.map((q) => q.serial)) + 1;
-          }
-    
-          return 1;
-        })(),
-     
+      serial:
+        formData.questions.length > 0
+          ? Math.max(...formData.questions.map((q) => q.serial)) + 1
+          : (() => {
+              const smallerReadings = (formData.test.testReadings || []).filter(
+                (reading) => reading.serial < formData.serial
+              );
+
+              if (smallerReadings.length > 0) {
+                const allQuestions = smallerReadings.flatMap(
+                  (reading) => reading.questions || []
+                );
+                if (allQuestions.length > 0) {
+                  return Math.max(...allQuestions.map((q) => q.serial)) + 1;
+                }
+              }
+
+              if (
+                formData.test.testMixingQuestions &&
+                formData.test.testMixingQuestions.length > 0
+              ) {
+                return (
+                  Math.max(
+                    ...formData.test.testMixingQuestions.map((q) => q.serial)
+                  ) + 1
+                );
+              }
+
+              return 1;
+            })(),
+
       content: "",
       status: "ACTIVE",
       testReadingId: formData.id,
@@ -400,7 +407,7 @@ const handleDeleteQuestion = async (questionToDelete) => {
             </Typography>
             <Box sx={{ mb: 2 }}>
               {image && (
-                  <CardMedia
+                <CardMedia
                   image={image}
                   sx={{ height: "250px", width: "250px" }}
                 />
@@ -411,7 +418,12 @@ const handleDeleteQuestion = async (questionToDelete) => {
                 startIcon={<Upload />}
               >
                 Upload
-                <input type="file" hidden accept="image/*" onChange={handleImageUploadData} />
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  onChange={handleImageUploadData}
+                />
               </Button>
             </Box>
 
@@ -447,12 +459,17 @@ const handleDeleteQuestion = async (questionToDelete) => {
                 </TableHead>
                 <TableBody>
                   {formData.questions.map((question) => (
-                    <TableRow
-                      key={question.id}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      <TableCell   onClick={() => handleQuestionSelect(question.id)}>{question.serial}</TableCell>
-                      <TableCell   onClick={() => handleQuestionSelect(question.id)}>{question.content}</TableCell>
+                    <TableRow key={question.id} sx={{ cursor: "pointer" }}>
+                      <TableCell
+                        onClick={() => handleQuestionSelect(question.id)}
+                      >
+                        {question.serial}
+                      </TableCell>
+                      <TableCell
+                        onClick={() => handleQuestionSelect(question.id)}
+                      >
+                        {question.content}
+                      </TableCell>
                       <TableCell>
                         {isEditing ? (
                           <IconButton
@@ -477,7 +494,7 @@ const handleDeleteQuestion = async (questionToDelete) => {
                 marginTop: "1rem",
               }}
               onClick={handleAddQuestion}
-              disabled={!isEditing }
+              disabled={!isEditing}
             >
               Add new question
             </Button>
@@ -506,7 +523,11 @@ const handleDeleteQuestion = async (questionToDelete) => {
           }}
         >
           <ButtonContainer>
-            <ColorButton color="#F08080" variant="contained" onClick={handleCancel}>
+            <ColorButton
+              color="#F08080"
+              variant="contained"
+              onClick={handleCancel}
+            >
               Cancel
             </ColorButton>
             <ColorButton

@@ -1,10 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Dialog, DialogContent, Button, Stack, Box, TextField, Typography } from "@mui/material";
+import {
+  Dialog,
+  DialogContent,
+  Button,
+  Stack,
+  Box,
+  TextField,
+  Typography,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ChangePassword from "components/account/ChangePassword";
-import { handleEditProfile, handleSave, handleChangePasswordOpen, handleChangePasswordClose } from "./HandleProfile";
+import {
+  handleEditProfile,
+  handleSave,
+  handleChangePasswordOpen,
+  handleChangePasswordClose,
+} from "./HandleProfile";
 import { fetchUserInfo } from "api/user/userService";
-import { handleFileChange } from "shared/utils/uploadImageUtils";
+import { handleFileChange } from "shared/utils/uploadFileUtils";
 
 const Profile = ({ open, handleClose }) => {
   const [name, setName] = useState("");
@@ -33,10 +46,24 @@ const Profile = ({ open, handleClose }) => {
   }, [open]);
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm" disableScrollLock>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      fullWidth
+      maxWidth="sm"
+      disableScrollLock
+    >
       <DialogContent>
-        <Stack direction="row" spacing={2} divider={<Box sx={{ width: 2, bgcolor: "grey.300" }} />}>
-          <Stack spacing={1} alignItems="center" sx={{ width: "40%", justifyContent: "center" }}>
+        <Stack
+          direction="row"
+          spacing={2}
+          divider={<Box sx={{ width: 2, bgcolor: "grey.300" }} />}
+        >
+          <Stack
+            spacing={1}
+            alignItems="center"
+            sx={{ width: "40%", justifyContent: "center" }}
+          >
             <label htmlFor="upload-button">
               <input
                 accept="image/*"
@@ -65,10 +92,20 @@ const Profile = ({ open, handleClose }) => {
           </Stack>
 
           <Stack spacing={1} sx={{ width: "60%", pt: 2 }}>
-            <Typography sx={{ fontSize: 40, fontWeight: "bold" }}>Hello Everyone</Typography>
-            <Typography sx={{ fontSize: 20, fontWeight: "light", fontStyle: "italic" }}>My name</Typography>
+            <Typography sx={{ fontSize: 40, fontWeight: "bold" }}>
+              Hello Everyone
+            </Typography>
+            <Typography
+              sx={{ fontSize: 20, fontWeight: "light", fontStyle: "italic" }}
+            >
+              My name
+            </Typography>
             <Box sx={{ position: "relative", mt: 1, mb: 2 }}>
-              <img src="/bg_name_profile.png" alt="Name Background" style={{ width: "100%" }} />
+              <img
+                src="/bg_name_profile.png"
+                alt="Name Background"
+                style={{ width: "100%" }}
+              />
               <Box
                 sx={{
                   position: "absolute",
@@ -111,10 +148,12 @@ const Profile = ({ open, handleClose }) => {
                 ) : (
                   <>
                     <Box>
-                      <span style={{ fontWeight: "bold" }}>Name:</span> {name || ""}
+                      <span style={{ fontWeight: "bold" }}>Name:</span>{" "}
+                      {name || ""}
                     </Box>
                     <Box>
-                      <span style={{ fontWeight: "bold" }}>Email:</span> {email || ""}
+                      <span style={{ fontWeight: "bold" }}>Email:</span>{" "}
+                      {email || ""}
                     </Box>
                   </>
                 )}
@@ -151,16 +190,15 @@ const Profile = ({ open, handleClose }) => {
         <Button
           onClick={
             editMode
-            ? () => handleSave(name || "", userNote || "", image, setEditMode)
-            : handleClose
-        }
-        riant="contained"
+              ? () => handleSave(name || "", userNote || "", image, setEditMode)
+              : handleClose
+          }
+          riant="contained"
           color="primary"
           sx={{ mt: 3, float: "right", bottom: ".5rem", bgcolor: "#ACCD0A" }}
         >
           {editMode ? "Save" : "Close"}
         </Button>
-
 
         <ChangePassword
           open={changePasswordOpen}

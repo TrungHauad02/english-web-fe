@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { getTeachers } from "api/admin/teacher/TeacherService";
 import { updateUser } from "api/user/userService";
-import { handleFileUpload } from "shared/utils/uploadImageUtils";
+import { handleFileUpload } from "shared/utils/uploadFileUtils";
 import { createTeacher } from "api/admin/teacher/TeacherService";
 import { fetchUserInfo } from "api/user/userService";
 import { toast } from "react-toastify";
