@@ -10,7 +10,7 @@ import handleError from "shared/utils/handleError";
 import {
   handleFileChange,
   handleFileUpload,
-} from "shared/utils/uploadImageUtils";
+} from "shared/utils/uploadFileUtils";
 
 export default function useGrammarInfo(data, setData) {
   const { id } = useParams();

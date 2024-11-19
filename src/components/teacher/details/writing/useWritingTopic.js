@@ -6,7 +6,7 @@ import {
 } from "api/study/writing/writingService";
 import { useNavigate, useParams } from "react-router-dom";
 import handleError from "shared/utils/handleError";
-import { handleFileUpload } from "shared/utils/uploadImageUtils";
+import { handleFileUpload } from "shared/utils/uploadFileUtils";
 
 export default function useWritingTopic(
   data,

@@ -6,10 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="fe0f51bb-9b1c-4bec-ae16-df10e97e9a53" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/common/writeAWord/useQuestion.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/common/writeAWord/useQuestion.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/teacher/details/grammar/useGrammarInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/grammar/useGrammarInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/listening/useListeningInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/listening/useListeningInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/reading/useReadingInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/reading/useReadingInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/speaking/useSpeakingInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/speaking/useSpeakingInfo.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/teacher/details/topic/useTopicInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/topic/useTopicInfo.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/teacher/details/topic/vocabulary/useVocabularyInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/topic/vocabulary/useVocabularyInfo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shared/utils/uploadImageUtils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/utils/uploadImageUtils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/writing/useWritingInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/writing/useWritingInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/teacher/details/writing/useWritingTopic.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/teacher/details/writing/useWritingTopic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/utils/uploadImageUtils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/utils/uploadFileUtils.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +71,8 @@
       <workItem from="1730421757992" duration="37000" />
       <workItem from="1731483315177" duration="63000" />
       <workItem from="1731483494393" duration="591000" />
+      <workItem from="1731637504301" duration="59000" />
+      <workItem from="1731730509009" duration="47000" />
     </task>
     <servers />
   </component>
