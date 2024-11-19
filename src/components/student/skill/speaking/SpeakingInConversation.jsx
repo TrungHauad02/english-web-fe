@@ -20,6 +20,7 @@ export default function SpeakingInConversation() {
     handleResetRecording,
     isRecordingList,
     recordedAudio,
+    handleSubmit,
   } = useSpeakingInConversation();
   const color = useColor();
 
@@ -113,6 +114,19 @@ export default function SpeakingInConversation() {
           </Grid2>
         ))}
       </Grid2>
+      <Stack justifyContent={"center"} alignItems={"flex-end"}>
+        <Button
+          sx={{
+            color: "#fff",
+            bgcolor: color.Color2_1,
+            textTransform: "capitalize",
+            padding: "0.5rem 1rem",
+          }}
+          onClick={handleSubmit}
+        >
+          Submit
+        </Button>
+      </Stack>
     </Grid2>
   );
 }

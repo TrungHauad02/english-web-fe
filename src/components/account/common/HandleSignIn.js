@@ -4,13 +4,14 @@ import { toast } from "react-toastify";
 export const handleSignIn = async (email, password, authContext, navigate) => {
   try {
     const response = await signInUser({ email, password });
-    const { token, authenticate, role } = response;
+    const { token, authenticate, role, id } = response;
 
     if (!authenticate) {
       throw new Error("Authentication failed");
     }
 
     localStorage.setItem("authToken", token);
+    localStorage.setItem("userId", id);
 
     authContext.SignIn(token);
 
@@ -31,5 +32,5 @@ export const handleSignIn = async (email, password, authContext, navigate) => {
     return role;
   } catch (error) {
     toast.error(error.response.data.message);
-    }
+  }
 };
