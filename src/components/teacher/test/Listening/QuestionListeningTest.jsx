@@ -16,12 +16,18 @@ import {
 import { Trash, Upload, PlusCircle } from "lucide-react";
 import { styled } from "@mui/material/styles";
 import QuestionListeningDetails from "./QuestionListeningTestDetails";
-import { createTestListening, updateTestListening } from "api/test/TestListeningApi";
+import {
+  createTestListening,
+  updateTestListening,
+} from "api/test/TestListeningApi";
 import {
   deleteFile,
   uploadFile,
 } from "api/feature/uploadFile/uploadFileService";
-import {handleFileUpload,handleFileChange} from "../../../../shared/utils/uploadImageUtils"
+import {
+  handleFileUpload,
+  handleFileChange,
+} from "../../../../shared/utils/uploadFileUtils";
 import { DeleteQuestionListeningTest } from "./DeleteQuestionListeningTest";
 
 import { updateTestListeningQuestion } from "api/test/TestListeningQuestionApi";
@@ -57,7 +63,7 @@ const ColorButton = styled(Button)(({ color }) => ({
 function QuestionListeningTest({ data, handleListening }) {
   const initialData = data || {};
   const questions = initialData.questions || [];
-  const [audio,setAudio] = useState(initialData?.content);
+  const [audio, setAudio] = useState(initialData?.content);
 
   const [formData, setFormData] = useState({
     ...initialData,
@@ -71,7 +77,7 @@ function QuestionListeningTest({ data, handleListening }) {
   );
 
   const handleAudioUpload = (event) => {
-    handleFileChange(event,setAudio);
+    handleFileChange(event, setAudio);
   };
 
   const handleQuestionSelect = (id) => {
@@ -87,12 +93,11 @@ function QuestionListeningTest({ data, handleListening }) {
       const existingIndex = prev.questions.findIndex(
         (question) => question.id === newQuestion.id
       );
-  
-      if (existingIndex !== -1) {
 
+      if (existingIndex !== -1) {
         const updatedQuestions = [...prev.questions];
         updatedQuestions[existingIndex] = newQuestion;
-  
+
         return {
           ...prev,
           questions: updatedQuestions,
@@ -107,8 +112,6 @@ function QuestionListeningTest({ data, handleListening }) {
       }
     });
   };
-  
-
 
   const handleEditToggle = () => {
     setIsEditing(true);
@@ -130,32 +133,34 @@ function QuestionListeningTest({ data, handleListening }) {
       content: audio,
       transcript: formData.transcript,
     };
-    if (formData.id === '') { 
+    if (formData.id === "") {
       try {
         const dataAudio = await uploadFile(
           "test/listening",
           initialData.testId.replace(/\s+/g, "_"),
-          audio,
+          audio
         );
-      
+
         if (dataAudio.url !== initialData.content) {
           updatedData = {
             ...updatedData,
             content: dataAudio.url,
           };
         }
-        
+
         const testListening = await createTestListening(updatedData);
         formData.id = testListening.id;
- 
-        try {
 
+        try {
           for (const questionData of formData.questions) {
-            if (questionData.id?.startsWith('add')) {
+            if (questionData.id?.startsWith("add")) {
               questionData.testListeningId = formData.id;
-         
-              const id = await AddQuestionListeningTest(initialData.test.id,  questionData);
-        
+
+              const id = await AddQuestionListeningTest(
+                initialData.test.id,
+                questionData
+              );
+
               await Promise.all(
                 (questionData.answers || []).map(async (answer) => {
                   answer.testQuestionListeningId = id;
@@ -173,111 +178,107 @@ function QuestionListeningTest({ data, handleListening }) {
         } catch (error) {
           console.error("Error saving questions or answers:", error);
         }
-        
       } catch (error) {
         console.error("Error saving questions or answers:", error);
       }
+    } else {
+      try {
+        const newAudio = await handleFileUpload(
+          initialData.content,
+          audio,
+          initialData.testId,
+          "test/listening"
+        );
 
-    }
-    else
-    {
-    try {
+        if (newAudio !== initialData.content) {
+          updatedData = {
+            ...updatedData,
+            content: newAudio,
+          };
+        }
+        await updateTestListening(updatedData.id, updatedData);
 
-       
-      const newAudio = await handleFileUpload(
-        initialData.content,
-        audio,
-        initialData.testId,
-        "test/listening"
-      );
-  
-      if (newAudio !== initialData.content) {
-        updatedData = {
-          ...updatedData,
-          content: newAudio,
-        };
-      }
-      await updateTestListening(updatedData.id, updatedData)
-       
-     
-      await Promise.all(
-        formData.questions
-          .filter((questionData) => !questionData.id?.startsWith('add'))
-          .map(async (questionData) => {
-            // Update câu hỏi cũ
-            await updateTestListeningQuestion(questionData.id, questionData);
-      
-            const answersToDelete =
-              initialData.questions
-                ?.find((q) => q.id === questionData.id)
-                ?.answers?.filter(
-                  (initialAnswer) =>
-                    !questionData.answers?.some(
-                      (currentAnswer) => currentAnswer.id === initialAnswer.id
-                    )
-                ) || [];
-      
-            await Promise.all(
-              answersToDelete.map((answer) => deleteTestListeningAnswer(answer.id))
-            );
-      
-            await Promise.all(
-              (questionData.answers || []).map(async (answer) => {
-                if (answer.id.startsWith('add')) {
-                  await createTestListeningAnswer(answer);
-                } else {
-                  await updateTestListeningAnswer(answer.id, answer);
-                }
-              })
+        await Promise.all(
+          formData.questions
+            .filter((questionData) => !questionData.id?.startsWith("add"))
+            .map(async (questionData) => {
+              // Update câu hỏi cũ
+              await updateTestListeningQuestion(questionData.id, questionData);
+
+              const answersToDelete =
+                initialData.questions
+                  ?.find((q) => q.id === questionData.id)
+                  ?.answers?.filter(
+                    (initialAnswer) =>
+                      !questionData.answers?.some(
+                        (currentAnswer) => currentAnswer.id === initialAnswer.id
+                      )
+                  ) || [];
+
+              await Promise.all(
+                answersToDelete.map((answer) =>
+                  deleteTestListeningAnswer(answer.id)
+                )
+              );
+
+              await Promise.all(
+                (questionData.answers || []).map(async (answer) => {
+                  if (answer.id.startsWith("add")) {
+                    await createTestListeningAnswer(answer);
+                  } else {
+                    await updateTestListeningAnswer(answer.id, answer);
+                  }
+                })
+              );
+            })
+        );
+        await Promise.all(
+          questionsDelete.map(async (questiondelete) => {
+            await updateTestListeningQuestion(
+              questiondelete.id,
+              questiondelete
             );
           })
-      );
-      await Promise.all(
-        questionsDelete.map(async (questiondelete) => {
-          await updateTestListeningQuestion(
-            questiondelete.id,questiondelete
-          );
-        })
-      );
-      for (const questiondelete of questionsDelete) {
-        await DeleteQuestionListeningTest(
-          initialData.test.id,
-          questiondelete,
-          questiondelete.serial,
-          1
         );
-      }
-      
+        for (const questiondelete of questionsDelete) {
+          await DeleteQuestionListeningTest(
+            initialData.test.id,
+            questiondelete,
+            questiondelete.serial,
+            1
+          );
+        }
 
-      try {
-        for (const questionData of formData.questions.filter((questionData) => questionData.id?.startsWith('add'))) {
-          questionData.testListeningId = formData.id;
-          console.log(questionData);
+        try {
+          for (const questionData of formData.questions.filter((questionData) =>
+            questionData.id?.startsWith("add")
+          )) {
+            questionData.testListeningId = formData.id;
+            console.log(questionData);
 
-          const id = await AddQuestionListeningTest(initialData.test.id,questionData);
-      
-          for (const answer of (questionData.answers || [])) {
-            answer.testQuestionListeningId = id;
-            if (answer.id.startsWith('add')) {
-              try {
-                await createTestListeningAnswer(answer);
-              } catch (error) {
-                console.error(`Error adding answer ${answer.id}:`, error);
+            const id = await AddQuestionListeningTest(
+              initialData.test.id,
+              questionData
+            );
+
+            for (const answer of questionData.answers || []) {
+              answer.testQuestionListeningId = id;
+              if (answer.id.startsWith("add")) {
+                try {
+                  await createTestListeningAnswer(answer);
+                } catch (error) {
+                  console.error(`Error adding answer ${answer.id}:`, error);
+                }
               }
             }
           }
+        } catch (error) {
+          console.error("Error saving questions or answers:", error);
         }
       } catch (error) {
         console.error("Error saving questions or answers:", error);
       }
-       
-    } catch (error) {
-      console.error("Error saving questions or answers:", error);
     }
-
-  
-     
-  }
 
     handleListening(formData);
     setIsEditing(false);
@@ -287,34 +288,37 @@ function QuestionListeningTest({ data, handleListening }) {
 
   const handleDeleteQuestion = async (questionToDelete) => {
     setFormData((prev) => {
-  
-      const filteredQuestions = prev.questions.filter((q) => !q.id.startsWith("add"));
-  
-   
-      const maxSerial = filteredQuestions.length > 0
-        ? Math.max(...filteredQuestions.map((q) => q.serial))
-        : 0;
-  
-  
+      const filteredQuestions = prev.questions.filter(
+        (q) => !q.id.startsWith("add")
+      );
+
+      const maxSerial =
+        filteredQuestions.length > 0
+          ? Math.max(...filteredQuestions.map((q) => q.serial))
+          : 0;
+
       if (!questionToDelete.id.startsWith("add")) {
         const updatedQuestionToDelete = {
           ...questionToDelete,
           serial: maxSerial,
         };
-        setQuestionsDelete((prevDeleted) => [...prevDeleted, updatedQuestionToDelete]);
+        setQuestionsDelete((prevDeleted) => [
+          ...prevDeleted,
+          updatedQuestionToDelete,
+        ]);
       }
-  
+
       const updatedQuestions = prev.questions.filter(
         (question) => question.id !== questionToDelete.id
       );
-  
+
       if (updatedQuestions.length === 0) {
         return {
           ...prev,
           questions: [],
         };
       }
-  
+
       const reOrderedQuestions = updatedQuestions.map((question) => {
         if (question.serial > questionToDelete.serial) {
           return {
@@ -324,7 +328,7 @@ function QuestionListeningTest({ data, handleListening }) {
         }
         return question;
       });
-  
+
       return {
         ...prev,
         questions: reOrderedQuestions,
@@ -336,36 +340,50 @@ function QuestionListeningTest({ data, handleListening }) {
   };
 
   const handleAddQuestion = () => {
-   
     const newQuestion = {
       id: `add-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      serial: formData.questions && formData.questions.length > 0
-  ? Math.max(...formData.questions.map((q) => q.serial)) + 1
-  : (() => {
-      const smallerListenings = (formData.test.testListenings || []).filter(
-        (listening) => listening.serial < formData.serial
-      );
+      serial:
+        formData.questions && formData.questions.length > 0
+          ? Math.max(...formData.questions.map((q) => q.serial)) + 1
+          : (() => {
+              const smallerListenings = (
+                formData.test.testListenings || []
+              ).filter((listening) => listening.serial < formData.serial);
 
-      if (smallerListenings.length > 0) {
-        const allQuestions = smallerListenings.flatMap((listening) => listening.questions || []);
-        if (allQuestions.length > 0) {
-          return Math.max(...allQuestions.map((q) => q.serial)) + 1;
-        }
-      }
+              if (smallerListenings.length > 0) {
+                const allQuestions = smallerListenings.flatMap(
+                  (listening) => listening.questions || []
+                );
+                if (allQuestions.length > 0) {
+                  return Math.max(...allQuestions.map((q) => q.serial)) + 1;
+                }
+              }
 
-      if (formData.test.testReadings && formData.test.testReadings.length > 0) {
-        const allQuestions = formData.test.testReadings.flatMap((reading) => reading.questions || []);
-        if (allQuestions.length > 0) {
-          return Math.max(...allQuestions.map((q) => q.serial)) + 1;
-        }
-      }
+              if (
+                formData.test.testReadings &&
+                formData.test.testReadings.length > 0
+              ) {
+                const allQuestions = formData.test.testReadings.flatMap(
+                  (reading) => reading.questions || []
+                );
+                if (allQuestions.length > 0) {
+                  return Math.max(...allQuestions.map((q) => q.serial)) + 1;
+                }
+              }
 
-      if (formData.test.testMixingQuestions && formData.test.testMixingQuestions.length > 0) {
-        return Math.max(...formData.test.testMixingQuestions.map((q) => q.serial)) + 1;
-      }
+              if (
+                formData.test.testMixingQuestions &&
+                formData.test.testMixingQuestions.length > 0
+              ) {
+                return (
+                  Math.max(
+                    ...formData.test.testMixingQuestions.map((q) => q.serial)
+                  ) + 1
+                );
+              }
 
-      return 1;
-    })(),
+              return 1;
+            })(),
       content: "",
       status: "ACTIVE",
       testListeningId: formData.id,
@@ -398,11 +416,7 @@ function QuestionListeningTest({ data, handleListening }) {
             </Typography>
             <Box sx={{ mb: 2 }}>
               {audio && (
-                <audio
-                  controls
-                  src={audio}
-                  style={{ width: "100%" }}
-                />
+                <audio controls src={audio} style={{ width: "100%" }} />
               )}
               <Button
                 variant="contained"
@@ -410,7 +424,12 @@ function QuestionListeningTest({ data, handleListening }) {
                 startIcon={<Upload />}
               >
                 Upload
-                <input type="file" hidden accept="audio/*" onChange={handleAudioUpload} />
+                <input
+                  type="file"
+                  hidden
+                  accept="audio/*"
+                  onChange={handleAudioUpload}
+                />
               </Button>
             </Box>
 
@@ -446,12 +465,17 @@ function QuestionListeningTest({ data, handleListening }) {
                 </TableHead>
                 <TableBody>
                   {formData.questions.map((question) => (
-                    <TableRow
-                      key={question.id}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      <TableCell   onClick={() => handleQuestionSelect(question.id)}>{question.serial}</TableCell>
-                      <TableCell   onClick={() => handleQuestionSelect(question.id)}>{question.content}</TableCell>
+                    <TableRow key={question.id} sx={{ cursor: "pointer" }}>
+                      <TableCell
+                        onClick={() => handleQuestionSelect(question.id)}
+                      >
+                        {question.serial}
+                      </TableCell>
+                      <TableCell
+                        onClick={() => handleQuestionSelect(question.id)}
+                      >
+                        {question.content}
+                      </TableCell>
                       <TableCell>
                         {isEditing ? (
                           <IconButton
@@ -476,7 +500,7 @@ function QuestionListeningTest({ data, handleListening }) {
                 marginTop: "1rem",
               }}
               onClick={handleAddQuestion}
-              disabled={!isEditing }
+              disabled={!isEditing}
             >
               Add new question
             </Button>
@@ -505,7 +529,11 @@ function QuestionListeningTest({ data, handleListening }) {
           }}
         >
           <ButtonContainer>
-            <ColorButton color="#F08080" variant="contained" onClick={handleCancel}>
+            <ColorButton
+              color="#F08080"
+              variant="contained"
+              onClick={handleCancel}
+            >
               Cancel
             </ColorButton>
             <ColorButton

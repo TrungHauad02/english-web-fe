@@ -78,6 +78,7 @@ export default function SpeakingInTopic() {
             className="sound-wave"
             onStop={handleStop}
             strokeColor="#fff"
+            mimeType="audio/wav"
             backgroundColor={color.Color2}
           />
           {audioSrc && (

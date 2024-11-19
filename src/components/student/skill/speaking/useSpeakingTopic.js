@@ -35,8 +35,13 @@ export default function useSpeakingTopic() {
   };
 
   const handleStop = (recordedBlob) => {
-    const audioURL = URL.createObjectURL(recordedBlob.blob);
-    setAudioSrc(audioURL);
+    const reader = new FileReader();
+    reader.readAsDataURL(recordedBlob.blob);
+    reader.onloadend = () => {
+      const base64Data = reader.result.split(",")[1];
+      const audioURL = `data:audio/wav;base64,${base64Data}`;
+      setAudioSrc(audioURL);
+    };
   };
 
   const handleClearAudio = () => {

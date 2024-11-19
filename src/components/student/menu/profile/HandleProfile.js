@@ -1,5 +1,5 @@
 import { updateUser } from "api/user/userService";
-import { handleFileUpload } from "shared/utils/uploadImageUtils";
+import { handleFileUpload } from "shared/utils/uploadFileUtils";
 import { fetchUserInfo } from "api/user/userService";
 import { toast } from "react-toastify";
 

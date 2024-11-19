@@ -1,4 +1,4 @@
-import { Button, Grid2, Typography } from "@mui/material";
+import { Button, Grid2, Stack, Typography } from "@mui/material";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -6,10 +6,23 @@ import FormControl from "@mui/material/FormControl";
 import MicIcon from "@mui/icons-material/Mic";
 import useSpeakingInConversation from "./useSpeakingInConversation";
 import SoundViewer from "shared/component/soundViewer/SoundViewer";
+import { ReactMic } from "react-mic";
+import useColor from "shared/color/Color";
 
 export default function SpeakingInConversation() {
-  const { listConversation, person, listPeople, handleChange } =
-    useSpeakingInConversation();
+  const {
+    listConversation,
+    person,
+    listPeople,
+    handleChange,
+    handleStartRecording,
+    handleStop,
+    handleResetRecording,
+    isRecordingList,
+    recordedAudio,
+    handleSubmit,
+  } = useSpeakingInConversation();
+  const color = useColor();
 
   return (
     <Grid2 container direction={"column"} spacing={4}>
@@ -35,21 +48,56 @@ export default function SpeakingInConversation() {
         </FormControl>
       </Grid2>
       <Grid2 container direction={"column"} spacing={2}>
-        {listConversation.map((conver) => (
+        {listConversation.map((conver, index) => (
           <Grid2 container key={conver.id}>
             {conver.name === person && (
               <>
-                <Grid2 item size={1}>
-                  <Typography variant="h6">You :</Typography>
+                <Grid2 container direction={"row"} sx={{ width: "100%" }}>
+                  <Grid2 item size={1}>
+                    <Typography variant="h6">You :</Typography>
+                  </Grid2>
+                  <Grid2 item size={10}>
+                    <Typography variant="body1">{conver.content}</Typography>
+                  </Grid2>
+                  <Grid2 item size={1}>
+                    <Button
+                      sx={{ color: "#000" }}
+                      onClick={() => handleStartRecording(conver.id)}
+                    >
+                      <MicIcon />
+                    </Button>
+                  </Grid2>
                 </Grid2>
-                <Grid2 item size={10}>
-                  <Typography variant="body1">{conver.content}</Typography>
-                </Grid2>
-                <Grid2 item size={1}>
-                  <Button sx={{ color: "#000" }}>
-                    <MicIcon />
-                  </Button>
-                </Grid2>
+                <Stack direction={"row"} spacing={4} sx={{ width: "100%" }}>
+                  <ReactMic
+                    record={isRecordingList[index]}
+                    className="sound-wave"
+                    onStop={(recordedBlob) =>
+                      handleStop(conver.id, recordedBlob)
+                    }
+                    strokeColor="#fff"
+                    backgroundColor={color.Color2}
+                    mimeType="audio/wav"
+                  />
+                  {recordedAudio[index] && (
+                    <Stack
+                      container
+                      direction={"row"}
+                      alignItems={"center"}
+                      spacing={4}
+                      sx={{ width: "100%" }}
+                    >
+                      <SoundViewer audioSrc={`${recordedAudio[index]}`} />
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => handleResetRecording(conver.id)}
+                      >
+                        Reset
+                      </Button>
+                    </Stack>
+                  )}
+                </Stack>
               </>
             )}
 
@@ -66,6 +114,19 @@ export default function SpeakingInConversation() {
           </Grid2>
         ))}
       </Grid2>
+      <Stack justifyContent={"center"} alignItems={"flex-end"}>
+        <Button
+          sx={{
+            color: "#fff",
+            bgcolor: color.Color2_1,
+            textTransform: "capitalize",
+            padding: "0.5rem 1rem",
+          }}
+          onClick={handleSubmit}
+        >
+          Submit
+        </Button>
+      </Stack>
     </Grid2>
   );
 }

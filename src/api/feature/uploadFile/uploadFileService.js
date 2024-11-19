@@ -1,13 +1,14 @@
 import apiClient from "api/apiClient";
 
-export const uploadFile = async (path, fileName, file) => {
+export const uploadFile = async (path, fileName, file, isRandomName) => {
   try {
     const data = {
       path: path,
       fileName: fileName,
       file: file,
     };
-    const res = await apiClient.post("/upload-file", data);
+    const params = isRandomName !== null ? "?randomName=" + isRandomName : "";
+    const res = await apiClient.post("/upload-file" + params, data);
     return res.data;
   } catch (error) {
     throw error;
@@ -21,7 +22,6 @@ export const deleteFile = async (fileUrl) => {
     throw error;
   }
 };
-
 
 export const downloadFile = async (fileUrl) => {
   try {
@@ -38,4 +38,3 @@ export const downloadFile = async (fileUrl) => {
     throw error;
   }
 };
-
