@@ -1,16 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Typography, Grid, TextField } from '@mui/material';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { Box, Typography, Grid, TextField, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const TestContainer = styled(Grid)(({ theme }) => ({
   width: '100%',
   height: 'auto',
   background: '#fff',
-}));
-
-const QuestionSection = styled(Grid)(({ theme }) => ({
-  marginRight: '2%',
-  flex: '0 1 47%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  padding: theme.spacing(3),
+  borderRadius: '8px',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
 }));
 
 const EssayInput = ({ value, wordCount, onChange }) => {
@@ -25,10 +28,10 @@ const EssayInput = ({ value, wordCount, onChange }) => {
       <TextField
         fullWidth
         multiline
-        rows={15}
+        rows={10}
         variant="outlined"
         placeholder="Type your essay here..."
-        value={value} 
+        value={value}
         onChange={handleEssayChange}
         sx={{
           '& .MuiOutlinedInput-root': {
@@ -44,51 +47,105 @@ const EssayInput = ({ value, wordCount, onChange }) => {
           },
         }}
       />
-      <Box sx={{ mt: 1 }}>
+      <Box sx={{ mt: 2 }}>
         <Typography variant="body2">Words Count: {wordCount}</Typography>
       </Box>
     </>
   );
 };
 
-function ContentWritingMixing({ datatest, title,onAnswerChange }) {
-  const [answer, setAnswer] = useState({ essay: '', wordCount: 0 });
+function ContentWritingMixing({ datatestList, title, answers,setAnswers ,focusId }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const questionRefs = useRef([]);
 
   useEffect(() => {
-    const savedAnswers = JSON.parse(localStorage.getItem('selectedAnswers' + title)) || {};
-    const savedAnswer = savedAnswers[datatest.id] || { essay: '', wordCount: 0 };
-    setAnswer(savedAnswer);
-  }, [datatest.id, title]);
+    const savedAnswers = JSON.parse(localStorage.getItem('selectedAnswers' + datatestList[0].testId)) || {};
+    const initialAnswers = {};
+    datatestList.forEach(datatest => {
+      initialAnswers[datatest.id] = savedAnswers[datatest.id] || { essay: '', wordCount: 0 };
+    });
+    setAnswers(initialAnswers);
+  }, [datatestList, title]);
 
-  const handleAnswerChange = useCallback((essay, wordCount) => {
-    setAnswer({ essay, wordCount });
+  useEffect(() => {
+    // Cuộn đến phần tử có serial bằng với focusId
+    const targetIndex = datatestList.findIndex(item => item.serial === focusId);
+    if (targetIndex !== -1) {
+      setCurrentIndex(targetIndex);
+      questionRefs.current[targetIndex]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [focusId, datatestList]);
 
-    const savedAnswers = JSON.parse(localStorage.getItem('selectedAnswers' + title)) || {};
-    savedAnswers[datatest.id] = { essay, wordCount };
-    localStorage.setItem('selectedAnswers' + title, JSON.stringify(savedAnswers));
-    onAnswerChange()
+  const handleAnswerChange = useCallback((id, essay, wordCount) => {
+    setAnswers(prev => ({
+      ...prev,
+      [id]: { essay, wordCount }
+    }));
+  }, []);
 
-    
-    
-  }, [datatest.id, title]);
+  const handleNext = () => {
+    if (currentIndex < datatestList.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      questionRefs.current[currentIndex + 1]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+      questionRefs.current[currentIndex - 1]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
+  const currentQuestion = datatestList[currentIndex];
 
   return (
-    <Box sx={{ display: 'flex', marginTop: '2%' }}>
-      <TestContainer sx={{ flex: '1 1 49%' }}>
-        <QuestionSection item>
-          <Typography variant="h5" sx={{ marginTop: '2%', fontWeight: 'bold' }}>
-            Question {datatest.serial}
-          </Typography>
-          <Typography variant="body1" sx={{ marginTop: '1rem' }}>{datatest.content}</Typography>
-        </QuestionSection>
-      </TestContainer>
-
-      <TestContainer sx={{ flex: '1 1 49%' }}>
-        <EssayInput
-          value={answer.essay}
-          wordCount={answer.wordCount}
-          onChange={handleAnswerChange}
-        />
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginTop: '2rem' }}>
+      <TestContainer ref={el => questionRefs.current[currentIndex] = el}>
+        <Typography variant="h5" sx={{ marginTop: '1rem', fontWeight: 'bold' }}>
+          Question {currentQuestion.serial}
+        </Typography>
+        <Typography variant="body1" sx={{ marginTop: '1rem' }}>{currentQuestion.content}</Typography>
+        <Box sx={{ flex: '1', marginTop: '2rem' }}>
+          <EssayInput
+            value={answers[currentQuestion.id]?.essay || ''}
+            wordCount={answers[currentQuestion.id]?.wordCount || 0}
+            onChange={(essay, wordCount) => handleAnswerChange(currentQuestion.id, essay, wordCount)}
+          />
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
+          <Button
+            variant="contained"
+            startIcon={<ArrowBackIcon />}
+            onClick={handlePrevious}
+            disabled={currentIndex === 0}
+            sx={{
+              backgroundColor: currentIndex === 0 ? '#e0e0e0' : '#42a5f5',
+              color: '#fff',
+              '&:hover': {
+                backgroundColor: currentIndex === 0 ? '#e0e0e0' : '#1e88e5',
+              },
+            }}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="contained"
+            endIcon={<ArrowForwardIcon />}
+            onClick={handleNext}
+            disabled={currentIndex === datatestList.length - 1}
+            sx={{
+              backgroundColor: currentIndex === datatestList.length - 1 ? '#e0e0e0' : '#42a5f5',
+              color: '#fff',
+              '&:hover': {
+                backgroundColor: currentIndex === datatestList.length - 1 ? '#e0e0e0' : '#1e88e5',
+              },
+            }}
+          >
+            Next
+          </Button>
+        </Box>
       </TestContainer>
     </Box>
   );

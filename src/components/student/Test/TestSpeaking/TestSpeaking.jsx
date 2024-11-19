@@ -7,21 +7,21 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SpeakingTesting from "./SpeakingTesting";
 import { getTest } from "api/test/TestApi";
-import {createSubmitTest} from "../../../../api/test/submitTest"
-import { fetchUserInfo } from "../../../../api/user/userService";
-import {createSubmitTestSpeaking} from "../../../../api/test/submitTestSpeaking"
 import { useLocation } from 'react-router-dom';
-
+import   SubmitTestSpeaking  from "./SubmitTestSpeaking/SubmitTestSpeaking"
 function TestSpeaking() {
     const location = useLocation();
     const { state } = location; 
     const [datatest, setdatatest] = useState(null);
+    const [submitTest,setSubmitTest] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const  [score, setSCore] = useState(null);
     const title = datatest ? datatest.type : ''; 
+    const [version,setVersion] = useState(0);
 
     const [status, setStatus] = useState('Testing');
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -48,19 +48,39 @@ function TestSpeaking() {
     if (error) {
         return <div>{error}</div>;
     }
-
+    const onClickTestAgain = () => {
+       
+        setVersion(version+1);
+         setStatus("Testing");
+    
+      };
 
 
     return(
         <Box>
             <MainTitle title={title} bg={"/bg_test.png"} />
             <Box sx={{marginLeft:'5%', marginRight:'5%',marginTop:'3rem'}}>
-         
-                <SpeakingTesting dataList={datatest.testSpeakings} status={status}/>
+            { 
+            status === "Testing" && 
+            <SpeakingTesting  key={version} datatest={datatest} status={status} setStatus={setStatus} setSubmitTest= {setSubmitTest}/>
+             }
+              { 
+            status === "Submit" && 
+            <SubmitTestSpeaking key={version} datatest={datatest} onClickTestAgain={onClickTestAgain}  submitTest= {submitTest}/>
+              }
             </Box>
         </Box>
     );
 }
+
+
+
+
+
+
+
+
+
 
 function MicrophoneTest() {
     const [isRecording, setIsRecording] = useState(false);

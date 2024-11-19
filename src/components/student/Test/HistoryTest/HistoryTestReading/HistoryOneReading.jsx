@@ -1,9 +1,9 @@
 import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl,Button,Grid,styled   } from '@mui/material';
 import { useEffect, useState } from 'react';
-import ListQuestion from '../common/ListQuestion';
+import ListQuestionSubmit from '../common/ListQuestionSubmit';
 
 
-function OneReadingTest({onereading,handlebtnSubmit,title,answers,setAnswers}){
+function OneReadingTest({onereading,title,dataSubmitTest,handleTestAgain}){
 
   const TestContainer = styled(Grid)(({ theme }) => ({
     width: '100%',
@@ -36,20 +36,19 @@ function OneReadingTest({onereading,handlebtnSubmit,title,answers,setAnswers}){
   <TestContainer sx={{ flex: '1 1 49%',padding:'1rem'}}>
     <Box sx={{ border: '1px solid black',
   borderRadius: '1rem',padding: '1rem',marginBottom:'1rem' }} >
-    <ListQuestion 
-    dataTest= {onereading}    answers = {answers}
-    setAnswers ={setAnswers}
+    <ListQuestionSubmit 
+    dataTest= {onereading.questions}   
+    dataSubmitTest= {dataSubmitTest} 
     title = {title} 
     />    
     </Box >
     <Button sx={{
-  borderRadius: '1rem',   backgroundColor: '#FFD984' ,color:'black',float:'right',marginRight:'10%',marginBottom:'2%',padding:'1rem 2rem'}}  onClick={handlebtnSubmit } 
+  borderRadius: '1rem',   backgroundColor: '#FFD984' ,color:'black',float:'right',marginRight:'10%',marginBottom:'2%',padding:'1rem 2rem'}}  onClick={handleTestAgain } 
   >
-  SUBMIT
+  Test Again
       </Button>
   </TestContainer>
   </>
-  
   );
 
 

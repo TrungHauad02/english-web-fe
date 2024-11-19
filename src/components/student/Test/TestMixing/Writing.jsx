@@ -1,9 +1,9 @@
 import ContentWritingMixing from './ContentWritingMixing'
-function Writing({status,dataTest,onAnswerChange,focusId,title}) 
+function Writing({dataTest,onAnswerChange,focusId,title,answers,setAnswers}) 
 {
     return(
         <>
-        <ContentWritingMixing onAnswerChange={onAnswerChange} datatest={dataTest.dataitem[0]} title={title}/>
+        <ContentWritingMixing  answers = {answers} setAnswers = {setAnswers} datatestList={dataTest.dataitem} title={title} focusId= {focusId}/>
  
         </>
     );

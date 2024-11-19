@@ -6,6 +6,8 @@ import HomePageStudent from "../../components/student/content/HomePageStudent";
 import Skills from "../../components/student/skill/Skills";
 import Account from "../../components/account/Account";
 import HistoryTest from "components/student/menu/historytest/HistoryTest";
+import HistoryTestReading from "components/student/Test/HistoryTest/HistoryTestReading/HistoryTestReading";
+import HistoryTestListening from "components/student/Test/HistoryTest/HistoryTestListening/HistoryTestListening";
 import StudySchedulePage from "../../components/student/menu/studyschedule/StudySchedule";
 import site from "./Pages";
 import HomeTeacher from "../../components/teacher/HomeTeacher";
@@ -66,6 +68,14 @@ export default function AppRoutes() {
         {
           path: "history-test",
           element: <HistoryTest />
+        },
+        {
+          path: "history-test/reading",
+          element: <HistoryTestReading />
+        },
+        {
+          path: "history-test/listening",
+          element: <HistoryTestListening />
         },
         {
           path: "study-schedule",

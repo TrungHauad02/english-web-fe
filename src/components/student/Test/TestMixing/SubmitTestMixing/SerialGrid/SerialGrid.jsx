@@ -16,15 +16,14 @@ function SerialGrid({
   gridData = [],
   TitleAndSerials,
   onItemClick,
-  handlebtnSubmit,
+  onClickTestAgain,
+  score,
 }) {
   return (
     <StyledBox>
        <Box>
           <Typography align="center">
-            <strong>Time remaining:</strong>
-            <br />
-            60:00
+           Score : {score}
           </Typography>
         </Box>
 
@@ -56,9 +55,9 @@ function SerialGrid({
             color: 'black',
             padding: '1rem 2rem',
           }}
-          onClick={handlebtnSubmit}
+          onClick={onClickTestAgain}
         >
-        SUBMIT
+        Test Again
         </Button>
       </Box>
     </StyledBox>
