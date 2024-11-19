@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import {
   handleFileChange,
   handleFileUpload,
-} from "shared/utils/uploadImageUtils";
+} from "shared/utils/uploadFileUtils";
 
 export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
   const { id } = useParams();

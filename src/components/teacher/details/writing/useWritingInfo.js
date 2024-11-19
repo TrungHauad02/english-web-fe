@@ -1,4 +1,4 @@
-import { handleFileChange } from "shared/utils/uploadImageUtils";
+import { handleFileChange } from "shared/utils/uploadFileUtils";
 
 export default function useWritingInfo(data, setData, isEditing, setIsEditing) {
   const onChangeImage = (e) => {
