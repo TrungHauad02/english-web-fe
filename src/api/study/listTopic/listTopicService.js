@@ -1,8 +1,8 @@
 import apiClient from "../../apiClient";
 
-export const getListTopic = async (title, page, size, sortBy) => {
+export const getListTopic = async (title, page, size, sortBy, name) => {
   try {
-    const path = `/${title}?page=${page}&size=${size}&sortBy=${sortBy}`;
+    const path = `/${title}?page=${page}&size=${size}&sortBy=${sortBy}&title=${name}`;
     const response = await apiClient.get(path);
     return response.data;
   } catch (error) {

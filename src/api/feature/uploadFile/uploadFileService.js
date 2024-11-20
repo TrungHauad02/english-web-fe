@@ -7,7 +7,8 @@ export const uploadFile = async (path, fileName, file, isRandomName) => {
       fileName: fileName,
       file: file,
     };
-    const params = isRandomName !== null ? "?randomName=" + isRandomName : "";
+    const params =
+      isRandomName !== undefined ? "?randomName=" + isRandomName : "";
     const res = await apiClient.post("/upload-file" + params, data);
     return res.data;
   } catch (error) {
