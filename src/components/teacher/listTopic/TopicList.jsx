@@ -12,7 +12,6 @@ export default function TopicList({ title }) {
     handleSearch,
     handleLoadMore,
     isLoading,
-    listTopic,
     totalElements,
     handleAddNewTopic,
     error,
@@ -92,7 +91,7 @@ export default function TopicList({ title }) {
             </Stack>
           ))}
         <Stack justifyContent="center" alignItems={"center"}>
-          {listTopic.length < totalElements && (
+          {displayList.length < totalElements && (
             <Box display="flex" justifyContent="center">
               <Button
                 variant={"text"}

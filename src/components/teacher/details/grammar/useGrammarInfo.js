@@ -49,7 +49,7 @@ export default function useGrammarInfo(data, setData) {
       let topicDetail = { image: "", file: "" };
       if (id !== "-1") {
         topicDetail = await getGrammarDetail(id);
-        updateTopic = topicDetail ? topicDetail : { image: "", file: "" };
+        topicDetail = topicDetail ? topicDetail : { image: "", file: "" };
       }
       const newImage = await handleFileUpload(
         topicDetail.image,
@@ -79,6 +79,7 @@ export default function useGrammarInfo(data, setData) {
         navigate(`/teacher/grammars/${data.id}`);
         return;
       }
+      console.log("Data grammar update:", updateTopic);
       const data = await updateGrammar(id, updateTopic);
       setData(data);
     } catch (error) {

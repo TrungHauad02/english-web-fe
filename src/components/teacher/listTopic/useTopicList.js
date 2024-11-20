@@ -3,12 +3,12 @@ import { getListTopic } from "api/study/listTopic/listTopicService";
 import { useNavigate } from "react-router-dom";
 
 export default function useTopicList(title) {
-  const [listTopic, setListTopic] = useState([]);
   const [displayList, setDisplayList] = useState([]);
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [totalElements, setTotalElements] = useState(0);
   const [error, setError] = useState(null);
+  const [nameSearch, setNameSearch] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,10 +16,11 @@ export default function useTopicList(title) {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await getListTopic(title, page, 10, "serial");
+        console.log(nameSearch);
+        const data = await getListTopic(title, page, 10, "serial", nameSearch);
+        console.log(data);
 
         const newContent = Array.isArray(data.content) ? data.content : [];
-        setListTopic((prevList) => [...(prevList || []), ...newContent]);
         setDisplayList((prevList) => [...(prevList || []), ...newContent]);
 
         setTotalElements(data.totalElements);
@@ -31,17 +32,16 @@ export default function useTopicList(title) {
       }
     };
     loadTopics();
-  }, [title, page]);
+  }, [title, page, nameSearch]);
 
   const handleCloseError = () => {
     setError(null);
   };
 
   function handleSearch(text) {
-    const newList = listTopic.filter((topic) =>
-      topic.title.toLowerCase().includes(text.toLowerCase())
-    );
-    setDisplayList(newList);
+    setDisplayList([]);
+    setNameSearch(text);
+    return;
   }
 
   function handleLoadMore() {
@@ -53,7 +53,6 @@ export default function useTopicList(title) {
   }
 
   return {
-    listTopic,
     displayList,
     handleSearch,
     handleLoadMore,
