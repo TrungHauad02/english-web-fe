@@ -19,7 +19,7 @@ const Account = () => {
   };
 
   return (
-    <Box display="flex" height="100vh">
+    <Box display="flex" height="84vh" paddingTop={7}>
       <Box
         flex={1}
         display="flex"

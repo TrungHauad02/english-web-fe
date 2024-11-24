@@ -1,62 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { Button, Stack, Menu, MenuItem, IconButton } from "@mui/material";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Stack, Menu, MenuItem, IconButton } from "@mui/material";
 import HeaderTypography from "shared/component/header/HeaderTypography";
-import SkillMenu from "./SkillMenu";
-import Profile from "./Profile";
+import Profile from "shared/profile/Profile";
+import useColor from "shared/color/Color";
+import { useHeaderTeacherHandlers } from "./common/handoleHeacerTeacher";
+import { fetchUserInfo } from "api/user/userService";
 
 const icon = "/icon.png";
 
 function HeaderTeacher() {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [openProfileDialog, setOpenProfileDialog] = useState(false);
-  const navigate = useNavigate();
-
+  const { HeaderBg } = useColor();
+  const [avatar, setAvatar] = useState(null);
   useEffect(() => {
-    const checkLoggedIn = () => {
-      const loggedIn = localStorage.getItem("isSignIn") === "true";
-      setIsLoggedIn(loggedIn);
+    const loadUserInfo = async () => {
+      try {
+        const userInfo = await fetchUserInfo();
+        setAvatar(userInfo.avatar || "/header_user.png");
+      } catch (error) {
+        console.error("Failed to fetch user info:", error);
+        setAvatar("/header_user.png");
+      }
     };
-
-    checkLoggedIn();
-    window.addEventListener("storage", checkLoggedIn);
-
-    return () => {
-      window.removeEventListener("storage", checkLoggedIn);
-    };
+    loadUserInfo();
   }, []);
-
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("isSignIn");
-    setIsLoggedIn(false);
-    handleMenuClose();
-    navigate("/account");
-  };
-
-  const handleProfileOpen = () => {
-    setOpenProfileDialog(true);
-    handleMenuClose();
-  };
-
-  const handleProfileClose = () => {
-    setOpenProfileDialog(false);
-  };
+  const {
+    anchorEl,
+    openProfileDialog,
+    handleMenuClick,
+    handleMenuClose,
+    handleLogout,
+    handleProfileOpen,
+    handleProfileClose,
+    navigate,
+    isAuthenticated,
+  } = useHeaderTeacherHandlers();
 
   return (
     <Stack
       direction={"row"}
       justifyContent={"space-between"}
       sx={{
-        backgroundColor: "#6EC2F7",
+        backgroundColor: HeaderBg,
         color: "#fff",
         padding: "0.5rem",
         position: "fixed",
@@ -71,7 +55,7 @@ function HeaderTeacher() {
         <img
           src={icon}
           alt="icon"
-          style={{ width: "50px", marginLeft: "1rem" }}
+          style={{ width: "50px", marginLeft: "1rem", cursor: "pointer" }}
           onClick={() => navigate("/teacher")}
         />
         <HeaderTypography
@@ -80,161 +64,49 @@ function HeaderTeacher() {
           sx={{
             fontWeight: "bold",
             fontSize: "2rem",
+            cursor: "pointer",
           }}
           onClick={() => navigate("/teacher")}
         >
           English Web
         </HeaderTypography>
       </Stack>
+
       <Stack direction={"row"} alignItems={"center"} spacing={2}>
-        <Button
-          component={NavLink}
-          to="/teacher"
+        <IconButton onClick={handleMenuClick}>
+        <img
+            src={avatar}
+            alt="User Icon"
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
+          />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+          disableScrollLock
           sx={{
-            backgroundColor: "transparent",
-            color: "white",
-            textDecoration: "none",
-            padding: "0.5rem 1rem",
-            borderRadius: "0.5rem",
-            "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
-            },
-            "&.active": {
-              backgroundColor: "white",
-              color: "black",
+            "& .MuiMenu-paper": {
+              background: "#75718D",
+              padding: ".2rem 1rem",
+              borderRadius: "1.5rem",
             },
           }}
         >
-          <HeaderTypography>Home</HeaderTypography>
-        </Button>
-
-        {isLoggedIn ? (
-          <>
-            <Button
-              component={NavLink}
-              to="/student/list-topic"
-              sx={{
-                backgroundColor: "transparent",
-                color: "white",
-                textDecoration: "none",
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                },
-                "&.active": {
-                  backgroundColor: "white",
-                  color: "black",
-                },
-              }}
-            >
-              <HeaderTypography>Vocabulary</HeaderTypography>
-            </Button>
-            <Button
-              component={NavLink}
-              to="/student/grammar"
-              sx={{
-                backgroundColor: "transparent",
-                color: "white",
-                textDecoration: "none",
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                },
-                "&.active": {
-                  backgroundColor: "white",
-                  color: "black",
-                },
-              }}
-            >
-              <HeaderTypography>Grammar</HeaderTypography>
-            </Button>
-
-            <SkillMenu />
-
-            <Button
-              component={NavLink}
-              to="/student/test"
-              sx={{
-                backgroundColor: "transparent",
-                color: "white",
-                textDecoration: "none",
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                },
-                "&.active": {
-                  backgroundColor: "white",
-                  color: "black",
-                },
-              }}
-            >
-              <HeaderTypography>Test</HeaderTypography>
-            </Button>
-
-            <IconButton onClick={handleMenuClick}>
-              <img
-                src="/header_user.png"
-                alt="User Icon"
-                style={{ width: "40px" }}
-              />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              sx={{
-                "& .MuiMenu-paper": {
-                  background: "#75718D",
-                  padding: ".2rem 1rem",
-                  borderRadius: "1.5rem",
-                },
-              }}
-            >
-              <MenuItem
-                onClick={handleProfileOpen}
-                sx={{
-                  borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-                  color: "white",
-                }}
-              >
-                Profile
-              </MenuItem>
-              <MenuItem
-                onClick={handleLogout}
-                sx={{
-                  color: "red",
-                  fontWeight: "bold",
-                }}
-              >
-                Logout
-              </MenuItem>
-            </Menu>
-          </>
-        ) : (
-          <Button
-            component={NavLink}
-            to="/account"
-            sx={{
-              backgroundColor: "transparent",
-              color: "white",
-              textDecoration: "none",
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-              "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.2)",
-              },
-              "&.active": {
-                backgroundColor: "white",
-                color: "black",
-              },
-            }}
-          >
-            <HeaderTypography>Sign In</HeaderTypography>
-          </Button>
-        )}
+          <MenuItem onClick={handleProfileOpen} sx={{ borderBottom: "1px solid rgba(255, 255, 255, 0.5)", color: "white" }}>
+            Profile
+          </MenuItem>
+          {isAuthenticated && (
+            <MenuItem onClick={handleLogout} sx={{ color: "red", fontWeight: "bold" }}>
+              Logout
+            </MenuItem>
+          )}
+        </Menu>
       </Stack>
 
       <Profile open={openProfileDialog} handleClose={handleProfileClose} />

@@ -4,7 +4,6 @@ import Home from "../../components/Home";
 import HomeStudent from "../../components/student/HomeStudent";
 import HomePageStudent from "../../components/student/content/HomePageStudent";
 import Skills from "../../components/student/skill/Skills";
-import Account from "../../components/account/Account";
 import HistoryTest from "components/student/menu/historytest/HistoryTest";
 import HistoryTestReading from "components/student/Test/HistoryTest/HistoryTestReading/HistoryTestReading";
 import HistoryTestListening from "components/student/Test/HistoryTest/HistoryTestListening/HistoryTestListening";
@@ -50,7 +49,7 @@ export default function AppRoutes() {
     },
     {
       path: "/account",
-      element: <Account />
+      element: <Home />
     },
     {
       path: "/student/*",
@@ -120,6 +119,10 @@ export default function AppRoutes() {
           path: `${page.path}/:id`,
           element: <page.detail />,
         })),
+        {
+          path: "*",
+          element: <ErrorPage errorType={404} />,
+        },
       ],
     },
     {
@@ -216,6 +219,10 @@ export default function AppRoutes() {
           path: "test",
           element: <HomeTest />,
         },
+        {
+          path: "*",
+          element: <ErrorPage errorType={404} />,
+        },
       ],
     },
     {
@@ -247,6 +254,10 @@ export default function AppRoutes() {
         {
           path: "student",
           element: <ManageStudent />,
+        },
+        {
+          path: "*",
+          element: <ErrorPage errorType={404} />,
         },
       ],
     },

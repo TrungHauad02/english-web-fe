@@ -70,18 +70,6 @@ const SignIn = ({ toggleForm }) => {
       >
         Sign In
       </Button>
-      <Divider>
-        <Typography variant="caption">Or</Typography>
-      </Divider>
-      <Button
-        fullWidth
-        variant="outlined"
-        startIcon={<GoogleIcon />}
-        color="error"
-        style={{ marginTop: 16 }}
-      >
-        Sign in with Google
-      </Button>
       <Box mt={2} display="flex" justifyContent="space-between">
         <Link href="#" variant="body2" onClick={() => toggleForm("signup")}>
           Sign up
