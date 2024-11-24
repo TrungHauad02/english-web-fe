@@ -1,16 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Stack, Menu, MenuItem, IconButton, Box } from "@mui/material";
 import { NavLink, useLocation } from "react-router-dom";
 import HeaderTypography from "shared/component/header/HeaderTypography";
 import SkillMenu from "./SkillMenu";
-import Profile from "../menu/profile/Profile";
+import Profile from "../../../shared/profile/Profile";
 import useColor from "shared/color/Color";
-import { useHeaderStudentHandlers } from "./common/HandleHeaderStudent"
+import { useHeaderStudentHandlers } from "./common/HandleHeaderStudent";
+import { fetchUserInfo } from "api/user/userService";
 
 const icon = "/icon.png";
 
 function HeaderStudent() {
-  const {HeaderBg} = useColor();
+  const { HeaderBg } = useColor();
+  const [avatar, setAvatar] = useState(null);
+  useEffect(() => {
+    const loadUserInfo = async () => {
+      try {
+        const userInfo = await fetchUserInfo();
+        setAvatar(userInfo.avatar || "/header_user.png");
+      } catch (error) {
+        console.error("Failed to fetch user info:", error);
+        setAvatar("/header_user.png");
+      }
+    };
+    loadUserInfo();
+  }, []);
   const {
     anchorEl,
     openProfileDialog,
@@ -20,8 +34,8 @@ function HeaderStudent() {
     handleProfileOpen,
     handleProfileClose,
     isActivePath,
-    navigate, 
-    isAuthenticated, 
+    navigate,
+    isAuthenticated,
   } = useHeaderStudentHandlers();
 
   const location = useLocation();
@@ -119,7 +133,16 @@ function HeaderStudent() {
         </Button>
 
         <IconButton onClick={handleMenuClick}>
-          <img src="/header_user.png" alt="User Icon" style={{ width: "40px" }} />
+          <img
+            src={avatar}
+            alt="User Icon"
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
+          />
         </IconButton>
         <Menu
           anchorEl={anchorEl}
@@ -150,7 +173,6 @@ function HeaderStudent() {
           )}
         </Menu>
       </Stack>
-
       <Profile open={openProfileDialog} handleClose={handleProfileClose} />
     </Stack>
   );

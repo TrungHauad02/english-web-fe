@@ -20,7 +20,7 @@ const ImageSlider = () => {
   };
 
   return (
-    <Box sx={{ width: "100%", margin: "auto", padding: "0", position: "relative" }}>
+    <Box sx={{ width: "100%", margin: "auto", padding: "0", position: "relative", paddingTop: 8 }}>
       <Slider {...settings}>
         {images.map((image, index) => (
           <Box

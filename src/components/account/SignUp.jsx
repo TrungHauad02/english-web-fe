@@ -91,12 +91,15 @@ const SignUp = ({ toggleForm }) => {
       >
         Sign Up
       </Button>
-      <Box mt={2} display="flex" justifyContent="center">
-        Already have an account?{" "}
+      <Box mt={2} display="flex" justifyContent="center" alignItems="center" fontFamily="Roboto">
+        <Typography variant="body2" mr={1}>
+          Already have an account?
+        </Typography>
         <Link href="#" variant="body2" onClick={() => toggleForm("signin")}>
           Sign In
         </Link>
       </Box>
+
     </Box>
   );
 };

@@ -6,12 +6,12 @@ import SchoolIcon from "@mui/icons-material/School";
 const adminLinks = [
     {
         path: "/admin/teacher",
-        label: "Quản lý giáo viên",
+        label: "Teacher Management",
         icon: <PeopleIcon />,
     },
     {
         path: "/admin/student",
-        label: "Quản lý học sinh",
+        label: "Student Management",
         icon: <SchoolIcon />,
     },
 ];
@@ -19,22 +19,26 @@ const adminLinks = [
 export default function AdminManagement() {
     return (
         <Stack
-            sx={{
-                bgcolor: "#f1f1f1",
-                padding: "2rem",
-                margin: "2rem auto",
-                width: "90%",
-            }}
+        sx={{
+            padding: "2rem",
+            margin: "2rem auto",
+            width: "90%",
+            height: "60vh",
+            display: "flex", 
+            flexDirection: "column", 
+            justifyContent: "center",
+            alignItems: "center",
+          }}          
             spacing={3}
         >
             <Typography
                 variant="h4"
                 sx={{ fontWeight: "bold", textAlign: "center", color: "#333" }}
             >
-                Quản lý Admin
+                Admin Management
             </Typography>
             <Typography variant="body1" sx={{ textAlign: "center", color: "#666" }}>
-                Chào mừng bạn đến với trình quản lý Admin. Chọn mục bên dưới để bắt đầu.
+                Welcome to the Admin Manager. Select an item below to get started.
             </Typography>
 
             <Grid container spacing={2} justifyContent="center">

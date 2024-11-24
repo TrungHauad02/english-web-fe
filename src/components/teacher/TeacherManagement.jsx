@@ -50,12 +50,16 @@ const resourceLinks = [
 export default function TeacherManagement() {
   return (
     <Stack
-      sx={{
-        bgcolor: "#f1f1f1",
-        padding: "2rem",
-        margin: "2rem auto",
-        width: "90%",
-      }}
+    sx={{
+      padding: "2rem",
+      margin: "2rem auto",
+      width: "90%",
+      height: "60vh",
+      display: "flex", 
+      flexDirection: "column", 
+      justifyContent: "center",
+      alignItems: "center",
+    }}  
       spacing={3}
     >
       <Typography
