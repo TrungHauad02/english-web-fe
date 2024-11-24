@@ -1,4 +1,4 @@
-export const handleClear = (setSelectedEntity, setIsNew) => {
+export const handleClear = (setSelectedEntity, setIsNew, setIsEditing) => {
     setSelectedEntity({
         name: '',
         email: '',
@@ -11,4 +11,5 @@ export const handleClear = (setSelectedEntity, setIsNew) => {
         id: null,
     });
     setIsNew(false);
+    setIsEditing(false);
 };

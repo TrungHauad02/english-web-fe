@@ -13,10 +13,11 @@ function ManageStudent() {
     const [searchName, setSearchName] = useState('');
     const [searchStartDate, setSearchStartDate] = useState('');
     const [searchEndDate, setSearchEndDate] = useState('');
-    const [size, setSize] = useState(10);
+    const [size, setSize] = useState();
     const [openProfile, setOpenProfile] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [isNew, setIsNew] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
     const [reload, setReload] = useState(false);
     const [students, setStudents] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState({
@@ -35,7 +36,9 @@ function ManageStudent() {
         setFilteredStudents,
         loadStudents,
         lastStudentElementRef,
+        page,
         setPage,
+        totalPages,
     } = useStudentData(searchName, searchStartDate, searchEndDate, size);
 
     useEffect(() => {
@@ -74,9 +77,10 @@ function ManageStudent() {
                         handleClear,
                         setIsNew,
                         setReload,
-                        setPage
+                        setPage,
+                        setIsEdit
                     )}
-                    handleClear={() => handleClear(setSelectedStudent, setIsNew)}
+                    handleClear={() => handleClear(setSelectedStudent, setIsNew, setIsEdit)}
                     setReload={setReload}
                     setPage={setPage}
                 />
@@ -85,13 +89,25 @@ function ManageStudent() {
             <Grid item xs={12} md={8}>
                 <StudentTeacherList
                     listData={filteredStudents}
-                    lastStudentElementRef={lastStudentElementRef}
-                    handleClick={(student) => setSelectedStudent(student)}
+                    handleClick={(student) => setSelectedStudent(student)} 
                     handleDetailClick={(student) => {
-                        setSelectedStudent(student);
-                        setOpenProfile(true);
+                        setSelectedStudent(student); 
+                        setOpenProfile(true); 
                     }}
-                    role="student"
+                    page={page} 
+                    totalPages={totalPages}
+                    onPreviousPage={() => {
+                        if (page > 0) {
+                            setPage(page - 1); 
+                            loadStudents(page - 1); 
+                        }
+                    }}
+                    onNextPage={() => {
+                        if (page < totalPages - 1) {
+                            setPage(page + 1);
+                            loadStudents(page + 1); 
+                        }
+                    }}
                 />
             </Grid>
 
@@ -110,7 +126,8 @@ function ManageStudent() {
                     handleClear,
                     setIsNew,
                     setReload,
-                    setPage
+                    setPage,
+                    setIsEdit
                 )}
             />
         </Grid>

@@ -16,10 +16,9 @@ export const useTeacherData = (
   const [teachers, setTeachers] = useState([]);
   const [filteredTeachers, setFilteredTeachers] = useState([]);
   const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const observer = useRef();
+  const [totalPages, setTotalPages] = useState(1);
 
-  const loadTeachers = async () => {
+  const loadTeachers = async (currentPage = 0) => {
     try {
       const filters = {
         name: searchName,
@@ -31,7 +30,8 @@ export const useTeacherData = (
           : undefined,
         level: searchLevel === "ALL" ? undefined : searchLevel,
       };
-      const data = await getTeachers(page, size, "id", "asc", filters);
+
+      const data = await getTeachers(currentPage, size, "id", "asc", filters);
 
       const validData = data.content.map((teacher) => ({
         ...teacher,
@@ -44,38 +44,22 @@ export const useTeacherData = (
         status: teacher.status || "Active",
       }));
 
-      setTeachers((prevTeachers) =>
-        page === 0 ? validData : [...prevTeachers, ...validData]
-      );
-      setFilteredTeachers((prevTeachers) =>
-        page === 0 ? validData : [...prevTeachers, ...validData]
-      );
-      setHasMore(data.content.length > 0);
+      setTeachers(validData);
+      setFilteredTeachers(validData);
+      setTotalPages(data.totalPages);
     } catch (error) {
       toast.error("Unable to load teacher list. Please try again later.");
     }
   };
-
-  const lastTeacherElementRef = useCallback(
-    (node) => {
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          setPage((prevPage) => prevPage + 1);
-        }
-      });
-      if (node) observer.current.observe(node);
-    },
-    [hasMore]
-  );
 
   return {
     teachers,
     filteredTeachers,
     setFilteredTeachers,
     loadTeachers,
-    lastTeacherElementRef,
+    page,
     setPage,
+    totalPages,
   };
 };
 
@@ -144,7 +128,8 @@ export const handleAddTeacher = async (
   avatarFile,
   setIsNew,
   setReload,
-  setPage
+  setPage,
+  setIsLoading
 ) => {
   if (
     !selectedTeacher.name.trim() ||
@@ -154,9 +139,10 @@ export const handleAddTeacher = async (
     toast.error("Please fill in all required fields: Name, Email, and Level.");
     return;
   }
-
+  setIsLoading(true);
   try {
     let newavatar = null;
+
     if (avatarFile) {
       newavatar = await new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -166,12 +152,9 @@ export const handleAddTeacher = async (
       });
     }
 
-    const newImage = await handleFileUpload(
-      null,
-      newavatar,
-      selectedTeacher.email,
-      "teacher/signup"
-    );
+    const newImage = avatarFile
+      ? await handleFileUpload(null, newavatar, selectedTeacher.email, "teacher/signup")
+      : "/header_student"; 
 
     const newTeacherData = {
       name: selectedTeacher.name,
@@ -184,8 +167,10 @@ export const handleAddTeacher = async (
     };
 
     const createdTeacher = await createTeacher(newTeacherData);
+
     setTeachers([...teachers, createdTeacher]);
     setFilteredTeachers([...teachers, createdTeacher]);
+
     setSelectedTeacher({
       name: "",
       email: "",
@@ -193,14 +178,20 @@ export const handleAddTeacher = async (
       avatar: "",
       status: "",
     });
+
     setIsNew(false);
     setReload((prev) => !prev);
     setPage(0);
+    toast.success("Add new teacher successfully")
   } catch (error) {
     toast.error(
       error.response?.data?.message ||
-        "An unexpected error occurred. Please try again."
+      "An unexpected error occurred. Please try again."
     );
+    console.error(error);
+  }
+  finally {
+    setIsLoading(false); 
   }
 };
 

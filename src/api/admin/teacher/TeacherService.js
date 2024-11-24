@@ -2,7 +2,7 @@ import apiClient from "api/apiClient";
 
 export const getTeachers = async (
   page = 0,
-  size = 10,
+  size = 5,
   sortBy = "id",
   sortDir = "asc",
   filters = {}
@@ -11,9 +11,6 @@ export const getTeachers = async (
 
   try {
     const params = { page, size, sortBy, sortDir, ...filters };
-    if (filters.level === undefined || filters.level === "All")
-      delete params.level; // Xóa level nếu undefined hoặc là "All"
-
     const response = await apiClient.get("/users/teachers", {
       params,
       headers: {

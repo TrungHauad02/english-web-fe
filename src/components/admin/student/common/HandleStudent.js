@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState } from 'react';
 import { getStudents } from 'api/admin/student/StudentService';
 import { toast } from 'react-toastify';
 
@@ -6,17 +6,18 @@ export const useStudentData = (searchName, searchStartDate, searchEndDate, size)
     const [students, setStudents] = useState([]);
     const [filteredStudents, setFilteredStudents] = useState([]);
     const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
     const [hasMore, setHasMore] = useState(true);
-    const observer = useRef();
 
-    const loadStudents = async () => {
+    const loadStudents = async (currentPage = 0) => {
         try {
             const filters = {
                 name: searchName,
                 startDate: searchStartDate ? new Date(searchStartDate).toISOString().split('T')[0] : undefined,
                 endDate: searchEndDate ? new Date(searchEndDate).toISOString().split('T')[0] : undefined,
             };
-            const data = await getStudents(page, size, "id", "asc", filters);
+
+            const data = await getStudents(currentPage, size, "id", "asc", filters);
 
             const validData = data.content.map(student => ({
                 ...student,
@@ -28,30 +29,22 @@ export const useStudentData = (searchName, searchStartDate, searchEndDate, size)
                 status: student.status || 'Active',
             }));
 
-            setStudents(prevStudents => page === 0 ? validData : [...prevStudents, ...validData]);
-            setFilteredStudents(prevStudents => page === 0 ? validData : [...prevStudents, ...validData]);
-            setHasMore(data.content.length > 0);
+            setStudents(validData); 
+            setFilteredStudents(validData);
+            setTotalPages(data.totalPages); 
+            setHasMore(data.content.length > 0); 
         } catch (error) {
-            toast.error("Không thể tải danh sách sinh viên. Vui lòng thử lại sau.");
+            toast.error("Unable to load student list. Please try again later.");
         }
     };
-
-    const lastStudentElementRef = useCallback(node => {
-        if (observer.current) observer.current.disconnect();
-        observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) {
-                setPage(prevPage => prevPage + 1);
-            }
-        });
-        if (node) observer.current.observe(node);
-    }, [hasMore]);
 
     return {
         students,
         filteredStudents,
         setFilteredStudents,
         loadStudents,
-        lastStudentElementRef,
+        page,
         setPage,
+        totalPages,
     };
 };

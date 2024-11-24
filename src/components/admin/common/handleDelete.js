@@ -12,6 +12,7 @@ export const handleDelete = async (
     setIsNew,
     setReload,
     setPage,
+    setIsEditing
 ) => {
     if (!Array.isArray(entities)) {
         toast.error("User is not an array:", entities);
@@ -50,7 +51,7 @@ export const handleDelete = async (
     }
 
     setConfirmDeleteOpen(false);
-    handleClear(setSelectedEntity, setIsNew);
+    handleClear(setSelectedEntity, setIsNew, setIsEditing);
     setReload(prev => !prev);
     setPage(0);
 };
