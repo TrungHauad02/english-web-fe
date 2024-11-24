@@ -18,6 +18,7 @@ import {
 } from "./HandleProfile";
 import { fetchUserInfo } from "api/user/userService";
 import { handleFileChange } from "shared/utils/uploadFileUtils";
+import DotLoader from 'shared/component/loader/DotLoader';
 
 const Profile = ({ open, handleClose }) => {
   const [name, setName] = useState("");
@@ -26,6 +27,7 @@ const Profile = ({ open, handleClose }) => {
   const [editMode, setEditMode] = useState(false);
   const [image, setImage] = useState("");
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const loadUserInfo = async () => {
@@ -190,7 +192,7 @@ const Profile = ({ open, handleClose }) => {
         <Button
           onClick={
             editMode
-              ? () => handleSave(name || "", userNote || "", image, setEditMode)
+              ? () => handleSave(name || "", userNote || "", image, setEditMode, setIsLoading)
               : handleClose
           }
           riant="contained"
@@ -206,6 +208,11 @@ const Profile = ({ open, handleClose }) => {
           variant="text"
         />
       </DialogContent>
+      {isLoading && (
+        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0, 0, 0, 0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1300 }}>
+          <DotLoader dotSize="1rem" />
+        </div>
+      )}
     </Dialog>
   );
 };

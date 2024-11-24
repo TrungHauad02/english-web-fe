@@ -82,7 +82,7 @@ const TeacherInfo = ({ setAvatarFile, selectedTeacher, setSelectedTeacher, isEdi
                             sx={{ bgcolor: '#FFD014' }}
                             onClick={isEditing ? handleSaveEdit : handleEditToggle}
                         >
-                            {isEditing ? 'Save Edit' : 'Edit'}
+                            {isEditing ? 'Save' : 'Edit'}
                         </Button>
                     </Grid>
                     <Grid item xs={3}>

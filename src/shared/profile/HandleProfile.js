@@ -7,7 +7,8 @@ export const handleEditProfile = (setEditMode) => {
   setEditMode(true);
 };
 
-export const handleSave = async (name, userNote, image, setEditMode) => {
+export const handleSave = async (name, userNote, image, setEditMode, setIsLoading) => {
+  setIsLoading(true);
   try {
     let user = await fetchUserInfo();
     let id = user.id;
@@ -36,6 +37,8 @@ export const handleSave = async (name, userNote, image, setEditMode) => {
   } catch (error) {
     console.error("Error while saving:", error);
     toast.error("Update failure information");
+  } finally{
+    setIsLoading(false);
   }
 };
 
