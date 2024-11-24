@@ -2,10 +2,11 @@ import React from "react";
 import { useAuth } from "security/AuthContext";
 import { Typography, Button, Box } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
+import useColor from "shared/color/Color";
 
 const ErrorPage = ({ errorType }) => {
   const { userRole } = useAuth();
-
+  const { Color2 } = useColor();
   const getHomePath = () => {
     switch (userRole) {
       case "TEACHER":
@@ -38,19 +39,21 @@ const ErrorPage = ({ errorType }) => {
       default:
         return "An unexpected error occurred.";
     }
-  };  
+  };
 
   return (
-    <Box sx={{ textAlign: "center", marginTop: 8 }}>
+    <Box sx={{ textAlign: "center", marginTop: 8, height: "72vh" }}>
       <Typography variant="h3" color="error" gutterBottom>
         {getErrorMessage()}
       </Typography>
       <Button
         variant="contained"
-        color="primary"
         component={RouterLink}
         to={getHomePath()}
-        sx={{ marginTop: 2 }}
+        sx={{
+          marginTop: 2,
+          backgroundColor: Color2, 
+        }}
       >
         Return to home page
       </Button>

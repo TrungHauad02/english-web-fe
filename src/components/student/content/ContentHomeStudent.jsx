@@ -4,10 +4,10 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { sections } from "./components/HomeStudent.js";
+import { sections } from "./common/HomeStudent.js";
 import { useAuth } from "security/AuthContext.js";
-import { HandleHomeStudent } from "./components/HandleHomeStudent.js";
-import RequiredLoginDialog from "./components/RequiredLoginDialog.js";
+import { HandleHomeStudent } from "./common/HandleHomeStudent.js";
+import RequiredLoginDialog from "./common/RequiredLoginDialog.js";
 
 const ContentHomeStudent = () => {
   const [requiredLoginDialog, setRequiredLoginDialog] = useState(false);
@@ -119,8 +119,8 @@ const ContentHomeStudent = () => {
                         {section.title === "TEST"
                           ? "Take Test"
                           : section.title === "SKILLS"
-                          ? "Improve Your Skills"
-                          : `Learn ${section.title}`}
+                            ? "Improve Your Skills"
+                            : `Learn ${section.title}`}
                       </Button>
                     </Box>
                   </Grid>
@@ -178,8 +178,8 @@ const ContentHomeStudent = () => {
                         {section.title === "TEST"
                           ? "Take Test"
                           : section.title === "SKILLS"
-                          ? "Improve Your Skills"
-                          : `Learn ${section.title}`}
+                            ? "Improve Your Skills"
+                            : `Learn ${section.title}`}
                       </Button>
                     </Box>
                   </Grid>
