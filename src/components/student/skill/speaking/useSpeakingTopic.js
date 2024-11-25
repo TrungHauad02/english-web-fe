@@ -64,7 +64,7 @@ export default function useSpeakingTopic() {
       setComment(dataScore.comment);
       setScore(dataScore.score);
     } catch (err) {
-      toast.error("Error while scoring: " + err);
+      toast.error("Error while scoring");
     }
   };
 
@@ -76,7 +76,9 @@ export default function useSpeakingTopic() {
         if (data && data.duration) {
           setTimer(data.duration);
         }
-      } catch (err) {}
+      } catch (err) {
+        toast.error("Error while fetching data");
+      }
     };
     fetchData();
     navigator.mediaDevices

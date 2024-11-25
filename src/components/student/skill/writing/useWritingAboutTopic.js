@@ -19,10 +19,6 @@ export default function useWritingAboutTopic(topic) {
     try {
       setIsScoring(true);
       const data = await scoreWriting(essay, topic);
-      // const data = {
-      //   score: "95/100",
-      //   comment: "You did a great job!",
-      // };
       setScore(data.score);
       setComment(data.comment);
       setIsScoring(false);

@@ -16,9 +16,7 @@ export default function useTopicList(title) {
       setIsLoading(true);
       setError(null);
       try {
-        console.log(nameSearch);
         const data = await getListTopic(title, page, 10, "serial", nameSearch);
-        console.log(data);
 
         const newContent = Array.isArray(data.content) ? data.content : [];
         setDisplayList((prevList) => [...(prevList || []), ...newContent]);
