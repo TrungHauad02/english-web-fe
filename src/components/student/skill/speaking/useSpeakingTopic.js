@@ -1,6 +1,8 @@
 import { getSpeakingDetail } from "api/study/speaking/speakingService";
+import { getSpeechToText } from "api/feature/stt/SpeechToTextService";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { scoreWriting } from "api/feature/scoreWriting/scoreWriting";
 
 export default function useSpeakingTopic() {
   const { id } = useParams();
@@ -10,6 +12,9 @@ export default function useSpeakingTopic() {
   const [isRecording, setIsRecording] = useState(false);
   const [audioSrc, setAudioSrc] = useState(null);
   const [timer, setTimer] = useState(0);
+  const [textRecognize, setTextRecognize] = useState("");
+  const [comment, setComment] = useState("");
+  const [score, setScore] = useState("");
   const timerRef = useRef(null);
 
   const handleStartRecording = () => {
@@ -48,6 +53,18 @@ export default function useSpeakingTopic() {
     setAudioSrc(null);
   };
 
+  const handleSubmit = async () => {
+    try {
+      const data = await getSpeechToText(audioSrc);
+      setTextRecognize(data.transcript);
+      const dataScore = await scoreWriting(data.transcript, speaking.topic);
+      setComment(dataScore.comment);
+      setScore(dataScore.score);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -82,5 +99,9 @@ export default function useSpeakingTopic() {
     handleStartRecording,
     handleStop,
     handleClearAudio,
+    handleSubmit,
+    textRecognize,
+    comment,
+    score,
   };
 }
