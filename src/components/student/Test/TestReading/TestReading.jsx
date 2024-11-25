@@ -9,7 +9,8 @@ import { getTest } from 'api/test/TestApi';
 import { createSubmitTest } from '../../../../api/test/submitTest';
 import { fetchUserInfo } from '../../../../api/user/userService';
 import { createSubmitTestReadingAnswer } from '../../../../api/test/submitTestReadingAnswer';
-import { commentReadingQuestion } from '../../../../api/test/commentTest';
+import { commentReadingQuestion,scoreTestSpeakingQuestion } from '../../../../api/test/commentTest';
+
 
 const DurationContainer = styled(Paper)(({ theme }) => ({
   background: '#FFF4CC',
@@ -70,6 +71,8 @@ function TestReading() {
   }
 
   const handlebtnSubmit = async () => {
+  
+    
     setIsSubmitting(true); 
     const score = calculateScore();
     let user = await fetchUserInfo();
@@ -186,14 +189,12 @@ function TestReading() {
         left: 0, 
         width: '100%', 
         height: '100vh', 
-        backgroundColor: 'rgba(255, 255, 255, 0.7)', // Màu nền mờ để nhìn thấy nội dung phía dưới
-        zIndex: 1000 // Đảm bảo CircularProgress nằm trên cùng
+        backgroundColor: 'rgba(255, 255, 255, 0.7)', 
+        zIndex: 1000 
       }}>
         <CircularProgress />
       </Box>
     )}
-    
-    {/* Nội dung chính */}
     <MainTitle title="Reading" bg={"/bg_test.png"} />
     <DurationContainer sx={{ marginRight: '5%' }} elevation={1}>
       <Typography align="center">

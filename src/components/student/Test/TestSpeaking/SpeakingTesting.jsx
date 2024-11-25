@@ -81,48 +81,44 @@ export default function InterviewInstruction({ datatest, status, setStatus , set
       }
     }
   };
-
+  const findIndicesBySerial = (serial, testSpeakings) => {
+    let speakingIndex = 0;
+    let questionIndex = 0;
+  
+    for (let i = 0; i < testSpeakings.length; i++) {
+      const speaking = testSpeakings[i];
+      for (let j = 0; j < speaking.questions.length; j++) {
+        if (speaking.questions[j].serial === serial) {
+          speakingIndex = i;
+          questionIndex = j;
+          break;
+        }
+      }
+    }
+  
+    return { speakingIndex, questionIndex };
+  };
+   
   const handleSerialClick = (serial) => {
-    if (isRecording) {
+    const handleConfirmDialog = () => {
       setOnDialogConfirm(() => (shouldSave) => {
-        if (shouldSave) {
-          setIsRecording(false);
-        } else {
-          setIsRecording(false);
-        }
-        let speakingIndex = 0;
-        let questionIndex = 0;
-        for (let i = 0; i < datatest?.testSpeakings.length; i++) {
-          const speaking = datatest?.testSpeakings[i];
-          for (let j = 0; j < speaking.questions.length; j++) {
-            if (speaking.questions[j].serial === serial) {
-              speakingIndex = i;
-              questionIndex = j;
-              break;
-            }
-          }
-        }
+        setIsRecording(false); 
+        const { speakingIndex, questionIndex } = findIndicesBySerial(serial, datatest?.testSpeakings);
         setIndexSpeaking(speakingIndex);
         setIndexQuestion(questionIndex);
       });
       setOpenDialog(true);
+    };
+  
+    if (isRecording) {
+      handleConfirmDialog();
     } else {
-      let speakingIndex = 0;
-      let questionIndex = 0;
-      for (let i = 0; i < datatest?.testSpeakings.length; i++) {
-        const speaking = datatest?.testSpeakings[i];
-        for (let j = 0; j < speaking.questions.length; j++) {
-          if (speaking.questions[j].serial === serial) {
-            speakingIndex = i;
-            questionIndex = j;
-            break;
-          }
-        }
-      }
+      const { speakingIndex, questionIndex } = findIndicesBySerial(serial, datatest?.testSpeakings);
       setIndexSpeaking(speakingIndex);
       setIndexQuestion(questionIndex);
     }
   };
+  
 
   const getListSerials = () => {
     const serials = [];

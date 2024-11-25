@@ -67,8 +67,6 @@ useEffect(() => {
       title: [],
       serials: [],
     };
-
-    
     DataTestMixing.forEach((data) => {
       if (data.title === "Vocabulary" || data.title === "Grammar") {
         TitleAndSerials.title.push(data.title);
@@ -102,7 +100,6 @@ useEffect(() => {
         TitleAndSerials.serials.push(serialsForCurrentTitle);
       }
     });
-    
     return TitleAndSerials;
   };
 
@@ -125,9 +122,6 @@ useEffect(() => {
     },
     [TitleAndSerials]
   );
-
-
-
   const [score, setScore] = useState(0);
 
  const generateGridData = () => {
@@ -374,9 +368,7 @@ useEffect(() => {
     return submitTest;
   };
   
-  
-
-  
+    
   const handlebtnSubmit = async () => {
   
  

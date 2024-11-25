@@ -79,25 +79,29 @@ const handlebtnNext = () => {
   });
 };
 
+const evaluateListeningTestResults = () => {
 
-const generateGridData = () => {
-  
-  return data.flatMap(dataitem =>
-    dataitem.questions.map(question => {
+  return data.flatMap(testListening =>
+    testListening.questions.map(question => {
    
-      const correctAnswer = question.answers.find((answer) => answer?.isCorrect);
+      const correctAnswer = question.answers.find(answer => answer?.isCorrect);
+ 
       const selectedAnswer = historyTest?.submitTestListeningAnswers?.find(
-          (submit) => submit?.questionId === question.id
+        submit => submit?.questionId === question.id
       )?.answerId;
-
+     
       if (!correctAnswer || selectedAnswer === undefined) {
-          return -1;
+        return -1; 
       }
 
-      return selectedAnswer === correctAnswer.id ? 1 : -1;
+      return selectedAnswer === correctAnswer.id ? 1 : -1; 
     })
   );
 };
+
+
+
+
 const handleItemClick = (serial) => {
 
     const newIndex = data.findIndex(dataItem => 
@@ -160,7 +164,7 @@ const getListSerialQuestion = () => {
         <Box sx={{ marginLeft:"2rem" , width:'15%'}}> 
         <ScoreGrid 
             score={historyTest?.score} 
-            gridData={generateGridData()} 
+            gridData={evaluateListeningTestResults()} 
             serials={getListSerialQuestion()} 
             onItemClick={handleItemClick} 
             handleTestAgain={handleTestAgain} 

@@ -1,5 +1,5 @@
 import ContentWritingMixing from './ContentWritingMixing'
-function Writing({dataTest,onAnswerChange,focusId,title,answers,setAnswers}) 
+function Writing({dataTest,focusId,title,answers,setAnswers}) 
 {
     return(
         <>

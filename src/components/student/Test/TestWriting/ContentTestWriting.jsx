@@ -15,7 +15,7 @@ const Partition = styled(Box)(({ theme }) => ({
 }));
 
 const QuestionSection = styled(Grid)(({ theme }) => ({
-  padding:'1rem',
+  padding: '1rem',
   flex: '0 1 47%',
 }));
 
@@ -25,7 +25,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   borderRadius: '1rem',
 }));
 
-const EssayInput = ({ value, wordCount, onChange }) => {
+const EssayInput = ({ value = '', wordCount = 0, onChange }) => {
   const handleEssayChange = useCallback((event) => {
     const text = event.target.value;
     const wordCount = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
@@ -40,7 +40,7 @@ const EssayInput = ({ value, wordCount, onChange }) => {
         rows={10}
         variant="outlined"
         placeholder="Type your essay here..."
-        value={value} 
+        value={value || ''}
         onChange={handleEssayChange}
         sx={{
           '& .MuiOutlinedInput-root': {
@@ -57,59 +57,55 @@ const EssayInput = ({ value, wordCount, onChange }) => {
         }}
       />
       <Box sx={{ mt: 1 }}>
-        <Typography variant="body2">Words Count: {wordCount}</Typography>
+        <Typography variant="body2">Words Count: {wordCount || 0}</Typography>
       </Box>
     </StyledPaper>
   );
 };
 
-function ContentTestWriting({ datatest,handlebtnSubmit,onClickTestAgain,status,calculateScore }) {
-
-  const [answers, setAnswers] = useState({});
-
+function ContentTestWriting({ datatest, handlebtnSubmit ,answers,setAnswers}) {
 
   const handleAnswerChange = (id, essay, wordCount) => {
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
-      [id]: { essay, wordCount }, 
+      [id]: { essay, wordCount },
     }));
   };
 
-
-
   return (
     <>
-      <Box sx={{  display: 'flex', marginTop: '2%' }}>
+      <Box sx={{ display: 'flex', marginTop: '2%' }}>
         <TestContainer sx={{ flex: '1 1 49%' }}>
           <QuestionSection item>
-          <Typography variant="h5" sx={{  fontWeight: 'bold' }}>
-            Question {datatest.serial}
+            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+              Question {datatest?.serial || ''} 
             </Typography>
-            <Typography variant="body1" sx={{marginTop:'1rem'}}>{datatest.content}</Typography>
+            <Typography variant="body1" sx={{ marginTop: '1rem' }}>
+              {datatest?.content || 'No content available'} 
+            </Typography>
           </QuestionSection>
         </TestContainer>
         <Partition sx={{ flex: '1 1 0.2%' }} />
         <TestContainer sx={{ flex: '1 1 49%' }}>
-    
           <EssayInput
-            value={answers[datatest.id]?.essay || ''} 
-            wordCount={answers[datatest.id]?.wordCount || 0} 
-            onChange={(essay, wordCount) => handleAnswerChange(datatest.id, essay, wordCount)} 
+            value={answers[datatest?.id]?.essay || ''} 
+            wordCount={answers[datatest?.id]?.wordCount || 0} 
+            onChange={(essay, wordCount) => handleAnswerChange(datatest?.id, essay, wordCount)}
           />
-           {
-      status === 'Submit' ?  <Box sx={{marginLeft:'1rem',float:'left',borderRadius: '1rem',border:'solid 0.02rem',padding:'1rem 2rem'}}>
-      <Typography align="center">
-          Score: {calculateScore()}
-          </Typography>
-      </Box> : null
-    }
-   
-   
-    <Button sx={{
-  borderRadius: '1rem',   backgroundColor: status === 'Testing' ? '#FFD984' : '#4A90E2',color:'black',float:'right',marginRight:'10%',marginBottom:'2%',padding:'1rem 2rem'}}  onClick={status === 'Testing' ? handlebtnSubmit : onClickTestAgain } 
-  >
-       {status === 'Testing' ? 'SUBMIT' : 'TEST AGAIN'}
-      </Button>
+          <Button
+            sx={{
+              borderRadius: '1rem',
+              backgroundColor: '#FFD984',
+              color: 'black',
+              float: 'right',
+              marginRight: '10%',
+              marginBottom: '2%',
+              padding: '1rem 2rem',
+            }}
+            onClick={handlebtnSubmit}
+          >
+            SUBMIT
+          </Button>
         </TestContainer>
       </Box>
     </>
