@@ -3,6 +3,7 @@ import { getSpeechToText } from "api/feature/stt/SpeechToTextService";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { scoreWriting } from "api/feature/scoreWriting/scoreWriting";
+import { toast } from "react-toastify";
 
 export default function useSpeakingTopic() {
   const { id } = useParams();
@@ -20,6 +21,7 @@ export default function useSpeakingTopic() {
   const handleStartRecording = () => {
     setIsRecording((prevState) => !prevState);
     if (!isRecording) {
+      if (audioSrc) handleClearAudio();
       timerRef.current = setInterval(() => {
         setTimer((prevTimer) => {
           if (prevTimer > 1) return prevTimer - 1;
@@ -51,6 +53,7 @@ export default function useSpeakingTopic() {
 
   const handleClearAudio = () => {
     setAudioSrc(null);
+    setTimer(speaking.duration);
   };
 
   const handleSubmit = async () => {
@@ -61,7 +64,7 @@ export default function useSpeakingTopic() {
       setComment(dataScore.comment);
       setScore(dataScore.score);
     } catch (err) {
-      console.error(err);
+      toast.error("Error while scoring: " + err);
     }
   };
 

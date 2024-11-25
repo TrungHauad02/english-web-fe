@@ -1,11 +1,13 @@
 import { scoreWriting } from "api/feature/scoreWriting/scoreWriting";
 import { useCallback, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function useWritingAboutTopic(topic) {
   const [essay, setEssay] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [comment, setComment] = useState("");
   const [score, setScore] = useState("");
+  const [isScoring, setIsScoring] = useState(false);
 
   const handleEssayChange = useCallback((event) => {
     const text = event.target.value;
@@ -14,13 +16,19 @@ export default function useWritingAboutTopic(topic) {
   }, []);
 
   const handleSubmit = async () => {
-    const data = await scoreWriting(essay, topic);
-    // const data = {
-    //   score: "95/100",
-    //   comment: "You did a great job!",
-    // };
-    setScore(data.score);
-    setComment(data.comment);
+    try {
+      setIsScoring(true);
+      const data = await scoreWriting(essay, topic);
+      // const data = {
+      //   score: "95/100",
+      //   comment: "You did a great job!",
+      // };
+      setScore(data.score);
+      setComment(data.comment);
+      setIsScoring(false);
+    } catch (error) {
+      toast.error("Error while scoring");
+    }
   };
 
   return {
@@ -30,5 +38,6 @@ export default function useWritingAboutTopic(topic) {
     handleSubmit,
     comment,
     score,
+    isScoring,
   };
 }

@@ -8,15 +8,16 @@ function BasicButton({
   startIcon,
   endIcon,
   sx,
+  disabled,
 }) {
   const { Color2_1 } = useColor();
   const complexSx = {
     borderRadius: "0.25rem",
     backgroundColor: Color2_1,
     color: "#000",
-    textTransform:"none",
-    ...sx
-  }
+    textTransform: "none",
+    ...sx,
+  };
 
   return (
     <Button
@@ -25,6 +26,7 @@ function BasicButton({
       sx={complexSx}
       startIcon={startIcon}
       endIcon={endIcon}
+      disabled={disabled}
     >
       {content}
     </Button>
