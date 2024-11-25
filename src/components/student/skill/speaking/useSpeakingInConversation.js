@@ -3,6 +3,7 @@ import { uploadFile } from "api/feature/uploadFile/uploadFileService";
 import { getConversationInSpeaking } from "api/study/speaking/conversationService";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function useSpeakingInConversation() {
   const [listConversation, setListConversation] = useState([]);
@@ -14,18 +15,23 @@ export default function useSpeakingInConversation() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getConversationInSpeaking(id, "ACTIVE");
-      const sortedData = (data || []).sort((a, b) => a.serial - b.serial);
-      setListConversation(sortedData);
+      try {
+        const data = await getConversationInSpeaking(id, "ACTIVE");
+        const sortedData = (data || []).sort((a, b) => a.serial - b.serial);
+        setListConversation(sortedData);
 
-      const uniquePeople = [
-        ...new Set((sortedData || []).map((line) => line.name)),
-      ];
-      setPerson(uniquePeople[0]);
-      setListPeople(uniquePeople);
+        const uniquePeople = [
+          ...new Set((sortedData || []).map((line) => line.name)),
+        ];
+        setPerson(uniquePeople[0]);
+        setListPeople(uniquePeople);
 
-      setIsRecordingList(sortedData.map(() => false));
-      setRecordedAudio(sortedData.map(() => null));
+        setIsRecordingList(sortedData.map(() => false));
+        setRecordedAudio(sortedData.map(() => null));
+      } catch (error) {
+        console.error(error);
+        toast.error("Error while fetching data");
+      }
     };
     fetchData();
   }, [id]);
