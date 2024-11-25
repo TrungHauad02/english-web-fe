@@ -27,6 +27,9 @@ const HistoryTest = () => {
   const [filter, setFilter] = useState("All");
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchStartDate, setSearchStartDate] = useState(null);
+  const [searchEndDate, setSearchEndDate] = useState(null);
+
   const [tests, setTests] = useState(testData);
 
   const currentTests = tests.slice(
@@ -44,6 +47,10 @@ const HistoryTest = () => {
             setFilter={setFilter}
             searchText={searchText}
             setSearchText={setSearchText}
+            searchStartDate={searchStartDate}
+            setSearchStartDate={setSearchStartDate} 
+            searchEndDate={searchEndDate}
+            setSearchEndDate={setSearchEndDate}
             handleSearch={() => handleSearch(testData, searchText, filter, setTests, setCurrentPage)}
           />
           <Grid container spacing={2}>
