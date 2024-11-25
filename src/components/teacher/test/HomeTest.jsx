@@ -104,33 +104,37 @@ const TestManagement = () => {
 
   };
   const navigate = useNavigate();
-  const location = useLocation();
+ 
 
   const handlebtnDetail = (datatest) => {
-    const currentPath = location.pathname.replace(/\/+/g, '/');
     
-    let newPath = "";
-
+    let newPath = '';
     switch (datatest.type) {
       case type.mixing:
-        newPath = `${currentPath}/mixing`;
+        newPath = `/teacher/test/mixing`;
         break;
       case type.reading:
-        newPath = `${currentPath}/reading`;
+        newPath = `/teacher/test/reading`;
         break;
       case type.listening:
-        newPath = `${currentPath}/listening`;
+        newPath = `/teacher/test/listening`;
         break;
       case type.speaking:
-        newPath = `${currentPath}/speaking`;
+        newPath = `/teacher/test/speaking`;
         break;
       case type.writing:
-        newPath = `${currentPath}/writing`;
+        newPath = `/teacher/test/writing`;
         break;
       default:
         break;
     }
-    navigate(newPath, { state: datatest });
+
+    navigate(newPath, { state: {
+      id: datatest.id,
+      type: datatest.type,
+  }});
+
+
   };
   return (
     <Container maxWidth="lg" sx={{ marginTop: "4rem", marginBottom: "2rem" }}>

@@ -35,3 +35,15 @@ export function commentMixingQuestion(request) {
       throw error;
     });
 }
+
+export function scoreTestSpeakingQuestion(request) {
+  return apiClient
+    .post("/score-test-speaking-question", request)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error scoring speaking question:", error);
+      throw error;
+    });
+}
