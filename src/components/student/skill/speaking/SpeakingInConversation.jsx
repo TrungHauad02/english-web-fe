@@ -78,6 +78,8 @@ export default function SpeakingInConversation() {
                     strokeColor="#fff"
                     backgroundColor={color.Color2}
                     mimeType="audio/wav"
+                    sampleRate={16000}
+                    audioBitsPerSecond={128000}
                   />
                   {recordedAudio[index] && (
                     <Stack
