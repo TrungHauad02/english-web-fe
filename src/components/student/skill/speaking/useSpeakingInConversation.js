@@ -1,6 +1,6 @@
-import { scoreConversation } from "api/feature/scoreSpeaking/scoreConversation";
-import { uploadFile } from "api/feature/uploadFile/uploadFileService";
 import { getConversationInSpeaking } from "api/study/speaking/conversationService";
+import { getSpeechToText } from "api/feature/stt/SpeechToTextService";
+import { scoreConversation } from "api/feature/scoreSpeaking/scoreConversation";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -11,6 +11,8 @@ export default function useSpeakingInConversation() {
   const [listPeople, setListPeople] = useState([]);
   const [isRecordingList, setIsRecordingList] = useState([]);
   const [recordedAudio, setRecordedAudio] = useState([]);
+  const [results, setResults] = useState([]);
+  const [isScoring, setIsScoring] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -82,32 +84,59 @@ export default function useSpeakingInConversation() {
   };
 
   const handleSubmit = async () => {
-    console.log("Submit");
-    const userId = localStorage.getItem("userId");
-    const uploadPromises = recordedAudio.map((audio, index) => {
-      if (audio) {
-        const fileName = `conversation${
-          listConversation[index].id + userId
-        }.wav`;
-        return uploadFile("study/speaking/conversation", fileName, audio, "NO");
-      }
-      return Promise.resolve();
-    });
     try {
-      const results = await Promise.all(uploadPromises);
-      console.log("All files uploaded successfully!:", results);
+      if (!recordedAudio || recordedAudio.length === 0) {
+        toast.warning("No recordings to process.");
+        return;
+      }
+      setIsScoring(true);
+      const newResults = [];
 
-      const scorePromises = results.map((result, index) => {
-        const audioProvided = result.url.replace("?alt=media", "");
-        const scale = 100;
-        const speakingConversationId = listConversation[index].id;
+      for (let i = 0; i < recordedAudio.length; i++) {
+        const audio = recordedAudio[i];
+        const conversation = listConversation[i];
 
-        return scoreConversation(speakingConversationId, scale, audioProvided);
-      });
-      const scoreResults = await Promise.all(scorePromises);
-      console.log("All scores submitted successfully!", scoreResults);
+        if (audio && conversation) {
+          try {
+            const speechText = await getSpeechToText(audio);
+
+            const scoreData = await scoreConversation(
+              speechText.transcript,
+              conversation.content
+            );
+
+            console.log(`Speech Text: ${speechText.transcript}`);
+            console.log(`Real Text: ${conversation.content}`);
+            console.log(`Score:`, scoreData);
+
+            newResults.push({
+              conversationId: conversation.id,
+              realText: conversation.content,
+              transcript: speechText.transcript,
+              score: scoreData.score,
+            });
+
+            toast.success(`Successfully scored conversation`);
+          } catch (error) {
+            console.error(
+              `Error processing conversation ID: ${conversation.id}`,
+              error
+            );
+            toast.error(
+              `Failed to process conversation ID: ${conversation.id}`
+            );
+          }
+        } else if (!audio) {
+          console.warn(
+            `No audio recorded for conversation ID: ${conversation.id}`
+          );
+        }
+      }
+      setResults(newResults);
+      setIsScoring(false);
     } catch (error) {
-      console.error("Failed to upload some files", error);
+      console.error("Error during submission", error);
+      toast.error("An error occurred during submission");
     }
   };
 
@@ -122,5 +151,7 @@ export default function useSpeakingInConversation() {
     recordedAudio,
     handleResetRecording,
     handleSubmit,
+    results,
+    isScoring,
   };
 }
