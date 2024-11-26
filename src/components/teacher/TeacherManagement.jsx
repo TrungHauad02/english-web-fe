@@ -13,53 +13,59 @@ import HearingIcon from "@mui/icons-material/Hearing";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
 import EditIcon from "@mui/icons-material/Edit";
 import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 
 const resourceLinks = [
   {
     path: "/teacher/topics",
-    label: "Quản lý bài học từ vựng theo chủ đề",
+    label: "Manage vocabulary lessons by topic",
     icon: <BookIcon />,
   },
   {
     path: "/teacher/grammars",
-    label: "Quản lý bài học ngữ pháp",
+    label: "Manage grammar lessons",
     icon: <MenuBookIcon />,
   },
   {
     path: "/teacher/readings",
-    label: "Quản lý bài học kỹ năng đọc hiểu",
+    label: "Manage reading comprehension lessons",
     icon: <SpeakerNotesIcon />,
   },
   {
     path: "/teacher/listenings",
-    label: "Quản lý bài học kỹ năng nghe hiểu",
+    label: "Manage listening comprehension lessons",
     icon: <HearingIcon />,
   },
   {
     path: "/teacher/speakings",
-    label: "Quản lý bài học kỹ năng nói",
+    label: "Manage speaking skills lessons",
     icon: <RecordVoiceOverIcon />,
   },
   {
     path: "/teacher/writings",
-    label: "Quản lý bài học kỹ năng viết",
+    label: "Manage writing skills lessons",
     icon: <EditIcon />,
+  },
+  {
+    path: "/teacher/test",
+    label: "Manage tests",
+    icon: <AssignmentIcon />,
   },
 ];
 
 export default function TeacherManagement() {
   return (
     <Stack
-    sx={{
-      padding: "2rem",
-      margin: "2rem auto",
-      width: "90%",
-      height: "60vh",
-      display: "flex", 
-      flexDirection: "column", 
-      justifyContent: "center",
-      alignItems: "center",
-    }}  
+      sx={{
+        padding: "2rem",
+        margin: "2rem auto",
+        width: "90%",
+        height: "auto",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
       spacing={3}
     >
       <Typography
@@ -73,12 +79,23 @@ export default function TeacherManagement() {
         tập tiếng Anh. Chọn mục bên dưới để bắt đầu.
       </Typography>
 
-      <Grid container spacing={2} justifyContent="center">
-        {resourceLinks.map((link) => (
-          <Grid item xs={12} sm={6} md={4} key={link.path}>
+      <Grid container spacing={3} justifyContent="center">
+        {resourceLinks.map((link, index) => (
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            key={link.path}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             <Card
               sx={{
-                height: 150,
+                height: 200,
+                width: "90%",
                 boxShadow: 3,
                 borderRadius: "1rem",
                 transition: "transform 0.3s",
@@ -112,6 +129,12 @@ export default function TeacherManagement() {
             </Card>
           </Grid>
         ))}
+        {/* Nếu phần tử lẻ nằm ở hàng cuối, căn giữa nó */}
+        {resourceLinks.length % 3 === 1 && (
+          <Grid item xs={12} container justifyContent="center">
+            <Grid item xs={12} sm={6} md={4} />
+          </Grid>
+        )}
       </Grid>
     </Stack>
   );

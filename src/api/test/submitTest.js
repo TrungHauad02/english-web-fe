@@ -1,8 +1,43 @@
 import apiClient from "../apiClient";
 
+export function getListSubmitTests(
+  page = 1,
+  type = "",
+  searchTerm = "",
+  startDate = "",
+  endDate = ""
+) {
+  const params = new URLSearchParams({
+    page: page - 1,
+    size: 10,
+    title: searchTerm,
+    type,
+    startDate,
+    endDate,
+  });
+  return apiClient
+    .get(`/submit-test?${params.toString()}`)
+    .then((response) => {
+      let data = response.data;
+      try {
+        if (typeof data === "string" && data.trim().startsWith("{")) {
+          data = JSON.parse(data);
+        }
+        return data;
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        throw new Error("Invalid JSON response from API");
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      throw error;
+    });
+}
+
 export function getSubmitTest(submitTestId) {
   return apiClient
-    .get("/submit-tests/" + submitTestId)
+    .get("/submit-test/" + submitTestId)
     .then((response) => {
       return response.data;
     })
@@ -14,7 +49,7 @@ export function getSubmitTest(submitTestId) {
 
 export function createSubmitTest(submitTest) {
   return apiClient
-    .post("/submit-tests", submitTest)
+    .post("/submit-test", submitTest)
     .then((response) => {
       return response.data;
     })
@@ -26,7 +61,7 @@ export function createSubmitTest(submitTest) {
 
 export function updateSubmitTest(id, submitTest) {
   return apiClient
-    .put(`/submit-tests/${id}`, submitTest)
+    .put(`/submit-test/${id}`, submitTest)
     .then((response) => {
       return response.data;
     })
@@ -38,7 +73,7 @@ export function updateSubmitTest(id, submitTest) {
 
 export function deleteSubmitTest(submitTestId) {
   return apiClient
-    .delete("/submit-tests/" + submitTestId)
+    .delete("/submit-test/" + submitTestId)
     .then((response) => {
       return response.status === 204;
     })

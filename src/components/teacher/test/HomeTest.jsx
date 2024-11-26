@@ -35,6 +35,7 @@ const ColorButton = styled(Button)(({ color }) => ({
 
 const TestManagement = () => {
   const type = {
+    all : "",
     mixing: "MIXING",
     reading: "READING",
     listening: "LISTENING",
@@ -101,7 +102,6 @@ const TestManagement = () => {
 
   const onChangePage = (event, value) => {
     setPage(value);
-
   };
   const navigate = useNavigate();
  

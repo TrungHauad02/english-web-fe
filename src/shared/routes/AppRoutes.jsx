@@ -85,23 +85,23 @@ export default function AppRoutes() {
           element: <ListTest />
         },
         {
-          path: "tests/listening",
+          path: "test/listening",
           element: <TestListening />
         },
         {
-          path: "tests/speaking",
+          path: "test/speaking",
           element: <TestSpeaking />
         },
         {
-          path: "tests/reading",
+          path: "test/reading",
           element: <TestReading />
         },
         {
-          path: "tests/writing",
+          path: "test/writing",
           element: <TestWriting />
         },
         {
-          path: "tests/mixing",
+          path: "test/mixing",
           element: <TestMixing />
         },
         ...site.map((page) => ({
