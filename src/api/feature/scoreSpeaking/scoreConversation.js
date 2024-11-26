@@ -1,17 +1,11 @@
 import apiClient from "api/apiClient";
 
-export const scoreConversation = async (
-  speakingConversationId,
-  scale,
-  audioProvided
-) => {
+export const scoreConversation = async (speechText, realText) => {
   try {
-    const data = {
-      speakingConversationId,
-      scale,
-      audioProvided,
-    };
-    const res = await apiClient.post("/score-speakings/score", data);
+    const res = await apiClient.post("/score-speech-text", {
+      speechText: speechText,
+      realText: realText,
+    });
     return res.data;
   } catch (err) {
     throw err;

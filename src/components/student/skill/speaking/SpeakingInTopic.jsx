@@ -23,6 +23,7 @@ export default function SpeakingInTopic() {
     textRecognize,
     comment,
     score,
+    isScoring,
   } = useSpeakingTopic();
 
   const color = useColor();
@@ -141,11 +142,21 @@ export default function SpeakingInTopic() {
               textTransform: "capitalize",
             }}
             onClick={handleSubmit}
+            disabled={isScoring || !audioSrc}
           >
             Submit
           </BasicButton>
         </Stack>
       </Grid2>
+      {isScoring && (
+        <Grid2
+          item
+          xs={12}
+          sx={{ bgcolor: "rgba(0, 0, 0, 0.05)", borderRadius: "0.5rem" }}
+        >
+          <CollapsibleSection buttonText="Scoring..."></CollapsibleSection>
+        </Grid2>
+      )}
       {textRecognize && (
         <Stack
           sx={{

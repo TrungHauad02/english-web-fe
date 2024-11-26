@@ -16,6 +16,7 @@ export default function useSpeakingTopic() {
   const [textRecognize, setTextRecognize] = useState("");
   const [comment, setComment] = useState("");
   const [score, setScore] = useState("");
+  const [isScoring, setIsScoring] = useState(false);
   const timerRef = useRef(null);
 
   const handleStartRecording = () => {
@@ -58,11 +59,13 @@ export default function useSpeakingTopic() {
 
   const handleSubmit = async () => {
     try {
+      setIsScoring(true);
       const data = await getSpeechToText(audioSrc);
       setTextRecognize(data.transcript);
       const dataScore = await scoreWriting(data.transcript, speaking.topic);
       setComment(dataScore.comment);
       setScore(dataScore.score);
+      setIsScoring(false);
     } catch (err) {
       toast.error("Error while scoring");
     }
@@ -108,5 +111,6 @@ export default function useSpeakingTopic() {
     textRecognize,
     comment,
     score,
+    isScoring,
   };
 }

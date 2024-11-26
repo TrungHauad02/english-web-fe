@@ -1,4 +1,4 @@
-import { Button, Grid2, Stack, Typography } from "@mui/material";
+import { Button, Divider, Grid2, Stack, Typography } from "@mui/material";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -8,6 +8,8 @@ import useSpeakingInConversation from "./useSpeakingInConversation";
 import SoundViewer from "shared/component/soundViewer/SoundViewer";
 import { ReactMic } from "react-mic";
 import useColor from "shared/color/Color";
+import CollapsibleSection from "shared/collapsible/CollapsibleSection";
+import Comment from "../writing/Comment";
 
 export default function SpeakingInConversation() {
   const {
@@ -21,6 +23,8 @@ export default function SpeakingInConversation() {
     isRecordingList,
     recordedAudio,
     handleSubmit,
+    results,
+    isScoring,
   } = useSpeakingInConversation();
   const color = useColor();
 
@@ -125,10 +129,38 @@ export default function SpeakingInConversation() {
             padding: "0.5rem 1rem",
           }}
           onClick={handleSubmit}
+          disabled={isScoring}
         >
           Submit
         </Button>
       </Stack>
+      {isScoring && (
+        <Grid2
+          item
+          xs={12}
+          sx={{ bgcolor: "rgba(0, 0, 0, 0.05)", borderRadius: "0.5rem" }}
+        >
+          <CollapsibleSection buttonText="Scoring..."></CollapsibleSection>
+        </Grid2>
+      )}
+      {results && results.length > 0 && (
+        <Grid2
+          item
+          xs={12}
+          sx={{ bgcolor: "rgba(0, 0, 0, 0.05)", borderRadius: "0.5rem" }}
+        >
+          <CollapsibleSection buttonText="Score">
+            {results.map((result, index) => (
+              <Stack sx={{ margin: "0.5rem 0rem" }} key={index}>
+                <Comment content={"Real text: " + result.realText} />
+                <Comment content={"Recognized text: " + result.transcript} />
+                <Comment content={"Score: " + result.score} />
+                <Divider />
+              </Stack>
+            ))}
+          </CollapsibleSection>
+        </Grid2>
+      )}
     </Grid2>
   );
 }
