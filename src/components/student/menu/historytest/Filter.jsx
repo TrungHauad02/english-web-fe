@@ -2,9 +2,29 @@ import React from "react";
 import { TextField, Button, MenuItem, Grid, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { Search } from '@mui/icons-material';
-
+import { format } from 'date-fns';
 const Filter = ({ filter, setFilter, searchText, setSearchText, searchStartDate, setSearchStartDate, searchEndDate, setSearchEndDate, handleSearch}) => {
     const isEndDateDisabled = !searchStartDate || new Date(searchStartDate) >= new Date();
+    const formatStartOfDay = (date) => {
+        if (!date) return "";
+        const newDate = new Date(date);
+        newDate.setHours(0, 0, 0, 0);
+        return `${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, '0')}-${String(newDate.getDate()).padStart(2, '0')} ${String(newDate.getHours()).padStart(2, '0')}:${String(newDate.getMinutes()).padStart(2, '0')}:${String(newDate.getSeconds()).padStart(2, '0')}`;
+    };
+    const formatDateForInput = (date) => {
+        if (!date) return "";
+        return format(new Date(date), 'yyyy-MM-dd'); // Định dạng phù hợp cho type="date"
+    };
+
+
+    const formatEndOfDay = (date) => {
+        if (!date) return "";
+        const newDate = new Date(date);
+        newDate.setHours(23, 59, 59, 999);
+        return `${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, '0')}-${String(newDate.getDate()).padStart(2, '0')} ${String(newDate.getHours()).padStart(2, '0')}:${String(newDate.getMinutes()).padStart(2, '0')}:${String(newDate.getSeconds()).padStart(2, '0')}`;
+    };
+
+    
 
     return (
         <Grid container spacing={1} alignItems="center" mb={2}>
@@ -34,13 +54,12 @@ const Filter = ({ filter, setFilter, searchText, setSearchText, searchStartDate,
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)}
                 >
-                    <MenuItem value="All">All</MenuItem>
-                    <MenuItem value="Vocabulary">Vocabulary</MenuItem>
-                    <MenuItem value="Grammar">Grammar</MenuItem>
-                    <MenuItem value="Listening">Listening</MenuItem>
-                    <MenuItem value="Speaking">Speaking</MenuItem>
-                    <MenuItem value="Reading">Reading</MenuItem>
-                    <MenuItem value="Writing">Writing</MenuItem>
+                    <MenuItem value="ALL">All</MenuItem>
+                    <MenuItem value="MIXING">Mixing</MenuItem>
+                    <MenuItem value="LISTENING">Listening</MenuItem>
+                    <MenuItem value="SPEAKING">Speaking</MenuItem>
+                    <MenuItem value="READING">Reading</MenuItem>
+                    <MenuItem value="WRITING">Writing</MenuItem>
                 </TextField>
             </Grid>
 
@@ -51,11 +70,12 @@ const Filter = ({ filter, setFilter, searchText, setSearchText, searchStartDate,
                     variant="outlined"
                     type="date"
                     InputLabelProps={{ shrink: true }}
-                    value={searchStartDate}
+                    value={(formatDateForInput(searchStartDate))}
                     onChange={(e) => {
-                        setSearchStartDate(e.target.value);
-                        if (searchEndDate && new Date(e.target.value) > new Date(searchEndDate)) {
-                            setSearchEndDate(e.target.value); 
+                        const formattedStartDate = formatStartOfDay(e.target.value);
+                        setSearchStartDate(formattedStartDate);
+                        if (searchEndDate && new Date(formattedStartDate) > new Date(searchEndDate)) {
+                            setSearchEndDate(formattedStartDate);
                         }
                     }}
                     onKeyDown={(e) => {
@@ -72,14 +92,14 @@ const Filter = ({ filter, setFilter, searchText, setSearchText, searchStartDate,
                     variant="outlined"
                     type="date"
                     InputLabelProps={{ shrink: true }}
-                    value={searchEndDate}
+                    value={(formatDateForInput(searchEndDate))}
                     onChange={(e) => {
-                        const selectedEndDate = e.target.value;
-                        if (new Date(selectedEndDate) > new Date(searchStartDate)) {
-                            setSearchEndDate(selectedEndDate);
+                        const formattedEndDate = formatEndOfDay(e.target.value);
+                        if (new Date(formattedEndDate) >= new Date(searchStartDate)) {
+                            setSearchEndDate(formattedEndDate);
                         }
                     }}
-                    disabled={isEndDateDisabled} 
+                    disabled={isEndDateDisabled}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                             handleSearch();
