@@ -8,28 +8,28 @@ export default function MultipleSkill() {
       description:
         "This part will help you improve your reading skills by focusing on comprehension, speed, and vocabulary building through a variety of engaging texts.",
       name: "reading",
-      path: "reading",
+      path: "readings",
     },
     {
       img: "/bg_listening.png",
       description:
         "This part will help you improve your listening skills by offering audio exercises that will enhance your ability to understand spoken English in different contexts.",
       name: "listening",
-      path: "listening",
+      path: "listenings",
     },
     {
       img: "/bg_speaking.png",
       description:
         "This part will help you improve your speaking skills through exercises that focus on pronunciation, fluency, and clear communication.",
       name: "speaking",
-      path: "speaking",
+      path: "speakings",
     },
     {
       img: "/bg_writing.png",
       description:
         "This part will help you improve your writing skills by providing structured guidance on grammar, coherence, and creativity in your writing.",
       name: "writing",
-      path: "writing",
+      path: "writings",
     },
   ];
 

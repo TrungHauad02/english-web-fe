@@ -160,7 +160,7 @@ export const handleAddTeacher = async (
       name: selectedTeacher.name,
       email: selectedTeacher.email,
       password: generatePassword(),
-      startDate: new Date().toISOString().split("T")[0],
+      startDate: selectedTeacher.startDate || new Date().toISOString().split("T")[0], 
       level: selectedTeacher.level,
       avatar: newImage,
       status: "ACTIVE",
@@ -236,11 +236,9 @@ export const handleSaveEdit = async (
   setPage
 ) => {
   try {
-    // Lấy thông tin người dùng hiện tại
     let userInfo = await fetchUserInfo();
     let id = selectedTeacher.id;
 
-    // Đọc file avatar nếu có
     let newAvatar = null;
     if (avatarFile) {
       newAvatar = await new Promise((resolve, reject) => {
@@ -251,7 +249,6 @@ export const handleSaveEdit = async (
       });
     }
 
-    // Upload hình ảnh mới nếu có, nếu không giữ nguyên avatar cũ
     const newImage = newAvatar
       ? await handleFileUpload(
           userInfo.avatar,
@@ -261,7 +258,6 @@ export const handleSaveEdit = async (
         )
       : userInfo.avatar;
 
-    // Dữ liệu người dùng được cập nhật
     const updatedUserData = {
       id: selectedTeacher.id,
       name: selectedTeacher.name,
@@ -269,17 +265,14 @@ export const handleSaveEdit = async (
       avatar: newImage,
     };
 
-    // Cập nhật thông tin người dùng
     await updateUser(updatedUserData, id);
 
-    // Cập nhật danh sách giáo viên
     const updatedTeachers = teachers.map((teacher) =>
       teacher.id === selectedTeacher.id
         ? { ...selectedTeacher, avatar: newImage }
         : teacher
     );
 
-    // Cập nhật state
     setTeachers(updatedTeachers);
     setFilteredTeachers(updatedTeachers);
     toast.success("Teacher information updated successfully!");
