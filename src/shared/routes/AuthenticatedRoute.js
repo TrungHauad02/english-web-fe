@@ -9,7 +9,6 @@ export default function AuthenticatedRoute({ children, role }) {
     return <Navigate to="/account" />;
   }
 
-  // Kiểm tra nếu người dùng có vai trò phù hợp
   if (role && authContext.userRole !== role) {
     return <ErrorPage />
   }

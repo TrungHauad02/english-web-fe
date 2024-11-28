@@ -1,48 +1,51 @@
-import React, { useState } from "react";
-import { Box, Grid, Typography, Card, Pagination } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Box, Grid, Typography, Card, Pagination, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import MainPicture from "../../common/listTopic/MainPicture";
 import Filter from "./Filter";
-import { handleSearch } from "./HandleHistoryTest";
-
+import { getListSubmitTests } from "../../../../api/test/submitTest";
+import CustomPagination from "shared/component/pagination/CustomPagination";
+import { useLocation } from 'react-router-dom';
 const CardStyled = styled(Card)(({ theme }) => ({
   backgroundColor: "#f5f5f5",
   padding: "10px",
   marginBottom: "10px",
 }));
 
-const testTypes = [
-  "Vocabulary",
-  "Grammar",
-  "Listening",
-  "Speaking",
-  "Reading",
-  "Writing",
-];
-
-const testData = Array.from({ length: 19 }, (_, index) => ({
-  name: `Test ${index + 1}`,
-  date: new Date(2024, 11, index + 1, 12, 20),
-  time: "12 minutes",
-  score: `${60 + index}/100`,
-  type: testTypes[index % testTypes.length],
-}));
-
 const ITEMS_PER_PAGE = 10;
 
 const HistoryTest = () => {
-  const [filter, setFilter] = useState("All");
-  const [searchText, setSearchText] = useState("");
+  const location = useLocation();
+  const { title, type } = location.state || {};
+
+
+  const [filter, setFilter] = useState(type || "ALL");
+  const [searchText, setSearchText] = useState(title || "");
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchStartDate, setSearchStartDate] = useState(null);
-  const [searchEndDate, setSearchEndDate] = useState(null);
+  const [searchStartDate, setSearchStartDate] = useState('');
+  const [searchEndDate, setSearchEndDate] = useState('');
+  
+  const [tests, setTests] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
 
-  const [tests, setTests] = useState(testData);
 
-  const currentTests = tests.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
+  const fetchTests = () => {
+    const adjustedType = filter === "ALL" ? "" : filter;
+    getListSubmitTests(currentPage, adjustedType, searchText, searchStartDate, searchEndDate)
+      .then((data) => {
+        setTests(data.content);
+        setTotalItems(data.totalElements);
+     
+      })
+      .catch((error) => {
+        console.error("Error fetching submit tests:", error);
+     
+      });
+  };
+
+  useEffect(() => {
+    fetchTests();
+  }, [currentPage,filter]);
 
   return (
     <>
@@ -63,38 +66,33 @@ const HistoryTest = () => {
             setSearchStartDate={setSearchStartDate}
             searchEndDate={searchEndDate}
             setSearchEndDate={setSearchEndDate}
-            handleSearch={() =>
-              handleSearch(
-                testData,
-                searchText,
-                filter,
-                setTests,
-                setCurrentPage
-              )
-            }
+            handleSearch={() => {
+              setCurrentPage(1);
+              fetchTests();
+            }}
           />
-          <Grid container spacing={2}>
-            {currentTests.map((test, index) => (
-              <Grid item xs={12} sm={6} key={index}>
-                <CardStyled variant="outlined">
-                  <Typography variant="h6">{test.name}</Typography>
-                  <Typography>Date: {test.date.toLocaleString()}</Typography>
-                  <Typography>Time: {test.time}</Typography>
-                  <Typography>Score: {test.score}</Typography>
-                </CardStyled>
-              </Grid>
-            ))}
+        <Grid container spacing={2}>
+        {tests.map((test, index) => (
+          <Grid item xs={12} sm={6} key={index}>
+            <CardStyled variant="outlined">
+              <Typography variant="h6">{test.testTitle}</Typography>
+              <Typography>Date: {new Date(test.submitTime).toLocaleString()}</Typography>
+              <Typography>
+                <strong>Score:</strong> {test.score === 0 ? "Haven’t done yet" : test.score}
+              </Typography>
+            </CardStyled>
           </Grid>
+        ))}
+      </Grid>
 
-          <Box mt={2} display="flex" justifyContent="center">
-            <Pagination
-              count={Math.ceil(tests.length / ITEMS_PER_PAGE)}
-              page={currentPage}
-              onChange={(event, page) => setCurrentPage(page)}
-              color="primary"
-            />
-          </Box>
         </Box>
+        <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
+          <CustomPagination
+            count={Math.ceil(totalItems / ITEMS_PER_PAGE)}
+            page={currentPage}
+            onChange={(event, page) => setCurrentPage(page)}
+          />
+        </Stack>
       </Box>
     </>
   );
