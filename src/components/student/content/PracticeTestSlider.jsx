@@ -4,7 +4,11 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { getListTest } from "api/test/listTestApi";
-import { handleNext, handlePrev, handleTestClick } from "./common/HandlePracticeTestSlider";
+import {
+  handleNext,
+  handlePrev,
+  handleTestClick,
+} from "./common/HandlePracticeTestSlider";
 import "./PracticeTestSlider.css";
 import { useAuth } from "security/AuthContext";
 
@@ -29,7 +33,10 @@ const PracticeTestSlider = () => {
           type: item.type,
           title: item.title,
           Duration: item.duration || "Duration Unknown",
-          imgSrc: index % 2 === 0 ? "./test1.jpg" : "./test2.jpg",
+          imgSrc:
+            index % 2 === 0
+              ? "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Ftest1.jpg?alt=media"
+              : "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Ftest2.jpg?alt=media",
         }));
         setSlides(formattedSlides);
       } catch (error) {
@@ -52,7 +59,7 @@ const PracticeTestSlider = () => {
       {!isAuthenticated && (
         <Box sx={{ textAlign: "center", marginTop: "2rem" }}>
           <img
-            src="./login_first.png"
+            src="https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Flogin_first.png?alt=media"
             alt="Login First"
             style={{ maxWidth: "100%", height: "auto" }}
           />

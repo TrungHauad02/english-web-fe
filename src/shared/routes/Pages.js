@@ -10,7 +10,7 @@ const site = [
   {
     id: 1,
     title: "Vocabulary",
-    bg: "/bg_vocabulary.png",
+    bg: "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_vocabulary.png?alt=media",
     path: "topics",
     file: ListTopic,
     detail: Vocabulary,
@@ -18,7 +18,7 @@ const site = [
   {
     id: 2,
     title: "Grammar",
-    bg: "/bg_grammar.png",
+    bg: "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_grammar.png?alt=media",
     path: "grammars",
     file: ListTopic,
     detail: Grammar,
@@ -26,7 +26,7 @@ const site = [
   {
     id: 3,
     title: "Reading",
-    bg: "/bg_reading.png",
+    bg: "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_reading.jpg?alt=media",
     path: "readings",
     file: ListTopic,
     detail: Reading,
@@ -34,7 +34,7 @@ const site = [
   {
     id: 4,
     title: "Listening",
-    bg: "/bg_listening.png",
+    bg: "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_listening.jpg?alt=media",
     path: "listenings",
     file: ListTopic,
     detail: Listening,
@@ -42,7 +42,7 @@ const site = [
   {
     id: 5,
     title: "Speaking",
-    bg: "/bg_speaking.png",
+    bg: "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_speaking.jpg?alt=media",
     path: "speakings",
     file: ListTopic,
     detail: Speaking,
@@ -50,7 +50,7 @@ const site = [
   {
     id: 6,
     title: "Writing",
-    bg: "/bg_writing.png",
+    bg: "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_writing.png?alt=media",
     path: "writings",
     file: ListTopic,
     detail: Writing,

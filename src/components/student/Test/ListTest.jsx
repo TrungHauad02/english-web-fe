@@ -106,7 +106,9 @@ function ListTest() {
     <Box>
       <ImageContainer>
         <img
-          src={"/bg_test.png"}
+          src={
+            "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
+          }
           alt="Test"
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />

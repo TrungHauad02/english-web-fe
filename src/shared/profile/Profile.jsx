@@ -18,7 +18,7 @@ import {
 } from "./HandleProfile";
 import { fetchUserInfo } from "api/user/userService";
 import { handleFileChange } from "shared/utils/uploadFileUtils";
-import DotLoader from 'shared/component/loader/DotLoader';
+import DotLoader from "shared/component/loader/DotLoader";
 
 const Profile = ({ open, handleClose }) => {
   const [name, setName] = useState("");
@@ -104,7 +104,7 @@ const Profile = ({ open, handleClose }) => {
             </Typography>
             <Box sx={{ position: "relative", mt: 1, mb: 2 }}>
               <img
-                src="/bg_name_profile.png"
+                src="https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_name_profile.png?alt=media"
                 alt="Name Background"
                 style={{ width: "100%" }}
               />
@@ -192,7 +192,14 @@ const Profile = ({ open, handleClose }) => {
         <Button
           onClick={
             editMode
-              ? () => handleSave(name || "", userNote || "", image, setEditMode, setIsLoading)
+              ? () =>
+                  handleSave(
+                    name || "",
+                    userNote || "",
+                    image,
+                    setEditMode,
+                    setIsLoading
+                  )
               : handleClose
           }
           riant="contained"
@@ -209,7 +216,20 @@ const Profile = ({ open, handleClose }) => {
         />
       </DialogContent>
       {isLoading && (
-        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0, 0, 0, 0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1300 }}>
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1300,
+          }}
+        >
           <DotLoader dotSize="1rem" />
         </div>
       )}

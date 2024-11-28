@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function ElementSkill({ skill, isLeft }) {
   const navigate = useNavigate();
   const handleOnClick = () => {
-    navigate(`/student/skill/${skill.path}`);
+    navigate(`/student/${skill.path}`);
   };
   return (
     <Grid2 container direction={isLeft ? "row" : "row-reverse"} spacing={12}>

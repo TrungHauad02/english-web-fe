@@ -11,7 +11,14 @@ const CardStyled = styled(Card)(({ theme }) => ({
   marginBottom: "10px",
 }));
 
-const testTypes = ["Vocabulary", "Grammar", "Listening", "Speaking", "Reading", "Writing"];
+const testTypes = [
+  "Vocabulary",
+  "Grammar",
+  "Listening",
+  "Speaking",
+  "Reading",
+  "Writing",
+];
 
 const testData = Array.from({ length: 19 }, (_, index) => ({
   name: `Test ${index + 1}`,
@@ -39,7 +46,12 @@ const HistoryTest = () => {
 
   return (
     <>
-      <MainPicture src={"/bg_history_test.png"} title={"History Test"} />
+      <MainPicture
+        src={
+          "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_history_test.png?alt=media"
+        }
+        title={"History Test"}
+      />
       <Box p={3}>
         <Box mx="5%">
           <Filter
@@ -48,10 +60,18 @@ const HistoryTest = () => {
             searchText={searchText}
             setSearchText={setSearchText}
             searchStartDate={searchStartDate}
-            setSearchStartDate={setSearchStartDate} 
+            setSearchStartDate={setSearchStartDate}
             searchEndDate={searchEndDate}
             setSearchEndDate={setSearchEndDate}
-            handleSearch={() => handleSearch(testData, searchText, filter, setTests, setCurrentPage)}
+            handleSearch={() =>
+              handleSearch(
+                testData,
+                searchText,
+                filter,
+                setTests,
+                setCurrentPage
+              )
+            }
           />
           <Grid container spacing={2}>
             {currentTests.map((test, index) => (
