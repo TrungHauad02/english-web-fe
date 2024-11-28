@@ -6,7 +6,13 @@ export default function IntroductionSkill() {
   const introduction =
     "Welcome to the Skills section! Here, you'll find resources and exercises designed to enhance your English language proficiency across various skills, including listening, speaking, reading, and writing. Our interactive tools and engaging content will help you practice and develop your abilities, allowing you to communicate effectively and confidently in English. Dive in and start your learning journey today!";
 
-  const images = ["/environment.png", "/bg_grammar.png", "/bg_reading.png"];
+  const images = [
+    "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_reading.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_grammar.png?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_listening.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_speaking.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_writing.png?alt=media",
+  ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 

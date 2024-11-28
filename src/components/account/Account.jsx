@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { Box } from '@mui/material';
-import SignIn from './SignIn';
-import SignUp from './SignUp';
-import ForgotPassword from './forgotPassword/ForgotPassword';
-import './Account.css'; 
+import React, { useState } from "react";
+import { Box } from "@mui/material";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
+import ForgotPassword from "./forgotPassword/ForgotPassword";
+import "./Account.css";
 
 const Account = () => {
-  const [formState, setFormState] = useState('signin');
-  const [isFlipped, setIsFlipped] = useState(false); 
+  const [formState, setFormState] = useState("signin");
+  const [isFlipped, setIsFlipped] = useState(false);
 
   const toggleForm = (newState) => {
-    setIsFlipped(true); 
+    setIsFlipped(true);
 
     setTimeout(() => {
-      setFormState(newState); 
-      setIsFlipped(false); 
-    }, 300); 
+      setFormState(newState);
+      setIsFlipped(false);
+    }, 300);
   };
 
   return (
@@ -26,10 +26,11 @@ const Account = () => {
         alignItems="center"
         justifyContent="center"
         style={{
-          backgroundImage: 'url(/bg_login.png)',
-          backgroundSize: '70%',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
+          backgroundImage:
+            "url(https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_login.png?alt=media)",
+          backgroundSize: "70%",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
         }}
       />
 
@@ -38,21 +39,21 @@ const Account = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        style={{ backgroundColor: 'white' }}
+        style={{ backgroundColor: "white" }}
       >
         <Box className="container">
-          <Box className={`card ${isFlipped ? 'flipped' : ''}`}>
-            {formState === 'signin' && (
+          <Box className={`card ${isFlipped ? "flipped" : ""}`}>
+            {formState === "signin" && (
               <div className="card-front">
                 <SignIn toggleForm={toggleForm} />
               </div>
             )}
-            {formState === 'signup' && (
+            {formState === "signup" && (
               <div className="card-back">
                 <SignUp toggleForm={toggleForm} />
               </div>
             )}
-            {formState === 'forgot' && (
+            {formState === "forgot" && (
               <div className="card-back">
                 <ForgotPassword toggleForm={toggleForm} />
               </div>

@@ -1,10 +1,13 @@
-import React from 'react';
-import Box from '@mui/material/Box'; 
-import Slider from 'react-slick'; 
-import "slick-carousel/slick/slick.css"; 
-import "slick-carousel/slick/slick-theme.css"; 
+import React from "react";
+import Box from "@mui/material/Box";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-const images = ["/banner1.png", "/banner2.jpg"];
+const images = [
+  "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbanner1.png?alt=media",
+  "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbanner2.jpg?alt=media",
+];
 const icon = "/icon.png";
 
 const ImageSlider = () => {
@@ -20,7 +23,15 @@ const ImageSlider = () => {
   };
 
   return (
-    <Box sx={{ width: "100%", margin: "auto", padding: "0", position: "relative", paddingTop: 8 }}>
+    <Box
+      sx={{
+        width: "100%",
+        margin: "auto",
+        padding: "0",
+        position: "relative",
+        paddingTop: 8,
+      }}
+    >
       <Slider {...settings}>
         {images.map((image, index) => (
           <Box
@@ -29,9 +40,9 @@ const ImageSlider = () => {
             src={image}
             alt={`Slide ${index}`}
             sx={{
-              width: "100%",     
-              maxHeight: "40rem", 
-              objectFit: "cover" 
+              width: "100%",
+              maxHeight: "40rem",
+              objectFit: "cover",
             }}
           />
         ))}
@@ -39,22 +50,22 @@ const ImageSlider = () => {
       <Box
         sx={{
           position: "absolute",
-          bottom: '4px',
+          bottom: "4px",
           right: 0,
           backgroundColor: "rgba(0, 0, 0, 0.5)",
           color: "white",
           padding: "1.5rem",
           borderRadius: "0.5rem 0 0 0",
           display: "flex",
-          flexDirection: "column", 
+          flexDirection: "column",
           alignItems: "flex-start",
         }}
       >
         <Box
           sx={{
             display: "flex",
-            alignItems: "center", 
-            marginBottom: "0.5rem", 
+            alignItems: "center",
+            marginBottom: "0.5rem",
           }}
         >
           <Box
@@ -71,20 +82,22 @@ const ImageSlider = () => {
             sx={{
               fontWeight: "bold",
               fontFamily: "Roboto",
-              fontSize: "1.5rem"
+              fontSize: "1.5rem",
             }}
           >
             IMPROVE YOUR ENGLISH SKILL WITH US
           </Box>
         </Box>
         <Box
-        sx={{
+          sx={{
             fontWeight: "bold",
             fontFamily: "Roboto",
-            fontSize: "1rem"
+            fontSize: "1rem",
           }}
-          >
-        Learn English online and improve your skills through our high-quality courses and resources, <br/>quality courses and resources
+        >
+          Learn English online and improve your skills through our high-quality
+          courses and resources, <br />
+          quality courses and resources
         </Box>
       </Box>
     </Box>

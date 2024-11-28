@@ -1,24 +1,35 @@
-import React, {useState, useEffect} from 'react';
-import { Box, Typography, Button, Container, Grid, Icon, Radio, RadioGroup, FormControlLabel, FormControl, Paper, TextField  } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import MainTitle  from '../MainTitle';
-import BtnPreviousNextContentTest from '../common/BtnPreviousNextContentTest';
-import { getTest } from 'api/test/TestApi';
-import { createSubmitTest } from '../../../../api/test/submitTest';
-import { fetchUserInfo } from '../../../../api/user/userService';
-import ContentTestWriting from './ContentTestWriting';
-import { useLocation ,useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Container,
+  Grid,
+  Icon,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  Paper,
+  TextField,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import MainTitle from "../MainTitle";
+import BtnPreviousNextContentTest from "../common/BtnPreviousNextContentTest";
+import { getTest } from "api/test/TestApi";
+import { createSubmitTest } from "../../../../api/test/submitTest";
+import { fetchUserInfo } from "../../../../api/user/userService";
+import ContentTestWriting from "./ContentTestWriting";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const DurationContainer = styled(Paper)(({ theme }) => ({
-  background: '#FFF4CC',
-  borderRadius: '20px',
-  fontSize: '14px',
-  float: 'right',
-  marginRight: '5%',
+  background: "#FFF4CC",
+  borderRadius: "20px",
+  fontSize: "14px",
+  float: "right",
+  marginRight: "5%",
   padding: theme.spacing(2),
 }));
-
-
 
 function TestWriting() {
   const [indexVisible, setIndexVisible] = useState(0);
@@ -31,24 +42,23 @@ function TestWriting() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [score, setSCore] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false); 
-  const title = datatest ? datatest.type : '';
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const title = datatest ? datatest.type : "";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getTest(state.id);
         console.log(data);
-        
+
         if (data) {
           setdatatest(data);
           console.log(data);
-          
         } else {
           setdatatest(null);
         }
       } catch (err) {
-        setError('Failed to fetch test data');
+        setError("Failed to fetch test data");
       } finally {
         setLoading(false);
       }
@@ -56,22 +66,20 @@ function TestWriting() {
 
     fetchData();
   }, [state.id]);
- 
 
-  const handlebtnSubmit = () => {
-   
+  const handlebtnSubmit = () => {};
+  const onClickTestAgain = () => {};
+  const calculateScore = () => {
+    return 0;
   };
-  const onClickTestAgain = () => {
- 
-};
-const calculateScore = () => {
-return 0;
-
-
-};
   return (
-    <Box >
-     <MainTitle title="Writing" bg={"/bg_test.png"} />
+    <Box>
+      <MainTitle
+        title="Writing"
+        bg={
+          "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
+        }
+      />
       <DurationContainer elevation={1}>
         <Typography align="center">
           <strong>Time remaining:</strong>
@@ -80,9 +88,18 @@ return 0;
         </Typography>
       </DurationContainer>
 
-      <BtnPreviousNextContentTest indexVisible = {indexVisible}  setIndexVisible={setIndexVisible} sumcontent = {datatest?.testWritings.length}  />
-      <ContentTestWriting datatest={datatest?.testWritings[indexVisible]} handlebtnSubmit={handlebtnSubmit} onClickTestAgain= {onClickTestAgain} answers ={answers} setAnswers ={setAnswers}/>
-
+      <BtnPreviousNextContentTest
+        indexVisible={indexVisible}
+        setIndexVisible={setIndexVisible}
+        sumcontent={datatest?.testWritings.length}
+      />
+      <ContentTestWriting
+        datatest={datatest?.testWritings[indexVisible]}
+        handlebtnSubmit={handlebtnSubmit}
+        onClickTestAgain={onClickTestAgain}
+        answers={answers}
+        setAnswers={setAnswers}
+      />
     </Box>
   );
 }

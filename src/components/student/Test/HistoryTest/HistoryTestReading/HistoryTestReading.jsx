@@ -1,19 +1,19 @@
-import { Box, Typography, Paper } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import MainTitle from '../../MainTitle';
-import HistoryOneReading from './HistoryOneReading';
-import React, { useState, useEffect } from 'react';
-import BtnPreviousNextContentTest from '../../common/BtnPreviousNextContentTest';
-import { useLocation } from 'react-router-dom';
-import { getTest } from 'api/test/TestApi';
-import { getSubmitTest } from 'api/test/submitTest';
-import { useNavigate } from 'react-router-dom';
+import { Box, Typography, Paper } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import MainTitle from "../../MainTitle";
+import HistoryOneReading from "./HistoryOneReading";
+import React, { useState, useEffect } from "react";
+import BtnPreviousNextContentTest from "../../common/BtnPreviousNextContentTest";
+import { useLocation } from "react-router-dom";
+import { getTest } from "api/test/TestApi";
+import { getSubmitTest } from "api/test/submitTest";
+import { useNavigate } from "react-router-dom";
 const DurationContainer = styled(Paper)(({ theme }) => ({
-  background: '#FFF4CC',
-  borderRadius: '20px',
-  fontSize: '14px',
-  float: 'right',
-  marginRight: '5%',
+  background: "#FFF4CC",
+  borderRadius: "20px",
+  fontSize: "14px",
+  float: "right",
+  marginRight: "5%",
   padding: theme.spacing(2),
 }));
 
@@ -57,59 +57,66 @@ function HistoryTestReading() {
   }
 
   const score = historyTest?.score;
-  const title = test?.type || '';
-
-
+  const title = test?.type || "";
 
   const handleTestAgain = () => {
-
     const state = {
-        id: test.id,
-    }
-    navigate('/student/tests/reading', { state });
+      id: test.id,
+    };
+    navigate("/student/tests/reading", { state });
   };
 
   return (
     <Box>
-      <MainTitle title="Reading" bg="/bg_test.png" />
+      <MainTitle
+        title="Reading"
+        bg="https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
+      />
       <DurationContainer
-  sx={{
-    marginRight: '5%',
-    textAlign: 'center',
-    backgroundColor: '#FFF4CC',
-    borderRadius: '12px',
-    width: '60px',
-    height: '60px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    border: '1px solid #E0C080',
-  }}
-  elevation={2}
->
-  <Typography
-    variant="h5"
-    sx={{
-      fontWeight: 500,
-      color: '#5A5A5A',
-    }}
-  >
-    {score}
-  </Typography>
-</DurationContainer>
+        sx={{
+          marginRight: "5%",
+          textAlign: "center",
+          backgroundColor: "#FFF4CC",
+          borderRadius: "12px",
+          width: "60px",
+          height: "60px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px solid #E0C080",
+        }}
+        elevation={2}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: 500,
+            color: "#5A5A5A",
+          }}
+        >
+          {score}
+        </Typography>
+      </DurationContainer>
 
-      <BtnPreviousNextContentTest 
+      <BtnPreviousNextContentTest
         indexVisible={indexVisible}
         setIndexVisible={setIndexVisible}
         sumcontent={test?.testReadings?.length || 0}
       />
-      <Box sx={{ marginRight: '5%', marginLeft: '5%', display: 'flex', marginTop: '2%' }}>
+      <Box
+        sx={{
+          marginRight: "5%",
+          marginLeft: "5%",
+          display: "flex",
+          marginTop: "2%",
+        }}
+      >
         {test && historyTest ? (
           <HistoryOneReading
             onereading={test.testReadings[indexVisible]}
             title={title}
             dataSubmitTest={historyTest.submitTestReadingAnswers}
-            handleTestAgain = {handleTestAgain}
+            handleTestAgain={handleTestAgain}
           />
         ) : (
           <Typography>No data available</Typography>

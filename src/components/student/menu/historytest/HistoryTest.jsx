@@ -49,7 +49,12 @@ const HistoryTest = () => {
 
   return (
     <>
-      <MainPicture src={"/bg_history_test.png"} title={"History Test"} />
+      <MainPicture
+        src={
+          "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_history_test.png?alt=media"
+        }
+        title={"History Test"}
+      />
       <Box p={3}>
         <Box mx="5%">
           <Filter
