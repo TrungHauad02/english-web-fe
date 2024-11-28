@@ -1,10 +1,19 @@
 import React, { useState } from "react";
-import { Box, Button, TextField, Typography, Divider, IconButton, InputAdornment, Link } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Divider,
+  IconButton,
+  InputAdornment,
+  Link,
+} from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
-import { handleSignIn } from "./common/HandleSignIn"; 
+import { handleSignIn } from "./common/HandleSignIn";
 import { useAuth } from "../../security/AuthContext";
 
 const SignIn = ({ toggleForm }) => {
@@ -16,8 +25,12 @@ const SignIn = ({ toggleForm }) => {
   const authContext = useAuth();
 
   const handleSignInClick = async () => {
-    await handleSignIn(email, password, authContext, navigate);
-  };  
+    try {
+      await handleSignIn(email, password, authContext, navigate);
+    } catch (error) {
+      console.error("Sign-in error:", error);
+    }
+  };
 
   return (
     <Box
