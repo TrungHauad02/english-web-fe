@@ -14,8 +14,6 @@ const ForgotPassword = ({ toggleForm }) => {
   const [timer, setTimer] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
 
-  const [error, setError] = useState('');
-
   useEffect(() => {
     let countdown;
     if (timer > 0) {
@@ -43,7 +41,7 @@ const ForgotPassword = ({ toggleForm }) => {
         <EmailStep
           email={email}
           setEmail={setEmail}
-          handleGetOtp={() => handleGetOtp(email, setStep, setTimer, setError)}
+          handleGetOtp={() => handleGetOtp(email, setStep, setTimer)}
         />
       )}
 
@@ -52,8 +50,8 @@ const ForgotPassword = ({ toggleForm }) => {
           otp={otp}
           setOtp={setOtp}
           timer={timer}
-          handleVerifyOtp={() => handleVerifyOtp(email, otp, timer, setStep, setError)}
-          handleResendOtp={() => handleGetOtp(email, setStep, setTimer, setError)}
+          handleVerifyOtp={() => handleVerifyOtp(email, otp, timer, setStep)}
+          handleResendOtp={() => handleGetOtp(email, setStep, setTimer)}
         />
       )}
 
@@ -65,14 +63,8 @@ const ForgotPassword = ({ toggleForm }) => {
           setRePassword={setRePassword}
           showPassword={showPassword}
           handleClickShowPassword={() => handleClickShowPassword(showPassword, setShowPassword)}
-          handleResetPassword={() => handleResetPassword(email, newPassword, rePassword, toggleForm, setError)}
+          handleResetPassword={() => handleResetPassword(email, newPassword, rePassword, toggleForm)}
         />
-      )}
-
-      {error && (
-        <Typography color={error.includes("successfully") ? 'green' : 'red'} align="center" mt={2}>
-          {error}
-        </Typography>
       )}
 
       <Box mt={2} display="flex" justifyContent="center">
