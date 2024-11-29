@@ -42,12 +42,18 @@ export const handleSignUp = async (name, email, password, rePassword, toggleForm
   }
 
   try {
-    const data = { name, email, password, role: "STUDENT" };
+    const data = { 
+      name, 
+      email, 
+      password, 
+      role: "STUDENT", 
+      startDate: new Date().toISOString().split("T")[0],
+    };
     await signUpStudent(data);
 
-    toast.success("Sign Up successful!"); 
+    toast.success("Sign up successful!"); 
     toggleForm("signin"); 
   } catch (error) {
-    toast.error("Sign Up failed. Please try again."); 
+    toast.error("Sign up failed. Please try again."); 
   }
 };

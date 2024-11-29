@@ -11,7 +11,7 @@ const StudentTeacherList = ({
     onPreviousPage,
     onNextPage,
 }) => {
-    const { Color2 } = useColor();
+    const { Color2_1 } = useColor();
 
     return (
         <Stack
@@ -89,8 +89,8 @@ const StudentTeacherList = ({
                         onClick={onPreviousPage}
                         disabled={page === 0}
                         sx={{
-                            backgroundColor: Color2,
-                            color: "#000",
+                            backgroundColor: Color2_1,
+                            color: "#fff",
                             "&:hover": {
                                 backgroundColor: "#48a999",
                             },
@@ -106,8 +106,8 @@ const StudentTeacherList = ({
                         onClick={onNextPage}
                         disabled={page === totalPages - 1}
                         sx={{
-                            backgroundColor: Color2,
-                            color: "#000",
+                            backgroundColor: Color2_1,
+                            color: "#fff",
                             "&:hover": {
                                 backgroundColor: "#48a999",
                             },

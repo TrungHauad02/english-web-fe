@@ -46,7 +46,7 @@ export default function AuthProvider({ children }) {
     setUserRole(null);
     localStorage.removeItem("authToken");
     localStorage.removeItem("tokenExpiration");
-    toast.info("you are logged out")
+    toast.info("Logout");
   }
 
   useEffect(() => {

@@ -21,7 +21,7 @@ function Footer() {
           paddingLeft: "1.5rem",
         }}
       >
-        STUDY ENGLISH WEB
+        STUDY H2T English
       </Typography>
       <About />
     </Stack>

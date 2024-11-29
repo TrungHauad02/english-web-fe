@@ -73,7 +73,7 @@ function HeaderStudent() {
           }}
           onClick={() => navigate("/student")}
         >
-          English Web
+          H2T English
         </HeaderTypography>
       </Stack>
 

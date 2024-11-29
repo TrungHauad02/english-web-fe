@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Grid, TextField, Button } from '@mui/material';
 import { Search } from '@mui/icons-material';
+import useColor from "shared/color/Color";
 
 const SearchPanel = ({  searchName,  setSearchName,   searchStartDate,   setSearchStartDate,   searchEndDate,   setSearchEndDate,   handleSearch }) => {
     useEffect(() => {
@@ -10,6 +11,7 @@ const SearchPanel = ({  searchName,  setSearchName,   searchStartDate,   setSear
     }, [searchStartDate, searchEndDate, setSearchEndDate]);
 
     const isEndDateDisabled = !searchStartDate || new Date(searchStartDate) >= new Date();
+    const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
 
     return (
         <Grid container spacing={1}>
@@ -75,7 +77,7 @@ const SearchPanel = ({  searchName,  setSearchName,   searchStartDate,   setSear
                     variant="contained"
                     startIcon={<Search />}
                     onClick={handleSearch}
-                    sx={{ marginTop: '.5rem' }}
+                    sx={{ marginTop: '.5rem', background: Color2_1 }}
                 >
                     Search
                 </Button>

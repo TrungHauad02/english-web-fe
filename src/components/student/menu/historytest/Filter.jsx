@@ -3,8 +3,11 @@ import { TextField, Button, MenuItem, Grid, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { Search } from '@mui/icons-material';
 import { format } from 'date-fns';
+import useColor from "shared/color/Color";
+
 const Filter = ({ filter, setFilter, searchText, setSearchText, searchStartDate, setSearchStartDate, searchEndDate, setSearchEndDate, handleSearch}) => {
     const isEndDateDisabled = !searchStartDate || new Date(searchStartDate) >= new Date();
+    const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
     const formatStartOfDay = (date) => {
         if (!date) return "";
         const newDate = new Date(date);
@@ -36,13 +39,6 @@ const Filter = ({ filter, setFilter, searchText, setSearchText, searchStartDate,
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                    InputProps={{
-                        endAdornment: (
-                            <IconButton onClick={handleSearch}>
-                                <SearchIcon />
-                            </IconButton>
-                        ),
-                    }}
                 />
             </Grid>
 
@@ -112,7 +108,7 @@ const Filter = ({ filter, setFilter, searchText, setSearchText, searchStartDate,
                     variant="contained"
                     startIcon={<Search />}
                     onClick={handleSearch}
-                    sx={{ marginTop: '.5rem' }}
+                    sx={{ marginTop: '.5rem', background: Color2_1 }}
                 >
                     Search
                 </Button>

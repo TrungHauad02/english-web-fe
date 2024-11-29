@@ -43,7 +43,7 @@ function Header() {
                     }}
                     onClick={() => navigate("/student")}
                 >
-                    English Web
+                    H2T English
                 </HeaderTypography>
             </Stack>
             <Stack direction={"row"} alignItems={"center"} spacing={2}>

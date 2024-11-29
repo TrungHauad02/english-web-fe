@@ -3,6 +3,8 @@ import { Box, Typography, Link } from '@mui/material';
 import EmailStep from './common/EmailStep';
 import OtpStep from './common/OtpStep';
 import ResetPasswordStep from './common/ResetPasswordStep';
+import useColor from "shared/color/Color";
+import DotLoader from "shared/component/loader/DotLoader";
 import { handleGetOtp, handleVerifyOtp, handleResetPassword, handleClickShowPassword} from './common/HandleForgotPassword';
 
 const ForgotPassword = ({ toggleForm }) => {
@@ -13,6 +15,8 @@ const ForgotPassword = ({ toggleForm }) => {
   const [rePassword, setRePassword] = useState('');
   const [timer, setTimer] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
 
   useEffect(() => {
     let countdown;
@@ -41,7 +45,7 @@ const ForgotPassword = ({ toggleForm }) => {
         <EmailStep
           email={email}
           setEmail={setEmail}
-          handleGetOtp={() => handleGetOtp(email, setStep, setTimer)}
+          handleGetOtp={() => handleGetOtp(email, setStep, setTimer, setIsLoading)}
         />
       )}
 
@@ -68,10 +72,26 @@ const ForgotPassword = ({ toggleForm }) => {
       )}
 
       <Box mt={2} display="flex" justifyContent="center">
-        <Link href="#" variant="body2" onClick={() => toggleForm('signin')}>
+        <Link href="#" sx={{color: Color2}} variant="body2" onClick={() => toggleForm('signin')}>
           Back to Sign In
         </Link>
       </Box>
+      {isLoading && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1300,
+          }}
+        >
+          <DotLoader dotSize="1rem" />
+        </div>
+      )}
     </Box>
   );
 };
