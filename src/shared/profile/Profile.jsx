@@ -111,9 +111,9 @@ const Profile = ({ open, handleClose }) => {
               <Box
                 sx={{
                   position: "absolute",
-                  top: "35%",
-                  left: "10%",
-                  fontSize: 24,
+                  top: "30%",
+                  left: "5%",
+                  fontSize: 20,
                   fontWeight: "bold",
                 }}
               >
