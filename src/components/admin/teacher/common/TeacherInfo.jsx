@@ -1,7 +1,9 @@
 import React from 'react';
 import { Grid, Card, Avatar, TextField, FormControl, InputLabel, Select, MenuItem, Typography, Button } from '@mui/material';
+import useColor from "shared/color/Color";
 
 const TeacherInfo = ({ setAvatarFile, selectedTeacher, setSelectedTeacher, isEditing, isNew, levelsForForm, handleImageChange, setConfirmDeleteOpen, handleEditToggle, handleSaveEdit, handleAddTeacher, handleNewToggle, handleClear, handleDeleteTeacher, setReload, setPage }) => {
+    const { Color2_1 } = useColor();
     return (
         <Grid item xs={12} md={4}>
             <Card sx={{ height: 450, padding: 2, bgcolor: "#F5F5F5" }}>
@@ -68,7 +70,7 @@ const TeacherInfo = ({ setAvatarFile, selectedTeacher, setSelectedTeacher, isEdi
                             fullWidth
                             variant="contained"
                             color={selectedTeacher.status === "INACTIVE" ? "primary" : "error"}
-                            sx={{ bgcolor: selectedTeacher.status === "INACTIVE" ? '#64FF64' : '#FF6655' }}
+                            sx={{ bgcolor: selectedTeacher.status === "INACTIVE" ? Color2_1 : '#FF6655' }}
                             onClick={selectedTeacher.status === "INACTIVE" ? handleDeleteTeacher : () => setConfirmDeleteOpen(true)}
                         >
                             {selectedTeacher.status === "INACTIVE" ? "Restore" : "Delete"}
@@ -90,7 +92,7 @@ const TeacherInfo = ({ setAvatarFile, selectedTeacher, setSelectedTeacher, isEdi
                             fullWidth
                             variant="contained"
                             color="success"
-                            sx={{ bgcolor: '#64FF64' }}
+                            sx={{ bgcolor: Color2_1 }}
                             onClick={isNew ? handleAddTeacher : handleNewToggle}
                         >
                             {isNew ? 'Save' : 'New'}

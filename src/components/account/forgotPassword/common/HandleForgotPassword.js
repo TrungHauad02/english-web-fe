@@ -1,7 +1,8 @@
 import { sendOtp, verifyOtp, resetPassword } from 'api/account/forgotPasswordService';
 import { toast } from 'react-toastify';
 
-export const handleGetOtp = async (email, setStep, setTimer) => {
+export const handleGetOtp = async (email, setStep, setTimer, setIsLoading) => {
+  setIsLoading(true);
   try {
     await sendOtp(email);
     toast.success("OTP has been sent to your email.");
@@ -10,6 +11,9 @@ export const handleGetOtp = async (email, setStep, setTimer) => {
   } catch (error) {
     console.error("Error sending OTP:", error);
     toast.error("Failed to send OTP. Please try again.");
+  }
+  finally{
+    setIsLoading(false);
   }
 };
 

@@ -3,6 +3,7 @@ import { Box, Button, TextField, Typography, Link, IconButton, InputAdornment } 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { handleSignUp, handleClickShowPassword } from "./common/HandleSignUp";
+import useColor from "shared/color/Color";
 
 const SignUp = ({ toggleForm }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,6 +12,7 @@ const SignUp = ({ toggleForm }) => {
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
   const emailInputRef = useRef(null);
+  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
 
   return (
     <Box
@@ -32,6 +34,11 @@ const SignUp = ({ toggleForm }) => {
         onChange={(e) => setName(e.target.value)}
         placeholder="Your Name"
         margin="normal"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleSignUp(name, email, password, rePassword, toggleForm, emailInputRef);
+          }
+      }}
       />
       <TextField
         fullWidth
@@ -43,6 +50,11 @@ const SignUp = ({ toggleForm }) => {
         placeholder="example@gmail.com"
         margin="normal"
         inputRef={emailInputRef}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleSignUp(name, email, password, rePassword, toggleForm, emailInputRef);
+          }
+      }}
       />
       <TextField
         fullWidth
@@ -62,6 +74,11 @@ const SignUp = ({ toggleForm }) => {
             </InputAdornment>
           ),
         }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleSignUp(name, email, password, rePassword, toggleForm, emailInputRef);
+          }
+      }}
       />
       <TextField
         fullWidth
@@ -81,12 +98,17 @@ const SignUp = ({ toggleForm }) => {
             </InputAdornment>
           ),
         }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleSignUp(name, email, password, rePassword, toggleForm, emailInputRef);
+          }
+      }}
       />
       <Button
         fullWidth
         variant="contained"
         color="primary"
-        style={{ marginTop: 16, marginBottom: 16 }}
+        style={{ marginTop: 16, marginBottom: 16, background: Color2 }}
         onClick={() => handleSignUp(name, email, password, rePassword, toggleForm, emailInputRef)}
       >
         Sign Up
@@ -95,7 +117,7 @@ const SignUp = ({ toggleForm }) => {
         <Typography variant="body2" mr={1}>
           Already have an account?
         </Typography>
-        <Link href="#" variant="body2" onClick={() => toggleForm("signin")}>
+        <Link href="#" variant="body2" sx={{color: Color2}} onClick={() => toggleForm("signin")}>
           Sign In
         </Link>
       </Box>

@@ -1,25 +1,17 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Divider,
-  IconButton,
-  InputAdornment,
-  Link,
-} from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
+import {Box, Button,TextField,Typography, IconButton, InputAdornment, Link,} from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import { handleSignIn } from "./common/HandleSignIn";
 import { useAuth } from "../../security/AuthContext";
+import useColor from "shared/color/Color";
 
 const SignIn = ({ toggleForm }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
 
   const navigate = useNavigate();
   const authContext = useAuth();
@@ -54,6 +46,11 @@ const SignIn = ({ toggleForm }) => {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="example@gmail.com"
         margin="normal"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleSignInClick();
+          }
+      }}
       />
       <TextField
         fullWidth
@@ -73,21 +70,26 @@ const SignIn = ({ toggleForm }) => {
             </InputAdornment>
           ),
         }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleSignInClick();
+          }
+      }}
       />
       <Button
         fullWidth
         variant="contained"
         color="primary"
-        style={{ marginTop: 16, marginBottom: 16 }}
+        style={{ marginTop: 16, marginBottom: 16, backgroundColor: Color2 }}
         onClick={handleSignInClick}
       >
         Sign In
       </Button>
       <Box mt={2} display="flex" justifyContent="space-between">
-        <Link href="#" variant="body2" onClick={() => toggleForm("signup")}>
+        <Link href="#" variant="body2" sx={{color: Color2}} onClick={() => toggleForm("signup")}>
           Sign up
         </Link>
-        <Link href="#" variant="body2" onClick={() => toggleForm("forgot")}>
+        <Link href="#" variant="body2" sx={{color: "red"}} onClick={() => toggleForm("forgot")}>
           Forgot password?
         </Link>
       </Box>

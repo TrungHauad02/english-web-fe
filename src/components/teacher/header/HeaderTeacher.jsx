@@ -68,7 +68,7 @@ function HeaderTeacher() {
           }}
           onClick={() => navigate("/teacher")}
         >
-          English Web
+          H2T English
         </HeaderTypography>
       </Stack>
 

@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  Button,
-  Stack,
-  Box,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Dialog, DialogContent, Button, Stack, Box, TextField, Typography} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ChangePassword from "components/account/ChangePassword";
 import {
@@ -19,6 +11,7 @@ import {
 import { fetchUserInfo } from "api/user/userService";
 import { handleFileChange } from "shared/utils/uploadFileUtils";
 import DotLoader from "shared/component/loader/DotLoader";
+import useColor from "shared/color/Color";
 
 const Profile = ({ open, handleClose }) => {
   const [name, setName] = useState("");
@@ -28,6 +21,7 @@ const Profile = ({ open, handleClose }) => {
   const [image, setImage] = useState("");
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
 
   useEffect(() => {
     const loadUserInfo = async () => {
@@ -86,7 +80,7 @@ const Profile = ({ open, handleClose }) => {
             <Button
               variant="contained"
               startIcon={<EditIcon />}
-              sx={{ mt: 2, bgcolor: "#FFF4CC", color: "#000" }}
+              sx={{ mt: 2, bgcolor: Color2_1, color: "#fff" }}
               onClick={() => handleEditProfile(setEditMode)}
             >
               Edit profile
@@ -111,9 +105,9 @@ const Profile = ({ open, handleClose }) => {
               <Box
                 sx={{
                   position: "absolute",
-                  top: "30%",
+                  top: "37%",
                   left: "5%",
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: "bold",
                 }}
               >
@@ -183,6 +177,7 @@ const Profile = ({ open, handleClose }) => {
             fontStyle: "italic",
             textDecoration: "underline",
             mt: 2,
+            color: Color2
           }}
           onClick={() => handleChangePasswordOpen(setChangePasswordOpen)}
         >
@@ -204,7 +199,7 @@ const Profile = ({ open, handleClose }) => {
           }
           riant="contained"
           color="primary"
-          sx={{ mt: 3, float: "right", bottom: ".5rem", bgcolor: "#ACCD0A" }}
+          sx={{ mt: 3, float: "right", bottom: ".5rem", bgcolor: Color2, color: "#fff" }}
         >
           {editMode ? "Save" : "Close"}
         </Button>

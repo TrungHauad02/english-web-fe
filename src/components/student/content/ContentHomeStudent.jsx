@@ -8,10 +8,12 @@ import { sections } from "./common/HomeStudent.js";
 import { useAuth } from "security/AuthContext.js";
 import { HandleHomeStudent } from "./common/HandleHomeStudent.js";
 import RequiredLoginDialog from "./common/RequiredLoginDialog.js";
+import useColor from "shared/color/Color";
 
 const ContentHomeStudent = () => {
   const [requiredLoginDialog, setRequiredLoginDialog] = useState(false);
   const { isAuthenticated } = useAuth();
+  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
   const { handleButtonClick, handleCloseDialog } =
     HandleHomeStudent(isAuthenticated);
 
@@ -108,6 +110,7 @@ const ContentHomeStudent = () => {
                           background: "#4a475c",
                           borderRadius: "1rem",
                           fontSize: "1rem",
+                          background: Color2
                         }}
                         onClick={() =>
                           handleButtonClick(
@@ -167,6 +170,7 @@ const ContentHomeStudent = () => {
                           background: "#4a475c",
                           borderRadius: "1rem",
                           fontSize: "1rem",
+                          background: Color2
                         }}
                         onClick={() =>
                           handleButtonClick(
