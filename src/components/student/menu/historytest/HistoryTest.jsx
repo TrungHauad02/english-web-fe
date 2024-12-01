@@ -5,7 +5,9 @@ import MainPicture from "../../common/listTopic/MainPicture";
 import Filter from "./Filter";
 import { getListSubmitTests } from "../../../../api/test/submitTest";
 import CustomPagination from "shared/component/pagination/CustomPagination";
-import { useLocation } from 'react-router-dom';
+import { useLocation,useNavigate } from 'react-router-dom';
+import { fetchUserInfo } from "api/user/userService";
+
 const CardStyled = styled(Card)(({ theme }) => ({
   backgroundColor: "#f5f5f5",
   padding: "10px",
@@ -16,6 +18,7 @@ const ITEMS_PER_PAGE = 10;
 
 const HistoryTest = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { title, type } = location.state || {};
 
 
@@ -29,9 +32,10 @@ const HistoryTest = () => {
   const [totalItems, setTotalItems] = useState(0);
 
 
-  const fetchTests = () => {
+  const fetchTests =  async () => {
+    const user = await fetchUserInfo();
     const adjustedType = filter === "ALL" ? "" : filter;
-    getListSubmitTests(currentPage, adjustedType, searchText, searchStartDate, searchEndDate)
+    getListSubmitTests(currentPage,user.id,adjustedType, searchText, searchStartDate, searchEndDate)
       .then((data) => {
         setTests(data.content);
         setTotalItems(data.totalElements);
@@ -41,6 +45,36 @@ const HistoryTest = () => {
         console.error("Error fetching submit tests:", error);
      
       });
+  };
+  const navigateSubmitTest =   (submitTest) => {
+
+    let newPath = "";
+    const state = {
+      id: submitTest.id,
+      testId: submitTest.testId,
+    };
+    switch (submitTest.testType) {
+      case "MIXING":
+        newPath = "/student/history-test/mixing";
+        break;
+      case "READING":
+        newPath = "/student/history-test/reading";
+        break;
+      case "LISTENING":
+        newPath = "/student/history-test/listening";
+        break;
+      case "SPEAKING":
+        newPath = "/student/history-test/speaking";
+        break;
+      case "WRITING":
+        newPath = "/student/history-test/writing";
+        break;
+      default:
+        break;
+    }
+    navigate(newPath, { state });
+   
+
   };
 
   useEffect(() => {
@@ -74,11 +108,13 @@ const HistoryTest = () => {
         <Grid container spacing={2}>
         {tests.map((test, index) => (
           <Grid item xs={12} sm={6} key={index}>
-            <CardStyled variant="outlined">
+            <CardStyled variant="outlined"
+              onClick={() => navigateSubmitTest(test)}
+            >
               <Typography variant="h6">{test.testTitle}</Typography>
               <Typography>Date: {new Date(test.submitTime).toLocaleString()}</Typography>
               <Typography>
-                <strong>Score:</strong> {test.score === 0 ? "Haven’t done yet" : test.score}
+                <strong>Score:</strong> {test.score === -1 ? "Haven’t done yet" : test.score}
               </Typography>
             </CardStyled>
           </Grid>

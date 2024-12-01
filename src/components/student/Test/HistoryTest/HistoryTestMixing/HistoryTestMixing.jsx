@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import MainTitle from "../MainTitle";
-import ItemTest from "./ItemTest";
+import MainTitle from "../../MainTitle";
+
 import HistoryTestMixingContent from "./HistoryTestMixingContent";
 import { Box } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -22,7 +22,7 @@ function HistoryTestMixing() {
     const state = {
       id: test.id,
     };
-    navigate("/student/tests/mixing", { state });
+    navigate("/student/test/mixing", { state });
   };
   useEffect(() => {
     const fetchData = async () => {

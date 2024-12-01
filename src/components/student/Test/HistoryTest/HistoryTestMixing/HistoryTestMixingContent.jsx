@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl, Button, Grid, styled } from '@mui/material';
-import ItemTitleTest from '../ItemTitleTest';
+import ItemTitleTest from '../../TestMixing/ItemTitleTest';
 import Vocabulary from './HistoryVocabulary';
 import Grammar from './HistoryGrammar';
 import Reading from './HistoryReading';
@@ -139,7 +139,7 @@ const HistoryTestMixing = ({datatest, submitTest ,onClickTestAgain}) => {
     [TitleAndSerials]
   );
 
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(submitTest?.score);
 
   const generateGridData = () => {
 
@@ -267,25 +267,42 @@ const HistoryTestMixing = ({datatest, submitTest ,onClickTestAgain}) => {
 
   return (
     <Grid sx={{ marginBottom: '1rem' }} >
-    <Box sx={{ marginBottom: '1rem' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', marginBottom: '1rem' }}>
-        {DataTestMixing.map((tab, index) => (
-          <Box
-            key={index}
-            sx={{
-              padding: '0.5rem 1rem',
-              borderRadius: '0.5rem',
-              background: activeTab === index ? '#D9D9D9' : '#d9d9d933',
-              cursor: 'pointer',
-            }}
-            onClick={() => setActiveTab(index)}
-          >
-            {tab.title}
-          </Box>
-        ))}
-      </Box>
-    </Box>
+    <Box sx={{}}>
+    <Box sx={{ display: 'flex',  }}>
 
+<Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+{DataTestMixing.map((tab, index) => (
+   
+   <Box
+     key={index}
+     sx={{
+       marginRight: '0.5rem',
+       padding: "0.5rem 1rem",
+       borderRadius: "1rem 1rem 0 0",
+       fontWeight: "bold",
+       textAlign: "center",
+       cursor: "pointer",
+       background: activeTab === index
+         ? "linear-gradient(to right, #00796B, #00B8A2)"
+         : "#E0F7FA",
+       color: activeTab === index ? "#FFFFFF" : "#000000",
+       boxShadow: activeTab === index
+         ? "0px 4px 6px rgba(0, 0, 0, 0.2)"
+         : "none",
+       transition: "all 0.3s ease",
+     }}
+     onClick={() => setActiveTab(index)}
+   >
+     {tab.title}
+   </Box>
+ ))}
+</Box>
+<Box sx={{ marginLeft: 'auto', display: 'flex',marginRight:'20%' ,      
+}}>
+  <ItemTitleTest title={DataTestMixing[activeTab].title} />
+</Box>
+</Box>
+  </Box>
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
       <Box 
         sx={{
@@ -295,7 +312,7 @@ const HistoryTestMixing = ({datatest, submitTest ,onClickTestAgain}) => {
           borderRadius: '1rem',
         }}
       >
-        <ItemTitleTest title={DataTestMixing[activeTab].title} />
+  
         {activeTab === 0 && <Vocabulary  dataTest={DataTestMixing[activeTab]} focusId={focusId}/>}
         {activeTab === 1 && <Grammar dataTest={DataTestMixing[activeTab]} focusId={focusId}  />}
         {activeTab === 2 && <Reading dataTest={DataTestMixing[activeTab]}  focusId={focusId}  />}

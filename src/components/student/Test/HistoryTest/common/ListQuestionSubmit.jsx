@@ -55,7 +55,7 @@ function ListQuestionSubmit({ dataTest, focusId, dataSubmitTest }) {
                             sx={{
                                 padding: '0.5rem 1rem',
                                 borderRadius: '50%',
-                                backgroundColor: '#ACCD0A',
+                                backgroundColor: '#00796B',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',

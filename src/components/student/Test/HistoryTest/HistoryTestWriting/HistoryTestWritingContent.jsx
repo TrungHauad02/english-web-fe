@@ -1,6 +1,6 @@
-import { Box, Typography, Button, Grid, TextField, Paper } from '@mui/material';
+import { Box, Typography, Button, Grid, Paper, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 
 const TestContainer = styled(Grid)(({ theme }) => ({
   width: '100%',
@@ -25,12 +25,13 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   borderRadius: '1rem',
 }));
 
-const EssayInput = ({ value = '', wordCount = 0, onChange }) => {
-  const handleEssayChange = useCallback((event) => {
-    const text = event.target.value;
-    const wordCount = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
-    onChange(text, wordCount);
-  }, [onChange]);
+const EssayInput = ({ value = '' }) => {
+  const calculateWordCount = (text) => {
+
+    return text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+  };
+
+  const wordCount = calculateWordCount(value);
 
   return (
     <StyledPaper elevation={3}>
@@ -39,9 +40,9 @@ const EssayInput = ({ value = '', wordCount = 0, onChange }) => {
         multiline
         rows={10}
         variant="outlined"
-        placeholder="Type your essay here..."
-        value={value || ''}
-        onChange={handleEssayChange}
+        placeholder="No input allowed"
+        value={value}
+        InputProps={{ readOnly: true }}
         sx={{
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
@@ -57,40 +58,41 @@ const EssayInput = ({ value = '', wordCount = 0, onChange }) => {
         }}
       />
       <Box sx={{ mt: 1 }}>
-        <Typography variant="body2">Words Count: {wordCount || 0}</Typography>
+        <Typography variant="body2">Words Count: {wordCount}</Typography>
       </Box>
     </StyledPaper>
   );
 };
 
-function ContentTestWriting({ datatest, handlebtnSubmit ,answers,setAnswers}) {
-
-  const handleAnswerChange = (id, essay, wordCount) => {
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [id]: { essay, wordCount },
-    }));
-  };
-
+function ContentTestWriting({ oneWriting, oneHistoryWriting, onClickTestAgain, Maxscore }) {
   return (
     <>
       <Box sx={{ display: 'flex', marginTop: '2%' }}>
         <TestContainer sx={{ flex: '1 1 49%' }}>
           <QuestionSection item>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-              Question {datatest?.serial || ''} 
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                Question {oneWriting?.serial || ''}
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 'bold',
+                  color: 'red',
+                }}
+              >
+                {oneHistoryWriting?.score + "/" + Maxscore || ''}
+              </Typography>
+            </Box>
             <Typography variant="body1" sx={{ marginTop: '1rem' }}>
-              {datatest?.content || 'No content available'} 
+              {oneWriting?.content || 'No content available'}
             </Typography>
           </QuestionSection>
         </TestContainer>
         <Partition sx={{ flex: '1 1 0.2%' }} />
         <TestContainer sx={{ flex: '1 1 49%' }}>
           <EssayInput
-            value={answers[datatest?.id]?.essay || ''} 
-            wordCount={answers[datatest?.id]?.wordCount || 0} 
-            onChange={(essay, wordCount) => handleAnswerChange(datatest?.id, essay, wordCount)}
+            value={oneHistoryWriting?.content || ''}
           />
           <Button
             sx={{
@@ -102,11 +104,25 @@ function ContentTestWriting({ datatest, handlebtnSubmit ,answers,setAnswers}) {
               marginBottom: '2%',
               padding: '1rem 2rem',
             }}
-            onClick={handlebtnSubmit}
+            onClick={onClickTestAgain} 
           >
-            SUBMIT
+            TEST AGAIN
           </Button>
         </TestContainer>
+      </Box>
+      <Box
+        sx={{
+          border: '1px solid #ccc',
+          borderRadius: '1rem',
+          padding: '1rem',
+          backgroundColor: '#f9f9f9',
+          marginTop: '1rem',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="body1" sx={{ fontSize: '1rem' }}>
+          {oneHistoryWriting?.comment || 'No comment available'}
+        </Typography>
       </Box>
     </>
   );

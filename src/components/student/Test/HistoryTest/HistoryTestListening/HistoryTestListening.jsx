@@ -58,7 +58,7 @@ const handleTestAgain = () => {
     const state = {
         id: test.id,
     }
-    navigate('/student/tests/listening', { state });
+    navigate('/student/test/listening', { state });
   };
 
 const handlebtnPrevious = () => {

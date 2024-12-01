@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography, Button, Grid, Divider } from '@mui/material';
 import { styled } from '@mui/system';
 import ItemSerialTest from './ItemSerialTest';
-
+import CountdownTimer from '../../common/CountdownTimer';
 const StyledBox = styled(Box)({
   padding: '24px',
   textAlign: 'center',
@@ -17,6 +17,8 @@ function SerialGrid({
   TitleAndSerials,
   onItemClick,
   handlebtnSubmit,
+  duration,
+  storeName
 }) {
   return (
     <StyledBox>
@@ -24,7 +26,12 @@ function SerialGrid({
           <Typography align="center">
             <strong>Time remaining:</strong>
             <br />
-            60:00
+            <CountdownTimer
+      duration={duration}
+      handleSubmit={handlebtnSubmit}
+      dbName={"MyDatabase"}
+      storeName={storeName}
+    />
           </Typography>
         </Box>
 
@@ -52,8 +59,8 @@ function SerialGrid({
         <Button
           sx={{
             borderRadius: '1rem',
-            backgroundColor: '#FFD984',
-            color: 'black',
+            backgroundColor: '#00796B',
+            color: 'white',
             padding: '1rem 2rem',
           }}
           onClick={handlebtnSubmit}

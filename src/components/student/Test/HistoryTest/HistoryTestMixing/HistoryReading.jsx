@@ -1,5 +1,6 @@
 import ListQuestion from "./HistoryListQuestion";
 import { Box, Typography, Paper, Container } from "@mui/material";
+import ImageWithLoading from "../../common/ImageWithLoading"
 
 function SubmitReading({ dataTest, focusId }) {
     return (
@@ -10,13 +11,7 @@ function SubmitReading({ dataTest, focusId }) {
                                Question {item?.questions?.[0]?.serial} - {item?.questions?.[item?.questions?.length-1]?.serial} 
                             </Typography>
                     {item.image && (
-                        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-                            <img 
-                                src={item.image} 
-                                alt="Reading content" 
-                                style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }} 
-                            />
-                        </Box>
+                    <ImageWithLoading imageSrc={item.image} />
                     )}
 
                     <Box sx={{ mb: 3 }}>

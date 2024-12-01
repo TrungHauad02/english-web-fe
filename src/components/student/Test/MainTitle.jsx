@@ -1,26 +1,13 @@
 import { Box, Typography, Button, Container, Grid, Icon, Radio, RadioGroup, FormControlLabel, FormControl, Paper  } from '@mui/material';
 import { styled } from '@mui/material/styles';
-const MainTitleContainer = styled(Box)(({ theme }) => ({
-    width: '25%',
-    position: 'absolute',
-    left: 0,
-    bottom: 0,
-    textAlign: 'center',
-    color: 'black',
-    background: 'linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.4) 100%)',
-    borderRadius: '0 20px 0 0',
-  }));
-  const ImageContainer = styled(Box)(({ theme }) => ({
-    position: 'relative',
-    width: '100%', 
-    height: '70vh',
-    overflow: 'hidden',
-  }));
-  
+import MainPicture from "../common/listTopic/MainPicture";
+
+
   
   
   const Title = styled(Paper)(({ theme }) => ({
-    background: 'linear-gradient(to right, rgba(172, 205, 10, 1) 0%, rgba(232, 245, 168, 1) 100%)',
+  
+    background: 'linear-gradient(to right, rgba(0, 121, 107, 1) 0%, rgba(224, 247, 250, 1) 100%)', 
     textAlign: 'center',
     width: '15%',
     padding: theme.spacing(2),
@@ -29,17 +16,16 @@ const MainTitleContainer = styled(Box)(({ theme }) => ({
     marginLeft: '2%',
     borderRadius: '4rem',
   }));
+  
   function MainTitle({title,bg}){
     return(
       <>
-          <ImageContainer>
-          <img src={bg} alt="Test" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        <MainTitleContainer>
-          <Typography variant="h4" component="h1" sx={{ margin: 2 }}>
-            TEST ONLINE
-          </Typography>
-        </MainTitleContainer>
-      </ImageContainer>
+        <MainPicture
+        src={
+          bg
+        }
+        title={"Test Online"}
+      />
            <Title elevation={3}>{title}</Title>
       </>
 

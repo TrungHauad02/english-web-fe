@@ -72,9 +72,8 @@ const SubmitTestSpeakignContent = ({ submitTestSpeakingList, testSpeakingList, f
                                         </Typography>
                                         {relatedSubmit && (
                                             <Typography variant="subtitle1" color="error">
-                                                {relatedSubmit.score}/
-                                                {submitTestSpeakingList?.length > 0
-                                        ? (100 /6/ submitTestSpeakingList.length).toFixed(0)
+                                                {relatedSubmit.score}/{submitTestSpeakingList?.length > 0
+                                        ? (100 / submitTestSpeakingList.length).toFixed(0)
                                         : "N/A"}
                                             </Typography>
                                         )}

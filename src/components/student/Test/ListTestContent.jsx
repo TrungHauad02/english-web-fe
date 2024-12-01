@@ -95,7 +95,7 @@ function ListTestContent({ list }) {
               <strong>Number of Questions:</strong> {test.numberOfQuestions}
             </Typography>
             <Typography  sx={{ marginTop: "0.5rem" }}>
-              <strong>Score:</strong> {test.scoreLastOfTest === 0
+              <strong>Score:</strong> {test.scoreLastOfTest === -1
                 ? "Haven’t done yet"
                 : test.scoreLastOfTest}
             </Typography>

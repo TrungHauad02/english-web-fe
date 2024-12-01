@@ -133,17 +133,29 @@ function QuestionReadingTest({ data, handleReading }) {
       content: formData.content,
       image: formData.image,
     };
+    console.log(image);
+    
     if (formData.id === "") {
       try {
-        const dataImage = await uploadFile(
-          "test/reading",
-          initialData.testId.replace(/\s+/g, "_"),
-          image
-        );
-        if (dataImage.url !== initialData.image) {
+        if(image!=='')
+          {
+            const dataImage = await uploadFile(
+              "test/reading",
+              initialData.testId.replace(/\s+/g, "_"),
+              image
+            );
+            if (dataImage.url !== null) {
+              updatedData = {
+                ...updatedData,
+                image: dataImage.url,
+              };
+            }
+          }
+        else
+        {
           updatedData = {
             ...updatedData,
-            image: dataImage.url,
+            image: '',
           };
         }
 
@@ -183,19 +195,36 @@ function QuestionReadingTest({ data, handleReading }) {
       }
     } else {
       try {
-        const newImage = await handleFileUpload(
-          initialData.image,
-          image,
-          initialData.testId,
-          "test/reading"
-        );
-
-        if (newImage !== initialData.image) {
-          updatedData = {
-            ...updatedData,
-            image: newImage,
-          };
-        }
+        if(initialData.image==='' && image!=='')
+          {
+            const dataImage = await uploadFile(
+              "test/reading",
+              initialData.testId.replace(/\s+/g, "_"),
+              image
+            );
+            if (dataImage.url !== null) {
+              updatedData = {
+                ...updatedData,
+                image: dataImage.url,
+              };
+            }
+          }
+          if(initialData.image!=='')
+          {
+            const newImage = await handleFileUpload(
+              initialData.image,
+              image,
+              initialData.testId,
+              "test/reading"
+            );
+    
+            if (newImage !== initialData.image) {
+              updatedData = {
+                ...updatedData,
+                image: newImage,
+              };
+            }
+          }
 
         await updateTestReading(updatedData.id, updatedData);
         await Promise.all(

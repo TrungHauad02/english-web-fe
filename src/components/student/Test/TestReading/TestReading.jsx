@@ -11,17 +11,24 @@ import { fetchUserInfo } from "../../../../api/user/userService";
 import { createSubmitTestReadingAnswer } from "../../../../api/test/submitTestReadingAnswer";
 import {
   commentReadingQuestion,
-  scoreTestSpeakingQuestion,
 } from "../../../../api/test/commentTest";
+import CountdownTimer from "../common/CountdownTimer";
+import { openDB, saveData, getData, deleteData } from '../common/IndexDB';
 
-const DurationContainer = styled(Paper)(({ theme }) => ({
-  background: "#FFF4CC",
+
+const DurationContainer = styled(Box)(({ theme }) => ({
+  background: "#E0F7FA",
   borderRadius: "20px",
   fontSize: "14px",
-  float: "right",
-  marginRight: "5%",
-  padding: theme.spacing(2),
+  float:'right',
+  padding: "1.5rem 3rem",
+  marginRight: theme.spacing(2),
+  border: '1px solid #000000',
+  display: 'flex',
+  justifyContent: 'center', 
+  alignItems: 'center',
 }));
+
 
 function TestReading() {
   const [indexVisible, setIndexVisible] = useState(0);
@@ -32,10 +39,11 @@ function TestReading() {
   const { state } = location;
   const [datatest, setdatatest] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [duration, setDuration] = useState(null);
   const [error, setError] = useState(null);
-  const [score, setSCore] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const title = datatest ? datatest.type : "";
+  const [storeName, setStoreName] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +51,8 @@ function TestReading() {
         const data = await getTest(state.id);
         if (data) {
           setdatatest(data);
+          setDuration(data.duration); 
+          setStoreName("MyStore" + data.id)
         } else {
           setdatatest(null);
         }
@@ -52,10 +62,43 @@ function TestReading() {
         setLoading(false);
       }
     };
-
+  
     fetchData();
-  }, [state.id]);
+  }, [state?.id]);
+  
+  useEffect(() => {
+    if (datatest != null) {
+      openDB("MyDatabase", "MyStore" + datatest.id)
+        .then((db) => {
+          getData(db, "MyStore" + datatest.id,storeName)
+            .then((data) => {
+              if (data?.answers) {
+                setAnswers(data.answers);           
+              } else {
+                console.log("No answers found in IndexedDB");
+                setAnswers({}); 
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching answers:", error);
+            });
+        })
+        .catch((error) => {
+          console.error("Error accessing IndexedDB:", error);
+        });
+    }
 
+  }, [datatest?.id]);
+  
+  useEffect(() => {
+    if (datatest != null) {
+      openDB("MyDatabase", storeName).then((db) => {
+        saveData(db, "MyStore" + datatest.id, { id: storeName, answers });
+      }).catch((error) => {
+        console.error("Error saving answers to the database:", error);
+      });
+    }
+  }, [answers]);
   if (loading) {
     return (
       <Box
@@ -90,14 +133,14 @@ function TestReading() {
     setIsSubmitting(true);
     const score = calculateScore();
     let user = await fetchUserInfo();
-
+    const vietnamTime = new Date().toLocaleString("en-CA", { timeZone: "Asia/Ho_Chi_Minh", hour12: false }).replace(", ", "T");
     let submitTest = {
       id: "",
       testId: datatest.id,
       userId: user.id,
       score: score,
       status: "ACTIVE",
-      submitTime: new Date().toISOString(),
+      submitTime: vietnamTime,
       submitTestReadingAnswers: [],
     };
 
@@ -169,10 +212,12 @@ function TestReading() {
         id: savedSubmitTest.id,
         testId: datatest.id,
       };
+      deleteData('MyDatabase', 'MyStore'+datatest.id);
       navigate("/student/history-test/reading", { state });
     } catch (error) {
       console.error("Error creating submitTest:", error);
     } finally {
+      
       setIsSubmitting(false);
     }
   };
@@ -226,11 +271,20 @@ function TestReading() {
           "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
         }
       />
-      <DurationContainer sx={{ marginRight: "5%" }} elevation={1}>
-        <Typography align="center">
-          <strong>Time remaining:</strong>
-          <br />
-          60:00
+      <DurationContainer sx={{ marginRight: "5%" ,fontWeight: 'bold'  }} elevation={1}>
+        <Typography align="center" >
+        Time remaining: 
+        </Typography>
+        <Typography align="center" sx={{marginLeft:'1rem'}} >
+        {
+      datatest && 
+      <CountdownTimer
+      duration={duration}
+      handleSubmit={handlebtnSubmit}
+      dbName={"MyDatabase"}
+      storeName={storeName}
+    />
+     }
         </Typography>
       </DurationContainer>
       <BtnPreviousNextContentTest

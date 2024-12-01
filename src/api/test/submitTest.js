@@ -2,6 +2,7 @@ import apiClient from "../apiClient";
 
 export function getListSubmitTests(
   page = 1,
+  userId,
   type = "",
   searchTerm = "",
   startDate = "",
@@ -10,6 +11,7 @@ export function getListSubmitTests(
   const params = new URLSearchParams({
     page: page - 1,
     size: 10,
+    userId,
     title: searchTerm,
     type,
     startDate,

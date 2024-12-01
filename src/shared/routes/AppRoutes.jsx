@@ -7,6 +7,9 @@ import Skills from "../../components/student/skill/Skills";
 import HistoryTest from "components/student/menu/historytest/HistoryTest";
 import HistoryTestReading from "components/student/Test/HistoryTest/HistoryTestReading/HistoryTestReading";
 import HistoryTestListening from "components/student/Test/HistoryTest/HistoryTestListening/HistoryTestListening";
+import HistoryTestWriting from "components/student/Test/HistoryTest/HistoryTestWriting/HistoryTestWriting";
+import HistoryTestSpeaking from "components/student/Test/HistoryTest/HistoryTestSpeaking/HistoryTestSpeaking";
+import HistoryTestMixing from "components/student/Test/HistoryTest/HistoryTestMixing/HistoryTestMixing";
 import StudySchedulePage from "../../components/student/menu/studyschedule/StudySchedule";
 import site from "./Pages";
 import HomeTeacher from "../../components/teacher/HomeTeacher";
@@ -36,6 +39,7 @@ import AuthenticatedRoute from "./AuthenticatedRoute";
 import TeacherManagement from "components/teacher/TeacherManagement";
 import AdminManagement from "components/admin/AdminManagement";
 import ErrorPage from "shared/utils/ErrorPage";
+
 
 export default function AppRoutes() {
   const router = createBrowserRouter([
@@ -75,6 +79,18 @@ export default function AppRoutes() {
         {
           path: "history-test/listening",
           element: <HistoryTestListening />
+        },
+        {
+          path: "history-test/writing",
+          element: <HistoryTestWriting />
+        },
+        {
+          path: "history-test/speaking",
+          element: <HistoryTestSpeaking />
+        },
+        {
+          path: "history-test/mixing",
+          element: <HistoryTestMixing />
         },
         {
           path: "study-schedule",

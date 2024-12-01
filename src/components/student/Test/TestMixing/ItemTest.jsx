@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl, Button, Grid, styled } from '@mui/material';
+import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl, Button, Grid, styled, duration } from '@mui/material';
 import ItemTitleTest from './ItemTitleTest';
 import Vocabulary from './Vocabulary';
 import Grammar from './Grammar';
@@ -10,11 +10,22 @@ import Speaking from './Speaking';
 import SerialGrid from './SerialGrid/SerialGrid';
 import {createSubmitTest} from "../../../../api/test/submitTest"
 import { fetchUserInfo } from "../../../../api/user/userService";
+import { uploadFile } from 'api/feature/uploadFile/uploadFileService';
 import {createSubmitTestReadingAnswer} from "../../../../api/test/submitTestReadingAnswer"
+import {createSubmitTestMixingAnswer} from "../../../../api/test/submitTestMixingAnswer"
+import {createSubmitTestListeningAnswer} from "../../../../api/test/submitTestListeningAnswer"
+import {createSubmitTestSpeaking} from "../../../../api/test/submitTestSpeaking"
+import {createSubmitTestWriting} from "../../../../api/test/submitTestWriting"
 import {commentMixingQuestion,commentReadingQuestion,commentListeningQuestion} from "../../../../api/test/commentTest"
+import { scoreTestWriting } from "api/feature/scoreTestWriting/scoreTestWriting";
+import { getSpeechToText } from "api/feature/stt/SpeechToTextService";
+import { useLocation,useNavigate } from "react-router-dom";
+import { openDB, saveData, getData, deleteData } from '../common/IndexDB';
 
 
 const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
+  const storeName = 'MyStore' + datatest.id;
+  const navigate = useNavigate();
   const DataTestMixing = [
     {
       title: "Vocabulary",
@@ -51,16 +62,37 @@ const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
 
   const [answers, setAnswers] = useState({});
   useEffect(() => {
-    openDB('MyDatabase', 'MyStore' + datatest.id).then((db) => {
-        getData(db, 'MyStore' + datatest.id).then(setAnswers);
-    }).catch((error) => {
-        console.error('Error accessing the database:', error);
-    });
-}, [datatest.id]);
-
-useEffect(() => {
-    openDB('MyDatabase', 'MyStore'+datatest.id).then((db) => saveData(db, 'MyStore'+datatest.id, answers));
-}, [answers]);
+    if (datatest != null) {
+      openDB("MyDatabase", "MyStore" + datatest.id)
+        .then((db) => {
+          getData(db, "MyStore" + datatest.id,storeName)
+            .then((data) => {
+              if (data?.answers) {
+                setAnswers(data.answers);           
+              } else {
+                console.log("No answers found in IndexedDB");
+                setAnswers({}); 
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching answers:", error);
+            });
+        })
+        .catch((error) => {
+          console.error("Error accessing IndexedDB:", error);
+        });
+    }
+  }, [datatest?.id]);
+  
+  useEffect(() => {
+    if (datatest != null) {
+      openDB("MyDatabase", storeName).then((db) => {
+        saveData(db, "MyStore" + datatest.id, { id: storeName, answers });
+      }).catch((error) => {
+        console.error("Error saving answers to the database:", error);
+      });
+    }
+  }, [answers]);
 
   const getListSerialTest = () => {
     const TitleAndSerials = {
@@ -209,18 +241,32 @@ useEffect(() => {
 
   const submitTest = async () => {
 
-    let user =  await fetchUserInfo();
-    const submitTest = getDataSubmitTest();
-    submitTest.userId = user.id;
+ 
   };
 
   const getDataSubmitTest = async () => {
+
+    let scoreTest=calculateScore();
+    let scorePerQuestionSpeaking = 0;
+    if (datatest?.testSpeakings?.length > 0) {
+      const totalQuestions = datatest.testSpeakings.reduce(
+        (sum, speaking) => sum + (speaking.questions?.length || 0),
+        0
+      );
+      scorePerQuestionSpeaking = totalQuestions > 0 ? 100 / 6 / totalQuestions : 0;
+    }
+    let scorePerQuestionWriting = 0;
+      if (datatest?.testWritings?.length > 0) {
+        scorePerQuestionWriting = 100 / 6 / datatest.testWritings.length;
+      }
+
+    const vietnamTime = new Date().toLocaleString("en-CA", { timeZone: "Asia/Ho_Chi_Minh", hour12: false }).replace(", ", "T");
     let submitTest = {
       id: '',
       testId: datatest.id,
       userId: '',
       score: '',
-      submitTime: new Date().toISOString(),
+      submitTime: vietnamTime,
       status: 'ACTIVE',
       submitTestListeningAnswers: [],
       submitTestReadingAnswers: [],
@@ -234,21 +280,13 @@ useEffect(() => {
         for (const question of data.questions) {
           if (!question || !question.answers) {
             console.warn("Question or answers array is undefined");
-            continue; // Skip this question if data is not valid
+            continue; 
           }
   
           const selectedAnswer = answers[question.id];
-          let submitTestMixingAnswer = {
-            id: '',
-            submitTestId: '',
-            questionId: question.id,
-            answerId: selectedAnswer !== undefined ? selectedAnswer : '',
-            comment: '',
-            status: 'ACTIVE',
-          };
-  
+        let comment = "No comment available. You haven't completed this question yet."
           if (selectedAnswer !== undefined) {
-
+       
             const answersContentList = question.answers.map((answer) => answer.content);
             const userAnswerContent = question.answers?.find((answer) => answer.id === selectedAnswer)?.content || '';
             try {
@@ -258,11 +296,19 @@ useEffect(() => {
                 userAnswer: userAnswerContent,
               };
               const response = await commentMixingQuestion(request);
-              submitTestMixingAnswer.comment = response.comment;
+              comment = response.comment;
             } catch (error) {
               console.error("Failed to get comment for mixing question:", error);
             }
           }
+          let submitTestMixingAnswer = {
+            id: '',
+            submitTestId: '',
+            questionId: question.id,
+            answerId: selectedAnswer !== undefined ? selectedAnswer : '',
+            comment: comment,
+            status: 'ACTIVE',
+          };
   
           submitTest.submitTestMixingAnswers.push(submitTestMixingAnswer);
         }
@@ -278,6 +324,7 @@ useEffect(() => {
               console.warn("Question or answers array is undefined");
               continue; 
             }
+            
   
             const selectedAnswer = answers[question.id];
             let submitAnswer = {
@@ -285,7 +332,7 @@ useEffect(() => {
               submitTestId: '',
               questionId: question.id,
               answerId: selectedAnswer !== undefined ? selectedAnswer : '',
-              comment: '',
+              comment: "No comment available. You haven't completed this question yet.",
               status: 'ACTIVE',
             };
   
@@ -326,22 +373,52 @@ useEffect(() => {
         for (const item of data.dataitem) {
           if (!item || !item.questions) {
             console.warn("Item or questions array is undefined");
-            continue; // Skip this item if data is not valid
+            continue; 
           }
   
           for (const question of item.questions) {
-            const selectedAnswer = answers[question.id];
-            let submitSpeaking = {
-              id: '',
-              submitTestId: '',
-              testSpeakingQuestionId: question.id,
-              content: selectedAnswer !== undefined ? selectedAnswer : '',
-              score: '',
-              explanation: '',
-              comment: '',
-              status: 'ACTIVE',
-            };
-            submitTest.submitTestSpeakings.push(submitSpeaking);
+            const audiobase64 = answers[question.id];
+
+            let content = "No audio available. You haven't completed this question yet.";
+            let transcript = "No transcipt available. You haven't completed this question yet."
+            let comment = "No comment available. You haven't completed this question yet."
+          let score = 0;
+        if (audiobase64) {
+          const result = await uploadFile(
+            "test/speaking",
+            question.id.replace(/\s+/g, "_") + "_" + Date.now() + "-" + Math.random().toString(36).substr(2, 9),
+            audiobase64,
+          );
+          content = result.url;
+          try {
+  
+            transcript = (await getSpeechToText(audiobase64)).transcript;
+          } catch (error) {
+        
+            console.log("Proceeding with the next step...");
+          
+          }
+          if(transcript!==null && transcript!=='')
+          {
+
+            let  dataScore= await scoreTestWriting(transcript, question.content,scorePerQuestionSpeaking);
+            score = dataScore.score.split("/")[0];;
+            comment = dataScore.comment;
+          }
+          
+        }
+        scoreTest=scoreTest+ +score;
+        let submitTestSpeakingQuestion = {
+          id: '',
+          testSpeakingQuestionId: question.id,
+          submitTestId: '',
+          score: score,
+          content: content,
+          explanation: transcript,
+          comment: comment,
+          status: "ACTIVE"
+        }
+            submitTest.submitTestSpeakings.push(submitTestSpeakingQuestion);
           }
         }
       } else if (data.title === "Writing") {
@@ -351,78 +428,195 @@ useEffect(() => {
             continue; 
           }
   
-          const selectedAnswer = answers[item.id];
+          const contentUserWrite = answers[item.id]?.essay;
+
+          let score = 0;
+          let comment = "No comment available. You haven't completed this question yet";
+          let content = "No comment available. You haven't completed this question yet";
+          if(contentUserWrite)
+          {
+            content = contentUserWrite;
+            let  dataScore= await scoreTestWriting(contentUserWrite, item.content,scorePerQuestionWriting);
+            score = dataScore.score.split("/")[0];;
+            comment = dataScore.comment;
+          }
+          scoreTest= scoreTest+ +score;
           let submitWriting = {
             id: '',
             submitTestId: '',
             testWritingId: item.id,
-            content: selectedAnswer !== undefined && selectedAnswer.essay !== '' ? selectedAnswer.essay : '',
-            score: '',
-            comment: '',
+            content: content,
+            score:score,
+            comment:comment,
             status: 'ACTIVE',
           };
           submitTest.submitTestWritings.push(submitWriting);
         }
       }
     }
+    submitTest.score = scoreTest;
     return submitTest;
   };
   
-    
   const handlebtnSubmit = async () => {
+    try {
+      let user = await fetchUserInfo();
+      const submitTest = await getDataSubmitTest();
+      submitTest.userId = user.id;
   
- 
-    let temscore = 0;
-    DataTestMixing.forEach((data) => {
-      if (data.questions) {
-        data.questions.forEach((question) => {
-          const correctAnswer = question.options?.find((option) => option.isCorrect);
-          if (correctAnswer && answers[question.id] === correctAnswer.content) {
-            temscore += 1;
+      const response = await createSubmitTest(submitTest);
+      const submitTestId = response.id;
+  
+      submitTest.submitTestListeningAnswers.forEach(
+        (answer) => (answer.submitTestId = submitTestId)
+      );
+      submitTest.submitTestReadingAnswers.forEach(
+        (answer) => (answer.submitTestId = submitTestId)
+      );
+      submitTest.submitTestSpeakings.forEach(
+        (answer) => (answer.submitTestId = submitTestId)
+      );
+      submitTest.submitTestWritings.forEach(
+        (answer) => (answer.submitTestId = submitTestId)
+      );
+      submitTest.submitTestMixingAnswers.forEach(
+        (answer) => (answer.submitTestId = submitTestId)
+      );
+  
+      await Promise.all([
+        Promise.all(
+          submitTest.submitTestListeningAnswers.map((answer) =>
+            createSubmitTestListeningAnswer(answer)
+          )
+        ),
+        Promise.all(
+          submitTest.submitTestReadingAnswers.map((answer) =>
+            createSubmitTestReadingAnswer(answer)
+          )
+        ),
+        Promise.all(
+          submitTest.submitTestSpeakings.map((answer) =>
+            createSubmitTestSpeaking(answer)
+          )
+        ),
+        Promise.all(
+          submitTest.submitTestWritings.map((answer) =>
+            createSubmitTestWriting(answer)
+          )
+        ),
+        Promise.all(
+          submitTest.submitTestMixingAnswers.map((answer) =>
+            createSubmitTestMixingAnswer(answer)
+          )
+        ),
+      ]);
+      
+  
+      deleteData("MyDatabase", storeName);
+      const state = {
+        id: submitTestId,
+        testId: datatest.id,
+      };
+      deleteData('MyDatabase', 'MyStore'+datatest.id);
+      console.log("thanh cong");
+      
+      navigate("/student/history-test/mixing", { state });
+    } catch (error) {
+      console.error("Error during submission:", error);
+    }
+  };
+  
+
+  const calculateScore = () => {
+    let score = 0;
+    const scorePerSection = 100 / 6;
+
+    const calculateSectionScore = (sections, totalQuestions) => {
+      const pointPerQuestion = scorePerSection / totalQuestions;
+      sections.forEach((section) => {
+        section.questions.forEach((question) => {
+          const correctAnswer = question.answers.find((answer) => answer.isCorrect);
+          if (correctAnswer && answers[question.id] === correctAnswer.id) {
+            score += pointPerQuestion;
           }
         });
-      }
-    });
-    deleteData('MyDatabase', 'MyStore'+datatest.id);
- 
-    const submitTestData = await getDataSubmitTest();
+      });
+    };
 
-    setSubmitTest(submitTestData);
-    setStatus("Submit");
+    const totalReadingQuestions = datatest.testReadings.reduce(
+      (total, data) => total + data.questions.length,
+      0
+    );
+    const totalListeningQuestions = datatest.testListenings.reduce(
+      (total, data) => total + data.questions.length,
+      0
+    );
+    calculateSectionScore(datatest?.testReadings, totalReadingQuestions);
+    calculateSectionScore(datatest?.testListenings, totalListeningQuestions);
+ 
+    const vocabularyQuestions = datatest?.testMixingQuestions.filter(
+      (question) => question.TYPE === "VOCABULARY"
+    );
     
+    const grammarQuestions = datatest?.testMixingQuestions.filter(
+      (question) => question.TYPE === "GRAMMAR"
+    );
+    calculateSectionScore([{ questions: vocabularyQuestions }], vocabularyQuestions.length);
+
+    calculateSectionScore([{ questions: grammarQuestions }], grammarQuestions.length);
+  
+    return Math.round(score * 100) / 100;
   };
+  
 
   return (
     <Grid sx={{ marginBottom: '1rem' }} >
-    <Box sx={{ marginBottom: '1rem' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', marginBottom: '1rem' }}>
-        {DataTestMixing.map((tab, index) => (
-          <Box
-            key={index}
-            sx={{
-              padding: '0.5rem 1rem',
-              borderRadius: '0.5rem',
-              background: activeTab === index ? '#D9D9D9' : '#d9d9d933',
-              cursor: 'pointer',
-            }}
-            onClick={() => setActiveTab(index)}
-          >
-            {tab.title}
-          </Box>
-        ))}
-      </Box>
-    </Box>
+    <Box sx={{}}>
+    <Box sx={{ display: 'flex',  }}>
 
+  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+  {DataTestMixing.map((tab, index) => (
+     
+     <Box
+       key={index}
+       sx={{
+         marginRight: '0.5rem',
+         padding: "0.5rem 1rem",
+         borderRadius: "1rem 1rem 0 0",
+         fontWeight: "bold",
+         textAlign: "center",
+         cursor: "pointer",
+         background: activeTab === index
+           ? "linear-gradient(to right, #00796B, #00B8A2)"
+           : "#E0F7FA",
+         color: activeTab === index ? "#FFFFFF" : "#000000",
+         boxShadow: activeTab === index
+           ? "0px 4px 6px rgba(0, 0, 0, 0.2)"
+           : "none",
+         transition: "all 0.3s ease",
+       }}
+       onClick={() => setActiveTab(index)}
+     >
+       {tab.title}
+     </Box>
+   ))}
+  </Box>
+  <Box sx={{ marginLeft: 'auto', display: 'flex',marginRight:'20%' ,      
+  }}>
+    <ItemTitleTest title={DataTestMixing[activeTab].title} />
+  </Box>
+</Box>
+    </Box>
+    
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
       <Box 
         sx={{
-          width: '100%',
+          width: '80%',
           padding: '2rem',
           border: '1px solid #ccc',
           borderRadius: '1rem',
         }}
       >
-        <ItemTitleTest title={DataTestMixing[activeTab].title} />
         {activeTab === 0 && <Vocabulary key={renderKey}  dataTest={DataTestMixing[activeTab]}  focusId={focusId} title={title}  answers = {answers} setAnswers = {setAnswers} />}
         {activeTab === 1 && <Grammar key={renderKey} dataTest={DataTestMixing[activeTab]} focusId={focusId} title={title}  answers = {answers} setAnswers = {setAnswers} />}
         {activeTab === 2 && <Reading key={renderKey}  dataTest={DataTestMixing[activeTab]} focusId={focusId} title={title}   answers = {answers} setAnswers = {setAnswers} />}
@@ -432,125 +626,21 @@ useEffect(() => {
       
       </Box>
 
-      <Box sx={{ width: '25%',marginLeft:'1rem' }}> 
+      <Box sx={{width: '20%',marginLeft:'1rem' }}> 
         <SerialGrid
           title={DataTestMixing[activeTab].title}
           TitleAndSerials={TitleAndSerials}
           gridData={gridData}
           onItemClick={onItemClick}
           handlebtnSubmit={handlebtnSubmit}
+          duration = {datatest.duration}
+          storeName ={storeName}
         />
       </Box>
     </Box>
   </Grid>
   );
 };
-
-
-const openDB = (dbName, storeName) => {
-  return new Promise((resolve, reject) => {
-      const request = indexedDB.open(dbName);
-
-      request.onsuccess = (event) => {
-          const db = event.target.result;
-
-          if (!db.objectStoreNames.contains(storeName)) {
-              db.close();
-            
-              const versionRequest = indexedDB.open(dbName, db.version + 1);
-
-              versionRequest.onupgradeneeded = (upgradeEvent) => {
-                  const upgradedDb = upgradeEvent.target.result;
-                  upgradedDb.createObjectStore(storeName, { keyPath: 'id' });
-                  console.log(`Created object store: ${storeName} in version upgrade`);
-              };
-
-              versionRequest.onsuccess = (versionEvent) => {
-                  resolve(versionEvent.target.result);
-              };
-
-              versionRequest.onerror = (event) => {
-                  reject(event.target.error);
-              };
-          } else {
-              resolve(db);
-          }
-      };
-
-      request.onupgradeneeded = (event) => {
-          const db = event.target.result;
-          if (!db.objectStoreNames.contains(storeName)) {
-              db.createObjectStore(storeName, { keyPath: 'id' });
-              console.log(`Created object store: ${storeName}`);
-          }
-      };
-
-      request.onerror = (event) => {
-          reject(event.target.error);
-      };
-  });
-};
-
-
-
-
-const saveData = async (db, storeName, data) => {
-  const tx = db.transaction(storeName, 'readwrite');
-  const store = tx.objectStore(storeName);
-  for (const [id, value] of Object.entries(data)) {
-      store.put({ id, value });
-  }
-};
-
-const getData = async (db, storeName) => {
-  return new Promise((resolve, reject) => {
-      const tx = db.transaction(storeName, 'readonly');
-      const store = tx.objectStore(storeName);
-      const request = store.getAll();
-
-      request.onsuccess = () => {
-          const result = request.result.reduce((acc, item) => {
-              acc[item.id] = item.value;
-              return acc;
-          }, {});
-          resolve(result);
-      };
-      request.onerror = () => reject(request.error);
-  });
-};
-const deleteData = (dbName, storeName, key) => {
-  const request = indexedDB.open(dbName);
-
-  request.onsuccess = () => {
-      const db = request.result;
-      const transaction = db.transaction(storeName, 'readwrite');
-      const store = transaction.objectStore(storeName);
-
-      if (key) {
-          store.delete(key);
-      } else {
-          store.clear();
-      }
-
-      transaction.oncomplete = () => {
-          console.log('Data deleted successfully');
-      };
-
-      transaction.onerror = (event) => {
-          console.error('Error deleting data:', event.target.error);
-      };
-  };
-
-  request.onerror = (event) => {
-      console.error('Error opening database:', event.target.error);
-  };
-};
-
-
-
-
-
-
 
 
 

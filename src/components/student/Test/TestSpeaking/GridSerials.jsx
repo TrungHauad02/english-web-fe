@@ -23,12 +23,10 @@ const GridItem = styled(Box)(({ hasAudio }) => ({
   },
 }));
 
-const ScoreGrid = ({ score, serials = [], serialSet = {}, handleSerialClick, handleBtnSubmit }) => {
+const ScoreGrid = ({ duration,storeName, serials = [], serialSet = {}, handleSerialClick, handleBtnSubmit }) => {
   return (
     <StyledBox>
-      <Typography variant="h6" gutterBottom>
-        Time remaining: 60:00
-      </Typography>
+     
 
       <Grid container spacing={1} sx={{ marginBottom: 2, marginTop: '1rem' }}>
         {serials.length > 0 ? (
@@ -52,9 +50,9 @@ const ScoreGrid = ({ score, serials = [], serialSet = {}, handleSerialClick, han
       <Button
         sx={{
           borderRadius: '1rem',
-          backgroundColor: '#FFD984',
-          color: 'black',
-          padding: '1rem 2rem',
+          backgroundColor: '#00796B',
+          color: 'white',
+          padding: '1rem 3rem',
         }}
         onClick={handleBtnSubmit}
       >

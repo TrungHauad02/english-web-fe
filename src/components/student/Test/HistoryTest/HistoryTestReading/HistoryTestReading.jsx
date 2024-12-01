@@ -63,7 +63,7 @@ function HistoryTestReading() {
     const state = {
       id: test.id,
     };
-    navigate("/student/tests/reading", { state });
+    navigate("/student/test/reading", { state });
   };
 
   return (
@@ -76,10 +76,8 @@ function HistoryTestReading() {
         sx={{
           marginRight: "5%",
           textAlign: "center",
-          backgroundColor: "#FFF4CC",
+          backgroundColor: "#E0F7FA",
           borderRadius: "12px",
-          width: "60px",
-          height: "60px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -94,7 +92,7 @@ function HistoryTestReading() {
             color: "#5A5A5A",
           }}
         >
-          {score}
+          Score: {score}
         </Typography>
       </DurationContainer>
 

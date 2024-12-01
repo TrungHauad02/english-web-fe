@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getListTest } from "api/test/listTestApi";
 import CustomPagination from "shared/component/pagination/CustomPagination";
 import ListTestContent from "./ListTestContent";
-
+import { fetchUserInfo } from "api/user/userService";
 import { Box, Typography, Tabs, Tab, Stack, styled } from "@mui/material";
 
 const ImageContainer = styled(Box)(({ theme }) => ({
@@ -94,7 +94,9 @@ function ListTest() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getListTest(page, currtype);
+      const user = await fetchUserInfo();
+
+      const data = await getListTest(page, currtype,'',"ACTIVE",user.id);
       const tests = data.content;
       setVersion(version + 1);
 
