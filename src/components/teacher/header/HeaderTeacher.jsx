@@ -3,7 +3,7 @@ import { Stack, Menu, MenuItem, IconButton } from "@mui/material";
 import HeaderTypography from "shared/component/header/HeaderTypography";
 import Profile from "shared/profile/Profile";
 import useColor from "shared/color/Color";
-import { useHeaderTeacherHandlers } from "./common/handoleHeacerTeacher";
+import { useHeaderTeacherHandlers } from "./common/handleHeaderTeacher";
 import { fetchUserInfo } from "api/user/userService";
 
 const icon = "/icon.png";
