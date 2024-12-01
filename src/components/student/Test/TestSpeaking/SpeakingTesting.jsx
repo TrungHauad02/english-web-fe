@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
-import { Box, Typography, Button, Grid, Fab, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import React, { useState, useRef,useEffect } from 'react';
+import { Box, Typography, Button, Grid, Fab, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, duration } from '@mui/material';
+
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import GridSerials from './GridSerials';
@@ -9,9 +10,29 @@ import { uploadFile } from '../../../../api/feature/uploadFile/uploadFileService
 import { createSubmitTest } from '../../../../api/test/submitTest';
 import { fetchUserInfo } from '../../../../api/user/userService';
 import { createSubmitTestSpeaking } from '../../../../api/test/submitTestSpeaking';
-import SubmitTestSpeaking from './SubmitTestSpeaking/SubmitTestSpeaking';
+import { openDB, saveData, getData, deleteData } from '../common/IndexDB';
+import { scoreTestWriting } from "api/feature/scoreTestWriting/scoreTestWriting";
+import { getSpeechToText } from "api/feature/stt/SpeechToTextService";
+import { styled } from "@mui/material/styles";
+import { useLocation,useNavigate } from "react-router-dom";
+import SubmitTestSpeaking from "./SubmitTestSpeaking/SubmitTestSpeaking";
+
+import CountdownTimer from "../common/CountdownTimer";
+const DurationContainer = styled(Box)(({ theme }) => ({
+  background: "#E0F7FA",
+  borderRadius: "20px",
+  fontSize: "14px",
+  float:'right',
+  padding: "1.5rem 3rem",
+  border: '1px solid #000000',
+  display: 'flex',
+  justifyContent: 'center', 
+  alignItems: 'center',
+}));
 
 export default function InterviewInstruction({ datatest, status, setStatus , setSubmitTest}) {
+  const storeName = "MyStore" + datatest.id;
+  const navigate = useNavigate();
   const [indexSpeaking, setIndexSpeaking] = useState(0);
   const [indexQuestion, setIndexQuestion] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
@@ -19,7 +40,49 @@ export default function InterviewInstruction({ datatest, status, setStatus , set
   const [submitTestQuestions, setSubmitTestQuestions] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [onDialogConfirm, setOnDialogConfirm] = useState(() => () => {});
+  const [serialSet, setSerialSet] = useState(new Set());
 
+  useEffect(() => {
+    if (datatest != null) {
+      openDB("MyDatabase", "MyStore" + datatest.id)
+        .then((db) => {
+          getData(db, "MyStore" + datatest.id,storeName)
+            .then((data) => {
+              if (data?.recordings) {
+                setRecordings(data.recordings);   
+                setSerialSet(data.serialSet);
+
+                 
+              } else {
+                console.log("No answers found in IndexedDB");
+                setRecordings({}); 
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching answers:", error);
+            });
+        })
+        .catch((error) => {
+          console.error("Error accessing IndexedDB:", error);
+        });
+    }
+
+  }, []);
+  
+  useEffect(() => {
+    if (datatest != null) {
+      openDB("MyDatabase", storeName).then((db) => {
+        saveData(db, "MyStore" + datatest.id, { id: storeName, recordings });
+        saveData(db, "MyStore" + datatest.id, { id: storeName, serialSet });
+        console.log(recordings);  
+        
+      }).catch((error) => {
+        console.error("Error saving answers to the database:", error);
+      });
+    }
+  }, [recordings]);
+
+  
   const currentSpeaking = datatest.testSpeakings[indexSpeaking];
   const currentQuestion = currentSpeaking?.questions[indexQuestion];
 
@@ -133,7 +196,7 @@ export default function InterviewInstruction({ datatest, status, setStatus , set
   };
 
   const currentRecordingIdRef = useRef(null);
-  const [serialSet, setSerialSet] = useState(new Set());
+
   const handleStartRecording = () => {
     currentRecordingIdRef.current = {
       id: currentQuestion.id,
@@ -145,10 +208,17 @@ export default function InterviewInstruction({ datatest, status, setStatus , set
   const handleStopRecording = (recordedBlob) => {
 
     if (currentRecordingIdRef.current !== null && recordedBlob && recordedBlob.blobURL) {
-      setRecordings((prev) => ({
-        ...prev,
-        [currentRecordingIdRef.current.id]: recordedBlob,
+      const reader = new FileReader();
+      reader.readAsDataURL(recordedBlob.blob);
+      reader.onloadend = () => {
+        const base64Data = reader.result.split(",")[1];
+        const audioURL = `data:audio/wav;base64,${base64Data}`;
+        setRecordings((prev) => ({
+          ...prev,
+          [currentRecordingIdRef.current.id]: audioURL,
       }));
+      };
+    
       setSerialSet((prev) => new Set(prev).add(currentRecordingIdRef.current.serial));
     } else {
       console.error('Invalid currentRecordingIdRef or recordedBlob:', currentRecordingIdRef.current, recordedBlob);
@@ -157,73 +227,121 @@ export default function InterviewInstruction({ datatest, status, setStatus , set
   };
 
   const handleBtnSubmit = async () => {
+ 
     let user = await fetchUserInfo();
+    let scoreTest=0;
+    const vietnamTime = new Date().toLocaleString("en-CA", { timeZone: "Asia/Ho_Chi_Minh", hour12: false }).replace(", ", "T");
     const newSubmitTest = {
       id: '',
       testId: datatest.id,
       userId: user.id,
       score: 1,
       status: "ACTIVE",
-      submitTime: new Date().toISOString(),
+      submitTime: vietnamTime,
       submitTestSpeakings: []
     }
+    let totalQuestions=0;
+    let scorePerQuestion = 0;
+    for (const testSpeaking of datatest.testSpeakings) {
+      totalQuestions += testSpeaking.questions.length;
+    }
 
-
-    const submitTest = await createSubmitTest(newSubmitTest);
-   
+    if (totalQuestions > 0) {
+      scorePerQuestion = 100 / totalQuestions;
+    }
 
     for (const testSpeaking of datatest.testSpeakings) {
       for (const question of testSpeaking.questions) {
-        const convertURLToBase64 = async (url) => {
-          try {
-            const response = await fetch(url);
-            const blob = await response.blob();
-            return new Promise((resolve, reject) => {
-              const reader = new FileReader();
-              reader.readAsDataURL(blob);
-              reader.onload = () => resolve(reader.result);
-              reader.onerror = (error) => reject(error);
-            });
-          } catch (error) {
-            console.error("Error fetching and converting URL to base64:", error);
-            throw error;
-          }
-        };
 
-        const audioBlob = recordings[question.id]?.blobURL;
         let content = "No audio available. You haven't completed this question yet.";
-        if (audioBlob) {
-          const base64Content = await convertURLToBase64(audioBlob);
+        let transcript = "No transcipt available. You haven't completed this question yet."
+        let comment = "No comment available. You haven't completed this question yet."
+          let score = 0;
+        if (recordings[question.id]) {
+          console.log(recordings[question.id]);
+          
           const result = await uploadFile(
             "test/speaking",
             question.id.replace(/\s+/g, "_") + "_" + Date.now() + "-" + Math.random().toString(36).substr(2, 9),
-            base64Content
+            recordings[question.id],
           );
           content = result.url;
-        }
+          try {
+  
+            transcript = (await getSpeechToText(recordings[question.id])).transcript;
+          } catch (error) {
+        
+            console.log("Proceeding with the next step...");
+          
+          }
+        
+         
+          if(transcript!==null && transcript!=='')
+          {
 
+            let  dataScore= await scoreTestWriting(transcript, question.content,scorePerQuestion);
+            score = dataScore.score.split("/")[0];;
+            comment = dataScore.comment;
+          }
+          
+   
+        }
+        scoreTest=scoreTest+ +score;
         let submitTestSpeakingQuestion = {
           id: '',
           testSpeakingQuestionId: question.id,
-          submitTestId: submitTest.id,
-          score: 1,
+          submitTestId: '',
+          score: score,
           content: content,
-          explanation: "Sample explanation",
-          comment: "tan",
+          explanation: transcript,
+          comment: comment,
           status: "ACTIVE"
         }
         newSubmitTest.submitTestSpeakings.push(submitTestSpeakingQuestion);
       }
     }
-    
-    setSubmitTest(newSubmitTest)
-    setStatus("Submit");
+    newSubmitTest.score= scoreTest;
+    const createdSubmitTest = await createSubmitTest(newSubmitTest);
+    newSubmitTest.submitTestSpeakings = newSubmitTest.submitTestSpeakings?.map((question) => ({
+      ...question,
+      submitTestId: createdSubmitTest.id,
+    }));
+    await Promise.all(
+      newSubmitTest.submitTestSpeakings?.map((question) =>
+        createSubmitTestSpeaking(question)
+      )
+    );
+    deleteData('MyDatabase', 'MyStore'+datatest.id);
+    const state = {
+      id: createdSubmitTest.id,
+      testId: datatest.id,
+    };
+    deleteData('MyDatabase', 'MyStore'+datatest.id);
+    navigate("/student/history-test/speaking", { state });
+
   };
 
   const isLastQuestion = indexSpeaking === datatest?.testSpeakings.length - 1 && indexQuestion === currentSpeaking?.questions.length - 1;
 
   return (
-    <Grid container spacing={4} sx={{ padding: '2rem' }}>
+    <>      <DurationContainer sx={{fontWeight: 'bold'  }} elevation={1}>
+    <Typography align="center" >
+    Time remaining: 
+    </Typography>
+    <Typography align="center" sx={{marginLeft:'1rem'}} >
+    {
+  datatest && 
+  <CountdownTimer
+  duration={datatest?.duration}
+  handleSubmit={handleBtnSubmit}
+  dbName={"MyDatabase"}
+  storeName={storeName}
+/>
+ }
+    </Typography>
+  </DurationContainer>
+    <Grid container spacing={4} sx={{  }}>
+        
             <Dialog open={openDialog} onClose={() => handleDialogClose(false)}>
         <DialogTitle sx={{ fontWeight: 'bold', textAlign: 'center' }}>
           Are You Sure?
@@ -308,6 +426,9 @@ export default function InterviewInstruction({ datatest, status, setStatus , set
                       onStop={handleStopRecording}
                       strokeColor="#000000"
                       backgroundColor="#f5f5f5"
+                      audioBitsPerSecond={128000}
+                      sampleRate={48000}  
+                 
                     />
                     <Fab
                       color={isRecording ? "secondary" : "error"}
@@ -330,7 +451,7 @@ export default function InterviewInstruction({ datatest, status, setStatus , set
                     </Fab>
                   </Box>
                   {currentQuestion && recordings[currentQuestion.id] && (
-                    <audio controls src={recordings[currentQuestion.id].blobURL} />
+                    <audio controls src={recordings[currentQuestion.id]} />
                   )}
                 </>
               ) : (
@@ -350,10 +471,10 @@ export default function InterviewInstruction({ datatest, status, setStatus , set
                   sx={{
                     borderRadius: '1rem',
                     padding: '0.8rem 2rem',
-                    backgroundColor: '#007bff',
+                    backgroundColor: '#00796B',
                     color: '#fff',
                     '&:hover': {
-                      backgroundColor: '#0056b3',
+                      backgroundColor: '#004d40', 
                     },
                   }}
                 >
@@ -367,10 +488,10 @@ export default function InterviewInstruction({ datatest, status, setStatus , set
                   sx={{
                     borderRadius: '1rem',
                     padding: '0.8rem 2rem',
-                    backgroundColor: isLastQuestion ? '#ccc' : '#007bff',
+                    backgroundColor: isLastQuestion ? '#ccc' : '#00796B',
                     color: '#fff',
                     '&:hover': {
-                      backgroundColor: isLastQuestion ? '#ccc' : '#0056b3',
+                      backgroundColor: isLastQuestion ? '#ccc' : '#004d40',
                     },
                   }}
                 >
@@ -388,9 +509,11 @@ export default function InterviewInstruction({ datatest, status, setStatus , set
           key={indexSpeaking + '-' + indexQuestion}
           handleSerialClick={handleSerialClick}
           serialSet={serialSet}
-          handleBtnSubmit={handleBtnSubmit}
+          handleBtnSubmit ={handleBtnSubmit}
         />
       </Grid>
     </Grid>
+    </>
+
   );
 }

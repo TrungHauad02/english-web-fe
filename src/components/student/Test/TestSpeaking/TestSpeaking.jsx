@@ -7,13 +7,20 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SpeakingTesting from "./SpeakingTesting";
 import { getTest } from "api/test/TestApi";
+import { styled } from "@mui/material/styles";
 import { useLocation } from "react-router-dom";
 import SubmitTestSpeaking from "./SubmitTestSpeaking/SubmitTestSpeaking";
+
+import CountdownTimer from "../common/CountdownTimer";
+
+
+
 function TestSpeaking() {
   const location = useLocation();
   const { state } = location;
   const [datatest, setdatatest] = useState(null);
   const [submitTest, setSubmitTest] = useState(null);
+  const [storeName, setStoreName] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [score, setSCore] = useState(null);
@@ -28,6 +35,7 @@ function TestSpeaking() {
         const data = await getTest(state.id);
         if (data) {
           setdatatest(data);
+          setStoreName("MyStore" + data.id)
         } else {
           setdatatest(null);
         }
@@ -61,8 +69,8 @@ function TestSpeaking() {
           "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
         }
       />
-      <Box sx={{ marginLeft: "5%", marginRight: "5%", marginTop: "3rem" }}>
-        {status === "Testing" && (
+      <Box sx={{marginLeft: "5%", marginRight: "5%",marginBottom:'1rem'}}>      
+      <Box sx={{  marginTop: "1rem" }}>
           <SpeakingTesting
             key={version}
             datatest={datatest}
@@ -70,16 +78,9 @@ function TestSpeaking() {
             setStatus={setStatus}
             setSubmitTest={setSubmitTest}
           />
-        )}
-        {status === "Submit" && (
-          <SubmitTestSpeaking
-            key={version}
-            datatest={datatest}
-            onClickTestAgain={onClickTestAgain}
-            submitTest={submitTest}
-          />
-        )}
+
       </Box>
+    </Box>
     </Box>
   );
 }

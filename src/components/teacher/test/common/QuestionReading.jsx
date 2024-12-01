@@ -134,20 +134,30 @@ function QuestionReading({ data, handleReading }) {
       image: formData.image,
     };
 
-    if (formData.id === "") {
+
+    if (formData.id === "") {    
       try {
-        const dataImage = await uploadFile(
-          "test/mixing/reading",
-          initialData.testId.replace(/\s+/g, "_"),
-          image
-        );
-        if (dataImage.url !== initialData.image) {
+        if(image!=='')
+          {
+            const dataImage = await uploadFile(
+              "test/mixing/reading",
+              initialData.testId.replace(/\s+/g, "_"),
+              image
+            );
+            if (dataImage.url !== null) {
+              updatedData = {
+                ...updatedData,
+                image: dataImage.url,
+              };
+            }
+          }
+        else
+        {
           updatedData = {
             ...updatedData,
-            image: dataImage.url,
+            image: '',
           };
         }
-
         const testReading = await createTestReading(updatedData);
         formData.id = testReading.id;
 
@@ -183,20 +193,40 @@ function QuestionReading({ data, handleReading }) {
         console.error("Error saving questions or answers:", error);
       }
     } else {
-      try {
-        const newImage = await handleFileUpload(
-          initialData.image,
-          image,
-          initialData.testId,
-          "test/mixing/reading"
-        );
 
-        if (newImage !== initialData.image) {
-          updatedData = {
-            ...updatedData,
-            image: newImage,
-          };
-        }
+      try {
+
+        if(initialData.image==='' && image!=='')
+          {
+            const dataImage = await uploadFile(
+              "test/mixing/reading",
+              initialData.testId.replace(/\s+/g, "_"),
+              image
+            );
+            if (dataImage.url !== null) {
+              updatedData = {
+                ...updatedData,
+                image: dataImage.url,
+              };
+            }
+          }
+          if(initialData.image!=='')
+          {
+            const newImage = await handleFileUpload(
+              initialData.image,
+              image,
+              initialData.testId,
+              "test/mixing/reading"
+            );
+    
+            if (newImage !== initialData.image) {
+              updatedData = {
+                ...updatedData,
+                image: newImage,
+              };
+            }
+          }
+        
 
         await updateTestReading(updatedData.id, updatedData);
         await Promise.all(
@@ -255,14 +285,13 @@ function QuestionReading({ data, handleReading }) {
             questionData.testReadingId = formData.id;
             console.log(questionData);
 
-            // Thêm câu hỏi mới
             const id = await AddQuestionTest(
               initialData.test.id,
               "READING",
               questionData
             );
 
-            // Thêm từng câu trả lời một
+
             for (const answer of questionData.answers || []) {
               answer.testQuestionReadingId = id;
               if (answer.id.startsWith("add")) {

@@ -1,11 +1,18 @@
 import apiClient from "../apiClient";
 
-export function getListTest(page = 1, type = "", searchTerm = "", status = "") {
+export function getListTest(
+  page = 1,
+  type = "",
+  searchTerm = "",
+  status = "",
+  userId = ""
+) {
   const params = new URLSearchParams({
-    page: page - 1, // Backend sử dụng page bắt đầu từ 0
+    page: page - 1,
     type,
     title: searchTerm,
     status,
+    userId,
   });
   console.log(params.toString());
 

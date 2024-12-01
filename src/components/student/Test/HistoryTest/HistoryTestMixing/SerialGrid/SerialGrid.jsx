@@ -51,8 +51,8 @@ function SerialGrid({
         <Button
           sx={{
             borderRadius: '1rem',
-            backgroundColor: '#FFD984',
-            color: 'black',
+            backgroundColor: '#00796B',
+            color: 'white',
             padding: '1rem 2rem',
           }}
           onClick={onClickTestAgain}

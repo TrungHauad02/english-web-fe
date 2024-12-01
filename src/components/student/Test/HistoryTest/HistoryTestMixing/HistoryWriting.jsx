@@ -75,7 +75,10 @@ const SubmitTestWritingContent = ({ testWritingList, submitTestWritingList, focu
                                                 fontWeight: 'bold',
                                             }}
                                         >
-                                            {relatedSubmit.score !== null ? `${relatedSubmit.score}/10` : '/10'}
+                                             {relatedSubmit.score}/
+                                                {submitTestWritingList?.length > 0
+                                        ? (100 /6/ submitTestWritingList.length).toFixed(0)
+                                        : "N/A"}
                                         </Typography>
                                     )}
                                 </Box>
