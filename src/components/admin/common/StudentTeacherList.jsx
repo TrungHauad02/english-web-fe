@@ -10,6 +10,8 @@ const StudentTeacherList = ({
     totalPages,
     onPreviousPage,
     onNextPage,
+    onFirstPage,
+    onLastPage,
 }) => {
     const { Color2_1 } = useColor();
 
@@ -86,6 +88,20 @@ const StudentTeacherList = ({
                 <Stack direction="row" justifyContent="space-between">
                     <Button
                         variant="contained"
+                        onClick={onFirstPage}
+                        disabled={page === 0}
+                        sx={{
+                            backgroundColor: Color2_1,
+                            color: "#fff",
+                            "&:hover": {
+                                backgroundColor: "#48a999",
+                            },
+                        }}
+                    >
+                        First Page
+                    </Button>
+                    <Button
+                        variant="contained"
                         onClick={onPreviousPage}
                         disabled={page === 0}
                         sx={{
@@ -114,6 +130,20 @@ const StudentTeacherList = ({
                         }}
                     >
                         Next
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={onLastPage}
+                        disabled={page === totalPages - 1}
+                        sx={{
+                            backgroundColor: Color2_1,
+                            color: "#fff",
+                            "&:hover": {
+                                backgroundColor: "#48a999",
+                            },
+                        }}
+                    >
+                        Last Page
                     </Button>
                 </Stack>
             </Box>

@@ -108,6 +108,14 @@ function ManageStudent() {
                             loadStudents(page + 1); 
                         }
                     }}
+                    onFirstPage={() => {
+                        setPage(0);
+                        loadStudents(0);
+                    }}
+                    onLastPage={() => {
+                        setPage(totalPages - 1);
+                        loadStudents(totalPages - 1); 
+                    }}
                 />
             </Grid>
 
