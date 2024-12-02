@@ -142,6 +142,14 @@ function ManageTeacher() {
                             loadTeachers(page + 1);
                         }
                     }}
+                    onFirstPage={() => {
+                        setPage(0);
+                        loadTeachers(0); 
+                    }}
+                    onLastPage={() => {
+                        setPage(totalPages - 1);
+                        loadTeachers(totalPages - 1); 
+                    }}
                 />
             </Grid>
 
