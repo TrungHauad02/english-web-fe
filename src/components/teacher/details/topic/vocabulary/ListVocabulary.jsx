@@ -4,14 +4,17 @@ import Divider from "@mui/material/Divider";
 import useListVocabulary from "./useListVocabulary";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
-export default function ListVocabulary({ listVocab, setCurVocab, fetchData }) {
-  const {
-    displayVocab,
-    handleSearch,
-    onHandleAddNewVocab,
-    onUpdateCurVocab,
-    onReLoad,
-  } = useListVocabulary(listVocab, setCurVocab, fetchData);
+export default function ListVocabulary({
+  listVocab,
+  setCurVocab,
+  fetchData,
+  handleSearch,
+  maxElement,
+  handleShowMore,
+  onReLoad,
+}) {
+  const { displayVocab, onHandleAddNewVocab, onUpdateCurVocab } =
+    useListVocabulary(listVocab, setCurVocab, fetchData);
 
   return (
     <Grid2
@@ -112,6 +115,23 @@ export default function ListVocabulary({ listVocab, setCurVocab, fetchData }) {
                 <Divider />
               </Grid2>
             ))}
+          {displayVocab &&
+            displayVocab.length !== 0 &&
+            displayVocab.length < maxElement && (
+              <Grid2 container direction={"row"} justifyContent={"center"}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#000",
+                    color: "#fff",
+                    textTransform: "capitalize",
+                  }}
+                  onClick={handleShowMore}
+                >
+                  Show more
+                </Button>
+              </Grid2>
+            )}
         </Grid2>
       </Grid2>
     </Grid2>

@@ -4,8 +4,16 @@ import VocabularyInfo from "./VocabularyInfo";
 import useVocabularyManagement from "./useVocabularyManagement";
 
 export default function VocabularyManagement({ setError }) {
-  const { curVocab, setCurVocab, listVocab, fetchData } =
-    useVocabularyManagement(setError);
+  const {
+    curVocab,
+    setCurVocab,
+    listVocab,
+    fetchData,
+    handleSearch,
+    maxElement,
+    handleShowMore,
+    onReLoad,
+  } = useVocabularyManagement(setError);
 
   const containerStyle = {
     backgroundColor: "#f1f1f1",
@@ -30,6 +38,10 @@ export default function VocabularyManagement({ setError }) {
             listVocab={listVocab}
             setCurVocab={setCurVocab}
             fetchData={fetchData}
+            handleSearch={handleSearch}
+            maxElement={maxElement}
+            handleShowMore={handleShowMore}
+            onReLoad={onReLoad}
           />
         </Grid2>
         <Grid2 container size={6}>

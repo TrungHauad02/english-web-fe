@@ -18,7 +18,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 const resourceLinks = [
   {
     path: "/teacher/topics",
-    label: "Manage vocabulary lessons by topic",
+    label: "Manage vocabulary lessons",
     icon: <BookIcon />,
   },
   {
@@ -28,12 +28,12 @@ const resourceLinks = [
   },
   {
     path: "/teacher/readings",
-    label: "Manage reading comprehension lessons",
+    label: "Manage reading skills lessons",
     icon: <SpeakerNotesIcon />,
   },
   {
     path: "/teacher/listenings",
-    label: "Manage listening comprehension lessons",
+    label: "Manage listening skills lessons",
     icon: <HearingIcon />,
   },
   {

@@ -34,6 +34,23 @@ export async function getVocabByPageAndTopicId(topicId, page, size, status) {
   }
 }
 
+export async function searchVocabByPageAndTopicId(
+  topicId,
+  page,
+  size,
+  searchText
+) {
+  try {
+    const requestUrl = `/vocabulary?page=${page}&size=${size}&topicId=${topicId}&searchText=${searchText}`;
+
+    const res = await apiClient.get(requestUrl);
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching vocab:", err);
+    throw err;
+  }
+}
+
 export async function createVocab(vocab) {
   try {
     const res = await apiClient.post("/vocabulary", vocab);
