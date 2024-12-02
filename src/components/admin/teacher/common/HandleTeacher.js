@@ -5,6 +5,7 @@ import { handleFileUpload } from "shared/utils/uploadFileUtils";
 import { createTeacher } from "api/admin/teacher/TeacherService";
 import { fetchUserInfo } from "api/user/userService";
 import { toast } from "react-toastify";
+import { validateEmail } from "components/account/common/HandleSignUp";
 
 export const useTeacherData = (
   searchName,
@@ -139,12 +140,17 @@ export const handleAddTeacher = async (
     toast.error("Please fill in all required fields: Name, Email, and Level.");
     return;
   }
-  setIsLoading(true);
-  try {
-    let newavatar = null;
 
+  if (!validateEmail(selectedTeacher.email)) {
+    toast.error("Invalid email format. Please enter a valid email address.");
+    return;
+  }
+
+  setIsLoading(true); 
+  try {
+    let newAvatar = null;
     if (avatarFile) {
-      newavatar = await new Promise((resolve, reject) => {
+      newAvatar = await new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onloadend = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
@@ -152,25 +158,30 @@ export const handleAddTeacher = async (
       });
     }
 
+    // Upload hình ảnh đại diện nếu có
     const newImage = avatarFile
-      ? await handleFileUpload(null, newavatar, selectedTeacher.email, "teacher/signup")
-      : "/header_student"; 
+      ? await handleFileUpload(null, newAvatar, selectedTeacher.email, "teacher/signup")
+      : "/header_student"; // Nếu không có ảnh đại diện, dùng ảnh mặc định
 
+    // Tạo dữ liệu mới cho giáo viên
     const newTeacherData = {
       name: selectedTeacher.name,
       email: selectedTeacher.email,
-      password: generatePassword(),
-      startDate: selectedTeacher.startDate || new Date().toISOString().split("T")[0], 
+      password: generatePassword(), // Tạo mật khẩu mới
+      startDate: selectedTeacher.startDate || new Date().toISOString().split("T")[0], // Nếu không có ngày bắt đầu, lấy ngày hiện tại
       level: selectedTeacher.level,
       avatar: newImage,
-      status: "ACTIVE",
+      status: "ACTIVE", // Trạng thái mặc định là ACTIVE
     };
 
+    // Tạo mới giáo viên trong hệ thống
     const createdTeacher = await createTeacher(newTeacherData);
 
+    // Cập nhật danh sách giáo viên
     setTeachers([...teachers, createdTeacher]);
     setFilteredTeachers([...teachers, createdTeacher]);
 
+    // Reset lại form chọn giáo viên
     setSelectedTeacher({
       name: "",
       email: "",
@@ -179,19 +190,18 @@ export const handleAddTeacher = async (
       status: "",
     });
 
-    setIsNew(false);
-    setReload((prev) => !prev);
-    setPage(0);
-    toast.success("Add new teacher successfully")
+    setIsNew(false); // Đánh dấu không còn là "thêm mới"
+    setReload((prev) => !prev); // Reload lại danh sách
+    setPage(0); // Quay lại trang đầu
+    toast.success("Add new teacher successfully"); // Thông báo thành công
   } catch (error) {
     toast.error(
       error.response?.data?.message ||
-      "An unexpected error occurred. Please try again."
+      "An unexpected error occurred. Please try again." // Xử lý lỗi
     );
-    console.error(error);
-  }
-  finally {
-    setIsLoading(false); 
+    console.error(error); // In lỗi ra console để debug
+  } finally {
+    setIsLoading(false); // Kết thúc quá trình tải
   }
 };
 

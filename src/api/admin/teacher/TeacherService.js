@@ -7,7 +7,7 @@ export const getTeachers = async (
   sortDir = "asc",
   filters = {}
 ) => {
-  const token = localStorage.getItem("authToken");
+  const token = sessionStorage.getItem("authToken");
 
   try {
     const params = { page, size, sortBy, sortDir, ...filters };
@@ -25,7 +25,7 @@ export const getTeachers = async (
 };
 
 export const createTeacher = async (teacherData) => {
-  const token = localStorage.getItem("authToken");
+  const token = sessionStorage.getItem("authToken");
 
   try {
     const response = await apiClient.post(
