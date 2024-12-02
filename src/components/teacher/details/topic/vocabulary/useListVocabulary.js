@@ -1,20 +1,13 @@
 import { useEffect, useState } from "react";
 import { getVocabById } from "api/study/topic/vocabularyService";
 
-export default function useListVocabulary(listVocab, setCurVocab, fetchData) {
+export default function useListVocabulary(listVocab, setCurVocab) {
   const [displayVocab, setDisplayVocab] = useState(listVocab);
 
   useEffect(() => {
     if (!listVocab) return;
     setDisplayVocab(listVocab);
   }, [listVocab]);
-
-  function handleSearch(text) {
-    const newList = listVocab.filter((vocab) =>
-      vocab.word.toLowerCase().includes(text.toLowerCase())
-    );
-    setDisplayVocab(newList);
-  }
 
   function onHandleAddNewVocab() {
     setCurVocab({
@@ -38,19 +31,9 @@ export default function useListVocabulary(listVocab, setCurVocab, fetchData) {
     fetchVocab();
   }
 
-  async function onReLoad() {
-    try {
-      await fetchData();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
   return {
     displayVocab,
-    handleSearch,
     onHandleAddNewVocab,
     onUpdateCurVocab,
-    onReLoad,
   };
 }
