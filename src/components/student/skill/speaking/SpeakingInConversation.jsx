@@ -5,26 +5,27 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import MicIcon from "@mui/icons-material/Mic";
 import useSpeakingInConversation from "./useSpeakingInConversation";
-import SoundViewer from "shared/component/soundViewer/SoundViewer";
-import { ReactMic } from "react-mic";
 import useColor from "shared/color/Color";
 import CollapsibleSection from "shared/collapsible/CollapsibleSection";
 import Comment from "../writing/Comment";
+import React from "react";
 
 export default function SpeakingInConversation() {
   const {
     listConversation,
     person,
     listPeople,
-    handleChange,
-    handleStartRecording,
-    handleStop,
-    handleResetRecording,
-    isRecordingList,
+    recordingStatus,
     recordedAudio,
-    handleSubmit,
-    results,
     isScoring,
+    results,
+    permission,
+    handleChange,
+    handleStart,
+    handleStop,
+    handleReset,
+    handleSubmit,
+    getMicrophonePermission,
   } = useSpeakingInConversation();
   const color = useColor();
 
@@ -51,74 +52,105 @@ export default function SpeakingInConversation() {
           </RadioGroup>
         </FormControl>
       </Grid2>
-      <Grid2 container direction={"column"} spacing={2}>
-        {listConversation.map((conver, index) => (
-          <Grid2 container key={conver.id}>
-            {conver.name === person && (
-              <>
-                <Grid2 container direction={"row"} sx={{ width: "100%" }}>
-                  <Grid2 item size={1}>
-                    <Typography variant="h6">You :</Typography>
-                  </Grid2>
-                  <Grid2 item size={10}>
-                    <Typography variant="body1">{conver.content}</Typography>
-                  </Grid2>
-                  <Grid2 item size={1}>
-                    <Button
-                      sx={{ color: "#000" }}
-                      onClick={() => handleStartRecording(conver.id)}
-                    >
-                      <MicIcon />
-                    </Button>
-                  </Grid2>
-                </Grid2>
-                <Stack direction={"row"} spacing={4} sx={{ width: "100%" }}>
-                  <ReactMic
-                    record={isRecordingList[index]}
-                    className="sound-wave"
-                    onStop={(recordedBlob) =>
-                      handleStop(conver.id, recordedBlob)
-                    }
-                    strokeColor="#fff"
-                    backgroundColor={color.Color2}
-                    mimeType="audio/wav"
-                    sampleRate={16000}
-                    audioBitsPerSecond={128000}
-                  />
-                  {recordedAudio[index] && (
+      <Grid2 container direction={"column"} spacing={4}>
+        {!permission ? (
+          <Button
+            onClick={getMicrophonePermission}
+            variant="contained"
+            sx={{ textTransform: "none" }}
+          >
+            Get Microphone
+          </Button>
+        ) : null}
+
+        {!permission && (
+          <Grid2 item xs={12} sx={{ width: "100%" }}>
+            <Typography
+              variant="body1"
+              textAlign={"center"}
+              fontWeight={"bold"}
+              color="red"
+            >
+              To complete this activity, you must allow access to your system's
+              microphone. Click the accept button above to start.
+            </Typography>
+          </Grid2>
+        )}
+        {permission &&
+          listConversation.map((conver, index) => (
+            <Stack key={conver.id}>
+              {conver.name === person && (
+                <Stack key={conver.id} spacing={2}>
+                  <Stack
+                    container
+                    direction={"row"}
+                    sx={{ width: "100%" }}
+                    alignItems={"center"}
+                    justifyContent={"space-between"}
+                  >
                     <Stack
-                      container
                       direction={"row"}
+                      justifyContent={"flex-start"}
                       alignItems={"center"}
                       spacing={4}
-                      sx={{ width: "100%" }}
                     >
-                      <SoundViewer audioSrc={`${recordedAudio[index]}`} />
+                      <Typography variant="h6">You :</Typography>
+                      <Typography variant="body1" textAlign={"left"}>
+                        {conver.content}
+                      </Typography>
+                    </Stack>
+                    <Stack sx={{ marginRight: "1rem" }}>
                       <Button
-                        variant="outlined"
-                        color="error"
-                        onClick={() => handleResetRecording(conver.id)}
+                        sx={{ color: "#000" }}
+                        onClick={
+                          recordingStatus[index] === "inactive"
+                            ? () => handleStart(index)
+                            : () => handleStop(index)
+                        }
                       >
-                        Reset
+                        <MicIcon />
                       </Button>
                     </Stack>
-                  )}
+                  </Stack>
+                  <Stack direction={"row"} spacing={4} sx={{ width: "100%" }}>
+                    {recordedAudio[index] && (
+                      <Stack
+                        container
+                        direction={"row"}
+                        alignItems={"center"}
+                        spacing={4}
+                        sx={{ width: "100%" }}
+                      >
+                        <audio controls src={`${recordedAudio[index]}`} />
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          onClick={() => handleReset(index)}
+                        >
+                          Reset
+                        </Button>
+                      </Stack>
+                    )}
+                  </Stack>
                 </Stack>
-              </>
-            )}
+              )}
 
-            {conver.name !== person && (
-              <>
-                <Grid2 item size={1}>
-                  <Typography variant="h6">{conver.name} :</Typography>
-                </Grid2>
-                <Grid2 item size={11}>
-                  <SoundViewer audioSrc={conver.audioUrl} />
-                </Grid2>
-              </>
-            )}
-          </Grid2>
-        ))}
+              {conver.name !== person && (
+                <Stack direction={"row"} spacing={4} alignItems={"center"}>
+                  <Stack>
+                    <Typography variant="h6">{conver.name} :</Typography>
+                  </Stack>
+                  <Stack sx={{ width: "80%" }}>
+                    <audio
+                      controls
+                      src={conver.audioUrl}
+                      style={{ width: "80%" }}
+                    />
+                  </Stack>
+                </Stack>
+              )}
+            </Stack>
+          ))}
       </Grid2>
       <Stack justifyContent={"center"} alignItems={"flex-end"}>
         <Button
@@ -151,8 +183,15 @@ export default function SpeakingInConversation() {
         >
           <CollapsibleSection buttonText="Score">
             {results.map((result, index) => (
-              <Stack sx={{ margin: "0.5rem 0rem" }} key={index}>
-                <Comment content={"Real text: " + result.realText} />
+              <Stack
+                sx={{
+                  margin: "0.5rem 0rem",
+                  bgcolor: color.Color2_1,
+                  borderRadius: "0.5rem",
+                }}
+                key={index}
+              >
+                <Comment content={result.realText} />
                 <Comment content={"Recognized text: " + result.transcript} />
                 <Comment content={"Score: " + result.score} />
                 <Divider />
