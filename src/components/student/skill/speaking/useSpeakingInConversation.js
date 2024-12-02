@@ -1,7 +1,7 @@
 import { getConversationInSpeaking } from "api/study/speaking/conversationService";
 import { getSpeechToText } from "api/feature/stt/SpeechToTextService";
 import { scoreConversation } from "api/feature/scoreSpeaking/scoreConversation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -9,11 +9,20 @@ export default function useSpeakingInConversation() {
   const [listConversation, setListConversation] = useState([]);
   const [person, setPerson] = useState("");
   const [listPeople, setListPeople] = useState([]);
-  const [isRecordingList, setIsRecordingList] = useState([]);
-  const [recordedAudio, setRecordedAudio] = useState([]);
   const [results, setResults] = useState([]);
   const [isScoring, setIsScoring] = useState(false);
   const { id } = useParams();
+
+  const [permission, setPermission] = useState(false);
+  // holds the data from creating a new MediaRecorder object, given a MediaStream to record
+  const mediaRecorder = useRef(null);
+  // sets the current recording status of the recorder. The three possible values are
+  const [recordingStatus, setRecordingStatus] = useState([]);
+  const [stream, setStream] = useState(null);
+  // contains encoded pieces (chunks) of the audio recording
+  const [audioChunks, setAudioChunks] = useState([]);
+  const [recordedAudio, setRecordedAudio] = useState([]);
+  const mimeType = "audio/wav";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,8 +37,8 @@ export default function useSpeakingInConversation() {
         setPerson(uniquePeople[0]);
         setListPeople(uniquePeople);
 
-        setIsRecordingList(sortedData.map(() => false));
-        setRecordedAudio(sortedData.map(() => null));
+        setRecordedAudio(sortedData.map(() => ""));
+        setRecordingStatus(sortedData.map(() => "inactive"));
       } catch (error) {
         console.error(error);
         toast.error("Error while fetching data");
@@ -39,39 +48,79 @@ export default function useSpeakingInConversation() {
   }, [id]);
 
   const handleChange = (event) => {
+    if (recordingStatus.includes("recording")) {
+      toast.warning("Cannot change person while recording.");
+      return;
+    }
     setPerson(event.target.value);
   };
 
-  const handleStartRecording = (index) => {
-    if (index !== -1) {
-      setIsRecordingList((prevState) =>
-        prevState.map((rec, idx) => (idx === index ? !rec : rec))
-      );
+  const handleStart = (index) => {
+    if (recordingStatus.includes("recording")) {
+      toast.warning("Cannot record more than one conversation at a time.");
+      return;
     }
+    if (recordedAudio[index]) {
+      setRecordedAudio((prevAudio) => [
+        ...prevAudio.slice(0, index),
+        "",
+        ...prevAudio.slice(index + 1),
+      ]);
+    }
+
+    setRecordingStatus((prevStatus) => [
+      ...prevStatus.slice(0, index),
+      "recording",
+      ...prevStatus.slice(index + 1),
+    ]);
+    const media = new MediaRecorder(stream, { type: mimeType });
+    mediaRecorder.current = media;
+    mediaRecorder.current.start();
+    let localAudioChunks = [];
+    mediaRecorder.current.ondataavailable = (event) => {
+      if (typeof event.data === "undefined") return;
+      if (event.data.size === 0) return;
+      localAudioChunks.push(event.data);
+    };
+    setAudioChunks(localAudioChunks);
   };
 
-  const handleStop = (index, recordedBlob) => {
-    if (index !== -1) {
+  const handleStop = (index) => {
+    setRecordingStatus((prevStatus) => [
+      ...prevStatus.slice(0, index),
+      "inactive",
+      ...prevStatus.slice(index + 1),
+    ]);
+    mediaRecorder.current.stop();
+    mediaRecorder.current.onstop = () => {
+      const audioBlob = new Blob(audioChunks, { type: mimeType });
       const reader = new FileReader();
-      reader.readAsDataURL(recordedBlob.blob);
+      reader.readAsDataURL(audioBlob);
       reader.onloadend = () => {
         const base64Data = reader.result.split(",")[1];
         const audioURL = `data:audio/wav;base64,${base64Data}`;
-        setRecordedAudio((prevState) =>
-          prevState.map((audio, idx) => (idx === index ? audioURL : audio))
-        );
+        setRecordedAudio((prevAudio) => [
+          ...prevAudio.slice(0, index),
+          audioURL,
+          ...prevAudio.slice(index + 1),
+        ]);
       };
-      setIsRecordingList((prevState) =>
-        prevState.map((rec, idx) => (idx === index ? false : rec))
-      );
-    }
+      setAudioChunks([]);
+    };
   };
-  const handleResetRecording = (index) => {
-    if (index !== -1) {
-      setRecordedAudio((prevState) =>
-        prevState.map((audio, idx) => (idx === index ? null : audio))
-      );
-    }
+
+  const handleReset = (index) => {
+    setRecordingStatus((prevStatus) => [
+      ...prevStatus.slice(0, index),
+      "inactive",
+      ...prevStatus.slice(index + 1),
+    ]);
+    setAudioChunks([]);
+    setRecordedAudio((prevAudio) => [
+      ...prevAudio.slice(0, index),
+      "",
+      ...prevAudio.slice(index + 1),
+    ]);
   };
 
   const handleSubmit = async () => {
@@ -87,7 +136,7 @@ export default function useSpeakingInConversation() {
         const audio = recordedAudio[i];
         const conversation = listConversation[i];
 
-        if (audio && conversation) {
+        if (audio && conversation && person === conversation.name) {
           try {
             const speechText = await getSpeechToText(audio);
 
@@ -102,7 +151,7 @@ export default function useSpeakingInConversation() {
 
             newResults.push({
               conversationId: conversation.id,
-              realText: conversation.content,
+              realText: conversation.name + ": " + conversation.content,
               transcript: speechText.transcript,
               score: scoreData.score,
             });
@@ -131,18 +180,37 @@ export default function useSpeakingInConversation() {
     }
   };
 
+  const getMicrophonePermission = async () => {
+    if ("MediaRecorder" in window) {
+      try {
+        const streamData = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: false,
+        });
+        setPermission(true);
+        setStream(streamData);
+      } catch (err) {
+        toast.error(err.message);
+      }
+    } else {
+      toast.error("The MediaRecorder API is not supported in your browser.");
+    }
+  };
+
   return {
     listConversation,
     person,
     listPeople,
-    handleChange,
-    handleStartRecording,
-    handleStop,
-    isRecordingList,
+    recordingStatus,
     recordedAudio,
-    handleResetRecording,
-    handleSubmit,
-    results,
     isScoring,
+    results,
+    permission,
+    handleChange,
+    handleStart,
+    handleStop,
+    handleReset,
+    handleSubmit,
+    getMicrophonePermission,
   };
 }

@@ -1,8 +1,6 @@
 import { Button, Grid2, Stack, Typography, Box } from "@mui/material";
-import { ReactMic } from "react-mic";
 import MicIcon from "@mui/icons-material/Mic";
 import BasicButton from "shared/component/button/BasicButton";
-import SoundViewer from "shared/component/soundViewer/SoundViewer";
 import useSpeakingTopic from "./useSpeakingTopic";
 import useColor from "shared/color/Color";
 import CollapsibleSection from "shared/collapsible/CollapsibleSection";
@@ -11,19 +9,20 @@ import Comment from "../writing/Comment";
 export default function SpeakingInTopic() {
   const {
     speaking,
-    hasMicPermission,
-    permissionChecked,
     isRecording,
-    audioSrc,
     timer,
-    handleStartRecording,
-    handleStop,
-    handleClearAudio,
-    handleSubmit,
     textRecognize,
     comment,
     score,
     isScoring,
+    permission,
+    recordingStatus,
+    audio,
+    handleClearAudio,
+    handleSubmit,
+    startRecording,
+    stopRecording,
+    getMicrophonePermission,
   } = useSpeakingTopic();
 
   const color = useColor();
@@ -47,8 +46,17 @@ export default function SpeakingInTopic() {
           Topic: {speaking.topic}
         </Typography>
       </Grid2>
+      {!permission ? (
+        <Button
+          onClick={getMicrophonePermission}
+          variant="contained"
+          sx={{ textTransform: "none" }}
+        >
+          Get Microphone
+        </Button>
+      ) : null}
 
-      {permissionChecked && !hasMicPermission && (
+      {!permission && (
         <Grid2 item xs={12} sx={{ width: "100%" }}>
           <Typography
             variant="body1"
@@ -62,7 +70,7 @@ export default function SpeakingInTopic() {
         </Grid2>
       )}
 
-      {hasMicPermission && (
+      {permission && (
         <>
           <Grid2 item xs={12} sx={{ width: "100%", textAlign: "center" }}>
             <Button
@@ -72,7 +80,9 @@ export default function SpeakingInTopic() {
                 borderRadius: "999px",
                 paddingY: "1rem",
               }}
-              onClick={handleStartRecording}
+              onClick={
+                recordingStatus === "inactive" ? startRecording : stopRecording
+              }
             >
               <MicIcon />
             </Button>
@@ -86,21 +96,7 @@ export default function SpeakingInTopic() {
               You have {timer} seconds to speak…
             </Typography>
           </Grid2>
-          <ReactMic
-            record={isRecording}
-            className="sound-wave"
-            onStop={handleStop}
-            strokeColor="#fff"
-            mimeType="audio/wav"
-            backgroundColor={color.Color2}
-            sampleRate={16000}
-            audioBitsPerSecond={128000}
-          />
-          {audioSrc && (
-            <Grid2 item xs={12} sx={{ width: "100%" }}>
-              <SoundViewer audioSrc={audioSrc} />{" "}
-            </Grid2>
-          )}
+          {audio && <audio src={audio} controls style={{ width: "100%" }} />}
           <Grid2 item xs={12} sx={{ width: "100%" }}>
             <Typography
               variant="body1"
@@ -121,7 +117,7 @@ export default function SpeakingInTopic() {
         sx={{ width: "100%", textAlign: "right", marginRight: "2rem" }}
       >
         <Stack direction="row" justifyContent="flex-end" spacing={2}>
-          {audioSrc && (
+          {audio && (
             <BasicButton
               sx={{
                 color: "#fff",
@@ -142,7 +138,7 @@ export default function SpeakingInTopic() {
               textTransform: "capitalize",
             }}
             onClick={handleSubmit}
-            disabled={isScoring || !audioSrc}
+            disabled={isScoring || !audio}
           >
             Submit
           </BasicButton>
