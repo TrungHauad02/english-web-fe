@@ -8,13 +8,13 @@ export const useAuth = () => useContext(AuthContext);
 
 export default function AuthProvider({ children }) {
   const [isAuthenticated, setAuthenticated] = useState(
-    !!localStorage.getItem("authToken")
+    !!sessionStorage.getItem("authToken")
   );
-  const [authToken, setAuthToken] = useState(localStorage.getItem("authToken"));
+  const [authToken, setAuthToken] = useState(sessionStorage.getItem("authToken"));
   const [userRole, setUserRole] = useState(() => getRoleFromToken());
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
     const expirationTime = localStorage.getItem("tokenExpiration");
 
     if (token && expirationTime && new Date() < new Date(expirationTime)) {
@@ -22,7 +22,7 @@ export default function AuthProvider({ children }) {
       setAuthToken(token);
       setUserRole(getRoleFromToken());
     } else {
-      localStorage.removeItem("authToken");
+      sessionStorage.removeItem("authToken");
       localStorage.removeItem("tokenExpiration");
       setAuthenticated(false);
       setAuthToken(null);
@@ -34,7 +34,7 @@ export default function AuthProvider({ children }) {
     const expirationTime = new Date(Date.now() + 9800 * 1000).toISOString();
     setAuthenticated(true);
     setAuthToken(token);
-    localStorage.setItem("authToken", token);
+    sessionStorage.setItem("authToken", token);
     localStorage.setItem("tokenExpiration", expirationTime);
     setUserRole(getRoleFromToken());
     toast.success("Login successfully")
@@ -44,7 +44,7 @@ export default function AuthProvider({ children }) {
     setAuthenticated(false);
     setAuthToken(null);
     setUserRole(null);
-    localStorage.removeItem("authToken");
+    sessionStorage.removeItem("authToken");
     localStorage.removeItem("tokenExpiration");
     toast.info("Logout");
   }

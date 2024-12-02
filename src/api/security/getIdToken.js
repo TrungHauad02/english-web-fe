@@ -1,5 +1,5 @@
 export const getIdToken = () => {
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
     if (!token) return null;
   
     const payloadBase64 = token.split(".")[1];
