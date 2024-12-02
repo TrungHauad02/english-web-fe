@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 export default function useSpeakingInConversation() {
   const [listConversation, setListConversation] = useState([]);
-  const [person, setPerson] = useState([]);
+  const [person, setPerson] = useState("");
   const [listPeople, setListPeople] = useState([]);
   const [isRecordingList, setIsRecordingList] = useState([]);
   const [recordedAudio, setRecordedAudio] = useState([]);
@@ -42,10 +42,7 @@ export default function useSpeakingInConversation() {
     setPerson(event.target.value);
   };
 
-  const handleStartRecording = (conversationId) => {
-    const index = listConversation.findIndex(
-      (conv) => conv.id === conversationId
-    );
+  const handleStartRecording = (index) => {
     if (index !== -1) {
       setIsRecordingList((prevState) =>
         prevState.map((rec, idx) => (idx === index ? !rec : rec))
@@ -53,10 +50,7 @@ export default function useSpeakingInConversation() {
     }
   };
 
-  const handleStop = (conversationId, recordedBlob) => {
-    const index = listConversation.findIndex(
-      (conv) => conv.id === conversationId
-    );
+  const handleStop = (index, recordedBlob) => {
     if (index !== -1) {
       const reader = new FileReader();
       reader.readAsDataURL(recordedBlob.blob);
@@ -72,10 +66,7 @@ export default function useSpeakingInConversation() {
       );
     }
   };
-  const handleResetRecording = (conversationId) => {
-    const index = listConversation.findIndex(
-      (conv) => conv.id === conversationId
-    );
+  const handleResetRecording = (index) => {
     if (index !== -1) {
       setRecordedAudio((prevState) =>
         prevState.map((audio, idx) => (idx === index ? null : audio))

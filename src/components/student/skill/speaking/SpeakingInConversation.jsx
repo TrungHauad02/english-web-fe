@@ -66,7 +66,7 @@ export default function SpeakingInConversation() {
                   <Grid2 item size={1}>
                     <Button
                       sx={{ color: "#000" }}
-                      onClick={() => handleStartRecording(conver.id)}
+                      onClick={() => handleStartRecording(index)}
                     >
                       <MicIcon />
                     </Button>
@@ -75,15 +75,11 @@ export default function SpeakingInConversation() {
                 <Stack direction={"row"} spacing={4} sx={{ width: "100%" }}>
                   <ReactMic
                     record={isRecordingList[index]}
-                    className="sound-wave"
-                    onStop={(recordedBlob) =>
-                      handleStop(conver.id, recordedBlob)
-                    }
-                    strokeColor="#fff"
-                    backgroundColor={color.Color2}
+                    onStop={(recordedBlob) => handleStop(index, recordedBlob)}
                     mimeType="audio/wav"
                     sampleRate={16000}
                     audioBitsPerSecond={128000}
+                    style={{ display: "none" }}
                   />
                   {recordedAudio[index] && (
                     <Stack
@@ -97,7 +93,7 @@ export default function SpeakingInConversation() {
                       <Button
                         variant="outlined"
                         color="error"
-                        onClick={() => handleResetRecording(conver.id)}
+                        onClick={() => handleResetRecording(index)}
                       >
                         Reset
                       </Button>
