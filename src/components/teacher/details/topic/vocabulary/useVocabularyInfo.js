@@ -10,6 +10,7 @@ import {
   handleFileChange,
   handleFileUpload,
 } from "shared/utils/uploadFileUtils";
+import { toast } from "react-toastify";
 
 export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
   const { id } = useParams();
@@ -29,7 +30,14 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
         if (!isEditing) return;
         if (fieldName === "image") {
           handleFileChange(event, (imageData) => {
-            setCurVocab((prev) => ({ ...prev, image: imageData }));
+            const img = new Image();
+            img.onload = () => {
+              setCurVocab((prev) => ({ ...prev, image: imageData }));
+            };
+            img.onerror = () => {
+              toast.error("Invalid image file");
+            };
+            img.src = imageData;
           });
         } else {
           const newValue = event.target.value;

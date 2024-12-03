@@ -6,6 +6,7 @@ import {
 } from "api/study/speaking/speakingService";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import handleError from "shared/utils/handleError";
 import {
   handleFileChange,
@@ -107,7 +108,14 @@ export default function useSpeakingInfo(setError) {
   const onChangeImage = (e) => {
     if (!isEditing) return;
     handleFileChange(e, (imageData) => {
-      setTopic((prevTopic) => ({ ...prevTopic, image: imageData }));
+      const img = new Image();
+      img.onload = () => {
+        setTopic((prevTopic) => ({ ...prevTopic, image: imageData }));
+      };
+      img.onerror = () => {
+        toast.error("Invalid image file");
+      };
+      img.src = imageData;
     });
   };
 

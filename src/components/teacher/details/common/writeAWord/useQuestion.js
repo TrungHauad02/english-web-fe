@@ -6,6 +6,7 @@ import {
 } from "api/study/listening/writeAWordService";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import handleError from "shared/utils/handleError";
 import {
   handleFileChange,
@@ -132,7 +133,15 @@ export default function useQuestion(data, fetchData) {
   function onChangeFile(e) {
     if (!isEditing) return;
     handleFileChange(e, (fileData) => {
-      setQuestion((prevQuestion) => ({ ...prevQuestion, audioUrl: fileData }));
+      const file = e.target.files[0];
+      if (file && file.type.startsWith("audio/")) {
+        setQuestion((prevQuestion) => ({
+          ...prevQuestion,
+          audioUrl: fileData,
+        }));
+      } else {
+        toast.error("Only audio files are allowed");
+      }
     });
   }
 

@@ -1,10 +1,18 @@
+import { toast } from "react-toastify";
 import { handleFileChange } from "shared/utils/uploadFileUtils";
 
 export default function useWritingInfo(data, setData, isEditing, setIsEditing) {
   const onChangeImage = (e) => {
     if (!isEditing) return;
     handleFileChange(e, (imageData) => {
-      setData((prevTopic) => ({ ...prevTopic, image: imageData }));
+      const img = new Image();
+      img.onload = () => {
+        setData((prevTopic) => ({ ...prevTopic, image: imageData }));
+      };
+      img.onerror = () => {
+        toast.error("Invalid image file");
+      };
+      img.src = imageData;
     });
   };
 
