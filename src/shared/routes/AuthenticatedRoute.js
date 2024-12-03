@@ -10,7 +10,7 @@ export default function AuthenticatedRoute({ children, role }) {
   }
 
   if (role && authContext.userRole !== role) {
-    return <ErrorPage />
+    return <ErrorPage errorType={403}/>
   }
 
   return children;
