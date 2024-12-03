@@ -72,6 +72,7 @@ export default function Question({
           <CustomTextField
             value={question.serial}
             type="number"
+            required
             disabled={!isEditing}
             onChange={onChangeQuestionSerial}
             sx={{
@@ -89,6 +90,7 @@ export default function Question({
           {/* Question content */}
           <CustomTextField
             value={question.content}
+            required
             maxWidth="20rem"
             minWidth={"18rem"}
             disabled={!isEditing}
@@ -148,6 +150,7 @@ export default function Question({
               sx={{ width: "95%" }}
               value={question.explanation}
               onChange={onChangeExplanation}
+              required
             />
           </Grid2>
           <Grid2 item size={3}>

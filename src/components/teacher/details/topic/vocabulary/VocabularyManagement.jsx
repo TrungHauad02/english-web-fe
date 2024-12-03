@@ -45,11 +45,7 @@ export default function VocabularyManagement({ setError }) {
           />
         </Grid2>
         <Grid2 container size={6}>
-          <VocabularyInfo
-            curVocab={curVocab}
-            setCurVocab={setCurVocab}
-            fetchData={fetchData}
-          />
+          <VocabularyInfo curVocab={curVocab} setCurVocab={setCurVocab} />
         </Grid2>
       </Grid2>
     </Grid2>

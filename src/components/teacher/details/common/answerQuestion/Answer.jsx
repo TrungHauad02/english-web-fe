@@ -16,6 +16,7 @@ export default function Answer({
       {/* Answer content */}
       <CustomTextField
         value={data.content}
+        required
         minWidth={"22rem"}
         disabled={!isEditing}
         onChange={(e) => onChangeAnswerContent(e, data.id)}

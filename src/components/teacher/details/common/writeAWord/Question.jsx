@@ -81,6 +81,7 @@ export default function Question({ data, fetchData }) {
         </Grid2>
         <Grid2 item>
           <CustomTextField
+            required
             value={question.sentence}
             minWidth="20rem"
             disabled={!isEditing}
@@ -122,6 +123,7 @@ export default function Question({ data, fetchData }) {
             <CustomTextField
               value={question.missingIndex}
               type="number"
+              required
               disabled={!isEditing}
               onChange={(e) => onChangeWordIndex(e)}
             />
@@ -175,6 +177,7 @@ export default function Question({ data, fetchData }) {
               value={question.correctAnswer}
               disabled={!isEditing}
               onChange={(e) => onChangeField(e, "correctAnswer")}
+              required
             />
           </Grid2>
           <Grid2 item sx={{ marginTop: "-0.65rem" }}>

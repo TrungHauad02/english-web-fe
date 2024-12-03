@@ -37,12 +37,14 @@ export default function WritingTopic({
           value={data.description}
           onChange={onChangeDescription}
           disabled={!isEditing}
+          required
         />
         <MultiLineTextField
           label={"Topic"}
           value={data.topic}
           onChange={onChangeTopic}
           disabled={!isEditing}
+          required
         />
         <Grid2 container direction={"row"} spacing={2}>
           <EditButton onEdit={handleEditing} disabled={isEditing} showText />
