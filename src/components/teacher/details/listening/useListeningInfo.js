@@ -6,6 +6,7 @@ import {
 } from "api/study/listening/listeningService";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import handleError from "shared/utils/handleError";
 import {
   handleFileChange,
@@ -123,7 +124,14 @@ export default function useListeningInfo() {
   const onChangeImage = (e) => {
     if (!isEditing) return;
     handleFileChange(e, (imageData) => {
-      setTopic((prevTopic) => ({ ...prevTopic, image: imageData }));
+      const img = new Image();
+      img.onload = () => {
+        setTopic((prevTopic) => ({ ...prevTopic, image: imageData }));
+      };
+      img.onerror = () => {
+        toast.error("Invalid image file");
+      };
+      img.src = imageData;
     });
   };
 
@@ -150,7 +158,13 @@ export default function useListeningInfo() {
   function onChangeFile(e) {
     if (!isEditing) return;
     handleFileChange(e, (fileData) => {
-      setTopic((prevTopic) => ({ ...prevTopic, audioUrl: fileData }));
+      const file = e.target.files[0];
+
+      if (file && file.type.startsWith("audio/")) {
+        setTopic((prevTopic) => ({ ...prevTopic, audioUrl: fileData }));
+      } else {
+        toast.error("Only audio files are allowed");
+      }
     });
   }
 

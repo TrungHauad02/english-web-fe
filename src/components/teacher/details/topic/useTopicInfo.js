@@ -11,6 +11,7 @@ import {
   handleFileChange,
   handleFileUpload,
 } from "shared/utils/uploadFileUtils";
+import { toast } from "react-toastify";
 
 export default function useTopicInfo(data, setError) {
   const { id } = useParams();
@@ -98,7 +99,14 @@ export default function useTopicInfo(data, setError) {
 
   const onChangeImage = (e) => {
     handleFileChange(e, (result) => {
-      setTopic((prevTopic) => ({ ...prevTopic, image: result }));
+      const img = new Image();
+      img.onload = () => {
+        setTopic((prevTopic) => ({ ...prevTopic, image: result }));
+      };
+      img.onerror = () => {
+        toast.error("Invalid image file");
+      };
+      img.src = result;
     });
   };
 

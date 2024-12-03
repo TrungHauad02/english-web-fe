@@ -22,12 +22,12 @@ export const handleFileUpload = async (oldFile, newFile, title, path) => {
   );
 };
 
-export const handleFileChange = (event, setImage) => {
+export const handleFileChange = (event, setFile) => {
   const file = event.target.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onloadend = () => {
-      setImage(reader.result);
+      setFile(reader.result);
     };
     reader.readAsDataURL(file);
   }

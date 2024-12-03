@@ -11,6 +11,7 @@ import {
   handleFileChange,
   handleFileUpload,
 } from "shared/utils/uploadFileUtils";
+import { toast } from "react-toastify";
 
 export default function useReadingInfo(data, setData) {
   const { id } = useParams();
@@ -100,7 +101,14 @@ export default function useReadingInfo(data, setData) {
   const onChangeImage = (e) => {
     if (!isEditing) return;
     handleFileChange(e, (imageData) => {
-      setTopic((prevTopic) => ({ ...prevTopic, image: imageData }));
+      const img = new Image();
+      img.onload = () => {
+        setTopic((prevTopic) => ({ ...prevTopic, image: imageData }));
+      };
+      img.onerror = () => {
+        toast.error("Invalid image file");
+      };
+      img.src = imageData;
     });
   };
 
@@ -126,9 +134,15 @@ export default function useReadingInfo(data, setData) {
 
   const onChangeFile = (e) => {
     if (!isEditing) return;
-    handleFileChange(e, (data) => {
-      setTopic((prevTopic) => ({ ...prevTopic, file: data }));
-      setData((prevTopic) => ({ ...prevTopic, file: data }));
+    handleFileChange(e, (fileData) => {
+      const file = e.target.files[0];
+
+      if (file && file.type === "application/pdf") {
+        setTopic((prevTopic) => ({ ...prevTopic, file: fileData }));
+        setData((prevTopic) => ({ ...prevTopic, file: fileData }));
+      } else {
+        toast.error("Only PDF files are allowed");
+      }
     });
   };
 
