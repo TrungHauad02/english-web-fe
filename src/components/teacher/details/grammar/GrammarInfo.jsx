@@ -9,6 +9,7 @@ import DeleteButton from "../common/button/DeleteButton";
 import EditButton from "../common/button/EditButton";
 import SaveButton from "../common/button/SaveButton";
 import ErrorComponent from "shared/component/error/ErrorComponent";
+import ConfirmDialogV2 from "shared/component/confirmDialog/ConfirmDialogV2";
 
 export default function GrammarInfo({ data, setData }) {
   const {
@@ -27,6 +28,9 @@ export default function GrammarInfo({ data, setData }) {
     onChangeFile,
     error,
     handleCloseError,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   } = useGrammarInfo(data, setData);
 
   return (
@@ -144,7 +148,7 @@ export default function GrammarInfo({ data, setData }) {
               <DeleteButton
                 disabled={!isEditing}
                 showText
-                onDel={handleDelete}
+                onDel={handleOpenDialog}
               />
             </Grid2>
             <Grid2 item>
@@ -157,6 +161,12 @@ export default function GrammarInfo({ data, setData }) {
       {error && (
         <ErrorComponent errorMessage={error} onClose={handleCloseError} />
       )}
+      <ConfirmDialogV2
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onConfirm={handleDelete}
+        message="Are you sure you want to delete this lesson?"
+      />
     </Grid2>
   );
 }

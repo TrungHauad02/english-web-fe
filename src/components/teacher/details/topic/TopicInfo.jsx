@@ -6,8 +6,9 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import useTopicInfo from "./useTopicInfo";
 import SaveButton from "../common/button/SaveButton";
 import EditButton from "../common/button/EditButton";
-import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
+import { VisuallyHiddenInput } from "shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import DeleteButton from "../common/button/DeleteButton";
+import ConfirmDialogV2 from "shared/component/confirmDialog/ConfirmDialogV2";
 
 export default function TopicInfo({ data, setError }) {
   const {
@@ -21,6 +22,9 @@ export default function TopicInfo({ data, setError }) {
     handleEditClick,
     handleSaveClick,
     handleDelete,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   } = useTopicInfo(data, setError);
 
   return (
@@ -72,7 +76,7 @@ export default function TopicInfo({ data, setError }) {
               <DeleteButton
                 disabled={!isEditing}
                 showText
-                onDel={handleDelete}
+                onDel={handleOpenDialog}
               />
             </Grid2>
             <Grid2 item>
@@ -116,6 +120,12 @@ export default function TopicInfo({ data, setError }) {
           />
         </Grid2>
       </Grid2>
+      <ConfirmDialogV2
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onConfirm={handleDelete}
+        message="Are you sure you want to delete this lesson?"
+      />
     </Stack>
   );
 }

@@ -4,6 +4,7 @@ import {
   getWritingDetail,
   updateWriting,
 } from "api/study/writing/writingService";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import handleError from "shared/utils/handleError";
 import { handleFileUpload } from "shared/utils/uploadFileUtils";
@@ -17,6 +18,15 @@ export default function useWritingTopic(
 ) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   const handleEditing = () => {
     setIsEditing(true);
@@ -90,5 +100,8 @@ export default function useWritingTopic(
     handleDelete,
     onChangeDescription,
     onChangeTopic,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   };
 }

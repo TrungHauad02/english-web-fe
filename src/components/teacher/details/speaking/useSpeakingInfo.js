@@ -17,6 +17,7 @@ export default function useSpeakingInfo(setError) {
   const { id } = useParams();
   const [topic, setTopic] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,6 +44,14 @@ export default function useSpeakingInfo(setError) {
     };
     fetchData();
   }, [id]);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   const handleDelete = async () => {
     if (!isEditing) return;
@@ -163,5 +172,8 @@ export default function useSpeakingInfo(setError) {
     onChangeDescription,
     onChangeTopic,
     onChangeDuration,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   };
 }

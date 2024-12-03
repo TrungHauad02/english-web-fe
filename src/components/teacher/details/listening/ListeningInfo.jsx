@@ -3,14 +3,14 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import BasicTextField from "../common/textField/BasicTextField";
 import BasicSelect from "../common/select/BasicSelect";
 import MultiLineTextField from "../common/textField/MultiLineTextField";
-import SaveEditDeleteButton from "../common/button/SaveEditDeleteButton";
-import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
+import { VisuallyHiddenInput } from "shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useListeningInfo from "./useListeningInfo";
 import SoundViewer from "shared/component/soundViewer/SoundViewer";
 import ErrorComponent from "shared/component/error/ErrorComponent";
 import EditButton from "../common/button/EditButton";
 import DeleteButton from "../common/button/DeleteButton";
 import SaveButton from "../common/button/SaveButton";
+import ConfirmDialogV2 from "shared/component/confirmDialog/ConfirmDialogV2";
 
 export default function ListeningInfo() {
   const {
@@ -27,6 +27,9 @@ export default function ListeningInfo() {
     onChangeFile,
     error,
     handleCloseError,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   } = useListeningInfo();
 
   if (!topic) return;
@@ -126,7 +129,11 @@ export default function ListeningInfo() {
         </Grid2>
         <Grid2 container direction={"row"} spacing={2}>
           <EditButton onEdit={handleEditing} disabled={isEditing} showText />
-          <DeleteButton onDel={handleDelete} disabled={!isEditing} showText />
+          <DeleteButton
+            onDel={handleOpenDialog}
+            disabled={!isEditing}
+            showText
+          />
           <SaveButton onSave={handleSave} disabled={!isEditing} showText />
         </Grid2>
       </Grid2>
@@ -134,6 +141,12 @@ export default function ListeningInfo() {
       {error && (
         <ErrorComponent errorMessage={error} onClose={handleCloseError} />
       )}
+      <ConfirmDialogV2
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onConfirm={handleDelete}
+        message="Are you sure you want to delete this lesson?"
+      />
     </Grid2>
   );
 }

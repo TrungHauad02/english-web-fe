@@ -9,6 +9,7 @@ import ErrorComponent from "../../../../../shared/component/error/ErrorComponent
 import EditButton from "../../common/button/EditButton";
 import DeleteButton from "../../common/button/DeleteButton";
 import SaveButton from "../../common/button/SaveButton";
+import ConfirmDialogV2 from "shared/component/confirmDialog/ConfirmDialogV2";
 
 export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
   const {
@@ -27,6 +28,9 @@ export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
     onHandleSave,
     error,
     handleCloseError,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   } = useVocabularyInfo(curVocab, setCurVocab, fetchData);
 
   return (
@@ -111,13 +115,19 @@ export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
         justifyContent={"flex-end"}
       >
         <EditButton onEdit={onHandleEdit} showText disabled={isEditing} />
-        <DeleteButton onDel={onHandleDelete} showText disabled={!isEditing} />
+        <DeleteButton onDel={handleOpenDialog} showText disabled={!isEditing} />
         <SaveButton onSave={onHandleSave} showText disabled={!isEditing} />
       </Grid2>
       {/**Hiển thị khi có lỗi */}
       {error && (
         <ErrorComponent errorMessage={error} onClose={handleCloseError} />
       )}
+      <ConfirmDialogV2
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onConfirm={onHandleDelete}
+        message="Are you sure you want to delete this vocabulary?"
+      />
     </Grid2>
   );
 }

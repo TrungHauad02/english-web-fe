@@ -1,6 +1,17 @@
 import { deleteConversation } from "api/study/speaking/conversationService";
+import { useState } from "react";
 
 export default function useLine(conversation, setConversation, index) {
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
   const onChangeName = (event) => {
     const newConversation = [...conversation];
     newConversation[index] = {
@@ -73,5 +84,8 @@ export default function useLine(conversation, setConversation, index) {
     onDeleteLine,
     moveUp,
     moveDown,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   };
 }
