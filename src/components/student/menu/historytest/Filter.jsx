@@ -16,7 +16,7 @@ const Filter = ({ filter, setFilter, searchText, setSearchText, searchStartDate,
     };
     const formatDateForInput = (date) => {
         if (!date) return "";
-        return format(new Date(date), 'yyyy-MM-dd'); // Định dạng phù hợp cho type="date"
+        return format(new Date(date), 'yyyy-MM-dd'); 
     };
 
 

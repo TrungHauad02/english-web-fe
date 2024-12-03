@@ -54,10 +54,10 @@ const ScoreGrid = ({ score, gridData = [], serials = [], onItemClick, handleTest
       <Button 
         variant="contained" 
         sx={{ 
-          backgroundColor: '#ffd54f', 
-          color: 'black',
+          backgroundColor: '#00796B', 
+          color: 'white',
           '&:hover': {
-            backgroundColor: '#ffca28',
+            backgroundColor: '#00796B',
           },
           borderRadius: '0.5rem',
         }}

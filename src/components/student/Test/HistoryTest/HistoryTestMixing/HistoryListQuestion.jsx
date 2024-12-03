@@ -7,7 +7,7 @@ function ListQuestionSubmit({ dataTest, focusId, dataSubmitTest }) {
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const questionRefs = useRef({});
     const [isFocused, setIsFocused] = useState({});
-    const [expandedSections, setExpandedSections] = useState({}); // To track which sections are expanded
+    const [expandedSections, setExpandedSections] = useState({}); 
 
     useEffect(() => {
         if (focusId && questionRefs.current[focusId]) {
