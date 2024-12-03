@@ -1,5 +1,3 @@
-// indexedDBUtils.js
-
 export const openDB = (dbName, storeName) => {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(dbName);

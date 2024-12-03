@@ -15,13 +15,19 @@ import {
   MenuItem,
   Select,
   Stack,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from "@mui/material/styles";
 import { useEffect } from "react";
 import { getListTest } from "api/test/listTestApi";
+import { getMaxSerial,updateStatus,deleteTest } from "api/test/TestApi";
 import CustomPagination from "shared/component/pagination/CustomPagination";
 import { useLocation, useNavigate } from "react-router-dom";
+import ConfirmDialog from "shared/component/confirmDialog/ConfirmDialog";
 import NewTest from "./NewTest";
+import useColor from "shared/color/Color";
+import {  toast } from 'react-toastify';
 const ColorButton = styled(Button)(({ color }) => ({
   borderRadius: "8px",
   padding: "8px 24px",
@@ -35,7 +41,7 @@ const ColorButton = styled(Button)(({ color }) => ({
 
 const TestManagement = () => {
   const type = {
-    all : "",
+    all : "ALL",
     mixing: "MIXING",
     reading: "READING",
     listening: "LISTENING",
@@ -46,20 +52,47 @@ const TestManagement = () => {
   const [list, setList] = useState([]);
   const [alltest, setalltest] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
-  const [currtype, setCurrtype] = useState(type.mixing);
+  const [currtype, setCurrtype] = useState("ALL");
   const [totalPage, setTotalPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
-  const [newTestSerial, setNewTestSerial] = useState(1);
   const [version, setVersion] = useState(1);
   const [versionPage, setVersionPage] = useState(1);
+  const [maxSerial,setMaxSerial] = useState(0);
+  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
+  const [openDialogDelete, setOpenDialogDelete] = useState(false);
+  const [testDelete,setTestDelete] = useState(0);
+
+  const handleOpenDialogDelete = (testDelete) => {
+    setTestDelete(testDelete);
+    setOpenDialogDelete(true);
+  };
+
+  const handleCloseDialogDelete = () => {
+    setOpenDialogDelete(false);
+  };
+  const handleAgreeDelete = async () => {
+    await deleteTest(testDelete.id)
+      .then(() => {
+        toast.success(`${testDelete.title} deleted successfully!`);
+        setList((prevList) => prevList.filter((test) => test.id !== testDelete.id));
+        handleCloseDialogDelete();
+      })
+      .catch(() => {
+        toast.error(`Failed to delete ${testDelete.title}`);
+        handleCloseDialogDelete();
+      });
+  };
+
+  
+
+
 
   const handleOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
-
     setOpen(false);
     setVersion(version+1);
    
@@ -75,15 +108,15 @@ const TestManagement = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getListTest(page, currtype,searchTerm);
+      const adjustedType = currtype === "ALL" ? "" : currtype;
+    
+      const data = await getListTest(page, adjustedType,searchTerm);
       const tests = data.content;
+      const serial  = await getMaxSerial();
+      setMaxSerial(serial+1||0);
+     
       setVersionPage(versionPage+1);
-      // const allTestsByType = await getListTestByType(currtype);
-      // setalltest(allTestsByType);
-      const maxSerial = 100;
-      // allTestsByType.reduce((max, test) => Math.max(max, test.serial), 0);
-      setNewTestSerial(maxSerial + 1);
-      console.log(data);
+   
 
       setTotalPage(data.totalPages);
 
@@ -94,17 +127,34 @@ const TestManagement = () => {
       }
       
     };
-
-    
-
     fetchData();
   }, [page, currtype,searchTerm]);
+
+
+  const handleStatusChange = (event, test) => {
+    updateStatus(test.id)
+      .then((response) => {
+        toast.success(`Status of "${test.title}" updated successfully!`);
+
+        setList((prevList) => {
+          return prevList.map((item) => {
+            if (item.id === test.id) {
+              return { ...item, status: event.target.value }; 
+            }
+            return item;
+          });
+        });
+      })
+      .catch((error) => {
+        toast.error('Failed to update status!');
+      });
+  };
 
   const onChangePage = (event, value) => {
     setPage(value);
   };
+  
   const navigate = useNavigate();
- 
 
   const handlebtnDetail = (datatest) => {
     
@@ -146,7 +196,17 @@ const TestManagement = () => {
       >
         TEST MANAGEMENT
       </Typography>
-      <NewTest key={version} open={open} onClose={handleClose} serial = {newTestSerial} type = {currtype}  handlebtnDetail ={handlebtnDetail}/>
+      <NewTest key={version} open={open} onClose={handleClose} serial = {maxSerial}  handlebtnDetail ={handlebtnDetail}/>
+      <ConfirmDialog
+        open={openDialogDelete}
+        onClose={handleCloseDialogDelete}
+        onAgree={handleAgreeDelete}
+        title="Confirm Deletion"  
+        content={`Are you sure you want to delete ${testDelete?.title}?`}
+        cancelText="Cancel"  
+        agreeText="Delete"  
+      />
+
       <Box
         sx={{
           display: "flex",
@@ -162,6 +222,7 @@ const TestManagement = () => {
           variant="outlined"
           sx={{ minWidth: 120 }}
         >
+          <MenuItem value="ALL">All</MenuItem>
           <MenuItem value={type.mixing}>Mixing</MenuItem>
           <MenuItem value={type.reading}>Reading</MenuItem>
           <MenuItem value={type.listening}>Listening</MenuItem>
@@ -179,7 +240,7 @@ const TestManagement = () => {
         />
 
         <ColorButton
-          color="#FFD700"
+          color={Color2}
           variant="contained"
           sx={{ marginLeft: 2, whiteSpace: "nowrap" }}
           onClick={handleOpen}
@@ -193,29 +254,71 @@ const TestManagement = () => {
             <TableRow>
               <TableCell>Serial</TableCell>
               <TableCell>Title</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell align="center">Details</TableCell>
+              <TableCell align="right">Change</TableCell>
+              <TableCell align="right">Details</TableCell>
+              <TableCell align="right">Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {list.map((test) => (
-              <TableRow key={test.serial}>
+              <TableRow key={test.id}>
                 <TableCell>{test.serial}</TableCell>
                 <TableCell>{test.title}</TableCell>
-                <TableCell>{test.status}</TableCell>
-                <TableCell align="center">
+                <TableCell align="right">
+                  <Select
+                    value={test.status}
+                    onChange={(event) => handleStatusChange(event, test)} 
+                    sx={{
+
+                      backgroundColor:
+                        test.status === 'ACTIVE'
+                          ? Color2
+                          : test.status === 'INACTIVE'
+                          ? '#FFEB3B'
+                          : '#9E9E9E',
+                      color: 'white',
+                      textAlign: 'center',
+                      borderRadius: '0.5rem',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                      '& .MuiSelect-icon': {
+                        color: 'white',
+                      },
+                    }}
+                  >
+                    <MenuItem value="ACTIVE" sx={{ backgroundColor: Color2, color: 'white' }}>ACTIVE</MenuItem>
+                    <MenuItem value="INACTIVE" sx={{ backgroundColor: '#FFEB3B', color: 'black' }}>INACTIVE</MenuItem>
+                  </Select>
+              </TableCell>
+
+                <TableCell align="right">
                   <Button
+                    sx={{background:'#000000',color:'#ffffff',borderRadius:'0.5rem'}}
                     variant="outlined"
                     onClick={() => handlebtnDetail(test)}
                   >
                     Detail
                   </Button>
                 </TableCell>
+                <TableCell align="right">
+              <IconButton 
+                onClick={() => handleOpenDialogDelete(test)} 
+                sx={{
+                  color: 'red', 
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 0, 0, 0.1)', // Chỉnh màu khi hover
+                  }
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+    
       <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
         <CustomPagination
           count={totalPage}
@@ -225,5 +328,6 @@ const TestManagement = () => {
       </Stack>
     </Container>
   );
+  
 };
 export default TestManagement;
