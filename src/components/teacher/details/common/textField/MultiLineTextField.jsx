@@ -8,20 +8,22 @@ export default function MultiLineTextField({
   type,
   sx,
   rows = 3,
+  required,
 }) {
   const complexSx = {
     ...sx,
     color: "#828282",
   };
+
   return (
     <Stack direction={"column"} spacing={1}>
       <Typography
-        variant="body"
+        variant="body1"
         fontWeight={"bold"}
         fontSize={"1rem"}
         sx={{ color: "#000" }}
       >
-        {label}
+        {label} {required && <span style={{ color: "red" }}>*</span>}
       </Typography>
       <TextField
         value={value}
@@ -33,6 +35,9 @@ export default function MultiLineTextField({
         multiline
         disabled={disabled}
         rows={rows}
+        required={required}
+        error={required && !value}
+        helperText={required && !value ? "This field is required" : ""}
       />
     </Stack>
   );

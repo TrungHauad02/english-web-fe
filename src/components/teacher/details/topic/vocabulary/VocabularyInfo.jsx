@@ -11,7 +11,7 @@ import DeleteButton from "../../common/button/DeleteButton";
 import SaveButton from "../../common/button/SaveButton";
 import ConfirmDialogV2 from "shared/component/confirmDialog/ConfirmDialogV2";
 
-export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
+export default function VocabularyInfo({ curVocab, setCurVocab }) {
   const {
     wordType,
     status,
@@ -31,7 +31,7 @@ export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
     openDialog,
     handleOpenDialog,
     handleCloseDialog,
-  } = useVocabularyInfo(curVocab, setCurVocab, fetchData);
+  } = useVocabularyInfo(curVocab, setCurVocab);
 
   return (
     <Grid2 container direction={"column"} sx={{ width: "100%" }} spacing={2}>
@@ -64,6 +64,7 @@ export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
             label={"Example"}
             rows={5}
             disabled={!isEditing}
+            required={curVocab.id !== "-1"}
             sx={{ backgroundColor: "#fff" }}
           />
         </Grid2>
@@ -74,6 +75,7 @@ export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
             value={curVocab.word}
             onChange={onChangeWord}
             disabled={!isEditing}
+            required={curVocab.id !== "-1"}
             sx={{ backgroundColor: "#fff" }}
           />
           <BasicTextField
@@ -81,6 +83,7 @@ export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
             value={curVocab.meaning}
             onChange={onChangeMeaning}
             disabled={!isEditing}
+            required={curVocab.id !== "-1"}
             sx={{ backgroundColor: "#fff" }}
           />
           <BasicSelect
@@ -89,6 +92,7 @@ export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
             value={curVocab.wordType}
             onChange={onChangeWordType}
             disabled={!isEditing}
+            required={curVocab.id !== "-1"}
             sx={{ backgroundColor: "#fff" }}
           />
           <BasicTextField
@@ -96,6 +100,7 @@ export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
             label={"Phonetic"}
             value={curVocab.phonetic}
             onChange={onChangePhonetic}
+            required={curVocab.id !== "-1"}
             sx={{ backgroundColor: "#fff" }}
           />
           <BasicSelect
@@ -104,6 +109,7 @@ export default function VocabularyInfo({ curVocab, setCurVocab, fetchData }) {
             value={curVocab.status}
             onChange={onChangeStatus}
             disabled={!isEditing}
+            required={curVocab.id !== "-1"}
             sx={{ backgroundColor: "#fff" }}
           />
         </Grid2>

@@ -46,6 +46,7 @@ export default function WritingInfo({ data, setData, isEditing }) {
             type="text"
             sx={{ minWidth: "250px" }}
             disabled={!isEditing}
+            required
           />
           <BasicTextField
             label={"Serial"}
@@ -53,6 +54,7 @@ export default function WritingInfo({ data, setData, isEditing }) {
             type="number"
             onChange={onChangeSerial}
             disabled={!isEditing}
+            required
           />
           <BasicSelect
             label={"Status"}
@@ -60,6 +62,7 @@ export default function WritingInfo({ data, setData, isEditing }) {
             onChange={onChangeStatus}
             options={["ACTIVE", "INACTIVE"]}
             disabled={!isEditing}
+            required
           />
         </Grid2>
       </Grid2>

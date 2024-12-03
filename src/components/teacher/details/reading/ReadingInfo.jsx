@@ -68,6 +68,7 @@ export default function ReadingInfo({ data, setData }) {
             type="text"
             sx={{ minWidth: "250px" }}
             disabled={!isEditing}
+            required
           />
           <BasicTextField
             label={"Serial"}
@@ -75,6 +76,7 @@ export default function ReadingInfo({ data, setData }) {
             type="number"
             onChange={onChangeSerial}
             disabled={!isEditing}
+            required
           />
           <BasicSelect
             label={"Status"}
@@ -82,6 +84,7 @@ export default function ReadingInfo({ data, setData }) {
             onChange={onChangeStatus}
             options={["ACTIVE", "INACTIVE"]}
             disabled={!isEditing}
+            required
           />
         </Grid2>
       </Grid2>
@@ -91,6 +94,7 @@ export default function ReadingInfo({ data, setData }) {
           value={topic.description}
           onChange={onChangeDescription}
           disabled={!isEditing}
+          required
         />
         <Grid2 container direction={"column"} spacing={2}>
           <Button

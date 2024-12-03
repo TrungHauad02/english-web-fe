@@ -7,20 +7,22 @@ export default function BasicTextField({
   type,
   sx,
   disabled,
+  required,
 }) {
   const combinedSx = {
     ...sx,
     color: "#828282",
   };
+
   return (
     <Stack direction={"column"} spacing={1}>
       <Typography
-        variant="body"
+        variant="body1"
         fontWeight={"bold"}
         fontSize={"1rem"}
         sx={{ color: "#000" }}
       >
-        {label}
+        {label} {required && <span style={{ color: "red" }}>*</span>}
       </Typography>
       <TextField
         value={value}
@@ -30,6 +32,9 @@ export default function BasicTextField({
         variant="outlined"
         fullWidth
         disabled={disabled}
+        required={required}
+        error={required && !value}
+        helperText={required && !value ? "This field is required" : ""}
       />
     </Stack>
   );

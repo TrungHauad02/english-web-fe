@@ -3,7 +3,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import BasicTextField from "../common/textField/BasicTextField";
 import BasicSelect from "../common/select/BasicSelect";
 import MultiLineTextField from "../common/textField/MultiLineTextField";
-import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
+import { VisuallyHiddenInput } from "shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useGrammarInfo from "./useGrammarInfo";
 import DeleteButton from "../common/button/DeleteButton";
 import EditButton from "../common/button/EditButton";
@@ -70,6 +70,7 @@ export default function GrammarInfo({ data, setData }) {
             type="text"
             sx={{ minWidth: "250px" }}
             disabled={!isEditing}
+            required
           />
           <BasicTextField
             label={"Serial"}
@@ -77,6 +78,7 @@ export default function GrammarInfo({ data, setData }) {
             type="number"
             onChange={onChangeSerial}
             disabled={!isEditing}
+            required
           />
           <BasicSelect
             label={"Status"}
@@ -84,6 +86,7 @@ export default function GrammarInfo({ data, setData }) {
             onChange={onChangeStatus}
             options={["ACTIVE", "INACTIVE"]}
             disabled={!isEditing}
+            required
           />
         </Grid2>
       </Grid2>
@@ -93,18 +96,21 @@ export default function GrammarInfo({ data, setData }) {
           value={topic.description}
           onChange={onChangeDescription}
           disabled={!isEditing}
+          required
         />
         <MultiLineTextField
           label={"Content"}
           value={topic.content}
           onChange={onChangeContent}
           disabled={!isEditing}
+          required
         />
         <MultiLineTextField
           label={"Example"}
           value={topic.example}
           onChange={onChangeExample}
           disabled={!isEditing}
+          required
         />
         <Grid2 container direction={"row"} spacing={2}>
           <Button

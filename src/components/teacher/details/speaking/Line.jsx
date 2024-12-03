@@ -71,6 +71,7 @@ export default function Line({
             sx={{ backgroundColor: "#fff" }}
             disabled={disabled}
             fullWidth
+            required
           />
           <BasicSelect
             disabled={disabled}

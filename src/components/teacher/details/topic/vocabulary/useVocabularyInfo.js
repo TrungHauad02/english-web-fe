@@ -12,7 +12,7 @@ import {
 } from "shared/utils/uploadFileUtils";
 import { toast } from "react-toastify";
 
-export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
+export default function useVocabularyInfo(curVocab, setCurVocab) {
   const { id } = useParams();
   const wordType = ["NOUN", "VERB", "ADJECTIVE", "ADVERB"];
   const status = ["ACTIVE", "INACTIVE"];
@@ -21,7 +21,6 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
   const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
-    if (curVocab.id !== "-1") return;
     setIsEditing(curVocab.id === "-1");
   }, [curVocab]);
 
@@ -85,7 +84,6 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
         return;
       }
       await deleteVocab(curVocab.id);
-      await fetchData();
       setCurVocab({
         id: "-1",
         word: "",
@@ -141,7 +139,6 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
         newData = await updateVocab(curVocab.id, vocab);
       }
       setCurVocab(newData);
-      await fetchData();
     } catch (err) {
       console.log(err);
       handleError(err);

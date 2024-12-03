@@ -35,12 +35,7 @@ export default function TopicInfo({ data, setError }) {
       </Typography>
       <Grid2 container direction={"row"} spacing={3}>
         {/**Ảnh và nút thay đổi ảnh */}
-        <Grid2
-          container
-          direction={"column"}
-          spacing={2}
-          justifyContent={"space-between"}
-        >
+        <Grid2 container direction={"column"} spacing={4}>
           <Grid2 container direction={"column"} justifyContent={"center"}>
             <CardMedia
               image={topic.image}
@@ -96,6 +91,7 @@ export default function TopicInfo({ data, setError }) {
             onChange={onChangeTitle}
             type="text"
             disabled={!isEditing}
+            required
             sx={{ minWidth: "250px" }}
           />
           <BasicTextField
@@ -103,6 +99,7 @@ export default function TopicInfo({ data, setError }) {
             value={topic.serial}
             type="number"
             disabled={!isEditing}
+            required
             onChange={onChangeSerial}
           />
           <BasicSelect
@@ -110,12 +107,14 @@ export default function TopicInfo({ data, setError }) {
             value={topic.status}
             onChange={onChangeStatus}
             options={["ACTIVE", "INACTIVE"]}
+            required
             disabled={!isEditing}
           />
           <MultiLineTextField
             label={"Description"}
             value={topic.description}
             onChange={onChangeDescription}
+            required
             disabled={!isEditing}
           />
         </Grid2>

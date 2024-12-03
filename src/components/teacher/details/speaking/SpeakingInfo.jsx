@@ -3,7 +3,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import BasicTextField from "../common/textField/BasicTextField";
 import BasicSelect from "../common/select/BasicSelect";
 import MultiLineTextField from "../common/textField/MultiLineTextField";
-import { VisuallyHiddenInput } from "../../../../shared/component/visuallyHiddenInput/VisuallyHiddenInput";
+import { VisuallyHiddenInput } from "shared/component/visuallyHiddenInput/VisuallyHiddenInput";
 import useSpeakingInfo from "./useSpeakingInfo";
 import SaveButton from "../common/button/SaveButton";
 import EditButton from "../common/button/EditButton";
@@ -66,6 +66,7 @@ export default function SpeakingInfo({ setError }) {
             type="text"
             sx={{ minWidth: "250px" }}
             disabled={!isEditing}
+            required
           />
           <BasicTextField
             label={"Serial"}
@@ -73,6 +74,7 @@ export default function SpeakingInfo({ setError }) {
             type="number"
             onChange={onChangeSerial}
             disabled={!isEditing}
+            required
           />
           <BasicSelect
             label={"Status"}
@@ -80,6 +82,7 @@ export default function SpeakingInfo({ setError }) {
             onChange={onChangeStatus}
             options={["ACTIVE", "INACTIVE"]}
             disabled={!isEditing}
+            required
           />
         </Grid2>
       </Grid2>
@@ -89,12 +92,14 @@ export default function SpeakingInfo({ setError }) {
           value={topic.description}
           onChange={onChangeDescription}
           disabled={!isEditing}
+          required
         />
         <MultiLineTextField
           label={"Topic"}
           value={topic.topic}
           onChange={onChangeTopic}
           disabled={!isEditing}
+          required
         />
         <BasicTextField
           label={"Duration (seconds)"}
@@ -102,6 +107,7 @@ export default function SpeakingInfo({ setError }) {
           onChange={onChangeDuration}
           type="number"
           disabled={!isEditing}
+          required
         />
         <Grid2 container direction={"row"} spacing={2}>
           <EditButton onEdit={handleEditing} disabled={isEditing} showText />
