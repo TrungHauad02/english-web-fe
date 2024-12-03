@@ -46,6 +46,7 @@ export default function AuthProvider({ children }) {
     setUserRole(null);
     sessionStorage.removeItem("authToken");
     localStorage.removeItem("tokenExpiration");
+    Cookies.remove('JSESSIONID'); 
     toast.info("Logout");
   }
 
