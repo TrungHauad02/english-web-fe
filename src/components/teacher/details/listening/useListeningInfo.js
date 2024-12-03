@@ -17,6 +17,7 @@ export default function useListeningInfo() {
   const { id } = useParams();
   const [topic, setTopic] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -42,6 +43,14 @@ export default function useListeningInfo() {
     };
     fetchData();
   }, [id]);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   const handleCloseError = () => {
     setError("");
@@ -182,5 +191,8 @@ export default function useListeningInfo() {
     onChangeFile,
     error,
     handleCloseError,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   };
 }

@@ -9,6 +9,7 @@ import ErrorComponent from "shared/component/error/ErrorComponent";
 import EditButton from "../common/button/EditButton";
 import DeleteButton from "../common/button/DeleteButton";
 import SaveButton from "../common/button/SaveButton";
+import ConfirmDialogV2 from "shared/component/confirmDialog/ConfirmDialogV2";
 
 export default function ReadingInfo({ data, setData }) {
   const {
@@ -25,6 +26,9 @@ export default function ReadingInfo({ data, setData }) {
     onChangeFile,
     error,
     handleCloseError,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   } = useReadingInfo(data, setData);
 
   return (
@@ -114,7 +118,11 @@ export default function ReadingInfo({ data, setData }) {
           </Button>
           <Stack direction={"row"} spacing={2}>
             <EditButton onEdit={handleEditing} disabled={isEditing} showText />
-            <DeleteButton onDel={handleDelete} disabled={!isEditing} showText />
+            <DeleteButton
+              onDel={handleOpenDialog}
+              disabled={!isEditing}
+              showText
+            />
             <SaveButton onSave={handleSave} disabled={!isEditing} showText />
           </Stack>
         </Grid2>
@@ -123,6 +131,12 @@ export default function ReadingInfo({ data, setData }) {
       {error && (
         <ErrorComponent errorMessage={error} onClose={handleCloseError} />
       )}
+      <ConfirmDialogV2
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onConfirm={handleDelete}
+        message="Are you sure you want to delete this lesson?"
+      />
     </Grid2>
   );
 }

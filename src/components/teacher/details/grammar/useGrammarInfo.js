@@ -18,7 +18,16 @@ export default function useGrammarInfo(data, setData) {
   const [topic, setTopic] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
   const navigate = useNavigate();
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   const handleCloseError = () => {
     setError("");
@@ -172,5 +181,8 @@ export default function useGrammarInfo(data, setData) {
     onChangeFile,
     error,
     handleCloseError,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   };
 }

@@ -8,6 +8,7 @@ import useSpeakingInfo from "./useSpeakingInfo";
 import SaveButton from "../common/button/SaveButton";
 import EditButton from "../common/button/EditButton";
 import DeleteButton from "../common/button/DeleteButton";
+import ConfirmDialogV2 from "shared/component/confirmDialog/ConfirmDialogV2";
 
 export default function SpeakingInfo({ setError }) {
   const {
@@ -23,6 +24,9 @@ export default function SpeakingInfo({ setError }) {
     onChangeDescription,
     onChangeTopic,
     onChangeDuration,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   } = useSpeakingInfo(setError);
   if (!topic) return <></>;
   return (
@@ -100,11 +104,21 @@ export default function SpeakingInfo({ setError }) {
           disabled={!isEditing}
         />
         <Grid2 container direction={"row"} spacing={2}>
-          <EditButton onEdit={handleEditing} disabled={isEditing} showText/>
-          <DeleteButton onDel={handleDelete} disabled={!isEditing} showText/>
+          <EditButton onEdit={handleEditing} disabled={isEditing} showText />
+          <DeleteButton
+            onDel={handleOpenDialog}
+            disabled={!isEditing}
+            showText
+          />
           <SaveButton onSave={handleSave} disabled={!isEditing} showText />
         </Grid2>
       </Grid2>
+      <ConfirmDialogV2
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onConfirm={handleDelete}
+        message="Are you sure you want to delete this lesson?"
+      />
     </Grid2>
   );
 }

@@ -17,12 +17,21 @@ export default function useTopicInfo(data, setError) {
   const { id } = useParams();
   const [topic, setTopic] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsEditing(id === "-1");
     setTopic(data);
   }, [id, data]);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   const handleDelete = async () => {
     if (id === "-1") {
@@ -121,5 +130,8 @@ export default function useTopicInfo(data, setError) {
     handleEditClick,
     handleSaveClick,
     handleDelete,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   };
 }

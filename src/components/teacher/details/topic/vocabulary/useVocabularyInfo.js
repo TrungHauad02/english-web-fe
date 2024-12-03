@@ -18,11 +18,21 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
   const status = ["ACTIVE", "INACTIVE"];
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     if (curVocab.id !== "-1") return;
     setIsEditing(curVocab.id === "-1");
   }, [curVocab]);
+
+  const handleOpenDialog = () => {
+    if (!curVocab || curVocab.id === "-1") return;
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   function handleInputChange(fieldName) {
     return (event) => {
@@ -154,5 +164,8 @@ export default function useVocabularyInfo(curVocab, setCurVocab, fetchData) {
     onHandleSave,
     error,
     handleCloseError,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   };
 }

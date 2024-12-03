@@ -13,6 +13,7 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import useLine from "./useLine";
 import BasicSelect from "../common/select/BasicSelect";
 import SoundViewer from "shared/component/soundViewer/SoundViewer";
+import ConfirmDialogV2 from "shared/component/confirmDialog/ConfirmDialogV2";
 
 export default function Line({
   listPeople,
@@ -29,6 +30,9 @@ export default function Line({
     onDeleteLine,
     moveUp,
     moveDown,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   } = useLine(conversation, setConversation, index);
   return (
     <Stack
@@ -79,7 +83,7 @@ export default function Line({
               minWidth: "7rem",
             }}
           />
-          <DeleteButton onDel={onDeleteLine} disabled={disabled} />
+          <DeleteButton onDel={handleOpenDialog} disabled={disabled} />
           <Stack direction="column" spacing={1}>
             <Button
               sx={{ color: "#000" }}
@@ -104,6 +108,12 @@ export default function Line({
           <SoundViewer audioSrc={line.audioUrl} />
         </Stack>
       )}
+      <ConfirmDialogV2
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onConfirm={onDeleteLine}
+        message="Are you sure you want to delete this line in conversation?"
+      />
     </Stack>
   );
 }

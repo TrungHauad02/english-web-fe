@@ -17,12 +17,21 @@ export default function useReadingInfo(data, setData) {
   const { id } = useParams();
   const [topic, setTopic] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsEditing(id === "-1");
   }, [id]);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   const handleCloseError = () => {
     setError("");
@@ -160,5 +169,8 @@ export default function useReadingInfo(data, setData) {
     onChangeFile,
     error,
     handleCloseError,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   };
 }
