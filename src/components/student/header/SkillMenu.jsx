@@ -18,13 +18,17 @@ function SkillMenu() {
   };
 
   const handleMouseLeaveMenu = (event) => {
+    const relatedTarget = event.relatedTarget;
+    
     if (
-      buttonRef.current && !buttonRef.current.contains(event.relatedTarget) && 
-      menuRef.current && !menuRef.current.contains(event.relatedTarget)
+      !relatedTarget ||
+      !(relatedTarget instanceof Node) ||
+      (buttonRef.current && !buttonRef.current.contains(relatedTarget)) &&
+      (menuRef.current && !menuRef.current.contains(relatedTarget))
     ) {
-      setAnchorEl(null);  
+      setAnchorEl(null);
     }
-  };
+  };  
 
   return (
     <Box sx={{ width: 100, height: height }} ref={menuRef} onMouseLeave={handleMouseLeaveMenu}>
