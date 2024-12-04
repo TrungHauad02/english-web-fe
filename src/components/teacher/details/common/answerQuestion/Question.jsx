@@ -1,9 +1,16 @@
-import { Button, Grid2, Typography } from "@mui/material";
+import {
+  Button,
+  Grid2,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import SaveEditDeleteButton from "../button/SaveEditDeleteButton";
 import useQuestion from "./useQuestion";
-import CustomTextField from "./CustomTextField";
 import Answer from "./Answer";
-import BasicSelect from "../select/BasicSelect";
 
 export default function Question({
   data,
@@ -69,12 +76,13 @@ export default function Question({
         </Grid2>
         {/* Question serial */}
         <Grid2 item>
-          <CustomTextField
+          <TextField
             value={question.serial}
             type="number"
             required
             disabled={!isEditing}
             onChange={onChangeQuestionSerial}
+            size="small"
             sx={{
               width: "4rem",
               "& .MuiInputBase-root": {
@@ -88,23 +96,38 @@ export default function Question({
         </Grid2>
         <Grid2 item>
           {/* Question content */}
-          <CustomTextField
+          <TextField
             value={question.content}
             required
-            maxWidth="20rem"
-            minWidth={"18rem"}
             disabled={!isEditing}
             onChange={onChangeQuestionContent}
+            fullWidth
+            variant="outlined"
+            size="small"
+            sx={{
+              maxWidth: "20rem",
+              minWidth: "18rem",
+            }}
           />
         </Grid2>
-        <Grid2 item sx={{ marginTop: "-0.5rem" }}>
-          <BasicSelect
-            disabled={!isEditing}
-            options={["ACTIVE", "INACTIVE"]}
-            value={question.status}
-            onChange={onChangeStatus}
-            sx={{ minWidth: "6.8rem" }}
-          />
+        <Grid2 item>
+          {/* Custom Select for question status */}
+          <FormControl fullWidth size="small" disabled={!isEditing}>
+            <InputLabel>Status</InputLabel>
+            <Select
+              value={question.status}
+              onChange={onChangeStatus}
+              label="Status"
+              sx={{
+                "& .MuiSelect-root": {
+                  fontSize: "0.85rem",
+                },
+              }}
+            >
+              <MenuItem value="ACTIVE">Active</MenuItem>
+              <MenuItem value="INACTIVE">InActive</MenuItem>
+            </Select>
+          </FormControl>
         </Grid2>
         <Grid2 item>
           <SaveEditDeleteButton
@@ -145,12 +168,14 @@ export default function Question({
           </Grid2>
           <Grid2 item size={7}>
             {/* Explanation */}
-            <CustomTextField
+            <TextField
               disabled={!isEditing}
               sx={{ width: "95%" }}
               value={question.explanation}
               onChange={onChangeExplanation}
               required
+              variant="outlined"
+              size="small"
             />
           </Grid2>
           <Grid2 item size={3}>

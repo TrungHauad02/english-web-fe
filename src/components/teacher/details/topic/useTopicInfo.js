@@ -22,6 +22,10 @@ export default function useTopicInfo(data, setError) {
 
   useEffect(() => {
     setIsEditing(id === "-1");
+    if (!data) {
+      toast.error("Error while fetching data");
+      return;
+    }
     setTopic(data);
   }, [id, data]);
 
@@ -86,6 +90,7 @@ export default function useTopicInfo(data, setError) {
       setTopic(res);
       setError("");
     } catch (err) {
+      setIsEditing(true);
       handleError(err, setError);
     }
   };

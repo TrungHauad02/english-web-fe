@@ -35,7 +35,7 @@ const ColorButton = styled(Button)(({ color }) => ({
 
 const TestManagement = () => {
   const type = {
-    all : "",
+    all: "",
     mixing: "MIXING",
     reading: "READING",
     listening: "LISTENING",
@@ -59,10 +59,8 @@ const TestManagement = () => {
   };
 
   const handleClose = () => {
-
     setOpen(false);
-    setVersion(version+1);
-   
+    setVersion(version + 1);
   };
 
   const handleSearchChange = (event) => {
@@ -75,9 +73,9 @@ const TestManagement = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getListTest(page, currtype,searchTerm);
+      const data = await getListTest(page, currtype, searchTerm);
       const tests = data.content;
-      setVersionPage(versionPage+1);
+      setVersionPage(versionPage + 1);
       // const allTestsByType = await getListTestByType(currtype);
       // setalltest(allTestsByType);
       const maxSerial = 100;
@@ -92,23 +90,18 @@ const TestManagement = () => {
       } else {
         setList([]);
       }
-      
     };
 
-    
-
     fetchData();
-  }, [page, currtype,searchTerm]);
+  }, [page, currtype, searchTerm]);
 
   const onChangePage = (event, value) => {
     setPage(value);
   };
   const navigate = useNavigate();
- 
 
   const handlebtnDetail = (datatest) => {
-    
-    let newPath = '';
+    let newPath = "";
     switch (datatest.type) {
       case type.mixing:
         newPath = `/teacher/test/mixing`;
@@ -129,12 +122,12 @@ const TestManagement = () => {
         break;
     }
 
-    navigate(newPath, { state: {
-      id: datatest.id,
-      type: datatest.type,
-  }});
-
-
+    navigate(newPath, {
+      state: {
+        id: datatest.id,
+        type: datatest.type,
+      },
+    });
   };
   return (
     <Container maxWidth="lg" sx={{ marginTop: "4rem", marginBottom: "2rem" }}>
@@ -146,7 +139,14 @@ const TestManagement = () => {
       >
         TEST MANAGEMENT
       </Typography>
-      <NewTest key={version} open={open} onClose={handleClose} serial = {newTestSerial} type = {currtype}  handlebtnDetail ={handlebtnDetail}/>
+      <NewTest
+        key={version}
+        open={open}
+        onClose={handleClose}
+        serial={newTestSerial}
+        type={currtype}
+        handlebtnDetail={handlebtnDetail}
+      />
       <Box
         sx={{
           display: "flex",
