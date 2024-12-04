@@ -1,36 +1,53 @@
 import React, { useState } from 'react';
-import { TextField, Button, MenuItem, FormControl, Dialog, DialogActions, DialogContent, DialogTitle, Typography, IconButton } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+  Select,
+  MenuItem,
+  Grid,
+  Box,
+} from '@mui/material';
 import { Add, Cancel, Send } from '@mui/icons-material';
-import { Box } from '@mui/system';
 import { createTest } from '../../../api/test/TestApi';
+import { toast } from 'react-toastify';
+import HelpTextField from './common/HelpTextField';
 
-const NewTest = ({ open, onClose, serial, type,handlebtnDetail }) => {
+const NewTest = ({ open, onClose, serial, handlebtnDetail }) => {
   const [title, setTitle] = useState('');
-  const [duration, setDuration] = useState('');  
-
+  const [duration, setDuration] = useState('');
+  const [testType, setTestType] = useState('');
   const [titleError, setTitleError] = useState('');
   const [durationError, setDurationError] = useState('');
+  const [typeError, setTypeError] = useState('');
 
-  const handleSubmit =  async () => {
+  const handleSubmit = async () => {
     if (validateInput()) {
-        
-     const test = await   createTest({
-        id: '',
-        title: title,
-        duration: duration,
-        serial: serial,
-        type: type.toUpperCase(),
-        status: 'ACTIVE',
-      });
-      handlebtnDetail(test);
-   
+      try {
+        const test = await createTest({
+          id: '',
+          title: title,
+          duration: duration,
+          serial: serial,
+          type: testType.toUpperCase(),
+          status: 'ACTIVE',
+        });
+
+        toast.success(`Created ${test.title} successfully!`);
+        handlebtnDetail(test);
+        onClose();
+      } catch (error) {
+        toast.error(`Failed to create test ${title}`);
+      }
     }
   };
 
   const validateInput = () => {
     let isValid = true;
 
-    // Kiểm tra trường title
     if (title.trim() === '') {
       setTitleError('Title cannot be empty');
       isValid = false;
@@ -46,37 +63,22 @@ const NewTest = ({ open, onClose, serial, type,handlebtnDetail }) => {
       setDurationError('');
     }
 
+    if (testType.trim() === '') {
+      setTypeError('Please select a test type');
+      isValid = false;
+    } else {
+      setTypeError('');
+    }
+
     return isValid;
-  };
-
-  // Hàm validate cho từng trường khi onChange
-  const handleTitleChange = (e) => {
-    const value = e.target.value;
-    setTitle(value);
-    if (value.trim() === '') {
-      setTitleError('Title cannot be empty');
-    } else {
-      setTitleError('');
-    }
-  };
-
-  const handleDurationChange = (e) => {
-    const value = e.target.value;
-    setDuration(value);
-    const durationValue = parseInt(value.trim(), 10);
-    if (isNaN(durationValue) || durationValue <= 0) {
-      setDurationError('Duration must be a valid positive integer');
-    } else {
-      setDurationError('');
-    }
   };
 
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      maxWidth="sm" // Đặt chiều rộng tối đa của dialog
-      fullWidth // Giúp dialog luôn có chiều rộng đầy đủ
+      maxWidth="sm"
+      fullWidth
       PaperProps={{
         style: {
           padding: '20px',
@@ -97,60 +99,68 @@ const NewTest = ({ open, onClose, serial, type,handlebtnDetail }) => {
         <Typography variant="subtitle1" style={{ marginBottom: '16px', fontSize: '1rem', color: '#555' }}>
           Please fill in the details to create a new test.
         </Typography>
-        <FormControl fullWidth margin="normal">
-          <TextField
-            label="Serial"
-            value={serial}
-            variant="outlined"
-            color="secondary"
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-        </FormControl>
-        <FormControl fullWidth margin="normal">
-          <TextField
-            label="Title"
-            value={title}
-            onChange={handleTitleChange}
-            error={Boolean(titleError)}
-            helperText={titleError || ' '}
-            variant="outlined"
-            color="secondary"
-            FormHelperTextProps={{ style: { minHeight: '20px', whiteSpace: 'nowrap' } }} // Đảm bảo chiều cao và không xuống dòng
-          />
-        </FormControl>
-        <FormControl fullWidth margin="normal">
-          <TextField
-            label="Duration (minutes)"
-            value={duration}
-            onChange={handleDurationChange}
-            type="number"
-            error={Boolean(durationError)}
-            helperText={durationError || ' '}
-            variant="outlined"
-            color="secondary"
-            FormHelperTextProps={{ style: { minHeight: '20px', whiteSpace: 'nowrap' } }} // Đảm bảo chiều cao và không xuống dòng
-          />
-        </FormControl>
-        <FormControl fullWidth margin="normal">
-          <TextField
-            label="Test Type"
-            value={type}
-            variant="outlined"
-            color="secondary"
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-        </FormControl>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <HelpTextField
+              label="Title *"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              error={Boolean(titleError)}
+              errorText={titleError}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <HelpTextField
+              label="Serial*"
+              value={serial}
+              disabled={true}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <HelpTextField
+              label="Duration (minutes)*"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+              error={Boolean(durationError)}
+              errorText={durationError}
+              type="number"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Box display="flex" alignItems="center">
+              <Typography
+                variant="body1"
+                style={{ fontWeight: 'bold', marginRight: '16px', minWidth: '150px' }}
+              >
+                Type *
+              </Typography>
+              <Select
+                value={testType}
+                onChange={(e) => setTestType(e.target.value)}
+                variant="outlined"
+                style={{ flexGrow: 1 }}
+              >
+                <MenuItem value="MIXING">Mixing</MenuItem>
+                <MenuItem value="READING">Reading</MenuItem>
+                <MenuItem value="LISTENING">Listening</MenuItem>
+                <MenuItem value="SPEAKING">Speaking</MenuItem>
+                <MenuItem value="WRITING">Writing</MenuItem>
+              </Select>
+            </Box>
+            {typeError && (
+              <Typography color="error" variant="caption" style={{ marginTop: '4px', display: 'block' }}>
+                {typeError}
+              </Typography>
+            )}
+          </Grid>
+        </Grid>
       </DialogContent>
-      <DialogActions style={{ justifyContent: 'center', padding: '16px' }}>
+      <DialogActions>
         <Button
           onClick={onClose}
           variant="contained"
           startIcon={<Cancel />}
-          style={{ backgroundColor: '#ffcc00', color: 'black', marginRight: '10px' }}
+          style={{ backgroundColor: "#D9D9D9", color: 'black' }}
         >
           Cancel
         </Button>
@@ -159,7 +169,6 @@ const NewTest = ({ open, onClose, serial, type,handlebtnDetail }) => {
           color="primary"
           variant="contained"
           startIcon={<Send />}
-          style={{ backgroundColor: '#6200ea', color: 'white', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}
         >
           Submit
         </Button>

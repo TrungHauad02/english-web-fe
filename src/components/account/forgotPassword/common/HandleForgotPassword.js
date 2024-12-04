@@ -9,10 +9,12 @@ export const handleGetOtp = async (email, setStep, setTimer, setIsLoading) => {
     setStep(2);
     setTimer(60);
   } catch (error) {
-    console.error("Error sending OTP:", error);
-    toast.error("Failed to send OTP. Please try again.");
-  }
-  finally{
+    if (error.response && error.response.status === 404) {
+      toast.error("Email not found. Please check the email address.");
+    } else {
+      toast.error("Failed to send OTP. Please try again.");
+    }
+  } finally {
     setIsLoading(false);
   }
 };

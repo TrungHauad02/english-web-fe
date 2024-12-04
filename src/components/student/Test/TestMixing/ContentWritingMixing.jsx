@@ -59,17 +59,8 @@ function ContentWritingMixing({ datatestList, title, answers,setAnswers ,focusId
 
   const questionRefs = useRef([]);
 
+ 
   useEffect(() => {
-    const savedAnswers = JSON.parse(localStorage.getItem('selectedAnswers' + datatestList[0].testId)) || {};
-    const initialAnswers = {};
-    datatestList.forEach(datatest => {
-      initialAnswers[datatest.id] = savedAnswers[datatest.id] || { essay: '', wordCount: 0 };
-    });
-    setAnswers(initialAnswers);
-  }, [datatestList, title]);
-
-  useEffect(() => {
-    // Cuộn đến phần tử có serial bằng với focusId
     const targetIndex = datatestList.findIndex(item => item.serial === focusId);
     if (targetIndex !== -1) {
       setCurrentIndex(targetIndex);

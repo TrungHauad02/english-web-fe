@@ -53,7 +53,24 @@ export const handleSignUp = async (name, email, password, rePassword, toggleForm
 
     toast.success("Sign up successful!"); 
     toggleForm("signin"); 
-  } catch (error) {
-    toast.error("Sign up failed. Please try again."); 
+  } catch (err) {
+    if (err.response) {
+      const { status, data } = err.response;
+
+      if (status === 409) {
+        toast.error("Email already exists. Please use another email.");
+      } else if (status === 401) {
+        toast.error("Unauthorized. Please check your credentials.");
+      } else {
+        toast.error("Sign up failed. Please try again.");
+      }
+      console.error("Error response:", data);
+    } else if (err.request) {
+      toast.error("Network error. Please check your internet connection.");
+      throw new Error("Network error");
+    } else {
+      toast.error("An unexpected error occurred.");
+      throw new Error(err.message || "Unexpected error");
+    }
   }
 };

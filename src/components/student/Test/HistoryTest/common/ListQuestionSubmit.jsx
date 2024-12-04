@@ -85,7 +85,7 @@ function ListQuestionSubmit({ dataTest, focusId, dataSubmitTest }) {
                                     value={answer.id}
                                     control={
                                         <Radio
-                                            onClick={(e) => e.preventDefault()} // Prevent selecting again
+                                            onClick={(e) => e.preventDefault()} // 
                                         />
                                     }
                                     label={` ${answer.content}`}

@@ -7,7 +7,7 @@ function ListQuestionSubmit({ dataTest, focusId, dataSubmitTest }) {
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const questionRefs = useRef({});
     const [isFocused, setIsFocused] = useState({});
-    const [expandedSections, setExpandedSections] = useState({}); // To track which sections are expanded
+    const [expandedSections, setExpandedSections] = useState({}); 
 
     useEffect(() => {
         if (focusId && questionRefs.current[focusId]) {
@@ -55,7 +55,7 @@ function ListQuestionSubmit({ dataTest, focusId, dataSubmitTest }) {
                             sx={{
                                 padding: '0.5rem 1rem',
                                 borderRadius: '50%',
-                                backgroundColor: '#ACCD0A',
+                                backgroundColor: '#00796B',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',

@@ -15,13 +15,22 @@ import {
   MenuItem,
   Select,
   Stack,
+  IconButton,
+  Switch,
+  colors
 } from "@mui/material";
+
+import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from "@mui/material/styles";
 import { useEffect } from "react";
 import { getListTest } from "api/test/listTestApi";
+import { getMaxSerial,updateStatus,deleteTest } from "api/test/TestApi";
 import CustomPagination from "shared/component/pagination/CustomPagination";
 import { useLocation, useNavigate } from "react-router-dom";
+import ConfirmDialog from "shared/component/confirmDialog/ConfirmDialog";
 import NewTest from "./NewTest";
+import useColor from "shared/color/Color";
+import {  toast } from 'react-toastify';
 const ColorButton = styled(Button)(({ color }) => ({
   borderRadius: "8px",
   padding: "8px 24px",
@@ -35,7 +44,7 @@ const ColorButton = styled(Button)(({ color }) => ({
 
 const TestManagement = () => {
   const type = {
-    all: "",
+    all : "ALL",
     mixing: "MIXING",
     reading: "READING",
     listening: "LISTENING",
@@ -46,13 +55,41 @@ const TestManagement = () => {
   const [list, setList] = useState([]);
   const [alltest, setalltest] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
-  const [currtype, setCurrtype] = useState(type.mixing);
+  const [currtype, setCurrtype] = useState("ALL");
   const [totalPage, setTotalPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
-  const [newTestSerial, setNewTestSerial] = useState(1);
   const [version, setVersion] = useState(1);
   const [versionPage, setVersionPage] = useState(1);
+  const [maxSerial,setMaxSerial] = useState(0);
+  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
+  const [openDialogDelete, setOpenDialogDelete] = useState(false);
+  const [testDelete,setTestDelete] = useState(0);
+
+  const handleOpenDialogDelete = (testDelete) => {
+    setTestDelete(testDelete);
+    setOpenDialogDelete(true);
+  };
+
+  const handleCloseDialogDelete = () => {
+    setOpenDialogDelete(false);
+  };
+  const handleAgreeDelete = async () => {
+    await deleteTest(testDelete.id)
+      .then(() => {
+        toast.success(`${testDelete.title} deleted successfully!`);
+        setList((prevList) => prevList.filter((test) => test.id !== testDelete.id));
+        handleCloseDialogDelete();
+      })
+      .catch(() => {
+        toast.error(`Failed to delete ${testDelete.title}`);
+        handleCloseDialogDelete();
+      });
+  };
+
+  
+
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -73,15 +110,14 @@ const TestManagement = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getListTest(page, currtype, searchTerm);
+      const adjustedType = currtype === "ALL" ? "" : currtype;
+    
+      const data = await getListTest(page, adjustedType,searchTerm);
       const tests = data.content;
-      setVersionPage(versionPage + 1);
-      // const allTestsByType = await getListTestByType(currtype);
-      // setalltest(allTestsByType);
-      const maxSerial = 100;
-      // allTestsByType.reduce((max, test) => Math.max(max, test.serial), 0);
-      setNewTestSerial(maxSerial + 1);
-      console.log(data);
+      const serial  = await getMaxSerial();
+      setMaxSerial(serial+1||0);
+     
+      setVersionPage(versionPage+1);
 
       setTotalPage(data.totalPages);
 
@@ -91,13 +127,33 @@ const TestManagement = () => {
         setList([]);
       }
     };
-
     fetchData();
   }, [page, currtype, searchTerm]);
+
+
+  const handleStatusChange = (event, test) => {
+    updateStatus(test.id)
+      .then((response) => {
+        toast.success(`Status of "${test.title}" updated successfully!`);
+
+        setList((prevList) => {
+          return prevList.map((item) => {
+            if (item.id === test.id) {
+              return { ...item, status: event.target.checked ? "INACTIVE" : "ACTIVE" }; 
+            }
+            return item;
+          });
+        });
+      })
+      .catch((error) => {
+        toast.error('Failed to update status!');
+      });
+  };
 
   const onChangePage = (event, value) => {
     setPage(value);
   };
+  
   const navigate = useNavigate();
 
   const handlebtnDetail = (datatest) => {
@@ -139,13 +195,15 @@ const TestManagement = () => {
       >
         TEST MANAGEMENT
       </Typography>
-      <NewTest
-        key={version}
-        open={open}
-        onClose={handleClose}
-        serial={newTestSerial}
-        type={currtype}
-        handlebtnDetail={handlebtnDetail}
+      <NewTest key={version} open={open} onClose={handleClose} serial = {maxSerial}  handlebtnDetail ={handlebtnDetail}/>
+      <ConfirmDialog
+        open={openDialogDelete}
+        onClose={handleCloseDialogDelete}
+        onAgree={handleAgreeDelete}
+        title="Confirm Deletion"  
+        content={`Are you sure you want to delete ${testDelete?.title}?`}
+        cancelText="Cancel"  
+        agreeText="Delete"  
       />
       <Box
         sx={{
@@ -162,6 +220,7 @@ const TestManagement = () => {
           variant="outlined"
           sx={{ minWidth: 120 }}
         >
+          <MenuItem value="ALL">All</MenuItem>
           <MenuItem value={type.mixing}>Mixing</MenuItem>
           <MenuItem value={type.reading}>Reading</MenuItem>
           <MenuItem value={type.listening}>Listening</MenuItem>
@@ -179,7 +238,7 @@ const TestManagement = () => {
         />
 
         <ColorButton
-          color="#FFD700"
+          color={Color2}
           variant="contained"
           sx={{ marginLeft: 2, whiteSpace: "nowrap" }}
           onClick={handleOpen}
@@ -187,35 +246,84 @@ const TestManagement = () => {
           Add new test
         </ColorButton>
       </Box>
-      <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Serial</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell align="center">Details</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {list.map((test) => (
-              <TableRow key={test.serial}>
-                <TableCell>{test.serial}</TableCell>
-                <TableCell>{test.title}</TableCell>
-                <TableCell>{test.status}</TableCell>
-                <TableCell align="center">
-                  <Button
-                    variant="outlined"
-                    onClick={() => handlebtnDetail(test)}
-                  >
-                    Detail
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: "8px", overflow: "hidden" }}>
+  <Table>
+    <TableHead>
+      <TableRow sx={{ backgroundColor: "#f0f0f0" }}>
+        <TableCell sx={{ fontWeight: "bold" }}>Serial</TableCell>
+        <TableCell sx={{ fontWeight: "bold" }}>Title</TableCell>
+        <TableCell sx={{ fontWeight: "bold" }}>Type</TableCell>
+        <TableCell sx={{ fontWeight: "bold", textAlign: "center" }}>Details</TableCell>
+        <TableCell sx={{ fontWeight: "bold", textAlign: "center" }}>Change Status</TableCell>
+        <TableCell sx={{ fontWeight: "bold", textAlign: "center" }}>Delete</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {list.map((test, index) => (
+        <TableRow
+          key={test.id}
+          sx={{
+            backgroundColor: index % 2 === 0 ? "#fafafa" : "#ffffff",
+            "&:hover": { backgroundColor: "#f1f1f1" },
+          }}
+        >
+          <TableCell>{test.serial}</TableCell>
+          <TableCell>{test.title}</TableCell>
+          <TableCell>{test.type}</TableCell>
+          <TableCell align="center">
+              <Button
+                onClick={() => handlebtnDetail(test)}
+                sx={{
+                  backgroundColor: "#000", 
+                  color: "#fff", 
+                  borderRadius: "1rem", 
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  padding: "0.5rem 1rem", 
+                  "&:hover": { backgroundColor: "#333" }, 
+                }}
+              >
+                Details
+              </Button>
+            </TableCell>
+
+
+                  <TableCell align="center">
+                  <Switch
+                  checked={test.status === "ACTIVE"} 
+                  onChange={(event) => handleStatusChange(event, test)}
+                  inputProps={{ "aria-label": "controlled" }}
+                  sx={{
+                    "& .MuiSwitch-switchBase.Mui-checked": {
+                      color: Color2,
+                    },
+                    "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                      backgroundColor: Color2,
+                    },
+                    "& .MuiSwitch-track": {
+                      backgroundColor: "#ccc", 
+                    },
+                  }}
+                />
+        </TableCell>
+
+          <TableCell align="center">
+            <IconButton
+              onClick={() => handleOpenDialogDelete(test)}
+              sx={{
+                color: "red",
+                "&:hover": { backgroundColor: "rgba(255, 0, 0, 0.1)" },
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+</TableContainer>
+
       <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
         <CustomPagination
           count={totalPage}
@@ -225,5 +333,6 @@ const TestManagement = () => {
       </Stack>
     </Container>
   );
+  
 };
 export default TestManagement;

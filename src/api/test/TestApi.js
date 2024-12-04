@@ -44,3 +44,21 @@ export function deleteTest(testId) {
       throw error;
     });
 }
+export function getMaxSerial() {
+  return apiClient
+    .get("/test/max-serial")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching max serial:", error);
+      throw error;
+    });
+}
+export function updateStatus(id) {
+  return apiClient
+    .patch(`/test/update-status/${id}`)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error updating status:", error);
+      throw error;
+    });
+}
