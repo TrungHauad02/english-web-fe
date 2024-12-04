@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Box,
-  TextField,
   Select,
   MenuItem,
   Button,
@@ -9,30 +8,15 @@ import {
   Paper,
   FormControl,
 } from "@mui/material";
+import {  toast } from 'react-toastify';
 import { styled } from "@mui/material/styles";
 import { updateTest } from "api/test/TestApi";
+import HelpTextField from "./HelpTextField"; 
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
-  backgroundColor: "#fff5e6",
+  backgroundColor: "#F0F0F0",
   borderRadius: theme.spacing(2),
-}));
-
-const StyledTextField = styled(TextField)(({ theme }) => ({
-  "& .MuiOutlinedInput-root": {
-    height: "3rem",
-    borderRadius: "0.5rem",
-    backgroundColor: "white",
-    "& input": {
-      color: "#9E9E9E",
-    },
-    "& fieldset": {
-      borderColor: "#E0E0E0",
-    },
-  },
-  "& .MuiInputLabel-root": {
-    display: "none",
-  },
 }));
 
 const ButtonContainer = styled(Box)(({ theme }) => ({
@@ -57,6 +41,7 @@ function InformationTest({ data }) {
   const [formData, setFormData] = useState(data);
   const [backupData, setBackupData] = useState(data);
   const [editMode, setEditMode] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -70,21 +55,36 @@ function InformationTest({ data }) {
     setEditMode(true);
   };
 
+  const validateForm = () => {
+    let formErrors = {};
+    if (!formData.title) formErrors.title = "Title is required";
+    if (!formData.duration || isNaN(formData.duration) || formData.duration <= 0) {
+      formErrors.duration = "Duration must be a positive number";
+    }
+    if (!formData.status) formErrors.status = "Status is required";
+    setErrors(formErrors);
+    return Object.keys(formErrors).length === 0;
+  };
+
   const handleSave = async () => {
-    try {
-      const updatedData = await updateTest(data.id, formData);
-      
-      setFormData((prevState) => ({
-        ...prevState,
-        ...updatedData,
-      }));
-      
-      setEditMode(false);
-    } catch (error) {
-      console.error("Error updating test:", error);
+    if (validateForm()) {
+      try {
+        const updatedData = await updateTest(data.id, formData).then(() => {
+          toast.success(`${data.title} updated successfully!`);
+        })
+        .catch(() => {
+          toast.error(`Failed to updated ${data.title}`);
+        });
+        setFormData((prevState) => ({
+          ...prevState,
+          ...updatedData,
+        }));
+        setEditMode(false);
+      } catch (error) {
+        console.error("Error updating test:", error);
+      }
     }
   };
-  
 
   const handleCancel = () => {
     setFormData(backupData);
@@ -103,68 +103,60 @@ function InformationTest({ data }) {
           TEST DETAILS MIXED
         </Typography>
 
-        <Box sx={{ mb: 1 }}>
-          <Typography variant="h7" sx={{ mb: 1, fontWeight: "bold" }}>
-            Title
-          </Typography>
-          <StyledTextField
-            fullWidth
-            placeholder="Speaking Detail 1"
+        <Box sx={{ mb: 2 }}>
+          <HelpTextField
+            label="Title *"
             name="title"
             value={formData.title}
             onChange={handleChange}
-            disabled={!editMode} // Chỉ có thể chỉnh sửa khi ở chế độ edit
+            disabled={!editMode}
+            error={!!errors.title}
+            errorText={errors.title}
           />
         </Box>
 
-        <Box sx={{ mb: 1 }}>
-          <Typography variant="h7" sx={{ mb: 1, fontWeight: "bold" }}>
-            Serial
-          </Typography>
-          <StyledTextField
-            fullWidth
-            placeholder="1"
+        <Box sx={{ mb: 2 }}>
+          <HelpTextField
+            label="Serial"
             name="serial"
             value={formData.serial}
             onChange={handleChange}
-            disabled={!editMode}
+            disabled={true}
           />
         </Box>
 
-        <Box sx={{ mb: 1 }}>
-          <Typography variant="h7" sx={{ mb: 1, fontWeight: "bold" }}>
-            Duration
-          </Typography>
-          <StyledTextField
-            fullWidth
-            placeholder="Duration"
+        <Box sx={{ mb: 2 }}>
+          <HelpTextField
+            label="Duration (minutes) *"
             name="duration"
             value={formData.duration}
             onChange={handleChange}
             disabled={!editMode}
+            error={!!errors.duration}
+            errorText={errors.duration}
           />
         </Box>
 
-        <Box sx={{ mb: 1 }}>
-          <Typography variant="h7" sx={{ mb: 1, fontWeight: "bold" }}>
-            Type
-          </Typography>
-          <StyledTextField
-            fullWidth
-            placeholder="Type"
+        <Box sx={{ mb: 2}}>
+          <HelpTextField
+            label="Type"
             name="type"
             value={formData.type}
             onChange={handleChange}
-            disabled={!editMode}
+            disabled={true}
           />
         </Box>
 
-        <Box sx={{ mb: 1 }}>
-          <Typography variant="h7" sx={{ mb: 1, fontWeight: "bold" }}>
-            Status
-          </Typography>
-          <FormControl fullWidth>
+        <Box sx={{ mb: 2 }}>
+          <Box display="flex" alignItems="center">
+            <Typography
+              variant="body1"
+              style={{ fontWeight: 'bold', marginRight: '16px', minWidth: '150px' }}
+            >
+              Status
+            </Typography>
             <Select
+                fullWidth
               value={formData.status}
               onChange={handleChange}
               name="status"
@@ -185,7 +177,12 @@ function InformationTest({ data }) {
               <MenuItem value="ACTIVE">Active</MenuItem>
               <MenuItem value="INACTIVE">Inactive</MenuItem>
             </Select>
-          </FormControl>
+          </Box>
+          {errors.status && (
+            <Typography color="error" variant="caption" style={{ marginTop: '4px', display: 'block' }}>
+              {errors.status}
+            </Typography>
+          )}
         </Box>
 
         <ButtonContainer>

@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { getRoleFromToken } from "api/security/GetRoleToken";
 import axios from "axios"; 
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
@@ -46,6 +47,7 @@ export default function AuthProvider({ children }) {
     setUserRole(null);
     sessionStorage.removeItem("authToken");
     localStorage.removeItem("tokenExpiration");
+    Cookies.remove('JSESSIONID'); 
     toast.info("Logout");
   }
 

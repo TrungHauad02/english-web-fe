@@ -17,7 +17,6 @@ const DurationContainer = styled(Box)(({ theme }) => ({
   fontSize: "14px",
   float:'right',
   padding: "1.5rem 3rem",
-  marginRight: theme.spacing(2),
   border: '1px solid #000000',
   display: 'flex',
   justifyContent: 'center', 
@@ -233,109 +232,112 @@ function TestListening() {
 
   return (
     <Box>
-      <MainTitle
-        title={datatest.type}
-        bg="https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
-      />
-          <DurationContainer sx={{ marginRight: "5%" ,fontWeight: 'bold'  }} elevation={1}>
-        <Typography align="center" >
-        Time remaining: 
-        </Typography>
-        <Typography align="center" sx={{marginLeft:'1rem'}} >
-        {
-      datatest && 
-      <CountdownTimer
-      duration={duration}
-      handleSubmit={handleSubmit}
-      dbName={"MyDatabase"}
-      storeName={storeName}
-    />
-     }
+  <MainTitle
+    title={datatest.type}
+    bg="https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
+  />
+  <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
+
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "right", 
+        alignItems: "center",
+    
+      }}
+    >
+      <DurationContainer>
+        <Typography align="center">Time remaining:</Typography>
+        <Typography align="center" sx={{ marginLeft: "1rem" }}>
+          {datatest && (
+            <CountdownTimer
+              duration={duration}
+              handleSubmit={handleSubmit}
+              dbName={"MyDatabase"}
+              storeName={storeName}
+            />
+          )}
         </Typography>
       </DurationContainer>
+    </Box>
+
+    <Box
+      sx={{
+        marginBottom: "1rem",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
       <Box
         sx={{
-          marginTop: "5%",
-          marginBottom: "1rem",
-          padding: "0.5rem 1rem",
           display: "flex",
           justifyContent: "center",
-          marginLeft: "5%",
-          marginRight: "5%",
         }}
       >
-        <Box
+        <Typography
+          variant="body1"
           sx={{
-            display: "flex",
-            mt: 5,
-            marginLeft: "5%",
-            width: "45%",
-            justifyContent: "center",
-          }}
-        >
-          <Box
-            variant="body1"
-            sx={{
-              mx: 2,
-              background: "#E0F7FA",
-              padding: "0.5rem 2rem",
-              textAlign: "center",
-              alignContent: "center",
-              fontSize: "1rem",
-              fontFamily: "Roboto",
-              fontWeight: "500",
-            }}
-          >
-            {indexVisible + 1}/{data.length}
-          </Box>
-        </Box>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          marginLeft: "5%",
-          marginRight: "5%",
-          marginBottom: "1rem",
-        }}
-      >
-        <Box sx={{ width: "100%" }}>
-          <Box
-            sx={{
-              border: "1px solid black",
-              borderRadius: "1rem",
-              padding: "0.5rem",
-              width: "100%",
-            }}
-          >
-            <OneListeningTest
-              onelistening={data[indexVisible]}
-              audioRef={audioRef}
-              title={title}
-              onAudioEnd={onAudioEnd}
-              answers={answers}
-              setAnswers={setAnswers}
-            />
-          </Box>
-        </Box>
-      </Box>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Button
-          sx={{
-            border: "0.0001rem solid black",
-            borderRadius: "1rem",
-            background: "#00796B",
-            color: "white",
+            mx: 2,
+            background: "#E0F7FA",
+            padding: "0.5rem 2rem",
             textAlign: "center",
-            marginBottom: "2%",
-            padding: "1rem 2rem",
+            fontSize: "1rem",
+            fontFamily: "Roboto",
+            fontWeight: "500",
           }}
-          onClick={handleSubmit}
         >
-          SUBMIT
-        </Button>
+          {indexVisible + 1}/{data.length}
+        </Typography>
       </Box>
     </Box>
+
+  
+    <Box
+      sx={{
+        display: "flex",
+        marginBottom: "1rem",
+      }}
+    >
+      <Box sx={{ width: "100%" }}>
+        <Box
+          sx={{
+            border: "1px solid black",
+            borderRadius: "1rem",
+            padding: "0.5rem",
+            width: "100%",
+          }}
+        >
+          <OneListeningTest
+            onelistening={data[indexVisible]}
+            audioRef={audioRef}
+            title={title}
+            onAudioEnd={onAudioEnd}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        </Box>
+      </Box>
+    </Box>
+
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Button
+        sx={{
+          border: "0.0001rem solid black",
+          borderRadius: "1rem",
+          background: "#00796B",
+          color: "white",
+          textAlign: "center",
+          marginBottom: "2%",
+          padding: "1rem 2rem",
+        }}
+        onClick={handleSubmit}
+      >
+        SUBMIT
+      </Button>
+    </Box>
+  </Box>
+</Box>
+
   );
 }
 

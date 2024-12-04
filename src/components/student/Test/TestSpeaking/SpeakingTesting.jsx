@@ -30,7 +30,7 @@ const DurationContainer = styled(Box)(({ theme }) => ({
   alignItems: 'center',
 }));
 
-export default function InterviewInstruction({ datatest, status, setStatus , setSubmitTest}) {
+export default function SpeakingTesting({ datatest, status, setStatus , setSubmitTest}) {
   const storeName = "MyStore" + datatest.id;
   const navigate = useNavigate();
   const [indexSpeaking, setIndexSpeaking] = useState(0);
