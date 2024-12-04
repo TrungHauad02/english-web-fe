@@ -8,7 +8,6 @@ export default function SearchBar({ title, onHandleSearch, sx, maxWidth }) {
     ...sx,
     color: "#828282",
     background: "transparent",
-    padding: "1rem 1.5rem",
     border: "1px solid #828282",
     boxShadow: "none",
     textTransform: "capitalize",
@@ -33,11 +32,10 @@ export default function SearchBar({ title, onHandleSearch, sx, maxWidth }) {
       />
       <Button
         variant={"contained"}
-        startIcon={<Search />}
         sx={complexSX}
         onClick={() => onHandleSearch(searchText)}
       >
-        Search
+        <Search />
       </Button>
     </Stack>
   );

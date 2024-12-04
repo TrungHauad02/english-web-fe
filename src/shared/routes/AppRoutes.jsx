@@ -40,7 +40,6 @@ import TeacherManagement from "components/teacher/TeacherManagement";
 import AdminManagement from "components/admin/AdminManagement";
 import ErrorPage from "shared/utils/ErrorPage";
 
-
 export default function AppRoutes() {
   const router = createBrowserRouter([
     {
@@ -53,7 +52,7 @@ export default function AppRoutes() {
     },
     {
       path: "/account",
-      element: <Home />
+      element: <Home />,
     },
     {
       path: "/student/*",
@@ -62,63 +61,63 @@ export default function AppRoutes() {
           <HomeStudent />
         </AuthenticatedRoute>
       ),
-      errorElement: <ErrorPage errorType={404}/>,
+      errorElement: <ErrorPage errorType={404} />,
       children: [
         {
           path: "skill",
-          element: <Skills />
+          element: <Skills />,
         },
         {
           path: "history-test",
-          element: <HistoryTest />
+          element: <HistoryTest />,
         },
         {
           path: "history-test/reading",
-          element: <HistoryTestReading />
+          element: <HistoryTestReading />,
         },
         {
           path: "history-test/listening",
-          element: <HistoryTestListening />
+          element: <HistoryTestListening />,
         },
         {
           path: "history-test/writing",
-          element: <HistoryTestWriting />
+          element: <HistoryTestWriting />,
         },
         {
           path: "history-test/speaking",
-          element: <HistoryTestSpeaking />
+          element: <HistoryTestSpeaking />,
         },
         {
           path: "history-test/mixing",
-          element: <HistoryTestMixing />
+          element: <HistoryTestMixing />,
         },
         {
           path: "study-schedule",
-          element: <StudySchedulePage />
+          element: <StudySchedulePage />,
         },
         {
           path: "tests",
-          element: <ListTest />
+          element: <ListTest />,
         },
         {
           path: "test/listening",
-          element: <TestListening />
+          element: <TestListening />,
         },
         {
           path: "test/speaking",
-          element: <TestSpeaking />
+          element: <TestSpeaking />,
         },
         {
           path: "test/reading",
-          element: <TestReading />
+          element: <TestReading />,
         },
         {
           path: "test/writing",
-          element: <TestWriting />
+          element: <TestWriting />,
         },
         {
           path: "test/mixing",
-          element: <TestMixing />
+          element: <TestMixing />,
         },
         ...site.map((page) => ({
           path: page.path,
@@ -148,7 +147,7 @@ export default function AppRoutes() {
           <HomeTeacher />
         </AuthenticatedRoute>
       ),
-      errorElement: <ErrorPage errorType={404}/>,
+      errorElement: <ErrorPage errorType={404} />,
     },
     {
       path: "/teacher/*",
@@ -157,7 +156,7 @@ export default function AppRoutes() {
           <HomeTeacher />
         </AuthenticatedRoute>
       ),
-      errorElement: <ErrorPage errorType={404}/>,
+      errorElement: <ErrorPage errorType={404} />,
       children: [
         {
           path: "",
@@ -233,7 +232,7 @@ export default function AppRoutes() {
         },
         {
           path: "test",
-          element: <HomeTest />,
+          element: <ListTopicManagement title={"test"} />,
         },
         {
           path: "*",
@@ -248,7 +247,7 @@ export default function AppRoutes() {
           <HomeAdmin />
         </AuthenticatedRoute>
       ),
-      errorElement: <ErrorPage errorType={404}/>,
+      errorElement: <ErrorPage errorType={404} />,
     },
     {
       path: "/admin/*",
@@ -257,7 +256,7 @@ export default function AppRoutes() {
           <HomeAdmin />
         </AuthenticatedRoute>
       ),
-      errorElement: <ErrorPage errorType={404}/>,
+      errorElement: <ErrorPage errorType={404} />,
       children: [
         {
           path: "",
@@ -279,7 +278,7 @@ export default function AppRoutes() {
     },
     {
       path: "*",
-      element: <ErrorPage errorType={404}/>,
+      element: <ErrorPage errorType={404} />,
     },
   ]);
   return <RouterProvider router={router} />;

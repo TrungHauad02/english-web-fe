@@ -9,10 +9,16 @@ export default function useTopicList(title) {
   const [totalElements, setTotalElements] = useState(0);
   const [error, setError] = useState(null);
   const [nameSearch, setNameSearch] = useState("");
+  const [curTitle, setCurTitle] = useState(title);
   const navigate = useNavigate();
 
   useEffect(() => {
     const loadTopics = async () => {
+      if (title !== curTitle) {
+        setDisplayList([]);
+        setPage(0);
+        setCurTitle(title);
+      }
       setIsLoading(true);
       setError(null);
       try {
@@ -37,12 +43,14 @@ export default function useTopicList(title) {
   };
 
   function handleSearch(text) {
+    if (nameSearch === text) return;
     setDisplayList([]);
     setNameSearch(text);
     return;
   }
 
   function handleLoadMore() {
+    if (displayList.length >= totalElements) return;
     setPage((prevPage) => prevPage + 1);
   }
 

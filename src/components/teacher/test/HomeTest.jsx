@@ -97,8 +97,7 @@ const TestManagement = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setVersion(version+1);
-   
+    setVersion(version + 1);
   };
 
   const handleSearchChange = (event) => {
@@ -119,7 +118,6 @@ const TestManagement = () => {
       setMaxSerial(serial+1||0);
      
       setVersionPage(versionPage+1);
-   
 
       setTotalPage(data.totalPages);
 
@@ -128,10 +126,9 @@ const TestManagement = () => {
       } else {
         setList([]);
       }
-      
     };
     fetchData();
-  }, [page, currtype,searchTerm]);
+  }, [page, currtype, searchTerm]);
 
 
   const handleStatusChange = (event, test) => {
@@ -160,8 +157,7 @@ const TestManagement = () => {
   const navigate = useNavigate();
 
   const handlebtnDetail = (datatest) => {
-    
-    let newPath = '';
+    let newPath = "";
     switch (datatest.type) {
       case type.mixing:
         newPath = `/teacher/test/mixing`;
@@ -182,12 +178,12 @@ const TestManagement = () => {
         break;
     }
 
-    navigate(newPath, { state: {
-      id: datatest.id,
-      type: datatest.type,
-  }});
-
-
+    navigate(newPath, {
+      state: {
+        id: datatest.id,
+        type: datatest.type,
+      },
+    });
   };
   return (
     <Container maxWidth="lg" sx={{ marginTop: "4rem", marginBottom: "2rem" }}>
@@ -209,7 +205,6 @@ const TestManagement = () => {
         cancelText="Cancel"  
         agreeText="Delete"  
       />
-
       <Box
         sx={{
           display: "flex",
@@ -328,8 +323,6 @@ const TestManagement = () => {
     </TableBody>
   </Table>
 </TableContainer>
-
-
 
       <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
         <CustomPagination
