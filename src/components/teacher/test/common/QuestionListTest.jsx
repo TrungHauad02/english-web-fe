@@ -12,27 +12,35 @@ import {
   Paper,
   IconButton,
   Button,
+  Switch,
 } from "@mui/material";
+import ConfirmDialog from "shared/component/confirmDialog/ConfirmDialog";
+import {  toast } from 'react-toastify';
+import useColor from "shared/color/Color";
 import { styled } from "@mui/material/styles";
 import { PlusCircle } from "lucide-react";
 import DeleteIcon from "@mui/icons-material/DeleteOutline";
 import { DeleteQuestionTest } from "../Mixing/DeleteQuestionTest";
-
+import { updateTestReading } from "api/test/TestReadingApi";
+import { updateTestListening } from "api/test/TestListeningApi";
+import { updateTestSpeaking } from "api/test/TestSpeakingApi";
+import { updateTestWriting } from "api/test/TestWritingApi";
+import { updateTestMixingQuestion } from "api/test/TestMixingQuestionApi";
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
-  backgroundColor: "#fff5e6",
+  backgroundColor: "#F0F0F0",
   borderRadius: theme.spacing(2),
 }));
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   marginBottom: theme.spacing(3),
   "& .MuiTab-root": {
-    backgroundColor: "#D4E9B9",
+    backgroundColor: "#E0F7FA",
     margin: "0 0.2rem",
     borderRadius: "0.5rem 0.5rem 0 0",
     color: "black",
     "&.Mui-selected": {
-      backgroundColor: "#8BC34A",
+      backgroundColor: "#00796B",
       color: "black",
     },
   },
@@ -54,6 +62,8 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
 
 function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
   const [currentTab, setCurrentTab] = useState(0);
+  
+  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
   const tabs = ["VOCABULARY", "GRAMMAR", "READING", "LISTENING", "SPEAKING", "WRITING"];
   const [datamixing, setDatamixing] = useState([]);
 
@@ -131,6 +141,41 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
 
     return questions;
   };
+
+const handleStatusChange = (event, itemUpdate) => {
+  let updateStatusFunction;
+  switch (itemUpdate.type) {
+    case "READING":
+      updateStatusFunction = updateTestReading;
+      break;
+    case "LISTENING":
+      updateStatusFunction = updateTestListening;
+      break;
+    case "SPEAKING":
+      updateStatusFunction = updateTestSpeaking;
+      break;
+    case "WRITING":
+      updateStatusFunction = updateTestWriting;
+      break;
+    default:
+      updateStatusFunction = updateTestMixingQuestion;
+      break;
+  }
+
+
+  updateStatusFunction(itemUpdate.id,{
+    ...itemUpdate,
+    status: event.target.checked ? "ACTIVE" : "INACTIVE",
+  }) 
+    .then((response) => {
+      toast.success(`Status of serial ${itemUpdate.serialquestion} with  ${currentTab > 1 ? 'Part' : 'Question'}  ${tabs[currentTab]} updated successfully!`);
+      setQuestionUpdate(itemUpdate);
+    })
+    .catch((error) => {
+      toast.error('Failed to update status!');
+    });
+};
+
 
   const questions = getListSerialTest();
 
@@ -238,32 +283,58 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
         content: "",
       }),
     };
-
-    
-
     handleRowClick(newQuestion);
   };
 
-  const handleDeleteQuestion = async (question) => {
+  const [openDialogDelete, setOpenDialogDelete] = useState(false);
+  const [itemDelete,setItemDelete] = useState(0);
+
+  const handleOpenDialogDelete = (itemDelete) => {
+    setItemDelete(itemDelete);
+    setOpenDialogDelete(true);
+  };
+
+  const handleCloseDialogDelete = () => {
+    setOpenDialogDelete(false);
+  };
+
+  const handleAgreeDelete = async () => {
     try {
-      let serial = question?.serial || "";
+      let serial = itemDelete?.serial || "";
       let minus = 1;
-      if (question?.type === "READING" || question?.type === "SPEAKING" || question?.type === "LISTENING") {
-        serial = question?.questions?.length > 0 ? question.questions[question.questions.length - 1].serial : -1;
-        question.test = true;
-        minus = question?.questions?.length || 0;
+      if (itemDelete?.type === "READING" || itemDelete?.type === "SPEAKING" || itemDelete?.type === "LISTENING") {
+        serial = itemDelete?.questions?.length > 0 ? itemDelete.questions[itemDelete.questions.length - 1].serial : -1;
+        itemDelete.test = true;
+        minus = itemDelete?.questions?.length || 0;
       }
 
-      await DeleteQuestionTest(data?.id, question?.type, question, serial, minus);
+      await DeleteQuestionTest(data?.id, itemDelete?.type, itemDelete, serial, minus).then(() => {
+        toast.success(`Successfully deleted serial ${itemDelete.serialquestion} with  ${currentTab > 1 ? 'Part' : 'Question'}: ${tabs[currentTab]}.`);
+     
+        handleCloseDialogDelete();
+      })
+      .catch(() => {
+        toast.error(`Failed to delete serial ${itemDelete.serialquestion} with  ${currentTab > 1 ? 'Part' : 'Question'}: ${tabs[currentTab]}.`);
+        handleCloseDialogDelete();
+      });
 
-      setQuestionUpdate(question);
+      setQuestionUpdate(itemDelete);
     } catch (error) {
       console.error("Failed to delete question:", error);
     }
   };
 
   return (
-    <FormContainer sx={{ bgcolor: "#FFF8DC", p: 3 }}>
+    <FormContainer sx={{  p: 3 }}>
+       <ConfirmDialog
+        open={openDialogDelete}
+        onClose={handleCloseDialogDelete}
+        onAgree={handleAgreeDelete}
+        title="Confirm Deletion"  
+        content={`Are you sure you want to delete serial ${itemDelete.serialquestion} with ${currentTab > 1 ? 'part' : 'question'} ${tabs[currentTab]}?`}
+        cancelText="Cancel"  
+        agreeText="Delete"  
+      />
       <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: "bold", mb: 4 }}>
         QUESTION LIST
       </Typography>
@@ -280,6 +351,7 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
             <TableRow>
               <TableCell>Serial</TableCell>
               <TableCell align="center">Type</TableCell>
+              <TableCell align="center">Change Status</TableCell>
               <TableCell align="right">Delete</TableCell>
             </TableRow>
           </TableHead>
@@ -290,8 +362,27 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
                 <TableCell align="center" onClick={() => handleRowClick(question)}>
                   {question?.type?.charAt(0) + question?.type?.slice(1)?.toLowerCase()}
                 </TableCell>
+             
+                <TableCell align="center">
+                  <Switch
+                  checked={question.status === "ACTIVE"} 
+                  onChange={(event) => handleStatusChange(event,question)}
+                  inputProps={{ "aria-label": "controlled" }}
+                  sx={{
+                    "& .MuiSwitch-switchBase.Mui-checked": {
+                      color: Color2,
+                    },
+                    "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                      backgroundColor: Color2,
+                    },
+                    "& .MuiSwitch-track": {
+                      backgroundColor: "#ccc", 
+                    },
+                  }}
+                />
+              </TableCell>
                 <TableCell align="right">
-                  <IconButton onClick={() => handleDeleteQuestion(question)}>
+                  <IconButton onClick={() => handleOpenDialogDelete(question)}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -306,13 +397,15 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
         onClick={handleAddNewQuestion}
         startIcon={<PlusCircle />}
         sx={{
-          bgcolor: "#9dc45f",
-          "&:hover": { bgcolor: "#8ab54e" },
+          bgcolor: Color2_1,
+          "&:hover": { bgcolor: Color2 },
           marginTop: "1rem",
         }}
       >
-        Add new question
+         Add new {currentTab > 1 ? 'Part' : 'Question'} {tabs[currentTab]}
+     
       </Button>
+      
     </FormContainer>
   );
 }

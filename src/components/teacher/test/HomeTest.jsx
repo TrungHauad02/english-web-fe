@@ -16,7 +16,10 @@ import {
   Select,
   Stack,
   IconButton,
+  Switch,
+  colors
 } from "@mui/material";
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from "@mui/material/styles";
 import { useEffect } from "react";
@@ -139,7 +142,7 @@ const TestManagement = () => {
         setList((prevList) => {
           return prevList.map((item) => {
             if (item.id === test.id) {
-              return { ...item, status: event.target.value }; 
+              return { ...item, status: event.target.checked ? "INACTIVE" : "ACTIVE" }; 
             }
             return item;
           });
@@ -248,77 +251,86 @@ const TestManagement = () => {
           Add new test
         </ColorButton>
       </Box>
-      <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Serial</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell align="right">Change</TableCell>
-              <TableCell align="right">Details</TableCell>
-              <TableCell align="right">Delete</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {list.map((test) => (
-              <TableRow key={test.id}>
-                <TableCell>{test.serial}</TableCell>
-                <TableCell>{test.title}</TableCell>
-                <TableCell align="right">
-                  <Select
-                    value={test.status}
-                    onChange={(event) => handleStatusChange(event, test)} 
-                    sx={{
-
-                      backgroundColor:
-                        test.status === 'ACTIVE'
-                          ? Color2
-                          : test.status === 'INACTIVE'
-                          ? '#FFEB3B'
-                          : '#9E9E9E',
-                      color: 'white',
-                      textAlign: 'center',
-                      borderRadius: '0.5rem',
-                      cursor: 'pointer',
-                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-                      '& .MuiSelect-icon': {
-                        color: 'white',
-                      },
-                    }}
-                  >
-                    <MenuItem value="ACTIVE" sx={{ backgroundColor: Color2, color: 'white' }}>ACTIVE</MenuItem>
-                    <MenuItem value="INACTIVE" sx={{ backgroundColor: '#FFEB3B', color: 'black' }}>INACTIVE</MenuItem>
-                  </Select>
-              </TableCell>
-
-                <TableCell align="right">
-                  <Button
-                    sx={{background:'#000000',color:'#ffffff',borderRadius:'0.5rem'}}
-                    variant="outlined"
-                    onClick={() => handlebtnDetail(test)}
-                  >
-                    Detail
-                  </Button>
-                </TableCell>
-                <TableCell align="right">
-              <IconButton 
-                onClick={() => handleOpenDialogDelete(test)} 
+      <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: "8px", overflow: "hidden" }}>
+  <Table>
+    <TableHead>
+      <TableRow sx={{ backgroundColor: "#f0f0f0" }}>
+        <TableCell sx={{ fontWeight: "bold" }}>Serial</TableCell>
+        <TableCell sx={{ fontWeight: "bold" }}>Title</TableCell>
+        <TableCell sx={{ fontWeight: "bold" }}>Type</TableCell>
+        <TableCell sx={{ fontWeight: "bold", textAlign: "center" }}>Details</TableCell>
+        <TableCell sx={{ fontWeight: "bold", textAlign: "center" }}>Change Status</TableCell>
+        <TableCell sx={{ fontWeight: "bold", textAlign: "center" }}>Delete</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {list.map((test, index) => (
+        <TableRow
+          key={test.id}
+          sx={{
+            backgroundColor: index % 2 === 0 ? "#fafafa" : "#ffffff",
+            "&:hover": { backgroundColor: "#f1f1f1" },
+          }}
+        >
+          <TableCell>{test.serial}</TableCell>
+          <TableCell>{test.title}</TableCell>
+          <TableCell>{test.type}</TableCell>
+          <TableCell align="center">
+              <Button
+                onClick={() => handlebtnDetail(test)}
                 sx={{
-                  color: 'red', 
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 0, 0, 0.1)', // Chỉnh màu khi hover
-                  }
+                  backgroundColor: "#000", 
+                  color: "#fff", 
+                  borderRadius: "1rem", 
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  padding: "0.5rem 1rem", 
+                  "&:hover": { backgroundColor: "#333" }, 
                 }}
               >
-                <DeleteIcon />
-              </IconButton>
+                Details
+              </Button>
             </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    
+
+
+                  <TableCell align="center">
+                  <Switch
+                  checked={test.status === "ACTIVE"} 
+                  onChange={(event) => handleStatusChange(event, test)}
+                  inputProps={{ "aria-label": "controlled" }}
+                  sx={{
+                    "& .MuiSwitch-switchBase.Mui-checked": {
+                      color: Color2,
+                    },
+                    "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                      backgroundColor: Color2,
+                    },
+                    "& .MuiSwitch-track": {
+                      backgroundColor: "#ccc", 
+                    },
+                  }}
+                />
+        </TableCell>
+
+          <TableCell align="center">
+            <IconButton
+              onClick={() => handleOpenDialogDelete(test)}
+              sx={{
+                color: "red",
+                "&:hover": { backgroundColor: "rgba(255, 0, 0, 0.1)" },
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+</TableContainer>
+
+
+
       <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
         <CustomPagination
           count={totalPage}

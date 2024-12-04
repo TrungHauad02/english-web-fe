@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
-import { TextField, Button, FormControl, Dialog, DialogActions, DialogContent, DialogTitle, Typography, IconButton, MenuItem, Select, Grid, Box } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+  Select,
+  MenuItem,
+  Grid,
+  Box,
+} from '@mui/material';
 import { Add, Cancel, Send } from '@mui/icons-material';
 import { createTest } from '../../../api/test/TestApi';
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
+import HelpTextField from './common/HelpTextField';
+
 const NewTest = ({ open, onClose, serial, handlebtnDetail }) => {
   const [title, setTitle] = useState('');
   const [duration, setDuration] = useState('');
@@ -22,18 +35,14 @@ const NewTest = ({ open, onClose, serial, handlebtnDetail }) => {
           type: testType.toUpperCase(),
           status: 'ACTIVE',
         });
-    
-        toast.success(`created ${test.title}  successfully!`);
+
+        toast.success(`Created ${test.title} successfully!`);
         handlebtnDetail(test);
-      
+        onClose();
       } catch (error) {
         toast.error(`Failed to create test ${title}`);
-    
       }
- 
     }
-    
-    
   };
 
   const validateInput = () => {
@@ -64,31 +73,6 @@ const NewTest = ({ open, onClose, serial, handlebtnDetail }) => {
     return isValid;
   };
 
-  const handleTitleChange = (e) => {
-    const value = e.target.value;
-    setTitle(value);
-    if (value.trim() === '') {
-      setTitleError('Title cannot be empty');
-    } else {
-      setTitleError('');
-    }
-  };
-
-  const handleDurationChange = (e) => {
-    const value = e.target.value;
-    setDuration(value);
-    const durationValue = parseInt(value.trim(), 10);
-    if (isNaN(durationValue) || durationValue <= 0) {
-      setDurationError('Duration must be a valid positive integer');
-    } else {
-      setDurationError('');
-    }
-  };
-
-  const handleTestTypeChange = (e) => {
-    setTestType(e.target.value);
-  };
-
   return (
     <Dialog
       open={open}
@@ -115,67 +99,46 @@ const NewTest = ({ open, onClose, serial, handlebtnDetail }) => {
         <Typography variant="subtitle1" style={{ marginBottom: '16px', fontSize: '1rem', color: '#555' }}>
           Please fill in the details to create a new test.
         </Typography>
-        <Grid container spacing={2} alignItems="center">
-          
-
-          <Grid item xs={4}>
-            <Typography variant="body1" color="textSecondary">Title *</Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <HelpTextField
+              label="Title *"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              error={Boolean(titleError)}
+              errorText={titleError}
+            />
           </Grid>
-          <Grid item xs={8}>
-            <FormControl fullWidth margin="normal">
-              <TextField
-                value={title}
-                onChange={handleTitleChange}
-                error={Boolean(titleError)}
-                helperText={titleError || ' '}
-                variant="outlined"
-                color="secondary"
-              />
-            </FormControl>
+          <Grid item xs={12}>
+            <HelpTextField
+              label="Serial*"
+              value={serial}
+              disabled={true}
+            />
           </Grid>
-          <Grid item xs={4}>
-            <Typography variant="body1" color="textSecondary">Serial</Typography>
+          <Grid item xs={12}>
+            <HelpTextField
+              label="Duration (minutes)*"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+              error={Boolean(durationError)}
+              errorText={durationError}
+              type="number"
+            />
           </Grid>
-          <Grid item xs={8}>
-            <FormControl fullWidth margin="normal">
-              <TextField
-                value={serial}
-                variant="outlined"
-                color="secondary"
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={4}>
-            <Typography variant="body1" color="textSecondary">Duration (minutes) *</Typography>
-          </Grid>
-          <Grid item xs={8}>
-            <FormControl fullWidth margin="normal">
-              <TextField
-                value={duration}
-                onChange={handleDurationChange}
-                type="number"
-                error={Boolean(durationError)}
-                helperText={durationError || ' '}
-                variant="outlined"
-                color="secondary"
-              />
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={4}>
-            <Typography variant="body1" color="textSecondary">Type *</Typography>
-          </Grid>
-          <Grid item xs={8}>
-            <FormControl fullWidth margin="normal">
+          <Grid item xs={12}>
+            <Box display="flex" alignItems="center">
+              <Typography
+                variant="body1"
+                style={{ fontWeight: 'bold', marginRight: '16px', minWidth: '150px' }}
+              >
+                Type *
+              </Typography>
               <Select
                 value={testType}
-                onChange={handleTestTypeChange}
+                onChange={(e) => setTestType(e.target.value)}
                 variant="outlined"
-                color="secondary"
+                style={{ flexGrow: 1 }}
               >
                 <MenuItem value="MIXING">Mixing</MenuItem>
                 <MenuItem value="READING">Reading</MenuItem>
@@ -183,17 +146,21 @@ const NewTest = ({ open, onClose, serial, handlebtnDetail }) => {
                 <MenuItem value="SPEAKING">Speaking</MenuItem>
                 <MenuItem value="WRITING">Writing</MenuItem>
               </Select>
-              {typeError && <Typography color="error">{typeError}</Typography>}
-            </FormControl>
+            </Box>
+            {typeError && (
+              <Typography color="error" variant="caption" style={{ marginTop: '4px', display: 'block' }}>
+                {typeError}
+              </Typography>
+            )}
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions style={{ justifyContent: 'center', padding: '16px' }}>
+      <DialogActions>
         <Button
           onClick={onClose}
           variant="contained"
           startIcon={<Cancel />}
-          style={{ backgroundColor: '#ffcc00', color: 'black', marginRight: '10px' }}
+          style={{ backgroundColor: "#D9D9D9", color: 'black' }}
         >
           Cancel
         </Button>
@@ -202,7 +169,6 @@ const NewTest = ({ open, onClose, serial, handlebtnDetail }) => {
           color="primary"
           variant="contained"
           startIcon={<Send />}
-          style={{ backgroundColor: '#6200ea', color: 'white', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}
         >
           Submit
         </Button>
