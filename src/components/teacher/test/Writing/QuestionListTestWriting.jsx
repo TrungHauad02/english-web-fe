@@ -14,11 +14,14 @@ import {
 import { styled } from "@mui/material/styles";
 import { PlusCircle } from "lucide-react";
 import DeleteIcon from "@mui/icons-material/DeleteOutline";
-import { deleteTestWriting, updateTestWriting } from 'api/test/TestWritingApi';
+import { deleteTestWriting, updateTestWriting } from "api/test/TestWritingApi";
+import { toast } from "react-toastify";
+import ConfirmDialog from "shared/component/confirmDialog/ConfirmDialog";
+import useColor from "shared/color/Color";
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
-  backgroundColor: "#fff5e6",
+  backgroundColor: "#F0F0F0",
   borderRadius: theme.spacing(2),
 }));
 
@@ -35,6 +38,9 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
 
 function QuestionListWriting({ data, handleRowClick, setQuestionUpdate }) {
   const [questions, setQuestions] = useState([]);
+  const [openDialogDelete, setOpenDialogDelete] = useState(false);
+  const [itemDelete, setItemDelete] = useState(null);
+  const { Color2, Color2_1 } = useColor();
 
   useEffect(() => {
     if (data?.testWritings) {
@@ -62,22 +68,57 @@ function QuestionListWriting({ data, handleRowClick, setQuestionUpdate }) {
     handleRowClick(newQuestion);
   };
 
-  const handleDeleteQuestion = async (question) => {
+  const handleDeleteQuestion = async () => {
+    if (!itemDelete) return;
 
-    await Promise.all(data?.testWritings.map(async (testWriting) => {
-        if (testWriting.serial > question.serial) {
+    try {
+      await Promise.all(
+        data?.testWritings.map(async (testWriting) => {
+          if (testWriting.serial > itemDelete.serial) {
             testWriting.serial -= 1;
             await updateTestWriting(testWriting.id, testWriting);
-        }
-    }));
-    await deleteTestWriting(question)
+          }
+        })
+      );
 
-      setQuestionUpdate(question);
-   
+      await deleteTestWriting(itemDelete.id);
+      toast.success(`Deleted serial ${itemDelete.serialquestion} test writing successfully!`);
+      setQuestionUpdate(itemDelete);
+      setOpenDialogDelete(false);
+    } catch (error) {
+      toast.error(`Failed to delete serial ${itemDelete.serialquestion}!`);
+      console.error("Failed to delete question:", error);
+    }
+  };
+
+  const handleOpenDialogDelete = (question) => {
+    setItemDelete(question);
+    setOpenDialogDelete(true);
+  };
+
+  const handleCloseDialogDelete = () => {
+    setOpenDialogDelete(false);
+    setItemDelete(null);
   };
 
   return (
-    <FormContainer sx={{ bgcolor: "#FFF8DC", p: 3 }}>
+    <FormContainer>
+      <ConfirmDialog
+        open={openDialogDelete}
+        onClose={handleCloseDialogDelete}
+        onAgree={handleDeleteQuestion}
+        title="Confirm Deletion"
+        content={`Are you sure you want to delete serial ${itemDelete?.serialquestion} of Test Writing?`}
+        cancelText="Cancel"
+        agreeText="Delete"
+        sx={{
+          bgcolor: "#FFFFFF",
+          padding: 2,
+          borderRadius: "4px",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+        }}
+      />
+
       <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: "bold", mb: 4 }}>
         WRITING QUESTION LIST
       </Typography>
@@ -99,7 +140,7 @@ function QuestionListWriting({ data, handleRowClick, setQuestionUpdate }) {
                   {question?.type?.charAt(0) + question?.type?.slice(1)?.toLowerCase()}
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton onClick={() => handleDeleteQuestion(question)}>
+                  <IconButton onClick={() => handleOpenDialogDelete(question)}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -114,12 +155,12 @@ function QuestionListWriting({ data, handleRowClick, setQuestionUpdate }) {
         onClick={handleAddNewQuestion}
         startIcon={<PlusCircle />}
         sx={{
-          bgcolor: "#9dc45f",
-          "&:hover": { bgcolor: "#8ab54e" },
+          bgcolor: Color2_1,
+          "&:hover": { bgcolor: Color2 },
           marginTop: "1rem",
         }}
       >
-        Add new question
+        Add new part
       </Button>
     </FormContainer>
   );

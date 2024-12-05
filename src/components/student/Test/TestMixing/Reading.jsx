@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import ListQuestion from "../common/ListQuestion";
-import { Box, Typography, Paper, Container } from "@mui/material";
+import { Box, Typography, Button, Grid, styled } from "@mui/material";
+import { Container } from "@mui/material";
+import ImageWithLoading from "../common/ImageWithLoading"
+const QuestionSection = styled(Grid)(({ theme }) => ({
+    marginTop:'1rem',
+    marginRight: "2%",
+    flex: "0 1 47%",
+    height: "auto",
 
+  }));
 function Reading({ dataTest, onAnswerChange, focusId, title,answers,setAnswers }) {
     return (
         <Container sx={{ mt: 4 }}>
@@ -13,20 +21,26 @@ function Reading({ dataTest, onAnswerChange, focusId, title,answers,setAnswers }
                                Question {item?.questions?.[0]?.serial} - {item?.questions?.[item?.questions?.length-1]?.serial} 
                             </Typography>
 
-                            {item.image  && (
-                                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-                                    <img 
-                                        src={item.image} 
-                                        alt="" 
-                                        style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }} 
-                                    />
+                            <QuestionSection item>
+                                    {item.image !== ''? (
+                                <>
+                            <ImageWithLoading imageSrc={item.image} />
+                                <Box    sx={{ height: "300px", overflowY: "auto"}}>
+                                <QuestionContent
+                                
+                                content={item.content}
+                            />
+                                </Box>
+                                </>
+                            ) : (
+                                <Box    sx={{ height: "300px", overflowY: "auto", }}>
+                                <QuestionContent
+                                content={item.content}
+                            />
+
                                 </Box>
                             )}
-                            <Box sx={{ mb: 3 }}>
-                                <Typography variant="body1" sx={{ backgroundColor: '#f9f9f9', p: 2, borderRadius: '8px' }}>
-                                    {item.content}
-                                </Typography>
-                            </Box>
+                                    </QuestionSection>
                             <ListQuestion 
                                 dataTest={item} 
                                 onAnswerChange={onAnswerChange} 
@@ -45,5 +59,17 @@ function Reading({ dataTest, onAnswerChange, focusId, title,answers,setAnswers }
         </Container>
     );
 }
-
+const QuestionContent = ({ content }) => {
+    const paragraphs = content.split("\n");
+  
+    return (
+      <Box >
+        {paragraphs.map((paragraph, index) => (
+          <Typography key={index} variant="body1" gutterBottom>
+            {paragraph}
+          </Typography>
+        ))}
+      </Box>
+    );
+  };
 export default Reading;

@@ -1,7 +1,6 @@
 import InformationTest from "../common/InformationTest";
 import QuestionListTest from "../common/QuestionListTest";
 import QuestionVocabulary from "../common/QuestionVocabulary";
-import QuestionGrammar from "../common/QuestionGrammar";
 import QuestionListening from "../common/QuestionListening";
 import React, { useState, useEffect } from "react";
 import QuestionReading from "../common/QuestionReading";
@@ -26,6 +25,15 @@ function Mixing() {
   const [type, setType] = useState("");
   const [questionData, setQuestionData] = useState();
   const [version,setVersion] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -138,17 +146,17 @@ function Mixing() {
         return null;
     }
   };
+  
 
   return (
     <Box
       sx={{
-        marginRight: "5%",
-        marginLeft: "5%",
         marginBottom: "2%",
         marginTop: "2%",
       }}
     >
-      <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch" }}>
+      <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch", marginRight: "5%",
+        marginLeft: "5%", }}>
         <Box sx={{ flex: 4, minHeight: 0 }}>
           <InformationTest data={datatest} />
         </Box>

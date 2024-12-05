@@ -8,16 +8,10 @@ import {
 } from '@mui/material';
 import { PlusCircle } from 'lucide-react';
 import { styled } from '@mui/material/styles';
-import { AddQuestionTest } from "../Mixing/AddQuestionTest";
-import { updateTestWriting ,createTestWriting} from "api/test/TestWritingApi";
+import { updateTestWriting } from "api/test/TestWritingApi";
+import { createTestWriting} from "api/test/TestWritingApi";
+import { toast } from "react-toastify";
 
-
-const ButtonContainer = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    justifyContent: 'center',
-    gap: theme.spacing(2),
-    marginTop: theme.spacing(4),
-  }));
   
   const ColorButton = styled(Button)(({ color }) => ({
     borderRadius: '8px',
@@ -32,65 +26,140 @@ const ButtonContainer = styled(Box)(({ theme }) => ({
 
 const QuestionWriting = ({data,handleWriting}) => {
   const [content, setContent] = useState(data?.content || '');
-  const [serialNumber, setSerialNumber] = useState(data?.serial);
-  const handleSave = async () => {
+  const [serialNumber, setSerialNumber] = useState(data.serial);
+  const [isEditing, setIsEditing] = useState(data.id==='' ? true : false);
+  
+
+const handleEdit = () => {
+  setIsEditing(true);
+};
+
+const handleSave = async () => {
+  try {
     data.content = content;
+    if (!content.trim()) {
+      toast.error("Content cannot be empty.");
+      return;
+    }
     if (data.id === '') {
-      data  = await createTestWriting(data);
+      data = await createTestWriting(data);
       data.type = "WRITING";
       handleWriting(data);
+      toast.success(`Successfully created question serial ${data.serial} of Part Writing.`);
     } else {
-      const testwriting  =  await updateTestWriting(data.id, data);
+      const testwriting = await updateTestWriting(data.id, data);
       testwriting.type = "WRITING";
       handleWriting(testwriting);
+      toast.success(`Successfully updated question serial ${data.serial} of Part Writing.`);
     }
-  };
+  } catch (error) {
+    toast.error("An error occurred while saving the question.");
+  }
+};
+
   
 
   const handleCancel = () => {
 
     setContent(data?.content || '');
+    setIsEditing(false);
   };
 
   return (
-    <Box sx={{ p: 3, bgcolor: '#fff9e6', minHeight: '100vh' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h4">Writing</Typography>
+    <Box
+    sx={{
+      p: 3,
+      bgcolor: "#F7F7F7",
+      minHeight: "100vh",
+      marginRight: "5%",
+      marginLeft: "5%",
+      borderRadius: "8px",
+      boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+    }}
+  >
+    <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+      <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+        Writing
+      </Typography>
+    </Box>
+  
+    <Box sx={{ mb: 3 }}>
+      <Typography
+        variant="h6"
+        sx={{ mb: 2, fontWeight: "500", color: "#333" }}
+      >
+        Serial question: {serialNumber}
+      </Typography>
+  
+      <Typography
+        variant="h6"
+        sx={{ mb: 2, fontWeight: "500", color: "#333" }}
+      >
+        Content:
+      </Typography>
+      <Paper
+        sx={{
+          p: 2,
+          mb: 2,
+          bgcolor: "#FFFFFF",
+          borderRadius: "8px",
+          boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <TextField
+          multiline
+          rows={12}
+          fullWidth
+          value={content}
+          disabled={!isEditing}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Enter the writing prompt or question here..."
+          sx={{
+            "& .MuiInputBase-root": {
+              bgcolor: "#F9F9F9",
+              borderRadius: "4px",
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#DDD",
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#BBB",
+            },
+          }}
+        />
+      </Paper>
+  
+      <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+        <ColorButton
+          color="#F08080"
+          variant="contained"
+          onClick={handleCancel}
+          disabled={data.id === '' ? true : false}
      
-      </Box>
-
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Serial question: {serialNumber}
-        </Typography>
-
-        <Typography variant="h6" sx={{ mb: 2 }}>Content</Typography>
-        <Paper sx={{ p: 2, mb: 2 }}>
-          <TextField
-            multiline
-            rows={12}
-            fullWidth
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Enter the writing prompt or question here..."
-          />
-        </Paper>
-
-        <ButtonContainer>
-        <ColorButton color="#F08080" variant="contained"
-        onClick={handleCancel}>
-            Cancel
+        >
+          Cancel
         </ColorButton>
-        <ColorButton color="#FFD700" variant="contained">
-            Upload
+        <ColorButton
+          color="#FFD700"
+          variant="contained"
+          onClick={handleEdit}
+          disabled={isEditing}
+        >
+          Edit
         </ColorButton>
-        <ColorButton color="#98FB98" variant="contained"  onClick={handleSave}>
-            Save
+        <ColorButton
+          color="#00796B"
+          variant="contained"
+          onClick={handleSave}
+          disabled={!isEditing}
+        >
+          Save
         </ColorButton>
-        </ButtonContainer>
-       
+
       </Box>
     </Box>
+  </Box>
+  
   );
 };
 

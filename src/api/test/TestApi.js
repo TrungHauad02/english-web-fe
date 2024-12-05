@@ -1,13 +1,18 @@
 import apiClient from "../apiClient";
 
-export function getTest(Testid) {
+export function getTest(Testid, status = null) {
   return apiClient
-    .get("/test/" + Testid)
+    .get(`/test/${Testid}`, {
+      params: { status },
+    })
     .then((response) => {
       return response.data;
     })
     .catch((error) => {
-      console.error("Error creating test:", error);
+      console.error(
+        "Error fetching test:",
+        error.response?.data || error.message
+      );
       throw error;
     });
 }

@@ -13,11 +13,15 @@ import {
   TableRow,
   IconButton,
   CardMedia,
+  Switch,
 } from "@mui/material";
+import ConfirmDialog from "shared/component/confirmDialog/ConfirmDialog";
+import { toast } from "react-toastify";
+import useColor from "shared/color/Color";
 import { Trash, Upload, PlusCircle } from "lucide-react";
 import { styled } from "@mui/material/styles";
-import QuestionReadingDetails from "./QuestionReadingDetails";
-import { createTestReading, updateTestReading } from "api/test/TestReadingApi";
+import QuestionReadingDetails from "../common/QuestionReadingDetails";
+import { createTestReading, updateTestReading } from "api/test/TestReadingApi"; 
 
 import { DeleteQuestionReadingTest } from "./DeleteQuestionReadingTest";
 import { AddQuestionReadingTest } from "./AddQuestionReadingTest";
@@ -36,11 +40,7 @@ import {
   uploadFile,
 } from "api/feature/uploadFile/uploadFileService";
 
-const FormContainer = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  backgroundColor: "#fff5e6",
-  borderRadius: theme.spacing(2),
-}));
+
 const ButtonContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
@@ -58,8 +58,9 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-function QuestionReadingTest({ data, handleReading }) {
+function QuestionReading({ data, handleReading }) {
   const initialData = data || {};
+  const { Color2, Color2_1 } = useColor();
   const questions = initialData.questions || [];
 
   const [formData, setFormData] = useState({
@@ -68,7 +69,7 @@ function QuestionReadingTest({ data, handleReading }) {
     selectedQuestion: questions.length > 0 ? questions[0] : null,
   });
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] =  useState(data.id==='' ? true : false);
   const [questionSelected, setQuestionSelected] = useState(
     questions.length > 0 ? questions[0] : null
   );
@@ -127,20 +128,32 @@ function QuestionReadingTest({ data, handleReading }) {
   };
 
   const handleSave = async () => {
+      
+    if (!formData.content || formData.content.trim() === "") {
+      toast.error("Reading content cannot be empty.");
+      return;
+    }
+    const activeQuestions = formData.questions.filter((question) => question.status === "ACTIVE");
+    if (activeQuestions.length === 0) {
+      toast.error("Please create at least one question ACTIVE");
+      return;
+    }
+   
+
     formData.type = "READING";
     let updatedData = {
       ...initialData,
       content: formData.content,
       image: formData.image,
     };
-    console.log(image);
-    
-    if (formData.id === "") {
+
+
+    if (formData.id === "") {    
       try {
         if(image!=='')
           {
             const dataImage = await uploadFile(
-              "test/reading",
+              "test/mixing/reading",
               initialData.testId.replace(/\s+/g, "_"),
               image
             );
@@ -158,7 +171,6 @@ function QuestionReadingTest({ data, handleReading }) {
             image: '',
           };
         }
-
         const testReading = await createTestReading(updatedData);
         formData.id = testReading.id;
 
@@ -169,9 +181,9 @@ function QuestionReadingTest({ data, handleReading }) {
 
               const id = await AddQuestionReadingTest(
                 initialData.test.id,
+                "READING",
                 questionData
               );
-              console.log(id);
 
               await Promise.all(
                 (questionData.answers || []).map(async (answer) => {
@@ -187,6 +199,7 @@ function QuestionReadingTest({ data, handleReading }) {
               );
             }
           }
+          toast.success(`Successfully created serial ${initialData.serial} of Part Reading.`);
         } catch (error) {
           console.error("Error saving questions or answers:", error);
         }
@@ -194,11 +207,22 @@ function QuestionReadingTest({ data, handleReading }) {
         console.error("Error saving questions or answers:", error);
       }
     } else {
+
       try {
+
+        if(questionsDelete.length!==0)
+       {
+        const result = await handleOpenDialogDelete();
+        if (result === "cancel") {
+          handleCancel(); 
+          return;
+        }
+       }
+
         if(initialData.image==='' && image!=='')
           {
             const dataImage = await uploadFile(
-              "test/reading",
+              "test/mixing/reading",
               initialData.testId.replace(/\s+/g, "_"),
               image
             );
@@ -215,7 +239,7 @@ function QuestionReadingTest({ data, handleReading }) {
               initialData.image,
               image,
               initialData.testId,
-              "test/reading"
+              "test/mixing/reading"
             );
     
             if (newImage !== initialData.image) {
@@ -225,7 +249,6 @@ function QuestionReadingTest({ data, handleReading }) {
               };
             }
           }
-
         await updateTestReading(updatedData.id, updatedData);
         await Promise.all(
           formData.questions
@@ -242,6 +265,7 @@ function QuestionReadingTest({ data, handleReading }) {
                         (currentAnswer) => currentAnswer.id === initialAnswer.id
                       )
                   ) || [];
+              
 
               await Promise.all(
                 answersToDelete.map((answer) =>
@@ -269,12 +293,12 @@ function QuestionReadingTest({ data, handleReading }) {
         for (const questiondelete of questionsDelete) {
           await DeleteQuestionReadingTest(
             initialData.test.id,
-
             questiondelete,
             questiondelete.serial,
             1
           );
         }
+
         try {
           for (const questionData of formData.questions.filter((questionData) =>
             questionData.id?.startsWith("add")
@@ -298,6 +322,7 @@ function QuestionReadingTest({ data, handleReading }) {
               }
             }
           }
+          toast.success(`Successfully updated serial ${initialData.serial} of Part Reading.`);
         } catch (error) {
           console.error("Error saving questions or answers:", error);
         }
@@ -384,6 +409,18 @@ function QuestionReadingTest({ data, handleReading }) {
                   return Math.max(...allQuestions.map((q) => q.serial)) + 1;
                 }
               }
+
+              if (
+                formData.test.testMixingQuestions &&
+                formData.test.testMixingQuestions.length > 0
+              ) {
+                return (
+                  Math.max(
+                    ...formData.test.testMixingQuestions.map((q) => q.serial)
+                  ) + 1
+                );
+              }
+
               return 1;
             })(),
 
@@ -392,28 +429,67 @@ function QuestionReadingTest({ data, handleReading }) {
       testReadingId: formData.id,
       test: initialData.test,
       answers: [
-        {
-          id: "add",
-          content: "",
-          isCorrect: true,
-          status: "ACTIVE",
-          testQuestionReadingId: "",
-        },
       ],
     };
 
     setQuestionSelected(newQuestion);
   };
 
+  const handleStatusChange = (event, questionId) => {
+   
+    
+    setFormData((prevData) => ({
+      ...prevData,
+      questions: prevData.questions.map((q) =>
+        q.id === questionId ? { ...q, status: event.target.checked ? "ACTIVE" : "INACTIVE", } : q
+      ),
+      
+    }));
+  };
+  const [openDialogDelete, setOpenDialogDelete] = useState(false);
+  const [dialogHandlers, setDialogHandlers] = useState({
+    onAgree: () => {},
+    onClose: () => {},
+  });
+  
+
+  const handleOpenDialogDelete = () => {
+    return new Promise((resolve) => {
+      setOpenDialogDelete(true);
+  
+      const handleSave = () => {
+        setOpenDialogDelete(false);
+        resolve("save");
+      };
+  
+      const handleCancel = () => {
+        setOpenDialogDelete(false);
+        resolve("cancel");
+      };
+  
+      setDialogHandlers({ onAgree: handleSave, onClose: handleCancel });
+    });
+  };
+
+
   return (
-    <FormContainer sx={{ p: 3, bgcolor: "#fff9e6", minHeight: "100vh" }}>
-      <Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-          <Typography variant="h4">Reading</Typography>
+    <Box sx={{ p: 3, bgcolor: "#", minHeight: "100vh",display: "flex", }}>
+        <ConfirmDialog
+        open={openDialogDelete}
+        onClose={dialogHandlers.onClose}
+        onAgree={dialogHandlers.onAgree} 
+        title="Confirm Deletion"
+        content={`Are you sure you want to delete ${questionsDelete.length} question(s)?`}
+        cancelText="Cancel"
+        agreeText="Delete"
+      />
+      <Box sx={{width: '50%', maxWidth: '50%'}}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 ,marginLeft:'6%'}}>
+          <Typography  variant="h4">Reading</Typography>
         </Box>
 
-        <Box sx={{ display: "flex", gap: 4 }}>
-          <Box sx={{ flex: 1 }}>
+        <Box sx={{ display: "flex", gap: 4 ,bgcolor:'#F0F0F0',padding:'2rem', marginRight: "5%",marginLeft: "5%",}}>
+          <Box sx={{ flex: 1, }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
               Image
             </Typography>
@@ -427,6 +503,7 @@ function QuestionReadingTest({ data, handleReading }) {
               <Button
                 variant="contained"
                 component="label"
+                disabled={!isEditing}
                 startIcon={<Upload />}
               >
                 Upload
@@ -466,7 +543,8 @@ function QuestionReadingTest({ data, handleReading }) {
                   <TableRow>
                     <TableCell>Serial</TableCell>
                     <TableCell align="center">Question Content</TableCell>
-                    <TableCell>{isEditing ? "Actions" : ""}</TableCell>
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell>Delete</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -482,15 +560,35 @@ function QuestionReadingTest({ data, handleReading }) {
                       >
                         {question.content}
                       </TableCell>
+                      <TableCell align="center">
+                          <Switch
+                          disabled={!isEditing}
+                          checked={question.status === "ACTIVE"} 
+                          onChange={(event) => handleStatusChange(event,question.id)}
+                          inputProps={{ "aria-label": "controlled" }}
+                          sx={{
+                            "& .MuiSwitch-switchBase.Mui-checked": {
+                              color: Color2,
+                            },
+                            "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                              backgroundColor: Color2,
+                            },
+                            "& .MuiSwitch-track": {
+                              backgroundColor: "#ccc", 
+                            },
+                          }}
+                        />
+                        </TableCell>
                       <TableCell>
-                        {isEditing ? (
+                        
                           <IconButton
+                            disabled={!isEditing}
                             onClick={() => handleDeleteQuestion(question)}
                             color="error"
                           >
                             <Trash />
                           </IconButton>
-                        ) : null}
+                     
                       </TableCell>
                     </TableRow>
                   ))}
@@ -501,8 +599,8 @@ function QuestionReadingTest({ data, handleReading }) {
               variant="contained"
               startIcon={<PlusCircle />}
               sx={{
-                bgcolor: "#9dc45f",
-                "&:hover": { bgcolor: "#8ab54e" },
+                bgcolor: Color2_1,
+                "&:hover": { bgcolor: Color2 },
                 marginTop: "1rem",
               }}
               onClick={handleAddQuestion}
@@ -511,7 +609,44 @@ function QuestionReadingTest({ data, handleReading }) {
               Add new question
             </Button>
           </Box>
-          <Box sx={{ flex: 1 }}>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            marginTop: "1rem",
+            justifyContent: "center",
+          }}
+        >
+           <ButtonContainer>
+          <ColorButton
+            color="#F08080"
+            variant="contained"
+            disabled={initialData.id === '' ? true : false}
+            onClick={handleCancel}
+          >
+            Cancel
+          </ColorButton>
+          <ColorButton
+            color="#FFD700"
+            variant="contained"
+            onClick={handleEditToggle}
+            disabled={isEditing}
+          >
+            Edit
+          </ColorButton>
+          <ColorButton
+            color="#00796B"
+            variant="contained"
+            onClick={handleSave}
+            disabled={!isEditing}
+          >
+            Save
+          </ColorButton>
+        </ButtonContainer>
+        </Box>
+      </Box>
+      <Box sx={{ flex: 1,width: '50%', maxWidth: '50%' }}>
             {questionSelected && (
               <QuestionReadingDetails
                 question={{
@@ -524,45 +659,9 @@ function QuestionReadingTest({ data, handleReading }) {
                 handleSaveSelectedQuestion={handleSaveSelectedQuestion}
               />
             )}
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            marginTop: "1rem",
-            justifyContent: "center",
-          }}
-        >
-          <ButtonContainer>
-            <ColorButton
-              color="#F08080"
-              variant="contained"
-              onClick={handleCancel}
-            >
-              Cancel
-            </ColorButton>
-            <ColorButton
-              color="#FFD700"
-              variant="contained"
-              onClick={handleEditToggle}
-              disabled={isEditing}
-            >
-              Edit
-            </ColorButton>
-            <ColorButton
-              color="#98FB98"
-              variant="contained"
-              onClick={handleSave}
-              disabled={!isEditing}
-            >
-              Save
-            </ColorButton>
-          </ButtonContainer>
-        </Box>
-      </Box>
-    </FormContainer>
+       </Box>
+    </Box>
   );
 }
 
-export default QuestionReadingTest;
+export default QuestionReading;

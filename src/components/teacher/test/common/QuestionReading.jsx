@@ -13,7 +13,11 @@ import {
   TableRow,
   IconButton,
   CardMedia,
+  Switch,
 } from "@mui/material";
+import ConfirmDialog from "shared/component/confirmDialog/ConfirmDialog";
+import { toast } from "react-toastify";
+import useColor from "shared/color/Color";
 import { Trash, Upload, PlusCircle } from "lucide-react";
 import { styled } from "@mui/material/styles";
 import QuestionReadingDetails from "./QuestionReadingDetails";
@@ -36,11 +40,7 @@ import {
   uploadFile,
 } from "api/feature/uploadFile/uploadFileService";
 
-const FormContainer = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  backgroundColor: "#fff5e6",
-  borderRadius: theme.spacing(2),
-}));
+
 const ButtonContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
@@ -60,6 +60,7 @@ const ColorButton = styled(Button)(({ color }) => ({
 
 function QuestionReading({ data, handleReading }) {
   const initialData = data || {};
+  const { Color2, Color2_1 } = useColor();
   const questions = initialData.questions || [];
 
   const [formData, setFormData] = useState({
@@ -68,7 +69,7 @@ function QuestionReading({ data, handleReading }) {
     selectedQuestion: questions.length > 0 ? questions[0] : null,
   });
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] =  useState(data.id==='' ? true : false);
   const [questionSelected, setQuestionSelected] = useState(
     questions.length > 0 ? questions[0] : null
   );
@@ -127,6 +128,18 @@ function QuestionReading({ data, handleReading }) {
   };
 
   const handleSave = async () => {
+      
+    if (!formData.content || formData.content.trim() === "") {
+      toast.error("Reading content cannot be empty.");
+      return;
+    }
+    const activeQuestions = formData.questions.filter((question) => question.status === "ACTIVE");
+    if (activeQuestions.length === 0) {
+      toast.error("Please create at least one question ACTIVE");
+      return;
+    }
+   
+
     formData.type = "READING";
     let updatedData = {
       ...initialData,
@@ -186,6 +199,7 @@ function QuestionReading({ data, handleReading }) {
               );
             }
           }
+          toast.success(`Successfully created serial ${initialData.serial} of Part Reading.`);
         } catch (error) {
           console.error("Error saving questions or answers:", error);
         }
@@ -195,6 +209,15 @@ function QuestionReading({ data, handleReading }) {
     } else {
 
       try {
+
+        if(questionsDelete.length!==0)
+       {
+        const result = await handleOpenDialogDelete();
+        if (result === "cancel") {
+          handleCancel(); 
+          return;
+        }
+       }
 
         if(initialData.image==='' && image!=='')
           {
@@ -226,8 +249,6 @@ function QuestionReading({ data, handleReading }) {
               };
             }
           }
-        
-
         await updateTestReading(updatedData.id, updatedData);
         await Promise.all(
           formData.questions
@@ -244,6 +265,7 @@ function QuestionReading({ data, handleReading }) {
                         (currentAnswer) => currentAnswer.id === initialAnswer.id
                       )
                   ) || [];
+              
 
               await Promise.all(
                 answersToDelete.map((answer) =>
@@ -303,6 +325,7 @@ function QuestionReading({ data, handleReading }) {
               }
             }
           }
+          toast.success(`Successfully updated serial ${initialData.serial} of Part Reading.`);
         } catch (error) {
           console.error("Error saving questions or answers:", error);
         }
@@ -409,28 +432,67 @@ function QuestionReading({ data, handleReading }) {
       testReadingId: formData.id,
       test: initialData.test,
       answers: [
-        {
-          id: "add",
-          content: "",
-          isCorrect: true,
-          status: "ACTIVE",
-          testQuestionReadingId: "",
-        },
       ],
     };
 
     setQuestionSelected(newQuestion);
   };
 
+  const handleStatusChange = (event, questionId) => {
+   
+    
+    setFormData((prevData) => ({
+      ...prevData,
+      questions: prevData.questions.map((q) =>
+        q.id === questionId ? { ...q, status: event.target.checked ? "ACTIVE" : "INACTIVE", } : q
+      ),
+      
+    }));
+  };
+  const [openDialogDelete, setOpenDialogDelete] = useState(false);
+  const [dialogHandlers, setDialogHandlers] = useState({
+    onAgree: () => {},
+    onClose: () => {},
+  });
+  
+
+  const handleOpenDialogDelete = () => {
+    return new Promise((resolve) => {
+      setOpenDialogDelete(true);
+  
+      const handleSave = () => {
+        setOpenDialogDelete(false);
+        resolve("save");
+      };
+  
+      const handleCancel = () => {
+        setOpenDialogDelete(false);
+        resolve("cancel");
+      };
+  
+      setDialogHandlers({ onAgree: handleSave, onClose: handleCancel });
+    });
+  };
+
+
   return (
-    <FormContainer sx={{ p: 3, bgcolor: "#fff9e6", minHeight: "100vh" }}>
-      <Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-          <Typography variant="h4">Reading</Typography>
+    <Box sx={{ p: 3, bgcolor: "#", minHeight: "100vh",display: "flex", }}>
+        <ConfirmDialog
+        open={openDialogDelete}
+        onClose={dialogHandlers.onClose}
+        onAgree={dialogHandlers.onAgree} 
+        title="Confirm Deletion"
+        content={`Are you sure you want to delete ${questionsDelete.length} question(s)?`}
+        cancelText="Cancel"
+        agreeText="Delete"
+      />
+      <Box sx={{width: '50%', maxWidth: '50%'}}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 ,marginLeft:'6%'}}>
+          <Typography  variant="h4">Reading</Typography>
         </Box>
 
-        <Box sx={{ display: "flex", gap: 4 }}>
-          <Box sx={{ flex: 1 }}>
+        <Box sx={{ display: "flex", gap: 4 ,bgcolor:'#F0F0F0',padding:'2rem', marginRight: "5%",marginLeft: "5%",}}>
+          <Box sx={{ flex: 1, }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
               Image
             </Typography>
@@ -444,6 +506,7 @@ function QuestionReading({ data, handleReading }) {
               <Button
                 variant="contained"
                 component="label"
+                disabled={!isEditing}
                 startIcon={<Upload />}
               >
                 Upload
@@ -483,7 +546,8 @@ function QuestionReading({ data, handleReading }) {
                   <TableRow>
                     <TableCell>Serial</TableCell>
                     <TableCell align="center">Question Content</TableCell>
-                    <TableCell>{isEditing ? "Actions" : ""}</TableCell>
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell>Delete</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -499,15 +563,35 @@ function QuestionReading({ data, handleReading }) {
                       >
                         {question.content}
                       </TableCell>
+                      <TableCell align="center">
+                          <Switch
+                          disabled={!isEditing}
+                          checked={question.status === "ACTIVE"} 
+                          onChange={(event) => handleStatusChange(event,question.id)}
+                          inputProps={{ "aria-label": "controlled" }}
+                          sx={{
+                            "& .MuiSwitch-switchBase.Mui-checked": {
+                              color: Color2,
+                            },
+                            "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                              backgroundColor: Color2,
+                            },
+                            "& .MuiSwitch-track": {
+                              backgroundColor: "#ccc", 
+                            },
+                          }}
+                        />
+                        </TableCell>
                       <TableCell>
-                        {isEditing ? (
+                        
                           <IconButton
+                            disabled={!isEditing}
                             onClick={() => handleDeleteQuestion(question)}
                             color="error"
                           >
                             <Trash />
                           </IconButton>
-                        ) : null}
+                     
                       </TableCell>
                     </TableRow>
                   ))}
@@ -518,8 +602,8 @@ function QuestionReading({ data, handleReading }) {
               variant="contained"
               startIcon={<PlusCircle />}
               sx={{
-                bgcolor: "#9dc45f",
-                "&:hover": { bgcolor: "#8ab54e" },
+                bgcolor: Color2_1,
+                "&:hover": { bgcolor: Color2 },
                 marginTop: "1rem",
               }}
               onClick={handleAddQuestion}
@@ -528,7 +612,44 @@ function QuestionReading({ data, handleReading }) {
               Add new question
             </Button>
           </Box>
-          <Box sx={{ flex: 1 }}>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            marginTop: "1rem",
+            justifyContent: "center",
+          }}
+        >
+           <ButtonContainer>
+          <ColorButton
+            color="#F08080"
+            variant="contained"
+            disabled={initialData.id === '' ? true : false}
+            onClick={handleCancel}
+          >
+            Cancel
+          </ColorButton>
+          <ColorButton
+            color="#FFD700"
+            variant="contained"
+            onClick={handleEditToggle}
+            disabled={isEditing}
+          >
+            Edit
+          </ColorButton>
+          <ColorButton
+            color="#00796B"
+            variant="contained"
+            onClick={handleSave}
+            disabled={!isEditing}
+          >
+            Save
+          </ColorButton>
+        </ButtonContainer>
+        </Box>
+      </Box>
+      <Box sx={{ flex: 1,width: '50%', maxWidth: '50%' }}>
             {questionSelected && (
               <QuestionReadingDetails
                 question={{
@@ -541,44 +662,8 @@ function QuestionReading({ data, handleReading }) {
                 handleSaveSelectedQuestion={handleSaveSelectedQuestion}
               />
             )}
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            marginTop: "1rem",
-            justifyContent: "center",
-          }}
-        >
-          <ButtonContainer>
-            <ColorButton
-              color="#F08080"
-              variant="contained"
-              onClick={handleCancel}
-            >
-              Cancel
-            </ColorButton>
-            <ColorButton
-              color="#FFD700"
-              variant="contained"
-              onClick={handleEditToggle}
-              disabled={isEditing}
-            >
-              Edit
-            </ColorButton>
-            <ColorButton
-              color="#98FB98"
-              variant="contained"
-              onClick={handleSave}
-              disabled={!isEditing}
-            >
-              Save
-            </ColorButton>
-          </ButtonContainer>
-        </Box>
-      </Box>
-    </FormContainer>
+       </Box>
+    </Box>
   );
 }
 

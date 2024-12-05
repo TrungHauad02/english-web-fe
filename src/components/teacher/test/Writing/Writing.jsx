@@ -64,13 +64,12 @@ function WritingTest() {
   return (
     <Box
       sx={{
-        marginRight: "5%",
-        marginLeft: "5%",
+    
         marginBottom: "2%",
         marginTop: "2%",
       }}
     >
-      <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch" }}>
+      <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch",    marginRight: "5%",marginLeft: "5%", }}>
         <Box sx={{ flex: 4, minHeight: 0 }}>
           <InformationTest data={datatest} />
         </Box>

@@ -11,43 +11,80 @@ import SerialGrid from './SerialGrid/SerialGrid';
 
 const HistoryTestMixing = ({datatest, submitTest ,onClickTestAgain}) => {
   
-  const DataTestMixing = [
+  const DataTestMixing = (() => {
+  let currentSerial = 1;
+
+  return [
     {
       title: "Vocabulary",
-      questions: datatest?.testMixingQuestions.filter(
+      questions: (datatest?.testMixingQuestions.filter(
         (question) => question.type === "VOCABULARY"
-      ) || [],
+      ) || []).map((question) =>
+        question.serial !== undefined
+          ? { ...question, serial: currentSerial++ }
+          : question
+      ),
       submitTestMixingAnswers: submitTest.submitTestMixingAnswers,
     },
     {
       title: "Grammar",
-      questions: datatest?.testMixingQuestions.filter(
+      questions: (datatest?.testMixingQuestions.filter(
         (question) => question.type === "GRAMMAR"
-      ) || [],
+      ) || []).map((question) =>
+        question.serial !== undefined
+          ? { ...question, serial: currentSerial++ }
+          : question
+      ),
       submitTestMixingAnswers: submitTest.submitTestMixingAnswers,
     },
     {
       title: "Reading",
-      testReadings: datatest?.testReadings || [],
-      submitTestReadingAnswers: submitTest.submitTestReadingAnswers
+      testReadings: (datatest?.testReadings || []).map((item) => ({
+        ...item,
+        questions: (item.questions || []).map((question) =>
+          question.serial !== undefined
+            ? { ...question, serial: currentSerial++ }
+            : question
+        ),
+      })),
+      submitTestReadingAnswers: submitTest.submitTestReadingAnswers,
     },
     {
       title: "Listening",
-      testListenings: datatest?.testListenings || [],
-      submitTestListeningAnswers: submitTest.submitTestListeningAnswers
+      testListenings: (datatest?.testListenings || []).map((item) => ({
+        ...item,
+        questions: (item.questions || []).map((question) =>
+          question.serial !== undefined
+            ? { ...question, serial: currentSerial++ }
+            : question
+        ),
+      })),
+      submitTestListeningAnswers: submitTest.submitTestListeningAnswers,
     },
     {
       title: "Speaking",
-      testSpeakings: datatest?.testSpeakings || [],
-      submitTestSpeakings: submitTest.submitTestSpeakings
+      testSpeakings: (datatest?.testSpeakings || []).map((item) => ({
+        ...item,
+        questions: (item.questions || []).map((question) =>
+          question.serial !== undefined
+            ? { ...question, serial: currentSerial++ }
+            : question
+        ),
+      })),
+      submitTestSpeakings: submitTest.submitTestSpeakings,
     },
     {
       title: "Writing",
-      testWritings: datatest?.testWritings || [],
-      submitTestWritings: submitTest.submitTestWritings
+      testWritings: (datatest?.testWritings || []).map((item) =>
+        item.serial !== undefined
+          ? { ...item, serial: currentSerial++ }
+          : item
+      ),
+      submitTestWritings: submitTest.submitTestWritings,
     },
- 
   ];
+})();
+
 
   const getListSerialTest = () => {
     const TitleAndSerials = {
@@ -120,6 +157,8 @@ const HistoryTestMixing = ({datatest, submitTest ,onClickTestAgain}) => {
     
     return TitleAndSerials;
   };
+
+
 
   const [focusId, setfocusId] = useState();
   const [activeTab, setActiveTab] = useState(0);
