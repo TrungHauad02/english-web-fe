@@ -22,7 +22,7 @@ export default function useVocabularyInfo(curVocab, setCurVocab) {
 
   useEffect(() => {
     setIsEditing(curVocab.id === "-1");
-  }, [curVocab]);
+  }, [curVocab.id]);
 
   const handleOpenDialog = () => {
     if (!curVocab || curVocab.id === "-1") return;
