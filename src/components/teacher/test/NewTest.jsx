@@ -55,13 +55,23 @@ const NewTest = ({ open, onClose, serial, handlebtnDetail }) => {
       setTitleError('');
     }
 
+    
+
     const durationValue = parseInt(duration.trim(), 10);
-    if (isNaN(durationValue) || durationValue <= 0) {
-      setDurationError('Duration must be a valid positive integer');
+
+    if (!/^\d*$/.test(duration)) {
+      setDurationError("Duration must be a positive number");
+      isValid = false;
+    } else if (duration === "" || durationValue <= 0) {
+      setDurationError("Duration must be a positive number");
+      isValid = false;
+    } else if (durationValue > 120) {
+      setDurationError("Duration must be under 120 minutes");
       isValid = false;
     } else {
-      setDurationError('');
+      setDurationError("");
     }
+    
 
     if (testType.trim() === '') {
       setTypeError('Please select a test type');
@@ -118,7 +128,7 @@ const NewTest = ({ open, onClose, serial, handlebtnDetail }) => {
           </Grid>
           <Grid item xs={12}>
             <HelpTextField
-              label="Duration (minutes)*"
+              label="Duration (min)*"
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
               error={Boolean(durationError)}
@@ -130,7 +140,7 @@ const NewTest = ({ open, onClose, serial, handlebtnDetail }) => {
             <Box display="flex" alignItems="center">
               <Typography
                 variant="body1"
-                style={{ fontWeight: 'bold', marginRight: '16px', minWidth: '150px' }}
+                style={{ fontWeight: 'bold', marginRight: '16px', minWidth: '120px' }}
               >
                 Type *
               </Typography>

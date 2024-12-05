@@ -9,7 +9,7 @@ const HelpTextField = ({
   errorText,
   type = 'text',
   disabled = false,
-  minWidth = '150px',
+  minWidth = '120px',
   ...props
 }) => {
   return (

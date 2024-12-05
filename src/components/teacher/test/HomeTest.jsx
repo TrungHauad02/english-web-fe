@@ -114,7 +114,7 @@ const TestManagement = () => {
     
       const data = await getListTest(page, adjustedType,searchTerm);
       const tests = data.content;
-      const serial  = await getMaxSerial();
+      const serial  = 0;
       setMaxSerial(serial+1||0);
      
       setVersionPage(versionPage+1);
