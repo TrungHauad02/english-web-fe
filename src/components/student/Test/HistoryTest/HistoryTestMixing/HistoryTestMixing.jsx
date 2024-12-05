@@ -27,11 +27,11 @@ function HistoryTestMixing() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const test = await getTest(state.testId);
+        const testResult =  await getTest(state.testId,"ACTIVE");
         const historyTest = await getSubmitTest(state.id);
 
-        if (test) {
-          setTest(test);
+        if (testResult) {
+          setTest(testResult);
         }
         if (historyTest) {
           setHistoryTest(historyTest);

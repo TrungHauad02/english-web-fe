@@ -4,7 +4,7 @@ import CustomPagination from "shared/component/pagination/CustomPagination";
 import ListTestContent from "./ListTestContent";
 import { fetchUserInfo } from "api/user/userService";
 import { Box, Typography, Tabs, Tab, Stack, styled } from "@mui/material";
-
+import MainPicture from "../common/listTopic/MainPicture";
 const ImageContainer = styled(Box)(({ theme }) => ({
   position: "relative",
   width: "100%",
@@ -112,20 +112,12 @@ function ListTest() {
 
   return (
     <Box>
-      <ImageContainer>
-        <img
-          src={
-            "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
-          }
-          alt="Test"
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
-        <MainTitleContainer>
-          <Typography variant="h4" component="h1" sx={{ margin: 2 }}>
-            TEST ONLINE
-          </Typography>
-        </MainTitleContainer>
-      </ImageContainer>
+    <MainPicture
+        src={
+               "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
+        }
+        title={"Test Online"}
+      />
       <Box sx={{ marginLeft: "5%", marginRight: "5%", marginTop: "2%" }}>
         <Box
           sx={{
@@ -133,68 +125,62 @@ function ListTest() {
             alignItems: "center",
           }}
         >
-          <Tabs
-            value={mainTab}
-            onChange={handleMainTabChange}
-            sx={{
-              display: "flex",
-              flex: 1 / 3,
-              width: "100%",
-            }}
-            TabIndicatorProps={{
-              style: { display: "none" },
-            }}
-          >
-            <TabItem
-              sx={{
-                display: "flex",
-                flex: 1,
-                width: "100%",
-              }}
-              label="Mixed"
-              selected={mainTab === 0}
-              isSubTab={false}
-            />
-            <TabItem
-              sx={{
-                display: "flex",
-                flex: 1,
-                width: "100%",
-              }}
-              label="Skills"
-              selected={mainTab === 1}
-              isSubTab={false}
-            />
-          </Tabs>
 
-          {mainTab === 1 && (
-            <Tabs
-              value={skillTab}
-              onChange={handleSkillTabChange}
-              sx={{
-                display: "flex",
-                flex: 2 / 3, // Đồng bộ flex với tab cha
-                width: "100%", // Đảm bảo width giống tab cha
-              }}
-              TabIndicatorProps={{
-                style: { display: "none" },
-              }}
-            >
-              {Object.keys(type.skills).map((key, index) => (
-                <TabItem
-                  sx={{
-                    display: "flex",
-                    flex: 1, // Đồng bộ flex với tab cha
-                    width: "100%", // Đảm bảo width giống tab cha
-                  }}
-                  key={key}
-                  label={type.skills[key]}
-                  selected={skillTab === index}
-                  isSubTab={true}
-                />
-              ))}
-            </Tabs>
-          )}
+
+<Tabs
+  value={mainTab}
+  onChange={handleMainTabChange}
+  sx={{
+    display: "flex",
+    flex: 1/3,
+    width: "100%",
+  }}
+  TabIndicatorProps={{
+    style: { display: "none" },
+  }}
+>
+  <TabItem  sx={{
+    display: "flex",
+    flex: 1,
+    width: "100%",
+  }} label="Mixed" selected={mainTab === 0} isSubTab={false} />
+  <TabItem  sx={{
+    display: "flex",
+    flex: 1,
+    width: "100%",
+  }} label="Skills" selected={mainTab === 1} isSubTab={false} />
+</Tabs>
+
+{mainTab === 1 && (
+  <Tabs
+    value={skillTab}
+    onChange={handleSkillTabChange}
+    sx={{
+      display: "flex",
+      flex: 2/3, 
+      width: "100%", 
+    }}
+    TabIndicatorProps={{
+      style: { display: "none" },
+    }}
+  >
+    {Object.keys(type.skills).map((key, index) => (
+      <TabItem
+      sx={{
+        display: "flex",
+        flex: 1, 
+        width: "100%", 
+      }}
+        key={key}
+        label={type.skills[key]}
+        selected={skillTab === index}
+        isSubTab={true}
+      />
+    ))}
+  </Tabs>
+)}
+
+
         </Box>
 
         <ListTestContent list={list} />

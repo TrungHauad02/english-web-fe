@@ -6,7 +6,8 @@ export function getListSubmitTests(
   type = "",
   searchTerm = "",
   startDate = "",
-  endDate = ""
+  endDate = "",
+  status = "ACTIVE"
 ) {
   const params = new URLSearchParams({
     page: page - 1,
@@ -16,6 +17,7 @@ export function getListSubmitTests(
     type,
     startDate,
     endDate,
+    status,
   });
   return apiClient
     .get(`/submit-test?${params.toString()}`)
