@@ -1,6 +1,6 @@
 import { BackSide } from "react-flippy";
 import { VocabCard } from "./VocabularyCard";
-import { Button, Grid2, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 
 function BackCard({ vocab }) {
@@ -28,23 +28,18 @@ function BackCard({ vocab }) {
         >
           {vocab.word}
         </Typography>
-        <Grid2 container>
-          <Grid2 item size={10}>
+        <Stack container>
+          <Stack>
             <Typography variant="body1" sx={{ color: "text.primary" }}>
               {vocab.phonetic}
             </Typography>
-          </Grid2>
-          <Grid2 item size={2} sx={{ position: "absolute", right: "1rem" }}>
-            <Button
-              size="small"
-              color="primary"
-              startIcon={
-                <VolumeUpIcon sx={{ color: "black" }} fontSize="large" />
-              }
-              onClick={handleSpeakerClick}
-            ></Button>
-          </Grid2>
-        </Grid2>
+          </Stack>
+          <Stack sx={{ position: "absolute", right: "0%", padding: "0rem" }}>
+            <Button size="small" color="primary" onClick={handleSpeakerClick}>
+              <VolumeUpIcon sx={{ color: "black" }} fontSize="small" />
+            </Button>
+          </Stack>
+        </Stack>
         <Typography
           variant="body1"
           sx={{ color: "text.primary", fontWeight: "bold" }}

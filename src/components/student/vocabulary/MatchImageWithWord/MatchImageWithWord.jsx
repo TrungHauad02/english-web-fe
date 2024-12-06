@@ -46,14 +46,14 @@ function MatchImageWithWord({ stateVocab }) {
           listContainer={state.listContainer}
           listVocab={state.listVocab}
         />
-        <Grid2 container justifyContent="flex-end">
+        <Grid2 container justifyContent="flex-end" sx={{ marginTop: "3rem" }}>
           <ResetButton onClick={handleResetClick} />
           <ConfirmAndSubmit
             sx={{
-                  fontSize: "1rem",
-                  padding: "0.5rem 1rem",
-                  margin: "1rem",
-              }}
+              fontSize: "1rem",
+              padding: "0.5rem 1rem",
+              margin: "1rem",
+            }}
             submitContent={getSubmittedContent()}
             scoreContent={getScoreContent()}
           />
