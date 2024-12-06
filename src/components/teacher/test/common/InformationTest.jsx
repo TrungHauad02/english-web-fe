@@ -36,7 +36,7 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-function InformationTest({ data }) {
+function InformationTest({ data,BooleanDeleteSubmitTest }) {
   const [formData, setFormData] = useState(data);
   const [backupData, setBackupData] = useState(data);
   const [editMode, setEditMode] = useState(false);
@@ -74,7 +74,12 @@ function InformationTest({ data }) {
     }));
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
     setEditMode(true);
   };
 

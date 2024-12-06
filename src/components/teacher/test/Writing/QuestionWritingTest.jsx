@@ -24,13 +24,18 @@ import { toast } from "react-toastify";
     },
   }));
 
-const QuestionWriting = ({data,handleWriting}) => {
+const QuestionWriting = ({data,handleWriting,BooleanDeleteSubmitTest}) => {
   const [content, setContent] = useState(data?.content || '');
   const [serialNumber, setSerialNumber] = useState(data.serial);
   const [isEditing, setIsEditing] = useState(data.id==='' ? true : false);
   
 
-const handleEdit = () => {
+const handleEdit = async () => {
+  const result = await BooleanDeleteSubmitTest();
+  
+  if (!result) {
+    return;
+  }
   setIsEditing(true);
 };
 

@@ -28,6 +28,7 @@ import { getListTest } from "api/test/listTestApi";
 import { getMaxSerial,updateStatus,deleteTest } from "api/test/TestApi";
 import CustomPagination from "shared/component/pagination/CustomPagination";
 import { useLocation, useNavigate } from "react-router-dom";
+import DeleteSubmitTestDialog from "./common/DeleteSubmitTestDialog";
 import ConfirmDialog from "shared/component/confirmDialog/ConfirmDialog";
 import NewTest from "./NewTest";
 import useColor from "shared/color/Color";
@@ -91,6 +92,20 @@ const TestManagement = () => {
     setOpenDialogDelete(false);
   };
   const handleAgreeDelete = async () => {
+    if(testDelete?.submitTestsId?.length>0)
+      {
+       
+        setSubmitTestIds(testDelete?.submitTestsId);
+        setOpenDialogDeleteSubmitTest(true)
+        const dialogResult = await waitForDialogAction(
+          () => dialogAction,
+          () => setDialogAction(null)
+        );
+    
+        if (dialogResult === "cancel") {
+          return; 
+        }
+      }
     await deleteTest(testDelete.id)
       .then(() => {
         toast.success(`${testDelete.title} deleted successfully!`);
@@ -102,10 +117,6 @@ const TestManagement = () => {
         handleCloseDialogDelete();
       });
   };
-
-  
-
-
 
   const handleOpen = () => {
     setOpen(true);
@@ -146,21 +157,52 @@ const TestManagement = () => {
     fetchData();
   }, [page, currtype, searchTerm,status,sortOrder]);
 
+  //xoá submit test
   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
-  const [submitTests, setSubmitTests] = useState([]);
-  const [contentDeleteSubmit, setContentDeleteSubmit] = useState("");
+  const [submitTestIds, setSubmitTestIds] = useState([]);
 
-  const handleDeleteRequest = (submittests, testTitle) => {
-
-  };
-
-  const handleCloseDialogDeleteSubmitTest= () => {
+  const [dialogAction, setDialogAction] = React.useState(null);
+  const handleDialogAction = (action) => {
+    if (action === "cancel") {
+      setDialogAction("cancel"); 
+    } else if (action === "confirm") {
+      setDialogAction("confirm");
+    }
     setOpenDialogDeleteSubmitTest(false);
-    setSubmitTests([]); 
   };
+  
+  const waitForDialogAction = (getDialogAction, resetDialogAction) => {
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        const action = getDialogAction();
+        if (action) {
+          clearInterval(interval); 
+          resolve(action); 
+          resetDialogAction(); 
+        }
+      }, 100);
+    });
+  };
+  
+  const handleStatusChange  = async (event, test) => {
 
-  const handleStatusChange = (event, test) => {
+    if(test?.submitTestsId?.length>0)
+    {
+     
+      setSubmitTestIds(test?.submitTestsId);
+      setOpenDialogDeleteSubmitTest(true)
+      const dialogResult = await waitForDialogAction(
+        () => dialogAction,
+        () => setDialogAction(null)
+      );
+  
+      if (dialogResult === "cancel") {
+        toast.info("Action cancelled.");
+        return; 
+      }
+    }
    
+
     updateStatus(test.id)
       .then((response) => {
         toast.success(`Status of "${test.title}" updated successfully!`);
@@ -233,6 +275,12 @@ const TestManagement = () => {
         content={`Are you sure you want to delete ${testDelete?.title}?`}
         cancelText="Cancel"  
         agreeText="Delete"  
+      />
+      <DeleteSubmitTestDialog
+        open={openDialogDeleteSubmitTest}
+        onClose={handleDialogAction} 
+        submitTestIds={submitTestIds}
+        content={`Are you sure you want to delete ${submitTestIds?.length || 0} history users of this test?`}
       />
       <Box
         sx={{

@@ -60,7 +60,7 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   },
 }));
 
-function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
+function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSubmitTest }) {
   const [currentTab, setCurrentTab] = useState(0);
   
   const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
@@ -142,7 +142,12 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
     return questions;
   };
 
-const handleStatusChange = (event, itemUpdate) => {
+const handleStatusChange =  async (event, itemUpdate) => {
+  const result = await BooleanDeleteSubmitTest();
+  
+  if (!result) {
+    return;
+  }
   let updateStatusFunction;
   switch (itemUpdate.type) {
     case "READING":
@@ -184,6 +189,13 @@ const handleStatusChange = (event, itemUpdate) => {
   );
 
   const handleAddNewQuestion = async () => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
+
+
     const newQuestion = {
       id: "",
       testId: data?.id || "",
@@ -285,6 +297,11 @@ const handleStatusChange = (event, itemUpdate) => {
   };
 
   const handleAgreeDelete = async () => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
     try {
       let serial = itemDelete?.serial || "";
       let minus = 1;

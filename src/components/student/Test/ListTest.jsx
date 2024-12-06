@@ -80,7 +80,7 @@ function ListTest() {
     const fetchData = async () => {
       const user = await fetchUserInfo();
 
-      const data = await getListTest(page, currtype, "", "ACTIVE", user.id);
+      const data = await getListTest(page, currtype, "", "ACTIVE", user.id,"ASC");
       const tests = data.content;
       setVersion(version + 1);
 
@@ -168,8 +168,6 @@ function ListTest() {
     ))}
   </Tabs>
 )}
-
-
         </Box>
 
         <ListTestContent list={list} />

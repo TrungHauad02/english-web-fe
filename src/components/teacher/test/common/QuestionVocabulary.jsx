@@ -95,17 +95,17 @@ const validateQuestion = (field, value, question) => {
 };
 
 
-const MixingQuiz = ({ question, handleQuestion }) => {
+const MixingQuiz = ({ question, handleQuestion , BooleanDeleteSubmitTest }) => {
   return (
     <>
       <FormContainer sx={{ p: 3, bgcolor: "#F0F0F0", minHeight: "100vh" , marginRight: "5%",marginLeft: "5%",}}>
-        <ContentQuestion question={question} handleQuestion={handleQuestion} />
+        <ContentQuestion question={question} handleQuestion={handleQuestion} BooleanDeleteSubmitTest ={BooleanDeleteSubmitTest} />
       </FormContainer>
     </>
   );
 };
 
-const ContentQuestion = ({ question, handleQuestion }) => {
+const ContentQuestion = ({ question, handleQuestion,BooleanDeleteSubmitTest }) => {
   const [questionMixing, setQuestionMixing] = useState(question);
   const [selectedAnswer, setSelectedAnswer] = useState(
     findCorrectAnswerId(question.answers)
@@ -284,7 +284,12 @@ const ContentQuestion = ({ question, handleQuestion }) => {
     setErrors({})
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
     setIsEditMode(true);
     setSelectedAnswer(findCorrectAnswerId(questionMixing.answers));
   };

@@ -38,7 +38,7 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   },
 }));
 
-function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
+function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSubmitTest }) {
   const [datamixing, setDatamixing] = useState([]);
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [itemDelete, setItemDelete] = useState(null);
@@ -54,7 +54,12 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
     setDatamixing(initialDataMixing);
   }, [data]);
 
-  const handleStatusChange = (event, itemUpdate) => {
+  const handleStatusChange = async (event, itemUpdate) => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
     updateTestListening(itemUpdate.id, {
       ...itemUpdate,
       status: event.target.checked ? "ACTIVE" : "INACTIVE",
@@ -96,6 +101,11 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
   const questions = getListSerialTest();
 
   const handleAddNewQuestion = async () => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
     const newQuestion = {
       id: "",
       testId: data?.id || "",
@@ -112,6 +122,11 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
   };
 
   const handleDeleteQuestion = async () => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
     if (!itemDelete) return;
 
     try {
