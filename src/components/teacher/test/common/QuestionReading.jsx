@@ -72,6 +72,25 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
   const [image, setImage] = useState(formData.image);
 
   const handleImageUploadData = (event) => {
+    const file = event.target.files[0]; 
+    if (!file) {
+      toast.error("Please select a file.");
+      return;
+    }
+    
+    const validExtensions = ["image/jpeg", "image/png", "image/gif"];
+    if (!validExtensions.includes(file.type)) {
+      toast.error("Only JPEG, PNG, and GIF image formats are allowed.");
+      return;
+    }
+    const img = new Image();
+    img.onload = function () {
+      if (img.width < 150 || img.height < 150) {
+        toast.warning("The image is small, which might affect quality. Please consider uploading a larger image.");
+      }
+      
+  };
+    
     handleFileChange(event, setImage);
   };
 
@@ -438,7 +457,7 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
           : q
       ),
     }));
-    console.log( event.target.checked );
+  
     
     
   };
@@ -499,34 +518,63 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
             marginLeft: "5%",
           }}
         >
-          <Box sx={{ flex: 1 }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              Image
-            </Typography>
-            <Box sx={{ mb: 2 }}>
+          <Box sx={{ flex: 1,marginTop:'2rem', }}>
+          <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                mb: 2,
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{
+                  whiteSpace: "nowrap",
+                  height: "3rem",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                Image
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  height: "3rem",
+                  flex: 1,
+                }}
+              >
               {image && (
                 <CardMedia
                   image={image}
-                  sx={{ height: "250px", width: "250px" }}
+                  sx={{ height: "150px", width: "150px" }}
                 />
               )}
-              <Button
-                variant="contained"
-                component="label"
-                disabled={!isEditing}
-                startIcon={<Upload />}
-              >
-                Upload
-                <input
+                <Button
+                  variant="contained"
+                  component="label"
+                  disabled={!isEditing}
+                  startIcon={<Upload />}
+                  sx={{
+                    whiteSpace: "nowrap",
+                    bgcolor: Color2_1,
+                    "&:hover": { bgcolor: Color2 },
+                  }}
+                >
+                  Upload
+                  <input
                   type="file"
                   hidden
                   accept="image/*"
                   onChange={handleImageUploadData}
                 />
-              </Button>
+                </Button>
+              </Box>
             </Box>
-
-            <Typography variant="h6" sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 2 , marginTop:'4rem'}}>
               Content
             </Typography>
             <TextField

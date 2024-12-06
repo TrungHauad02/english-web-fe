@@ -97,19 +97,25 @@ function ListQuestionSubmit({ dataTest, focusId, dataSubmitTest }) {
                             );
                         })}
                     </RadioGroup>
-                    <Button
-                        onClick={() => toggleSection(questionNumber.id, 'explain')}
-                        sx={{ mt: 1, color: 'primary.main', textTransform: 'none', fontSize: '0.875rem' }}
-                        variant="text"
-                        endIcon={expandedSections[questionNumber.id]?.explain ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    >
-                        Explain
-                    </Button>
-                    <Collapse in={expandedSections[questionNumber.id]?.explain}>
-                        <Typography variant="body2" sx={{ ml: 2,mt: 1 }}>
-                            {questionNumber.explanation || 'No explanation provided.'}
-                        </Typography>
-                    </Collapse>
+                            {questionNumber.explanation && (
+                            <>
+                                <Button
+                                    onClick={() => toggleSection(questionNumber.id, 'explain')}
+                                    sx={{ mt: 1, color: 'primary.main', textTransform: 'none', fontSize: '0.875rem' }}
+                                    variant="text"
+                                    endIcon={
+                                        expandedSections[questionNumber.id]?.explain ? <ExpandLessIcon /> : <ExpandMoreIcon />
+                                    }
+                                >
+                                    Explain
+                                </Button>
+                                <Collapse in={expandedSections[questionNumber.id]?.explain}>
+                                    <Typography variant="body2" sx={{ ml: 2, mt: 1 }}>
+                                        {questionNumber.explanation}
+                                    </Typography>
+                                </Collapse>
+                            </>
+                        )}
                     <Button
                         onClick={() => toggleSection(questionNumber.id, 'comment')}
                         sx={{ mt: 1, color: 'primary.main', textTransform: 'none', fontSize: '0.875rem' }}

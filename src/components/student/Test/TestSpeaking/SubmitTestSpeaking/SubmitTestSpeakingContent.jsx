@@ -95,7 +95,7 @@ const SubmitTestSpeakignContent = ({ submitTestSpeakingList, testSpeakingList, f
                                                 onClick={() => toggleExplanation(question.serial)}
                                                 sx={{ color: '#42a5f5', textTransform: 'none', mt: 1 }}
                                             >
-                                                Explain {showExplanation === question.serial ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                                Transcript {showExplanation === question.serial ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                             </Button>
                                             <Collapse in={showExplanation === question.serial}>
                                                 <Typography variant="body2" sx={{ mt: 1 }}>

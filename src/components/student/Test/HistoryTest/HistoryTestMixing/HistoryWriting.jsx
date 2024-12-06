@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-    Card,
-    CardContent,
     Typography,
     Container,
     Paper,
@@ -10,6 +8,7 @@ import {
     Collapse,
     Button,
     Divider,
+    TextField,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -34,6 +33,8 @@ const SubmitTestWritingContent = ({ testWritingList, submitTestWritingList, focu
         setShowComment((prev) => (prev === serial ? null : serial));
     };
 
+    const calculateWordCount = (text) => (text.trim() === '' ? 0 : text.trim().split(/\s+/).length);
+
     return (
         <Container>
             {(testWritingList || []).map((test, index) => {
@@ -42,78 +43,86 @@ const SubmitTestWritingContent = ({ testWritingList, submitTestWritingList, focu
                 );
 
                 return (
-                    <Card
+                    <Box
                         key={index}
+                        ref={(el) => (questionRefs.current[test.serial] = el)}
                         sx={{
                             mb: 3,
-                            borderRadius: 2,
-                            boxShadow: 1,
-                            backgroundColor: '#ffffff',
+                            p: 2,
+                            backgroundColor: test.serial === highlightedSerial ? '#e3f2fd' : '#ffffff',
+                            transition: 'background-color 0.3s ease',
+                            borderRadius: 1,
                             border: '1px solid #e0e0e0',
-                            position: 'relative',
                         }}
                     >
-                        <CardContent>
-                            <Paper
-                                ref={(el) => (questionRefs.current[test.serial] = el)}
-                                sx={{
-                                    p: 2,
-                                    backgroundColor: test.serial === highlightedSerial ? '#e3f2fd' : '#ffffff',
-                                    transition: 'background-color 0.3s ease',
-                                    borderRadius: 1,
-                                }}
-                            >
-                                <Box display="flex" justifyContent="space-between" alignItems="center">
-                                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                        Question {test.serial}
-                                    </Typography>
-                                    {relatedSubmit && (
-                                        <Typography
-                                            variant="h6"
-                                            sx={{
-                                                color: 'red',
-                                                fontWeight: 'bold',
-                                            }}
-                                        >
-                                             {relatedSubmit.score}/
-                                                {submitTestWritingList?.length > 0
-                                        ? (100 /6/ submitTestWritingList.length).toFixed(0)
-                                        : "N/A"}
-                                        </Typography>
-                                    )}
-                                </Box>
-                                <Divider sx={{ my: 1 }} />
-                                <Typography variant="body1" sx={{ mb: 1 }}>
-                                    {test.content || 'No content available'}
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+                            Question {test.serial}: {test.content || 'No content available'}
+                        </Typography>
+                        <Divider sx={{ my: 1 }} />
+                        {relatedSubmit ? (
+                            <Box>
+                                <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
+                                    <strong>Your Answer:</strong>
                                 </Typography>
-                                {relatedSubmit ? (
-                                    <Box>
-                                        <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-                                            <strong>Your Answer:</strong> {relatedSubmit.content || 'No answer provided'}
+                                <Paper elevation={3} sx={{ mb: 2, p: 2 }}>
+                                    <TextField
+                                        fullWidth
+                                        multiline
+                                        rows={6}
+                                        variant="outlined"
+                                        value={relatedSubmit.content || 'No answer provided'}
+                                        InputProps={{ readOnly: true }}
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                '& fieldset': {
+                                                    borderColor: 'rgba(0, 0, 0, 0.23)',
+                                                },
+                                                '&:hover fieldset': {
+                                                    borderColor: 'rgba(0, 0, 0, 0.5)',
+                                                },
+                                                '&.Mui-focused fieldset': {
+                                                    borderColor: 'primary.main',
+                                                },
+                                            },
+                                        }}
+                                    />
+                                    <Box sx={{ mt: 1 }}>
+                                        <Typography variant="body2">
+                                            Words Count: {calculateWordCount(relatedSubmit.content || '')}
                                         </Typography>
-                                        <Button
-                                            variant="text"
-                                            size="small"
-                                            onClick={() => toggleComment(test.serial)}
-                                            sx={{ color: '#42a5f5', textTransform: 'none' }}
-                                            endIcon={showComment === test.serial ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                                        >
-                                            View Comment
-                                        </Button>
-                                        <Collapse in={showComment === test.serial}>
-                                            <Typography variant="body2" sx={{ ml: 2,mt: 1 , color: '#616161' }}>
-                                                <strong>Comment:</strong> {relatedSubmit.comment || 'No comment provided'}
-                                            </Typography>
-                                        </Collapse>
                                     </Box>
-                                ) : (
-                                    <Typography variant="body2" color="error">
-                                        No answer for this question.
+                                </Paper>
+                                <Button
+                                    variant="text"
+                                    size="small"
+                                    onClick={() => toggleComment(test.serial)}
+                                    sx={{ color: '#42a5f5', textTransform: 'none' }}
+                                    endIcon={
+                                        showComment === test.serial ? (
+                                            <ExpandLessIcon />
+                                        ) : (
+                                            <ExpandMoreIcon />
+                                        )
+                                    }
+                                >
+                                    Comment
+                                </Button>
+                                <Collapse in={showComment === test.serial}>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{ ml: 2, mt: 1, color: '#616161' }}
+                                    >
+                                        <strong>Comment:</strong>{' '}
+                                        {relatedSubmit.comment || 'No comment provided'}
                                     </Typography>
-                                )}
-                            </Paper>
-                        </CardContent>
-                    </Card>
+                                </Collapse>
+                            </Box>
+                        ) : (
+                            <Typography variant="body2" color="error">
+                                No answer for this question.
+                            </Typography>
+                        )}
+                    </Box>
                 );
             })}
         </Container>
