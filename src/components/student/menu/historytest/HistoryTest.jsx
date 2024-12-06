@@ -30,8 +30,6 @@ const HistoryTest = () => {
   
   const [tests, setTests] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
-
-
   
   const navigateSubmitTest =   (submitTest) => {
 
@@ -60,8 +58,6 @@ const HistoryTest = () => {
         break;
     }
     navigate(newPath, { state });
-   
-
   };
  
   const fetchTests = async () => {

@@ -293,7 +293,7 @@ export default function SpeakingTesting({ datatest, status, setStatus , setSubmi
           submitTestId: '',
           score: score,
           content: content,
-          explanation: transcript,
+          transcript: transcript,
           comment: comment,
           status: "ACTIVE"
         }

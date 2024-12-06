@@ -19,9 +19,11 @@ import {
   Switch,
   FormControl,
   InputLabel,
+  Grid,
 } from "@mui/material";
-
+import {  Replay } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
+
 import { styled } from "@mui/material/styles";
 import { useEffect } from "react";
 import { getListTest } from "api/test/listTestApi";
@@ -55,7 +57,7 @@ const TestManagement = () => {
   };
   const [page, setPage] = useState(1);
   const [list, setList] = useState([]);
-  const [currtype, setCurrtype] = useState("ALL");
+  const [currType, setCurrType] = useState("ALL");
   const [totalPage, setTotalPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
@@ -130,12 +132,12 @@ const TestManagement = () => {
   };
 
   const handleFilterChange = (event) => {
-    setCurrtype(event.target.value);
+    setCurrType(event.target.value);
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const adjustedType = currtype === "ALL" ? "" : currtype;
+      const adjustedType = currType === "ALL" ? "" : currType;
       const adjustedStatus = status === "ALL" ? "" : status;
       const data = await getListTest(
         page,
@@ -160,7 +162,7 @@ const TestManagement = () => {
       }
     };
     fetchData();
-  }, [page, currtype, searchTerm, status, sortOrder,version]);
+  }, [page, currType, searchTerm, status, sortOrder,version]);
 
   //xoá submit test
   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] =
@@ -190,6 +192,16 @@ const TestManagement = () => {
         }
       }, 100);
     });
+  };
+
+
+  const handleResetFilter = () => {
+    setStatus("ALL");
+    setSortOrder("ASC");
+    setCurrType("ALL");
+    setSearchTerm("");
+
+   
   };
 
   const handleStatusChange = async (event, test) => {
@@ -297,78 +309,87 @@ const TestManagement = () => {
           submitTestIds?.length || 0
         } history users of this test?`}
       />
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "2rem",
-          gap: "1rem",
-        }}
-      >
-        <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-          <InputLabel id="type-label">Type</InputLabel>
-          <Select
-            labelId="type-label"
-            value={currtype}
-            onChange={handleFilterChange}
-            label="Type"
-          >
-            <MenuItem value="ALL">All</MenuItem>
-            <MenuItem value={type.mixing}>Mixing</MenuItem>
-            <MenuItem value={type.reading}>Reading</MenuItem>
-            <MenuItem value={type.listening}>Listening</MenuItem>
-            <MenuItem value={type.speaking}>Speaking</MenuItem>
-            <MenuItem value={type.writing}>Writing</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-          <InputLabel id="status-label">Status</InputLabel>
-          <Select
-            labelId="status-label"
-            value={status}
-            onChange={handleStatusChangeFilter}
-            label="Status"
-          >
-            <MenuItem value="ALL">ALL</MenuItem>
-            <MenuItem value="ACTIVE">ACTIVE</MenuItem>
-            <MenuItem value="INACTIVE">INACTIVE</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl variant="outlined" sx={{ minWidth: 130 }}>
-          <InputLabel id="sortOrder-label">Sort Order</InputLabel>
-          <Select
-            labelId="sortOrder-label"
-            value={sortOrder}
-            onChange={handleSortChange}
-            label="Sort Order"
-          >
-            <MenuItem value="ASC">Serial ASC</MenuItem>
-            <MenuItem value="DESC">Serial DESC</MenuItem>
-          </Select>
-        </FormControl>
-        <TextField
-          label="Search Test"
-          variant="outlined"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          fullWidth
-          sx={{ flexGrow: 1 }}
-        />
-        <ColorButton
-          color={Color2}
-          variant="contained"
-          sx={{
-            marginLeft: 2,
-            whiteSpace: "nowrap",
-            padding: "8px 16px",
-            minWidth: "120px",
-            borderRadius: "8px",
-          }}
-          onClick={handleOpen}
+      <Box sx={{ marginBottom: "2rem" }}>
+  <Grid container spacing={2} alignItems="center">
+
+    <Grid item xs={12} sm={6} md={2} sx={{ display: "flex" }}>
+      <FormControl variant="outlined" fullWidth>
+        <InputLabel id="type-label">Type</InputLabel>
+        <Select
+          labelId="type-label"
+          value={currType}
+          onChange={handleFilterChange}
+          label="Type"
         >
-          Add new test
-        </ColorButton>
+          <MenuItem value="ALL">All</MenuItem>
+          <MenuItem value={type.mixing}>Mixing</MenuItem>
+          <MenuItem value={type.reading}>Reading</MenuItem>
+          <MenuItem value={type.listening}>Listening</MenuItem>
+          <MenuItem value={type.speaking}>Speaking</MenuItem>
+          <MenuItem value={type.writing}>Writing</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
+    <Grid item xs={12} sm={6} md={2} sx={{ display: "flex" }}>
+      <FormControl variant="outlined" fullWidth>
+        <InputLabel id="status-label">Status</InputLabel>
+        <Select
+          labelId="status-label"
+          value={status}
+          onChange={handleStatusChangeFilter}
+          label="Status"
+        >
+          <MenuItem value="ALL">ALL</MenuItem>
+          <MenuItem value="ACTIVE">ACTIVE</MenuItem>
+          <MenuItem value="INACTIVE">INACTIVE</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
+    <Grid item xs={12} sm={6} md={2} sx={{ display: "flex" }}>
+      <FormControl variant="outlined" fullWidth>
+        <InputLabel id="sortOrder-label">Sort Order</InputLabel>
+        <Select
+          labelId="sortOrder-label"
+          value={sortOrder}
+          onChange={handleSortChange}
+          label="Sort Order"
+        >
+          <MenuItem value="ASC">Serial ASC</MenuItem>
+          <MenuItem value="DESC">Serial DESC</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
+    <Grid item xs={12} sm={6} md={4} sx={{ display: "flex", alignItems: "center" }}>
+      <TextField
+        label="Search Test"
+        variant="outlined"
+        value={searchTerm}
+        onChange={handleSearchChange}
+        fullWidth
+      />
+      <IconButton
+        sx={{ marginLeft: 1 }}
+        onClick={() => handleResetFilter()} 
+      >
+        <Replay />
+      </IconButton>
+    </Grid>
+    <Grid item xs={12} sm={6} md={2}>
+      <ColorButton
+        color={Color2}
+        variant="contained"
+        fullWidth
+        sx={{
+          whiteSpace: "nowrap",
+          padding: "8px 16px",
+          borderRadius: "8px",
+        }}
+        onClick={handleOpen}
+      >
+        Add new test
+      </ColorButton>
+          </Grid>
+        </Grid>
       </Box>
       <TableContainer
         component={Paper}
@@ -461,7 +482,7 @@ const TestManagement = () => {
         <CustomPagination
           count={totalPage}
           onChange={onChangePage}
-          key={currtype}
+          key={currType}
         />
       </Stack>
     </Container>

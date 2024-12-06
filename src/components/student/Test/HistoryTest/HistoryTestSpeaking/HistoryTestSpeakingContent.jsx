@@ -13,10 +13,10 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
-const SubmitTestSpeakignContent = ({ submitTestSpeakingList, testSpeakingList, focusedSerial }) => {
+const SubmitTestSpeakingContent = ({ submitTestSpeakingList, testSpeakingList, focusedSerial }) => {
     const questionRefs = useRef({});
     const [highlightedSerial, setHighlightedSerial] = useState(focusedSerial);
-    const [showExplanation, setShowExplanation] = useState(null);
+    const [showTranscript, setShowTranscript] = useState(null);
     const [showComment, setShowComment] = useState(null);
 
     useEffect(() => {
@@ -31,7 +31,7 @@ const SubmitTestSpeakignContent = ({ submitTestSpeakingList, testSpeakingList, f
     }, [focusedSerial]);
 
     const toggleExplanation = (serial) => {
-        setShowExplanation((prev) => (prev === serial ? null : serial));
+        setShowTranscript((prev) => (prev === serial ? null : serial));
     };
 
     const toggleComment = (serial) => {
@@ -96,11 +96,11 @@ const SubmitTestSpeakignContent = ({ submitTestSpeakingList, testSpeakingList, f
                                                 onClick={() => toggleExplanation(question.serial)}
                                                 sx={{ color: '#42a5f5', textTransform: 'none', mt: 1 }}
                                             >
-                                                Explain {showExplanation === question.serial ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                                Transcript {showTranscript === question.serial ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                             </Button>
-                                            <Collapse in={showExplanation === question.serial}>
+                                            <Collapse in={showTranscript === question.serial}>
                                                 <Typography variant="body2" sx={{ ml: 2,mt: 1  }}>
-                                                    {relatedSubmit.explanation || 'No explanation available'}
+                                                    {relatedSubmit.transcript || 'No transcript available'}
                                                 </Typography>
                                             </Collapse>
 
@@ -133,14 +133,14 @@ const SubmitTestSpeakignContent = ({ submitTestSpeakingList, testSpeakingList, f
     );
 };
 
-SubmitTestSpeakignContent.propTypes = {
+SubmitTestSpeakingContent.propTypes = {
     submitTestSpeakingList: PropTypes.arrayOf(PropTypes.object).isRequired,
     testSpeakingList: PropTypes.arrayOf(PropTypes.object).isRequired,
     focusedSerial: PropTypes.string,
 };
 
-SubmitTestSpeakignContent.defaultProps = {
+SubmitTestSpeakingContent.defaultProps = {
     focusedSerial: null,
 };
 
-export default SubmitTestSpeakignContent;
+export default SubmitTestSpeakingContent;

@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 function TestSpeaking() {
   const location = useLocation();
   const { state } = location;
-  const [datatest, setdatatest] = useState(null);
+  const [datatest, setDataTest] = useState(null);
   const [submitTest, setSubmitTest] = useState(null);
   const [storeName, setStoreName] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -38,10 +38,10 @@ function TestSpeaking() {
 
           const updatedData = updateDataTest(data);
 
-          setdatatest(updatedData);
+          setDataTest(updatedData);
           setStoreName("MyStore" + data.id);
         } else {
-          setdatatest(null);
+          setDataTest(null);
         }
       } catch (err) {
         setError("Failed to fetch test data");

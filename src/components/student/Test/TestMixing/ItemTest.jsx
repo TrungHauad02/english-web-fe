@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl, Button, Grid, styled, duration ,CircularProgress} from '@mui/material';
+import { Box, Grid,CircularProgress} from '@mui/material';
 import ItemTitleTest from './ItemTitleTest';
 import Vocabulary from './Vocabulary';
 import Grammar from './Grammar';
@@ -19,11 +19,11 @@ import {createSubmitTestWriting} from "../../../../api/test/submitTestWriting"
 import {commentMixingQuestion,commentReadingQuestion,commentListeningQuestion} from "../../../../api/test/commentTest"
 import { scoreTestWriting } from "api/feature/scoreTestWriting/scoreTestWriting";
 import { getSpeechToText } from "api/feature/stt/SpeechToTextService";
-import { useLocation,useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { openDB, saveData, getData, deleteData } from '../common/IndexDB';
 
 
-const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
+const ItemTest = ({ title, datatest }) => {
   const storeName = 'MyStore' + datatest.id;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
@@ -446,7 +446,7 @@ const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
           submitTestId: '',
           score: score,
           content: content,
-          explanation: transcript,
+          transcript: transcript,
           comment: comment,
           status: "ACTIVE"
         }
@@ -464,7 +464,7 @@ const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
 
           let score = 0;
           let comment = "No comment available. You haven't completed this question yet";
-          let content = "No comment available. You haven't completed this question yet";
+          let content = "No content available. You haven't completed this question yet";
           if(contentUserWrite)
           {
             content = contentUserWrite;

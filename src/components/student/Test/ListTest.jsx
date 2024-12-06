@@ -48,7 +48,7 @@ function ListTest() {
     },
   };
 
-  const [currtype, setCurrtype] = useState(type.mixed);
+  const [currType, setCurrType] = useState(type.mixed);
   const [mainTab, setMainTab] = useState(0);
   const [skillTab, setSkillTab] = useState(0);
 
@@ -56,9 +56,9 @@ function ListTest() {
     setMainTab(newValue);
     setPage(1);
     if (newValue === 0) {
-      setCurrtype(type.mixed);
+      setCurrType(type.mixed);
     } else {
-      setCurrtype(type.skills.reading);
+      setCurrType(type.skills.reading);
       setSkillTab(0);
     }
   };
@@ -66,7 +66,7 @@ function ListTest() {
   const handleSkillTabChange = (event, newValue) => {
     setSkillTab(newValue);
     const skillKeys = Object.keys(type.skills);
-    setCurrtype(type.skills[skillKeys[newValue]]);
+    setCurrType(type.skills[skillKeys[newValue]]);
     setPage(1);
   };
 
@@ -76,7 +76,7 @@ function ListTest() {
 
       const data = await getListTest(
         page,
-        currtype,
+        currType,
         "",
         "ACTIVE",
         user.id,
@@ -94,7 +94,7 @@ function ListTest() {
     };
 
     fetchData();
-  }, [page, currtype]);
+  }, [page, currType]);
 
   const onChangePage = (event, value) => {
     setPage(value);
@@ -184,7 +184,7 @@ function ListTest() {
           <CustomPagination
             count={totalPage}
             onChange={onChangePage}
-            key={currtype}
+            key={currType}
           />
         </Stack>
       </Box>

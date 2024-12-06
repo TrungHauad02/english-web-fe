@@ -5,7 +5,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ListQuestion from "./HistoryListQuestion";
 
 function SubmitListening({ dataTest, focusId }) {
-    // State for toggling transcript section
+
     const [showTranscript, setShowTranscript] = useState({});
 
     const handleToggleTranscript = (id) => {
@@ -39,7 +39,6 @@ function SubmitListening({ dataTest, focusId }) {
                             {item.transcript ? item.transcript : "No transcript available."}
                         </Typography>
                     </Collapse>
-
                     <ListQuestion 
                         dataTest={item.questions} 
                         focusId={focusId} 

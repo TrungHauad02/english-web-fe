@@ -278,15 +278,15 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
         );
 
         await Promise.all(
-          questionsDelete.map(async (questiondelete) => {
-            await updateTestReadingQuestion(questiondelete.id, questiondelete);
+          questionsDelete.map(async (questionDelete) => {
+            await updateTestReadingQuestion(questionDelete.id, questionDelete);
           })
         );
-        for (const questiondelete of questionsDelete) {
+        for (const questionDelete of questionsDelete) {
           await DeleteQuestionReadingTest(
             initialData.test.id,
-            questiondelete,
-            questiondelete.serial,
+            questionDelete,
+            questionDelete.serial,
             1
           );
         }
@@ -496,33 +496,62 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
           }}
         >
           <Box sx={{ flex: 1 }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              Image
-            </Typography>
-            <Box sx={{ mb: 2 }}>
+          <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                mb: 2,
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{
+                  whiteSpace: "nowrap",
+                  height: "3rem",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                Image
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  height: "3rem",
+                  flex: 1,
+                }}
+              >
               {image && (
                 <CardMedia
                   image={image}
-                  sx={{ height: "250px", width: "250px" }}
+                  sx={{ height: "150px", width: "150px" }}
                 />
               )}
-              <Button
-                variant="contained"
-                component="label"
-                disabled={!isEditing}
-                startIcon={<Upload />}
-              >
-                Upload
-                <input
+                <Button
+                  variant="contained"
+                  component="label"
+                  disabled={!isEditing}
+                  startIcon={<Upload />}
+                  sx={{
+                    whiteSpace: "nowrap",
+                    bgcolor: Color2_1,
+                    "&:hover": { bgcolor: Color2 },
+                  }}
+                >
+                  Upload
+                  <input
                   type="file"
                   hidden
                   accept="image/*"
                   onChange={handleImageUploadData}
                 />
-              </Button>
+                </Button>
+              </Box>
             </Box>
-
-            <Typography variant="h6" sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 2 , marginTop:'4rem'}}>
               Content
             </Typography>
             <TextField
