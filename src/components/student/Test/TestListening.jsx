@@ -1,7 +1,7 @@
 import MainTitle from "./MainTitle";
 import OneListeningTest from "./OneListeningTest";
 import { Box, Typography, Button } from "@mui/material";
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getTest } from "api/test/TestApi";
 import { createSubmitTest } from "../../../api/test/submitTest";
@@ -9,18 +9,18 @@ import { fetchUserInfo } from "../../../api/user/userService";
 import { createSubmitTestListeningAnswer } from "../../../api/test/submitTestListeningAnswer";
 import { commentListeningQuestion } from "../../../api/test/commentTest";
 import CountdownTimer from "./common/CountdownTimer";
-import { openDB, saveData, getData, deleteData } from './common/IndexDB';
+import { openDB, saveData, getData, deleteData } from "./common/IndexDB";
 import { styled } from "@mui/material/styles";
 const DurationContainer = styled(Box)(({ theme }) => ({
   background: "#E0F7FA",
   borderRadius: "20px",
   fontSize: "14px",
-  float:'right',
+  float: "right",
   padding: "1.5rem 3rem",
-  border: '1px solid #000000',
-  display: 'flex',
-  justifyContent: 'center', 
-  alignItems: 'center',
+  border: "1px solid #000000",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 }));
 function TestListening() {
   const location = useLocation();
@@ -29,7 +29,6 @@ function TestListening() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const title = datatest ? datatest.type : "";
-  const [status, setStatus] = useState("Testting");
   const data = datatest?.testListenings;
   const [indexVisible, setIndexVisible] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -41,10 +40,10 @@ function TestListening() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getTest(state.id,"ACTIVE");
+        const data = await getTest(state.id, "ACTIVE");
         if (data) {
           const updateDataTest = (data) => {
-            let serialCounter = 1; 
+            let serialCounter = 1;
             data.testListenings = data.testListenings.map((item) => ({
               ...item,
               questions: item.questions.map((question) =>
@@ -55,12 +54,12 @@ function TestListening() {
             }));
             return data;
           };
-  
+
           const updatedData = updateDataTest(data);
-     
+
           setdatatest(updatedData);
           setDuration(data.duration);
-          setStoreName( "MyStore" + data.id);
+          setStoreName("MyStore" + data.id);
         } else {
           setdatatest(null);
         }
@@ -81,21 +80,19 @@ function TestListening() {
           getData(db, "MyStore" + storeName)
             .then((data) => {
               if (data?.answers) {
-                setAnswers(data.answers); 
+                setAnswers(data.answers);
                 setDuration(data.duration);
-                
-              } 
+              }
             })
             .catch((error) => {
               console.error("Error fetching answers:", error);
             });
-            getData(db, "MyStore" + datatest.id, "duration")
+          getData(db, "MyStore" + datatest.id, "duration")
             .then((data) => {
               if (data?.duration) {
-                setDuration(data.duration); 
+                setDuration(data.duration);
                 console.log(data);
-                
-              } 
+              }
             })
             .catch((error) => {
               console.error("Error fetching answers:", error);
@@ -105,17 +102,18 @@ function TestListening() {
           console.error("Error accessing IndexedDB:", error);
         });
     }
-
   }, [datatest?.id]);
-  
+
   useEffect(() => {
     if (datatest != null) {
-      openDB("MyDatabase", storeName).then((db) => {
-        saveData(db, storeName, { id: storeName,  answers });
-      }).catch((error) => {
-        console.error("Error saving answers to the database:", error);
-      });
-    } 
+      openDB("MyDatabase", storeName)
+        .then((db) => {
+          saveData(db, storeName, { id: storeName, answers });
+        })
+        .catch((error) => {
+          console.error("Error saving answers to the database:", error);
+        });
+    }
   }, [answers]);
 
   if (loading) {
@@ -135,7 +133,9 @@ function TestListening() {
     setIsSubmitting(true);
     const score = calculateScore();
     let user = await fetchUserInfo();
-    const vietnamTime = new Date().toLocaleString("en-CA", { timeZone: "Asia/Ho_Chi_Minh", hour12: false }).replace(", ", "T");
+    const vietnamTime = new Date()
+      .toLocaleString("en-CA", { timeZone: "Asia/Ho_Chi_Minh", hour12: false })
+      .replace(", ", "T");
     let submitTest = {
       id: "",
       testId: datatest.id,
@@ -209,7 +209,7 @@ function TestListening() {
       );
 
       await Promise.all(saveAnswerPromises);
-      deleteData('MyDatabase', 'MyStore'+datatest.id);
+      deleteData("MyDatabase", "MyStore" + datatest.id);
       const state = {
         id: savedSubmitTest.id,
         testId: datatest.id,
@@ -247,112 +247,108 @@ function TestListening() {
 
   return (
     <Box>
-  <MainTitle
-    title={datatest.type}
-    bg="https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
-  />
-  <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
-
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "right", 
-        alignItems: "center",
-    
-      }}
-    >
-      <DurationContainer>
-        <Typography align="center">Time remaining:</Typography>
-        <Typography align="center" sx={{ marginLeft: "1rem" }}>
-          {datatest && (
-            <CountdownTimer
-              duration={duration}
-              handleSubmit={handleSubmit}
-              dbName={"MyDatabase"}
-              storeName={storeName}
-            />
-          )}
-        </Typography>
-      </DurationContainer>
-    </Box>
-
-    <Box
-      sx={{
-        marginBottom: "1rem",
-        display: "flex",
-        justifyContent: "center",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Typography
-          variant="body1"
-          sx={{
-            mx: 2,
-            background: "#E0F7FA",
-            padding: "0.5rem 2rem",
-            textAlign: "center",
-            fontSize: "1rem",
-            fontFamily: "Roboto",
-            fontWeight: "500",
-          }}
-        >
-          {indexVisible + 1}/{data.length}
-        </Typography>
-      </Box>
-    </Box>
-
-  
-    <Box
-      sx={{
-        display: "flex",
-        marginBottom: "1rem",
-      }}
-    >
-      <Box sx={{ width: "100%" }}>
+      <MainTitle
+        title={datatest.type}
+        bg="https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
+      />
+      <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
         <Box
           sx={{
-            border: "1px solid black",
-            borderRadius: "1rem",
-            padding: "0.5rem",
-            width: "100%",
+            display: "flex",
+            justifyContent: "right",
+            alignItems: "center",
           }}
         >
-          <OneListeningTest
-            onelistening={data[indexVisible]}
-            audioRef={audioRef}
-            title={title}
-            onAudioEnd={onAudioEnd}
-            answers={answers}
-            setAnswers={setAnswers}
-          />
+          <DurationContainer>
+            <Typography align="center">Time remaining:</Typography>
+            <Typography align="center" sx={{ marginLeft: "1rem" }}>
+              {datatest && (
+                <CountdownTimer
+                  duration={duration}
+                  handleSubmit={handleSubmit}
+                  dbName={"MyDatabase"}
+                  storeName={storeName}
+                />
+              )}
+            </Typography>
+          </DurationContainer>
+        </Box>
+
+        <Box
+          sx={{
+            marginBottom: "1rem",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Typography
+              variant="body1"
+              sx={{
+                mx: 2,
+                background: "#E0F7FA",
+                padding: "0.5rem 2rem",
+                textAlign: "center",
+                fontSize: "1rem",
+                fontFamily: "Roboto",
+                fontWeight: "500",
+              }}
+            >
+              {indexVisible + 1}/{data.length}
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            marginBottom: "1rem",
+          }}
+        >
+          <Box sx={{ width: "100%" }}>
+            <Box
+              sx={{
+                border: "1px solid black",
+                borderRadius: "1rem",
+                padding: "0.5rem",
+                width: "100%",
+              }}
+            >
+              <OneListeningTest
+                onelistening={data[indexVisible]}
+                audioRef={audioRef}
+                title={title}
+                onAudioEnd={onAudioEnd}
+                answers={answers}
+                setAnswers={setAnswers}
+              />
+            </Box>
+          </Box>
+        </Box>
+
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            sx={{
+              border: "0.0001rem solid black",
+              borderRadius: "1rem",
+              background: "#00796B",
+              color: "white",
+              textAlign: "center",
+              marginBottom: "2%",
+              padding: "1rem 2rem",
+            }}
+            onClick={handleSubmit}
+          >
+            SUBMIT
+          </Button>
         </Box>
       </Box>
     </Box>
-
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <Button
-        sx={{
-          border: "0.0001rem solid black",
-          borderRadius: "1rem",
-          background: "#00796B",
-          color: "white",
-          textAlign: "center",
-          marginBottom: "2%",
-          padding: "1rem 2rem",
-        }}
-        onClick={handleSubmit}
-      >
-        SUBMIT
-      </Button>
-    </Box>
-  </Box>
-</Box>
-
   );
 }
 
@@ -398,14 +394,8 @@ function IntroduceTest({ setStatus, datatest }) {
   );
 }
 
-function TestingListening({ audioRef, datatest, title, duration}) {
- 
-
-  return (
-    <>
-      
-    </>
-  );
+function TestingListening({ audioRef, datatest, title, duration }) {
+  return <></>;
 }
 
 export default TestListening;

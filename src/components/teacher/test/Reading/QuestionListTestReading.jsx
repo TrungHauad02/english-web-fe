@@ -10,11 +10,11 @@ import {
   Paper,
   IconButton,
   Button,
-  Switch
+  Switch,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ConfirmDialog from "shared/component/confirmDialog/ConfirmDialog";
-import {  toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import useColor from "shared/color/Color";
 import { PlusCircle } from "lucide-react";
 import DeleteIcon from "@mui/icons-material/DeleteOutline";
@@ -38,10 +38,14 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   },
 }));
 
-
-function QuestionList({ data, handleRowClick, setQuestionUpdate ,BooleanDeleteSubmitTest}) {
+function QuestionList({
+  data,
+  handleRowClick,
+  setQuestionUpdate,
+  BooleanDeleteSubmitTest,
+}) {
   const [datamixing, setDatamixing] = useState([]);
-  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
+  const { Color2, Color2_1 } = useColor();
 
   useEffect(() => {
     const initialDataMixing = [
@@ -53,23 +57,25 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate ,BooleanDeleteSu
     setDatamixing(initialDataMixing);
   }, [data]);
 
-  const handleStatusChange = async(event, itemUpdate) => {
+  const handleStatusChange = async (event, itemUpdate) => {
     const result = await BooleanDeleteSubmitTest();
-  
+
     if (!result) {
       return;
     }
 
-    updateTestReading(itemUpdate.id,{
+    updateTestReading(itemUpdate.id, {
       ...itemUpdate,
       status: event.target.checked ? "ACTIVE" : "INACTIVE",
-    }) 
+    })
       .then((response) => {
-        toast.success(`Status of serial ${itemUpdate.serialquestion} with Reading updated successfully!`);
-          setQuestionUpdate(itemUpdate);
+        toast.success(
+          `Status of serial ${itemUpdate.serialquestion} with Reading updated successfully!`
+        );
+        setQuestionUpdate(itemUpdate);
       })
       .catch((error) => {
-        toast.error('Failed to update status!');
+        toast.error("Failed to update status!");
       });
   };
   const getListSerialTest = () => {
@@ -79,13 +85,17 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate ,BooleanDeleteSu
       if (data.type === "READING") {
         data.dataitem?.forEach((item) => {
           item.type = data.type;
-          const serials = item?.questions?.map((q) => q.serial).filter((serial) => serial != null) || [];
+          const serials =
+            item?.questions
+              ?.map((q) => q.serial)
+              .filter((serial) => serial != null) || [];
           if (serials.length === 1) {
             item.serialquestion = serials[0];
           } else if (serials.length === 2) {
             item.serialquestion = serials[0] + "-" + serials[1];
           } else if (serials.length > 2) {
-            item.serialquestion = serials[0] + "-" + serials[serials.length - 1];
+            item.serialquestion =
+              serials[0] + "-" + serials[serials.length - 1];
           } else {
             item.serialquestion = "";
           }
@@ -101,7 +111,7 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate ,BooleanDeleteSu
 
   const handleAddNewQuestion = async () => {
     const result = await BooleanDeleteSubmitTest();
-  
+
     if (!result) {
       return;
     }
@@ -110,9 +120,10 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate ,BooleanDeleteSu
       testId: data?.id || "",
       status: "ACTIVE",
       type: "READING",
-      serial: data.testReadings && data.testReadings.length > 0
-        ? data.testReadings[data.testReadings.length - 1].serial + 1
-        : 1,
+      serial:
+        data.testReadings && data.testReadings.length > 0
+          ? data.testReadings[data.testReadings.length - 1].serial + 1
+          : 1,
       image: "",
       content: "",
     };
@@ -122,7 +133,7 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate ,BooleanDeleteSu
 
   const handleDeleteQuestion = async () => {
     const result = await BooleanDeleteSubmitTest();
-  
+
     if (!result) {
       return;
     }
@@ -130,18 +141,22 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate ,BooleanDeleteSu
       let serial = itemDelete?.serial || "";
       let minus = 1;
       if (itemDelete?.type === "READING") {
-        serial = itemDelete?.questions?.length > 0 ? itemDelete.questions[itemDelete.questions.length - 1].serial : -1;
+        serial =
+          itemDelete?.questions?.length > 0
+            ? itemDelete.questions[itemDelete.questions.length - 1].serial
+            : -1;
         itemDelete.test = true;
         minus = itemDelete?.questions?.length || 0;
       }
 
-      await DeleteQuestionReadingTest(data?.id, itemDelete, serial, minus).then((response) => {
-        toast.success(`Deleted ${data.serial} of Test Reading successfully!`);
+      await DeleteQuestionReadingTest(data?.id, itemDelete, serial, minus)
+        .then((response) => {
+          toast.success(`Deleted ${data.serial} of Test Reading successfully!`);
           setQuestionUpdate(data);
-      })
-      .catch((error) => {
-        toast.error('Failed to delete !');
-      });;
+        })
+        .catch((error) => {
+          toast.error("Failed to delete !");
+        });
       setOpenDialogDelete(false);
 
       setQuestionUpdate(itemDelete);
@@ -151,7 +166,7 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate ,BooleanDeleteSu
   };
 
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
-  const [itemDelete,setItemDelete] = useState(0);
+  const [itemDelete, setItemDelete] = useState(0);
 
   const handleOpenDialogDelete = (itemDelete) => {
     setItemDelete(itemDelete);
@@ -162,19 +177,23 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate ,BooleanDeleteSu
     setOpenDialogDelete(false);
   };
 
-
   return (
     <FormContainer sx={{ bgcolor: "#", p: 3 }}>
-        <ConfirmDialog
+      <ConfirmDialog
         open={openDialogDelete}
         onClose={handleCloseDialogDelete}
         onAgree={handleDeleteQuestion}
-        title="Confirm Deletion"  
+        title="Confirm Deletion"
         content={`Are you sure you want to delete serial ${itemDelete.serialquestion} of Test Reading?`}
-        cancelText="Cancel"  
-        agreeText="Delete"  
+        cancelText="Cancel"
+        agreeText="Delete"
       />
-      <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: "bold", mb: 4 }}>
+      <Typography
+        variant="h4"
+        align="center"
+        gutterBottom
+        sx={{ fontWeight: "bold", mb: 4 }}
+      >
         READING QUESTION LIST
       </Typography>
 
@@ -191,29 +210,36 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate ,BooleanDeleteSu
           <TableBody>
             {questions.map((question) => (
               <TableRow key={question?.id}>
-                <TableCell onClick={() => handleRowClick(question)}>{question?.serialquestion}</TableCell>
-                <TableCell align="center" onClick={() => handleRowClick(question)}>
-                  {question?.type?.charAt(0) + question?.type?.slice(1)?.toLowerCase()}
+                <TableCell onClick={() => handleRowClick(question)}>
+                  {question?.serialquestion}
+                </TableCell>
+                <TableCell
+                  align="center"
+                  onClick={() => handleRowClick(question)}
+                >
+                  {question?.type?.charAt(0) +
+                    question?.type?.slice(1)?.toLowerCase()}
                 </TableCell>
 
                 <TableCell align="center">
                   <Switch
-                  checked={question.status === "ACTIVE"} 
-                  onChange={(event) => handleStatusChange(event,question)}
-                  inputProps={{ "aria-label": "controlled" }}
-                  sx={{
-                    "& .MuiSwitch-switchBase.Mui-checked": {
-                      color: Color2,
-                    },
-                    "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-                      backgroundColor: Color2,
-                    },
-                    "& .MuiSwitch-track": {
-                      backgroundColor: "#ccc", 
-                    },
-                  }}
-                />
-              </TableCell>
+                    checked={question.status === "ACTIVE"}
+                    onChange={(event) => handleStatusChange(event, question)}
+                    inputProps={{ "aria-label": "controlled" }}
+                    sx={{
+                      "& .MuiSwitch-switchBase.Mui-checked": {
+                        color: Color2,
+                      },
+                      "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
+                        {
+                          backgroundColor: Color2,
+                        },
+                      "& .MuiSwitch-track": {
+                        backgroundColor: "#ccc",
+                      },
+                    }}
+                  />
+                </TableCell>
                 <TableCell align="right">
                   <IconButton onClick={() => handleOpenDialogDelete(question)}>
                     <DeleteIcon />

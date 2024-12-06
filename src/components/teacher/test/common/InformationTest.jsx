@@ -36,9 +36,9 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-function InformationTest({ data,BooleanDeleteSubmitTest }) {
+function InformationTest({ data, BooleanDeleteSubmitTest }) {
   const [formData, setFormData] = useState(data);
-  const [backupData, setBackupData] = useState(data);
+  const backupData = data;
   const [editMode, setEditMode] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -76,7 +76,7 @@ function InformationTest({ data,BooleanDeleteSubmitTest }) {
 
   const handleEdit = async () => {
     const result = await BooleanDeleteSubmitTest();
-  
+
     if (!result) {
       return;
     }
@@ -86,7 +86,11 @@ function InformationTest({ data,BooleanDeleteSubmitTest }) {
   const validateForm = () => {
     let formErrors = {};
     if (!formData.title) formErrors.title = "Title is required";
-    if (!formData.duration || isNaN(formData.duration) || formData.duration <= 0) {
+    if (
+      !formData.duration ||
+      isNaN(formData.duration) ||
+      formData.duration <= 0
+    ) {
       formErrors.duration = "Duration must be a positive number";
     } else if (formData.duration > 120) {
       formErrors.duration = "Duration must be under 120 minutes";
@@ -99,12 +103,13 @@ function InformationTest({ data,BooleanDeleteSubmitTest }) {
   const handleSave = async () => {
     if (validateForm()) {
       try {
-        const updatedData = await updateTest(data.id, formData).then(() => {
-          toast.success(`${data.title} updated successfully!`);
-        })
-        .catch(() => {
-          toast.error(`Failed to update ${data.title}`);
-        });
+        const updatedData = await updateTest(data.id, formData)
+          .then(() => {
+            toast.success(`${data.title} updated successfully!`);
+          })
+          .catch(() => {
+            toast.error(`Failed to update ${data.title}`);
+          });
         setFormData((prevState) => ({
           ...prevState,
           ...updatedData,
@@ -224,7 +229,11 @@ function InformationTest({ data,BooleanDeleteSubmitTest }) {
         </Box>
 
         <ButtonContainer>
-          <ColorButton color="#F08080" variant="contained" onClick={handleCancel}>
+          <ColorButton
+            color="#F08080"
+            variant="contained"
+            onClick={handleCancel}
+          >
             Cancel
           </ColorButton>
           <ColorButton color="#FFD700" variant="contained" onClick={handleEdit}>

@@ -1,22 +1,8 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  Paper,
-  Button,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  TextField,
-  IconButton,
-  Select,
-  FormControl,
-  MenuItem
-} from "@mui/material";
+import { Box, Typography, Paper, Button } from "@mui/material";
 import useColor from "shared/color/Color";
 import QuestionComponent from "./QuestionComponent";
 import { toast } from "react-toastify";
-import { Trash, PlusCircle } from "lucide-react";
 import { styled } from "@mui/material/styles";
 
 import ConfirmDialog from "shared/component/confirmDialog/ConfirmDialog";
@@ -44,8 +30,6 @@ const findCorrectAnswerId = (answers = []) => {
   return correctAnswer ? correctAnswer.id : null;
 };
 
-
-
 const validateQuestion = (field, value, question) => {
   const errors = { ...question.errors };
 
@@ -68,19 +52,27 @@ const validateQuestion = (field, value, question) => {
   return errors;
 };
 
-const QuestionReadingDetails = ({ question = {}, handleSaveSelectedQuestion,isEditTestParent }) => {
+const QuestionReadingDetails = ({
+  question = {},
+  handleSaveSelectedQuestion,
+  isEditTestParent,
+}) => {
   return (
-    <Box sx={{  bgcolor: "", minHeight: "100vh" }}>
+    <Box sx={{ bgcolor: "", minHeight: "100vh" }}>
       <ContentQuestion
         question={question}
         handleSaveSelectedQuestion={handleSaveSelectedQuestion}
-        isEditTestParent ={isEditTestParent}
+        isEditTestParent={isEditTestParent}
       />
     </Box>
   );
 };
 
-const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion,isEditTestParent }) => {
+const ContentQuestion = ({
+  question = {},
+  handleSaveSelectedQuestion,
+  isEditTestParent,
+}) => {
   const { Color2, Color2_1 } = useColor();
   const [questionData, setQuestionData] = useState(question || {});
   const [backupData, setBackupData] = useState(question || {});
@@ -100,7 +92,9 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion,isEditTestP
   };
 
   const handleAddAnswer = () => {
-    const hasCorrectAnswer = questionData.answers?.some((answer) => answer.isCorrect === true);
+    const hasCorrectAnswer = questionData.answers?.some(
+      (answer) => answer.isCorrect === true
+    );
     const newAnswer = {
       id: `add-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       content: "",
@@ -112,46 +106,45 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion,isEditTestP
       ...questionData,
       answers: [...(questionData.answers || []), newAnswer],
     });
-    setSelectedAnswer(findCorrectAnswerId([...(questionData.answers || []), newAnswer]));
+    setSelectedAnswer(
+      findCorrectAnswerId([...(questionData.answers || []), newAnswer])
+    );
   };
 
   const handleRadioChange = (answerId) => {
     setSelectedAnswer(answerId);
     setQuestionData({
       ...questionData,
-      answers: questionData.answers?.map((a) => ({
-        ...a,
-        isCorrect: a.id === answerId,
-      })) || [],
+      answers:
+        questionData.answers?.map((a) => ({
+          ...a,
+          isCorrect: a.id === answerId,
+        })) || [],
     });
   };
 
-
   const handleDeleteAnswer = (answer) => {
-
-    const updatedAnswers = questionData.answers?.filter((a) => a.id !== answer.id) || [];
+    const updatedAnswers =
+      questionData.answers?.filter((a) => a.id !== answer.id) || [];
     setQuestionData({
       ...questionData,
       answers: updatedAnswers,
     });
   };
   const handleAnswerChange = (answerId, value) => {
- 
     const updatedAnswers = questionData.answers.map((answer) =>
       answer.id === answerId ? { ...answer, content: value } : answer
     );
-  
 
     const invalidAnswerIds = updatedAnswers
       .filter((answer) => !answer.content || answer.content.trim() === "")
       .map((answer) => answer.id);
-  
+
     const updatedErrors = { ...errors, answers: invalidAnswerIds };
-  
+
     setErrors(updatedErrors);
     setQuestionData({ ...questionData, answers: updatedAnswers });
   };
-  
 
   const handleSave = async () => {
     if (!questionData.content || questionData.content.trim() === "") {
@@ -170,7 +163,7 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion,isEditTestP
     const activeAnswers = questionData.answers?.filter(
       (answer) => answer.status === "ACTIVE"
     );
-    if (activeAnswers.length===0) {
+    if (activeAnswers.length === 0) {
       toast.error("Please create least one answer ACTIVE.");
       return;
     }
@@ -179,7 +172,7 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion,isEditTestP
       toast.error("Please select one correct answer active.");
       return;
     }
-    
+
     const answersToDelete = question.answers.filter(
       (answer) =>
         !questionData.answers.some((newAnswer) => newAnswer.id === answer.id)
@@ -187,7 +180,7 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion,isEditTestP
     if (answersToDelete.length > 0) {
       const result = await handleOpenDialogDelete(answersToDelete);
       if (result === "cancel") {
-        handleCancel(); 
+        handleCancel();
         return;
       }
     }
@@ -213,24 +206,23 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion,isEditTestP
     onAgree: () => {},
     onClose: () => {},
   });
-  
-  const [answersDelete, setAnswersDelete] = useState(
-    []);
+
+  const [answersDelete, setAnswersDelete] = useState([]);
   const handleOpenDialogDelete = (answersToDelete) => {
     setAnswersDelete(answersToDelete);
     return new Promise((resolve) => {
       setOpenDialogDelete(true);
-  
+
       const handleSave = () => {
         setOpenDialogDelete(false);
         resolve("save");
       };
-  
+
       const handleCancel = () => {
         setOpenDialogDelete(false);
         resolve("cancel");
       };
-  
+
       setDialogHandlers({ onAgree: handleSave, onClose: handleCancel });
     });
   };
@@ -243,41 +235,40 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion,isEditTestP
       <ConfirmDialog
         open={openDialogDelete}
         onClose={dialogHandlers.onClose}
-        onAgree={dialogHandlers.onAgree} 
+        onAgree={dialogHandlers.onAgree}
         title="Confirm Deletion"
         content={`Are you sure you want to delete ${answersDelete.length} answer(s)?`}
         cancelText="Cancel"
         agreeText="Delete"
       />
 
+      <Paper sx={{ mb: 3, p: 2, boxShadow: 3, backgroundColor: "#F0F0F0" }}>
+        <QuestionComponent
+          question={question}
+          questionData={questionData}
+          isEditMode={isEditMode}
+          setQuestionData={setQuestionData}
+          handleInputChange={handleInputChange}
+          handleAnswerChange={handleAnswerChange}
+          handleSelectAnswer={handleRadioChange}
+          handleAddAnswer={handleAddAnswer}
+          handleDeleteAnswer={handleDeleteAnswer}
+          errors={errors}
+          setSelectedAnswer={setSelectedAnswer}
+          selectedAnswer={selectedAnswer}
+          handleSave={handleSave}
+          handleEdit={handleEdit}
+          handleCancel={handleCancel}
+          Color2={Color2}
+          Color2_1={Color2_1}
+          listening={true}
+        ></QuestionComponent>
 
-      <Paper sx={{ mb: 3, p: 2, boxShadow: 3 ,backgroundColor:'#F0F0F0'}}>
-      <QuestionComponent
-      question={question}
-      questionData={questionData}
-      isEditMode={isEditMode}
-      setQuestionData={setQuestionData}
-      handleInputChange={handleInputChange}
-      handleAnswerChange={handleAnswerChange}
-      handleSelectAnswer={handleRadioChange}
-      handleAddAnswer={handleAddAnswer}
-      handleDeleteAnswer={handleDeleteAnswer}
-      errors={errors}
-      setSelectedAnswer={setSelectedAnswer}
-      selectedAnswer={selectedAnswer}
-      handleSave={handleSave}
-      handleEdit={handleEdit}
-      handleCancel={handleCancel}
-      Color2={Color2}
-      Color2_1={Color2_1}
-      listening={true}
-      ></QuestionComponent>
-
-<ButtonContainer>
+        <ButtonContainer>
           <ColorButton
             color="#F08080"
             variant="contained"
-            disabled={isEditTestParent  }
+            disabled={isEditTestParent}
             onClick={handleCancel}
           >
             Cancel
@@ -286,7 +277,7 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion,isEditTestP
             color="#FFD700"
             variant="contained"
             onClick={handleEdit}
-            disabled={isEditTestParent || isEditMode }
+            disabled={isEditTestParent || isEditMode}
           >
             Edit
           </ColorButton>

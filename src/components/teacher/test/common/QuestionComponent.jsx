@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Typography,
@@ -33,7 +33,6 @@ const QuestionComponent = ({
 }) => {
   return (
     <Box>
-     
       <Box sx={{ mb: 3, p: 2, bgcolor: "#F0F0F0" }}>
         <Box
           sx={{
@@ -96,7 +95,10 @@ const QuestionComponent = ({
               Answers:
             </Typography>
             <Box sx={{ flex: 1 }}>
-              <RadioGroup value={selectedAnswer} onChange={(e) => setSelectedAnswer(e.target.value)}>
+              <RadioGroup
+                value={selectedAnswer}
+                onChange={(e) => setSelectedAnswer(e.target.value)}
+              >
                 {questionData.answers.map((answer) => (
                   <Box
                     key={answer.id}
@@ -119,8 +121,12 @@ const QuestionComponent = ({
                         },
                       }}
                       value={answer.content}
-                      onChange={(e) => handleAnswerChange(answer.id, e.target.value)}
-                      error={!!errors.answers && errors.answers.includes(answer.id)}
+                      onChange={(e) =>
+                        handleAnswerChange(answer.id, e.target.value)
+                      }
+                      error={
+                        !!errors.answers && errors.answers.includes(answer.id)
+                      }
                       helperText={
                         errors.answers && errors.answers.includes(answer.id)
                           ? "Answer content cannot be empty."
@@ -133,10 +139,16 @@ const QuestionComponent = ({
                         value={answer.status || "ACTIVE"}
                         disabled={!isEditMode}
                         onChange={(e) => {
-                          const updatedAnswers = questionData.answers.map((opt) =>
-                            opt.id === answer.id ? { ...opt, status: e.target.value } : opt
+                          const updatedAnswers = questionData.answers.map(
+                            (opt) =>
+                              opt.id === answer.id
+                                ? { ...opt, status: e.target.value }
+                                : opt
                           );
-                          setQuestionData({ ...questionData, answers: updatedAnswers });
+                          setQuestionData({
+                            ...questionData,
+                            answers: updatedAnswers,
+                          });
                         }}
                       >
                         <MenuItem value="ACTIVE">ACTIVE</MenuItem>
@@ -144,8 +156,12 @@ const QuestionComponent = ({
                       </Select>
                     </FormControl>
                     <FormControlLabel
-                      control={<Radio disabled={!isEditMode}
-                      onChange={() => handleSelectAnswer(answer.id)} />}
+                      control={
+                        <Radio
+                          disabled={!isEditMode}
+                          onChange={() => handleSelectAnswer(answer.id)}
+                        />
+                      }
                       label=""
                       value={answer.id}
                       sx={{ marginLeft: "1rem" }}
@@ -164,46 +180,48 @@ const QuestionComponent = ({
           </Box>
 
           <Box sx={{ mt: 2, display: "flex", alignItems: "center", gap: 2 }}>
-  {!listening && (
-    <>
-      <Typography variant="h6" sx={{ whiteSpace: "nowrap" }}>
-        Explain:
-      </Typography>
-      <TextField
-        sx={{
-          flex: 1,
-          "& .MuiInputBase-root": {
-            height: "3rem",
-            bgcolor: "#F0F0F0",
-            borderRadius: "4px",
-          },
-        }}
-        multiline
-        rows={2}
-        value={questionData.explanation || ""}
-        onChange={(e) => handleInputChange("explanation", e.target.value)}
-        disabled={!isEditMode}
-        error={!!errors.explanation}
-        helperText={errors.explanation}
-      />
-    </>
-  )}
-  <Button
-    variant="contained"
-    onClick={handleAddAnswer}
-    startIcon={<PlusCircle />}
-    sx={{
-      bgcolor: Color2_1,
-      "&:hover": { bgcolor: Color2 },
-      whiteSpace: "nowrap",
-      height: "3rem",
-    }}
-    disabled={!isEditMode}
-  >
-    Add new answer
-  </Button>
-</Box>
-</Box>
+            {!listening && (
+              <>
+                <Typography variant="h6" sx={{ whiteSpace: "nowrap" }}>
+                  Explain:
+                </Typography>
+                <TextField
+                  sx={{
+                    flex: 1,
+                    "& .MuiInputBase-root": {
+                      height: "3rem",
+                      bgcolor: "#F0F0F0",
+                      borderRadius: "4px",
+                    },
+                  }}
+                  multiline
+                  rows={2}
+                  value={questionData.explanation || ""}
+                  onChange={(e) =>
+                    handleInputChange("explanation", e.target.value)
+                  }
+                  disabled={!isEditMode}
+                  error={!!errors.explanation}
+                  helperText={errors.explanation}
+                />
+              </>
+            )}
+            <Button
+              variant="contained"
+              onClick={handleAddAnswer}
+              startIcon={<PlusCircle />}
+              sx={{
+                bgcolor: Color2_1,
+                "&:hover": { bgcolor: Color2 },
+                whiteSpace: "nowrap",
+                height: "3rem",
+              }}
+              disabled={!isEditMode}
+            >
+              Add new answer
+            </Button>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

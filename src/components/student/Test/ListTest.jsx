@@ -3,14 +3,8 @@ import { getListTest } from "api/test/listTestApi";
 import CustomPagination from "shared/component/pagination/CustomPagination";
 import ListTestContent from "./ListTestContent";
 import { fetchUserInfo } from "api/user/userService";
-import { Box, Typography, Tabs, Tab, Stack, styled } from "@mui/material";
+import { Box, Tabs, Tab, Stack, styled } from "@mui/material";
 import MainPicture from "../common/listTopic/MainPicture";
-const ImageContainer = styled(Box)(({ theme }) => ({
-  position: "relative",
-  width: "100%",
-  height: "70vh",
-  overflow: "hidden",
-}));
 
 const TabItem = styled(Tab)(({ theme, selected, isSubTab }) => ({
   backgroundColor: selected ? "#00796B" : isSubTab ? "#E0F7FA" : "#00B8A2",
@@ -80,7 +74,14 @@ function ListTest() {
     const fetchData = async () => {
       const user = await fetchUserInfo();
 
-      const data = await getListTest(page, currtype, "", "ACTIVE", user.id,"ASC");
+      const data = await getListTest(
+        page,
+        currtype,
+        "",
+        "ACTIVE",
+        user.id,
+        "ASC"
+      );
       const tests = data.content;
       setVersion(version + 1);
 
@@ -101,9 +102,9 @@ function ListTest() {
 
   return (
     <Box>
-    <MainPicture
+      <MainPicture
         src={
-               "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
+          "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
         }
         title={"Test Online"}
       />
@@ -114,60 +115,68 @@ function ListTest() {
             alignItems: "center",
           }}
         >
+          <Tabs
+            value={mainTab}
+            onChange={handleMainTabChange}
+            sx={{
+              display: "flex",
+              flex: 1 / 3,
+              width: "100%",
+            }}
+            TabIndicatorProps={{
+              style: { display: "none" },
+            }}
+          >
+            <TabItem
+              sx={{
+                display: "flex",
+                flex: 1,
+                width: "100%",
+              }}
+              label="Mixed"
+              selected={mainTab === 0}
+              isSubTab={false}
+            />
+            <TabItem
+              sx={{
+                display: "flex",
+                flex: 1,
+                width: "100%",
+              }}
+              label="Skills"
+              selected={mainTab === 1}
+              isSubTab={false}
+            />
+          </Tabs>
 
-
-<Tabs
-  value={mainTab}
-  onChange={handleMainTabChange}
-  sx={{
-    display: "flex",
-    flex: 1/3,
-    width: "100%",
-  }}
-  TabIndicatorProps={{
-    style: { display: "none" },
-  }}
->
-  <TabItem  sx={{
-    display: "flex",
-    flex: 1,
-    width: "100%",
-  }} label="Mixed" selected={mainTab === 0} isSubTab={false} />
-  <TabItem  sx={{
-    display: "flex",
-    flex: 1,
-    width: "100%",
-  }} label="Skills" selected={mainTab === 1} isSubTab={false} />
-</Tabs>
-
-{mainTab === 1 && (
-  <Tabs
-    value={skillTab}
-    onChange={handleSkillTabChange}
-    sx={{
-      display: "flex",
-      flex: 2/3, 
-      width: "100%", 
-    }}
-    TabIndicatorProps={{
-      style: { display: "none" },
-    }}
-  >
-    {Object.keys(type.skills).map((key, index) => (
-      <TabItem
-      sx={{
-        display: "flex",
-        flex: 1, 
-        width: "100%", 
-      }}
-        key={key}
-        label={type.skills[key]}
-        selected={skillTab === index}
-        isSubTab={true}
-      />
-    ))}
-  </Tabs>
-)}
+          {mainTab === 1 && (
+            <Tabs
+              value={skillTab}
+              onChange={handleSkillTabChange}
+              sx={{
+                display: "flex",
+                flex: 2 / 3,
+                width: "100%",
+              }}
+              TabIndicatorProps={{
+                style: { display: "none" },
+              }}
+            >
+              {Object.keys(type.skills).map((key, index) => (
+                <TabItem
+                  sx={{
+                    display: "flex",
+                    flex: 1,
+                    width: "100%",
+                  }}
+                  key={key}
+                  label={type.skills[key]}
+                  selected={skillTab === index}
+                  isSubTab={true}
+                />
+              ))}
+            </Tabs>
+          )}
         </Box>
 
         <ListTestContent list={list} />
