@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogTitle, TextField, Button, Stack, IconButton, InputAdornment, Typography } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, TextField, Button, Stack, IconButton, InputAdornment } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import useColor from "shared/color/Color";
 import { handlePasswordChange, handleClickShowNewPassword, handleClickShowReEnterPassword } from "./common/HandleChangePassword";
 
 const ChangePassword = ({ open, handleClose }) => {
@@ -10,6 +11,7 @@ const ChangePassword = ({ open, handleClose }) => {
   const [reEnterPassword, setReEnterPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showReEnterPassword, setShowReEnterPassword] = useState(false);
+  const { Color2} = useColor();
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
@@ -75,6 +77,7 @@ const ChangePassword = ({ open, handleClose }) => {
           <Button
             variant="contained"
             color="primary"
+            sx={{background:Color2}}
             onClick={() =>
               handlePasswordChange(oldPassword, newPassword, reEnterPassword, handleClose)
             }

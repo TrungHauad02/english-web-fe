@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TextField, Button } from '@mui/material';
 import useColor from "shared/color/Color";
 
 const EmailStep = ({ email, setEmail, handleGetOtp }) => {
-  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor(); 
+  const { Color2} = useColor(); 
 
   return (
     <>

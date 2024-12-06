@@ -67,10 +67,9 @@ export const handleSignUp = async (name, email, password, rePassword, toggleForm
       console.error("Error response:", data);
     } else if (err.request) {
       toast.error("Network error. Please check your internet connection.");
-      throw new Error("Network error");
     } else {
       toast.error("An unexpected error occurred.");
-      throw new Error(err.message || "Unexpected error");
+      console.error("Unexpected error:", err);
     }
   }
 };

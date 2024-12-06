@@ -29,7 +29,7 @@ export const handleDelete = async (
             startDate: newStatus === "ACTIVE" ? currentDate : selectedEntity.startDate,
         };
 
-        const response = await updateUser(updatedData, selectedEntity.id);
+        await updateUser(updatedData, selectedEntity.id);
 
         const updatedEntities = entities.map(entity =>
             entity.id === selectedEntity.id

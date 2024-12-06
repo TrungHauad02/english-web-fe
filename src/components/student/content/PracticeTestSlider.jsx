@@ -16,7 +16,7 @@ const PracticeTestSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { isAuthenticated } = useAuth(); // Lấy trạng thái đăng nhập
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {

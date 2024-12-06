@@ -12,7 +12,7 @@ const ResetPasswordStep = ({
   handleClickShowPassword,
   handleResetPassword,
 }) => {
-  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor(); 
+  const {Color2} = useColor(); 
 
   return (
     <>

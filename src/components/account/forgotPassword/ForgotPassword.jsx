@@ -16,7 +16,7 @@ const ForgotPassword = ({ toggleForm }) => {
   const [timer, setTimer] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
+  const { Color2} = useColor();
 
   useEffect(() => {
     let countdown;
