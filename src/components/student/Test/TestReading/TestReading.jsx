@@ -30,7 +30,6 @@ function TestReading() {
   const [indexVisible, setIndexVisible] = useState(0);
   const [answers, setAnswers] = useState({});
   const navigate = useNavigate();
-  const renderKey = 0;
   const location = useLocation();
   const { state } = location;
   const [datatest, setdatatest] = useState(null);
@@ -316,7 +315,6 @@ function TestReading() {
         }}
       >
         <OneReadingTest
-          key={renderKey}
           onereading={datatest.testReadings[indexVisible]}
           handlebtnSubmit={handlebtnSubmit}
           title={title}
