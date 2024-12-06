@@ -25,13 +25,18 @@ function Mixing() {
   const [type, setType] = useState("");
   const [questionData, setQuestionData] = useState();
   const [version,setVersion] = useState(0);
+  const [submitTestIds,setSubmitTestIds] = useState([]);
+  
   
   useEffect(() => {
+    
     const fetchData = async () => {
       try {
         const data = await getTest(state.id);
         if (data) {
           setdatatest(data);
+          setSubmitTestIds(data?.submitTestIds);
+          
         } else {
           setdatatest(null); 
         }
@@ -47,7 +52,6 @@ function Mixing() {
 
   //delete submit test 
   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
-  const [submitTestIds, setSubmitTestIds] = useState([]);
 
   const [dialogAction, setDialogAction] = React.useState(null);
   const handleDialogAction = (action) => {
@@ -55,6 +59,7 @@ function Mixing() {
       setDialogAction("cancel"); 
     } else if (action === "confirm") {
       setDialogAction("confirm");
+   
     }
     setOpenDialogDeleteSubmitTest(false);
   };
@@ -72,8 +77,7 @@ function Mixing() {
     });
   };
   const BooleanDeleteSubmitTest = async () => {
-    if (datatest?.submitTestsId?.length > 0) {
-      setSubmitTestIds(datatest.submitTestsId);
+    if (submitTestIds?.length > 0) {
       setOpenDialogDeleteSubmitTest(true);
   
       const dialogResult = await waitForDialogAction(
@@ -82,10 +86,10 @@ function Mixing() {
       );
   
       if (dialogResult === "cancel") {
-     
         return false; 
       }
-  
+
+      setVersion(version+1);
       console.log("User confirmed the action.");
       return true; 
     }
@@ -210,7 +214,7 @@ function Mixing() {
           <InformationTest data={datatest} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}/>
         </Box>
         <Box sx={{ marginLeft: "2%", flex: 6, minHeight: 0 }}>
-          <QuestionListTest data={datatest} handleRowClick={handleRowClick} setQuestionUpdate = { setQuestionUpdate} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
+          <QuestionListTest   data={datatest} handleRowClick={handleRowClick} setQuestionUpdate = { setQuestionUpdate} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
         </Box>
       </Box>
       {renderQuestionComponent()}

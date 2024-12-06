@@ -167,6 +167,7 @@ function QuestionList({
   };
 
   const handleStatusChange = async (event, itemUpdate) => {
+    console.log(event.target.checked);
     const result = await BooleanDeleteSubmitTest();
 
     if (!result) {
@@ -190,10 +191,11 @@ function QuestionList({
         updateStatusFunction = updateTestMixingQuestion;
         break;
     }
-
+   
+    
     updateStatusFunction(itemUpdate.id, {
       ...itemUpdate,
-      status: event.target.checked ? "ACTIVE" : "INACTIVE",
+      status: event.target.checked ? "INACTIVE" : "ACTIVE",
     })
       .then((response) => {
         toast.success(

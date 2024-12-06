@@ -1,40 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { openDB, saveData, getData } from "./IndexDB";
-import { duration } from "@mui/material";
-import { Typography } from "@mui/material";
+import { toast } from "react-toastify";
+
 const CountdownTimer = ({ duration, handleSubmit, dbName, storeName }) => {
   const [timeLeft, setTimeLeft] = useState(null);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
-  useEffect(() => {
-    const initializeTimer = async () => {
-      try {
-        const db = await openDB(dbName, storeName);
-        const data = await getData(db, storeName, storeName);
+  const initializeTimer = async () => {
+    try {
+      const db = await openDB(dbName, storeName);
+      const data = await getData(db, storeName, storeName);
 
-        if (data?.endTime) {
-          const now = Math.floor(Date.now() / 1000);
-          const remainingTime = data.endTime - now;
-          const duration = remainingTime;
-          saveData(db, storeName, { id: storeName, duration });
-          if (remainingTime > 0) {
-            setTimeLeft(remainingTime);
-          } else {
-            setTimeLeft(0);
-            handleSubmit();
-          }
+      if (data?.endTime) {
+        const now = Math.floor(Date.now() / 1000);
+        const remainingTime = data.endTime - now;
+
+        if (remainingTime > 0) {
+          setTimeLeft(remainingTime);
         } else {
-          const endTime = Math.floor(Date.now() / 1000) + duration;
-          saveData(db, storeName, { id: storeName, endTime });
-          setTimeLeft(duration);
+          setTimeLeft(0);
+          if (!hasSubmitted) {
+            handleSubmit();
+            setHasSubmitted(true);
+            toast.info("Time's up! The assignment has been automatically submitted.");
+          }
         }
-      } catch (error) {
-        console.error("Error initializing timer:", error);
+      } else {
+        const endTime = Math.floor(Date.now() / 1000) + duration * 60;
+        await saveData(db, storeName, { id: storeName, endTime });
+        setTimeLeft(duration * 60);
       }
-    };
+    } catch (error) {
+      console.error("Error initializing timer:", error);
+    
+    }
+  };
 
+  useEffect(() => {
     initializeTimer();
-  }, [dbName, storeName, duration, handleSubmit]);
+  }, [dbName, storeName, duration, handleSubmit, hasSubmitted]);
 
   useEffect(() => {
     if (timeLeft === null || timeLeft <= 0) return;
@@ -45,8 +49,12 @@ const CountdownTimer = ({ duration, handleSubmit, dbName, storeName }) => {
 
         if (newTime <= 0) {
           clearInterval(timer);
-          handleSubmit();
-          setHasSubmitted(true);
+          if (!hasSubmitted) {
+            handleSubmit();
+            setHasSubmitted(true);
+            toast.info("Hết giờ! Bài tập đã được nộp tự động.");
+          }
+          return 0; 
         }
 
         return newTime;
@@ -54,7 +62,7 @@ const CountdownTimer = ({ duration, handleSubmit, dbName, storeName }) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, handleSubmit]);
+  }, [timeLeft, handleSubmit, hasSubmitted]);
 
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
@@ -63,15 +71,13 @@ const CountdownTimer = ({ duration, handleSubmit, dbName, storeName }) => {
   };
 
   return (
-  <>
-   {timeLeft === null
+    <div aria-live="polite">
+      {timeLeft === null
         ? "Loading..."
         : timeLeft > 0
         ? formatTime(timeLeft)
-        : "Time's up!"}
-  </>
-     
-  
+        : "00:00"}
+    </div>
   );
 };
 

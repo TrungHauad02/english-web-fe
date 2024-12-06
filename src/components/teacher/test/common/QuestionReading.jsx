@@ -438,6 +438,9 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
           : q
       ),
     }));
+    console.log( event.target.checked );
+    
+    
   };
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [dialogHandlers, setDialogHandlers] = useState({
