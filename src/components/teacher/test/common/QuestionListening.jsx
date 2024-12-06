@@ -66,7 +66,7 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-function QuestionListening({ data, handleListening }) {
+function QuestionListening({ data, handleListening,BooleanDeleteSubmitTest }) {
   const initialData = data || {};
   const { Color2, Color2_1 } = useColor();
   const questions = initialData.questions || [];
@@ -119,7 +119,12 @@ function QuestionListening({ data, handleListening }) {
     });
   };
 
-  const handleEditToggle = () => {
+  const handleEditToggle = async () => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
     setIsEditing(true);
   };
 
@@ -668,7 +673,7 @@ function QuestionListening({ data, handleListening }) {
             type: "Question detail",
             details: "true",
           }}
-          iseditlistening={isEditing}
+          isEditTestParent={!isEditing}
           key={questionSelected.id}
           handleSaveSelectedQuestion={handleSaveSelectedQuestion}
         />

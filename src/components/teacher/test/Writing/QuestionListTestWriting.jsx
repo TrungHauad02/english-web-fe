@@ -10,6 +10,7 @@ import {
   Paper,
   IconButton,
   Button,
+  Switch
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { PlusCircle } from "lucide-react";
@@ -36,7 +37,8 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   },
 }));
 
-function QuestionListWriting({ data, handleRowClick, setQuestionUpdate }) {
+
+function QuestionListWriting({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSubmitTest }) {
   const [questions, setQuestions] = useState([]);
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [itemDelete, setItemDelete] = useState(null);
@@ -53,7 +55,31 @@ function QuestionListWriting({ data, handleRowClick, setQuestionUpdate }) {
     }
   }, [data]);
 
+  const handleStatusChange = async (event, itemUpdate) => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
+    updateTestWriting(itemUpdate.id, {
+      ...itemUpdate,
+      status: event.target.checked ? "ACTIVE" : "INACTIVE",
+    })
+      .then(() => {
+        toast.success(`Status of serial ${itemUpdate.serial} updated successfully!`);
+        setQuestionUpdate(itemUpdate);
+      })
+      .catch(() => {
+        toast.error(`Failed to update status of serial ${itemUpdate.serial}!`);
+      });
+  };
+
   const handleAddNewQuestion = async () => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
     const newQuestion = {
       id: "",
       testId: data?.id || "",
@@ -129,6 +155,7 @@ function QuestionListWriting({ data, handleRowClick, setQuestionUpdate }) {
             <TableRow>
               <TableCell>Serial</TableCell>
               <TableCell align="center">Type</TableCell>
+              <TableCell align="center">Status</TableCell>
               <TableCell align="right">Delete</TableCell>
             </TableRow>
           </TableHead>
@@ -138,6 +165,13 @@ function QuestionListWriting({ data, handleRowClick, setQuestionUpdate }) {
                 <TableCell onClick={() => handleRowClick(question)}>{question?.serialquestion}</TableCell>
                 <TableCell align="center" onClick={() => handleRowClick(question)}>
                   {question?.type?.charAt(0) + question?.type?.slice(1)?.toLowerCase()}
+                </TableCell>
+                <TableCell align="center">
+                  <Switch
+                    checked={question.status === "ACTIVE"}
+                    onChange={(event) => handleStatusChange(event, question)}
+                    inputProps={{ "aria-label": "controlled" }}
+                  />
                 </TableCell>
                 <TableCell align="right">
                   <IconButton onClick={() => handleOpenDialogDelete(question)}>

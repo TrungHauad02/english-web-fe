@@ -68,18 +68,19 @@ const validateQuestion = (field, value, question) => {
   return errors;
 };
 
-const QuestionReadingDetails = ({ question = {}, handleSaveSelectedQuestion }) => {
+const QuestionReadingDetails = ({ question = {}, handleSaveSelectedQuestion,isEditTestParent }) => {
   return (
     <Box sx={{  bgcolor: "", minHeight: "100vh" }}>
       <ContentQuestion
         question={question}
         handleSaveSelectedQuestion={handleSaveSelectedQuestion}
+        isEditTestParent ={isEditTestParent}
       />
     </Box>
   );
 };
 
-const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion }) => {
+const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion,isEditTestParent }) => {
   const { Color2, Color2_1 } = useColor();
   const [questionData, setQuestionData] = useState(question || {});
   const [backupData, setBackupData] = useState(question || {});
@@ -272,11 +273,11 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion }) => {
       listening={true}
       ></QuestionComponent>
 
-        <ButtonContainer>
+<ButtonContainer>
           <ColorButton
             color="#F08080"
             variant="contained"
-            disabled={question.id === '' ? true : false}
+            disabled={isEditTestParent  }
             onClick={handleCancel}
           >
             Cancel
@@ -285,7 +286,7 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion }) => {
             color="#FFD700"
             variant="contained"
             onClick={handleEdit}
-            disabled={isEditMode}
+            disabled={isEditTestParent || isEditMode }
           >
             Edit
           </ColorButton>

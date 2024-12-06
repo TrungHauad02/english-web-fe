@@ -49,7 +49,7 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-const TestSpeakingForm = ({ initialData, handleSpeaking }) => {
+const TestSpeakingForm = ({ initialData, handleSpeaking,BooleanDeleteSubmitTest }) => {
   const [formData, setFormData] = useState({
     ...initialData,
     serial: initialData?.serial || 1,
@@ -296,7 +296,12 @@ const TestSpeakingForm = ({ initialData, handleSpeaking }) => {
     setFormData(initialData);
   };
 
-  const handleEdit = () => {
+  const handleEdit =  async () => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
     setIsEditMode(true);
   };
 

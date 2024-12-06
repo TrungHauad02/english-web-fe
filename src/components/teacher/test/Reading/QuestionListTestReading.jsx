@@ -39,7 +39,7 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
 }));
 
 
-function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
+function QuestionList({ data, handleRowClick, setQuestionUpdate ,BooleanDeleteSubmitTest}) {
   const [datamixing, setDatamixing] = useState([]);
   const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
 
@@ -53,7 +53,12 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
     setDatamixing(initialDataMixing);
   }, [data]);
 
-  const handleStatusChange = (event, itemUpdate) => {
+  const handleStatusChange = async(event, itemUpdate) => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
 
     updateTestReading(itemUpdate.id,{
       ...itemUpdate,
@@ -95,6 +100,11 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
   const questions = getListSerialTest();
 
   const handleAddNewQuestion = async () => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
     const newQuestion = {
       id: "",
       testId: data?.id || "",
@@ -111,6 +121,11 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate }) {
   };
 
   const handleDeleteQuestion = async () => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
     try {
       let serial = itemDelete?.serial || "";
       let minus = 1;
