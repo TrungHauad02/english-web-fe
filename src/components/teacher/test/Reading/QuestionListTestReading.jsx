@@ -66,7 +66,7 @@ function QuestionList({
 
     updateTestReading(itemUpdate.id, {
       ...itemUpdate,
-      status: event.target.checked ? "ACTIVE" : "INACTIVE",
+      status: event.target.checked ? "INACTIVE" : "ACTIVE",
     })
       .then((response) => {
         toast.success(

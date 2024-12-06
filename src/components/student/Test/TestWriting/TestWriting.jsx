@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Box,
-  Typography,
-  Button,
-  Container,
-  Grid,
-  Icon,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  Paper,
-  TextField,
+  Typography,CircularProgress
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import MainTitle from "../MainTitle";
@@ -43,16 +33,12 @@ function TestWriting() {
   const [answers, setAnswers] = useState({});
   const [duration, setDuration] = useState({});
   const navigate = useNavigate();
-  const [renderKey, setRenderKey] = useState(0);
   const location = useLocation();
   const { state } = location;
   const [datatest, setdatatest] = useState(null);
   const [storeName, setStoreName] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [score, setSCore] = useState(null);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const title = datatest ? datatest.type : "";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,9 +52,9 @@ function TestWriting() {
           setdatatest(null);
         }
       } catch (err) {
-        setError("Failed to fetch test data");
+    
       } finally {
-        setLoading(false);
+    
       }
     };
 
@@ -102,9 +88,9 @@ function TestWriting() {
           setdatatest(null);
         }
       } catch (err) {
-        setError("Failed to fetch test data");
+
       } finally {
-        setLoading(false);
+ 
       }
     };
   
@@ -148,6 +134,7 @@ function TestWriting() {
   }, [answers]);
 
   const handlebtnSubmit = async () => {
+    setIsSubmitting(true);
  
     try {
       let user = await fetchUserInfo();
@@ -235,6 +222,24 @@ function TestWriting() {
 
   return (
     <Box>
+      {isSubmitting && (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100vh",
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+          zIndex: 1000,
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )}
       <MainTitle
         title="Writing"
         bg={

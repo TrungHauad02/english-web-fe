@@ -63,7 +63,7 @@ function QuestionListWriting({ data, handleRowClick, setQuestionUpdate,BooleanDe
     }
     updateTestWriting(itemUpdate.id, {
       ...itemUpdate,
-      status: event.target.checked ? "ACTIVE" : "INACTIVE",
+      status: event.target.checked ? "INACTIVE" : "ACTIVE",
     })
       .then(() => {
         toast.success(`Status of serial ${itemUpdate.serial} updated successfully!`);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Grid, Typography, Card, Pagination, Stack } from "@mui/material";
+import { Box, Grid, Typography, Card, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import MainPicture from "../../common/listTopic/MainPicture";
 import Filter from "./Filter";
@@ -32,20 +32,7 @@ const HistoryTest = () => {
   const [totalItems, setTotalItems] = useState(0);
 
 
-  const fetchTests =  async () => {
-    const user = await fetchUserInfo();
-    const adjustedType = filter === "ALL" ? "" : filter;
-    getListSubmitTests(currentPage,user.id,adjustedType, searchText, searchStartDate, searchEndDate)
-      .then((data) => {
-        setTests(data.content);
-        setTotalItems(data.totalElements);
-     
-      })
-      .catch((error) => {
-        console.error("Error fetching submit tests:", error);
-     
-      });
-  };
+  
   const navigateSubmitTest =   (submitTest) => {
 
     let newPath = "";
@@ -76,10 +63,29 @@ const HistoryTest = () => {
    
 
   };
+ 
+  const fetchTests = async () => {
+    try {
+      const user = await fetchUserInfo();
+      const adjustedType = filter === "ALL" ? "" : filter;
+      const data = await getListSubmitTests(
+        currentPage,
+        user.id,
+        adjustedType,
+        searchText,
+        searchStartDate,
+        searchEndDate
+      );
+      setTests(data.content);
+      setTotalItems(data.totalElements);
+    } catch (error) {
+      console.error("Error fetching submit tests:", error);
+    }
+  };
 
   useEffect(() => {
     fetchTests();
-  }, [currentPage,filter]);
+  }, []);
 
   return (
     <>

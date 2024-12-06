@@ -61,7 +61,7 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSub
     }
     updateTestSpeaking(itemUpdate.id, {
       ...itemUpdate,
-      status: event.target.checked ? "ACTIVE" : "INACTIVE",
+      status: event.target.checked ? "INACTIVE" : "ACTIVE",
     })
       .then(() => {
         toast.success(`Status of serial ${itemUpdate.serialquestion} updated successfully!`);

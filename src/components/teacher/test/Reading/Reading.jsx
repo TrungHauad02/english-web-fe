@@ -16,6 +16,7 @@ function ReadingTest() {
   const [questionData, setQuestionData] = useState(null);
   const [version, setVersion] = useState(0);
   const [questionUpdate, setQuestionUpdate] = useState();
+  const [submitTestIds,setSubmitTestIds] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +24,7 @@ function ReadingTest() {
         const data = await getTest(state.id);
         if (data) {
           setdatatest(data);
+          setSubmitTestIds(data?.submitTestIds);
         } else {
           setdatatest(null);
         }
@@ -34,12 +36,12 @@ function ReadingTest() {
     };
 
     fetchData();
-  }, [state.id, version,questionUpdate]);
+  }, [state.id, version,questionUpdate,submitTestIds]);
 
 
   //delete submit test 
   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
-  const [submitTestIds, setSubmitTestIds] = useState([]);
+
 
   const [dialogAction, setDialogAction] = React.useState(null);
   const handleDialogAction = (action) => {
@@ -64,8 +66,7 @@ function ReadingTest() {
     });
   };
   const BooleanDeleteSubmitTest = async () => {
-    if (datatest?.submitTestsId?.length > 0) {
-      setSubmitTestIds(datatest.submitTestsId);
+    if (submitTestIds?.length > 0) {
       setOpenDialogDeleteSubmitTest(true);
   
       const dialogResult = await waitForDialogAction(
@@ -77,7 +78,6 @@ function ReadingTest() {
      
         return false; 
       }
-  
       console.log("User confirmed the action.");
       return true; 
     }
