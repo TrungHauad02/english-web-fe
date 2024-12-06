@@ -15,7 +15,7 @@ import {
   Switch,
 } from "@mui/material";
 import ConfirmDialog from "shared/component/confirmDialog/ConfirmDialog";
-import {  toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import useColor from "shared/color/Color";
 import { styled } from "@mui/material/styles";
 import { PlusCircle } from "lucide-react";
@@ -60,22 +60,40 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   },
 }));
 
-function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSubmitTest }) {
+function QuestionList({
+  data,
+  handleRowClick,
+  setQuestionUpdate,
+  BooleanDeleteSubmitTest,
+}) {
   const [currentTab, setCurrentTab] = useState(0);
-  
-  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
-  const tabs = ["VOCABULARY", "GRAMMAR", "READING", "LISTENING", "SPEAKING", "WRITING"];
+
+  const { Color2, Color2_1 } = useColor();
+  const tabs = [
+    "VOCABULARY",
+    "GRAMMAR",
+    "READING",
+    "LISTENING",
+    "SPEAKING",
+    "WRITING",
+  ];
   const [datamixing, setDatamixing] = useState([]);
 
   useEffect(() => {
     const initialDataMixing = [
       {
         type: "VOCABULARY",
-        questions: data?.testMixingQuestions?.filter((question) => question.type === "VOCABULARY") || [],
+        questions:
+          data?.testMixingQuestions?.filter(
+            (question) => question.type === "VOCABULARY"
+          ) || [],
       },
       {
         type: "GRAMMAR",
-        questions: data?.testMixingQuestions?.filter((question) => question.type === "GRAMMAR") || [],
+        questions:
+          data?.testMixingQuestions?.filter(
+            (question) => question.type === "GRAMMAR"
+          ) || [],
       },
       {
         type: "READING",
@@ -112,89 +130,97 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSub
         });
       }
 
-      if (data.type === "READING" || data.type === "LISTENING" || data.type === "SPEAKING" ) {
+      if (
+        data.type === "READING" ||
+        data.type === "LISTENING" ||
+        data.type === "SPEAKING"
+      ) {
         data.dataitem?.forEach((item) => {
           item.type = data.type;
-          const serials = item?.questions?.map((q) => q.serial).filter((serial) => serial != null) || [];
+          const serials =
+            item?.questions
+              ?.map((q) => q.serial)
+              .filter((serial) => serial != null) || [];
           if (serials.length === 1) {
             item.serialquestion = serials[0];
           } else if (serials.length === 2) {
             item.serialquestion = serials[0] + "-" + serials[1];
           } else if (serials.length > 2) {
-            item.serialquestion = serials[0] + "-" + serials[serials.length - 1];
+            item.serialquestion =
+              serials[0] + "-" + serials[serials.length - 1];
           } else {
             item.serialquestion = "";
           }
           questions.push(item);
         });
       }
-      if( data.type === "WRITING")
-        {
-          data.dataitem?.forEach((item) => {
-            item.type = data.type;
-            item.serialquestion = item.serial;
-            questions.push(item);
-          });
-        }
+      if (data.type === "WRITING") {
+        data.dataitem?.forEach((item) => {
+          item.type = data.type;
+          item.serialquestion = item.serial;
+          questions.push(item);
+        });
+      }
     });
-   
 
     return questions;
   };
 
-const handleStatusChange =  async (event, itemUpdate) => {
-  const result = await BooleanDeleteSubmitTest();
-  
-  if (!result) {
-    return;
-  }
-  let updateStatusFunction;
-  switch (itemUpdate.type) {
-    case "READING":
-      updateStatusFunction = updateTestReading;
-      break;
-    case "LISTENING":
-      updateStatusFunction = updateTestListening;
-      break;
-    case "SPEAKING":
-      updateStatusFunction = updateTestSpeaking;
-      break;
-    case "WRITING":
-      updateStatusFunction = updateTestWriting;
-      break;
-    default:
-      updateStatusFunction = updateTestMixingQuestion;
-      break;
-  }
+  const handleStatusChange = async (event, itemUpdate) => {
+    const result = await BooleanDeleteSubmitTest();
 
+    if (!result) {
+      return;
+    }
+    let updateStatusFunction;
+    switch (itemUpdate.type) {
+      case "READING":
+        updateStatusFunction = updateTestReading;
+        break;
+      case "LISTENING":
+        updateStatusFunction = updateTestListening;
+        break;
+      case "SPEAKING":
+        updateStatusFunction = updateTestSpeaking;
+        break;
+      case "WRITING":
+        updateStatusFunction = updateTestWriting;
+        break;
+      default:
+        updateStatusFunction = updateTestMixingQuestion;
+        break;
+    }
 
-  updateStatusFunction(itemUpdate.id,{
-    ...itemUpdate,
-    status: event.target.checked ? "ACTIVE" : "INACTIVE",
-  }) 
-    .then((response) => {
-      toast.success(`Status of serial ${itemUpdate.serialquestion} with  ${currentTab > 1 ? 'Part' : 'Question'}  ${tabs[currentTab]} updated successfully!`);
-      setQuestionUpdate(itemUpdate);
+    updateStatusFunction(itemUpdate.id, {
+      ...itemUpdate,
+      status: event.target.checked ? "ACTIVE" : "INACTIVE",
     })
-    .catch((error) => {
-      toast.error('Failed to update status!');
-    });
-};
-
+      .then((response) => {
+        toast.success(
+          `Status of serial ${itemUpdate.serialquestion} with  ${
+            currentTab > 1 ? "Part" : "Question"
+          }  ${tabs[currentTab]} updated successfully!`
+        );
+        setQuestionUpdate(itemUpdate);
+      })
+      .catch((error) => {
+        toast.error("Failed to update status!");
+      });
+  };
 
   const questions = getListSerialTest();
 
   const filteredQuestions = questions.filter(
-    (question) => question.type?.toUpperCase() === tabs[currentTab]?.toUpperCase()
+    (question) =>
+      question.type?.toUpperCase() === tabs[currentTab]?.toUpperCase()
   );
 
   const handleAddNewQuestion = async () => {
     const result = await BooleanDeleteSubmitTest();
-  
+
     if (!result) {
       return;
     }
-
 
     const newQuestion = {
       id: "",
@@ -204,80 +230,99 @@ const handleStatusChange =  async (event, itemUpdate) => {
         type: "VOCABULARY",
         explanation: "",
         serial:
-          (datamixing.find((data) => data.type === "VOCABULARY")?.questions?.slice(-1)[0]?.serial || 0) + 1,
+          (datamixing
+            .find((data) => data.type === "VOCABULARY")
+            ?.questions?.slice(-1)[0]?.serial || 0) + 1,
         content: "",
-        answers: [
-        ],
+        answers: [],
       }),
       ...(tabs[currentTab] === "GRAMMAR" && {
         type: "GRAMMAR",
         explanation: "",
         serial:
-          (datamixing.find((data) => data.type === "GRAMMAR")?.questions?.slice(-1)[0]?.serial ||
-            datamixing.find((data) => data.type === "VOCABULARY")?.questions?.slice(-1)[0]?.serial ||
+          (datamixing
+            .find((data) => data.type === "GRAMMAR")
+            ?.questions?.slice(-1)[0]?.serial ||
+            datamixing
+              .find((data) => data.type === "VOCABULARY")
+              ?.questions?.slice(-1)[0]?.serial ||
             0) + 1,
         content: "",
-        answers: [
-        ],
+        answers: [],
       }),
       ...(tabs[currentTab] === "READING" && {
         type: "READING",
-        serial: data.testReadings && data.testReadings.length > 0
-        ? data.testReadings[data.testReadings.length - 1].serial + 1
-        : 1,
+        serial:
+          data.testReadings && data.testReadings.length > 0
+            ? data.testReadings[data.testReadings.length - 1].serial + 1
+            : 1,
         image: "",
         content: "",
       }),
       ...(tabs[currentTab] === "LISTENING" && {
         type: "LISTENING",
-        serial: data.testListenings && data.testListenings.length > 0
-        ? data.testListenings[data.testListenings.length - 1].serial + 1
-        : 1,
+        serial:
+          data.testListenings && data.testListenings.length > 0
+            ? data.testListenings[data.testListenings.length - 1].serial + 1
+            : 1,
         transcript: "",
         content: "",
       }),
       ...(tabs[currentTab] === "SPEAKING" && {
         type: "SPEAKING",
-        serial: data.testSpeakings && data.testSpeakings.length > 0
-        ? data.testSpeakings[data.testSpeakings.length - 1].serial + 1
-        : 1,
+        serial:
+          data.testSpeakings && data.testSpeakings.length > 0
+            ? data.testSpeakings[data.testSpeakings.length - 1].serial + 1
+            : 1,
         title: "",
       }),
       ...(tabs[currentTab] === "WRITING" && {
         type: "WRITING",
-        serial: data.testWritings && data.testWritings.length > 0
-        ? data.testWritings[data.testWritings.length - 1].serial + 1
-        :   (() => {
-  
-          if (data.testSpeakings && data.testSpeakings.length > 0) {
-            const allQuestions = data.testSpeakings.flatMap((speaking) => speaking.questions || []);
-            if (allQuestions.length > 0) {
-              return Math.max(...allQuestions.map((q) => q.serial)) + 1;
-            }
-          }
-  
-            if (data.testListenings && data.testListenings.length > 0) {
-              const allQuestions = data.testListenings.flatMap((listening) => listening.questions || []);
-              if (allQuestions.length > 0) {
-                return Math.max(...allQuestions.map((q) => q.serial)) + 1;
-              }
-            }
-  
-              if (data.testReadings && data.testReadings.length > 0) {
-                const allQuestions = data.testReadings.flatMap((reading) => reading.questions || []);
-                if (allQuestions.length > 0) {
-                  return Math.max(...allQuestions.map((q) => q.serial)) + 1;
+        serial:
+          data.testWritings && data.testWritings.length > 0
+            ? data.testWritings[data.testWritings.length - 1].serial + 1
+            : (() => {
+                if (data.testSpeakings && data.testSpeakings.length > 0) {
+                  const allQuestions = data.testSpeakings.flatMap(
+                    (speaking) => speaking.questions || []
+                  );
+                  if (allQuestions.length > 0) {
+                    return Math.max(...allQuestions.map((q) => q.serial)) + 1;
+                  }
                 }
-              }
-       
-            if (data.testMixingQuestions && data.testMixingQuestions.length > 0) {
-              return Math.max(...data.testMixingQuestions.map((q) => q.serial)) + 1;
-            }
-   
-            return 1;
-          })(),
-         status: 'ACTIVE',
-      
+
+                if (data.testListenings && data.testListenings.length > 0) {
+                  const allQuestions = data.testListenings.flatMap(
+                    (listening) => listening.questions || []
+                  );
+                  if (allQuestions.length > 0) {
+                    return Math.max(...allQuestions.map((q) => q.serial)) + 1;
+                  }
+                }
+
+                if (data.testReadings && data.testReadings.length > 0) {
+                  const allQuestions = data.testReadings.flatMap(
+                    (reading) => reading.questions || []
+                  );
+                  if (allQuestions.length > 0) {
+                    return Math.max(...allQuestions.map((q) => q.serial)) + 1;
+                  }
+                }
+
+                if (
+                  data.testMixingQuestions &&
+                  data.testMixingQuestions.length > 0
+                ) {
+                  return (
+                    Math.max(...data.testMixingQuestions.map((q) => q.serial)) +
+                    1
+                  );
+                }
+
+                return 1;
+              })(),
+        status: "ACTIVE",
+
         content: "",
       }),
     };
@@ -285,7 +330,7 @@ const handleStatusChange =  async (event, itemUpdate) => {
   };
 
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
-  const [itemDelete,setItemDelete] = useState(0);
+  const [itemDelete, setItemDelete] = useState(0);
 
   const handleOpenDialogDelete = (itemDelete) => {
     setItemDelete(itemDelete);
@@ -298,28 +343,50 @@ const handleStatusChange =  async (event, itemUpdate) => {
 
   const handleAgreeDelete = async () => {
     const result = await BooleanDeleteSubmitTest();
-  
+
     if (!result) {
       return;
     }
     try {
       let serial = itemDelete?.serial || "";
       let minus = 1;
-      if (itemDelete?.type === "READING" || itemDelete?.type === "SPEAKING" || itemDelete?.type === "LISTENING") {
-        serial = itemDelete?.questions?.length > 0 ? itemDelete.questions[itemDelete.questions.length - 1].serial : -1;
+      if (
+        itemDelete?.type === "READING" ||
+        itemDelete?.type === "SPEAKING" ||
+        itemDelete?.type === "LISTENING"
+      ) {
+        serial =
+          itemDelete?.questions?.length > 0
+            ? itemDelete.questions[itemDelete.questions.length - 1].serial
+            : -1;
         itemDelete.test = true;
         minus = itemDelete?.questions?.length || 0;
       }
 
-      await DeleteQuestionTest(data?.id, itemDelete?.type, itemDelete, serial, minus).then(() => {
-        toast.success(`Successfully deleted serial ${itemDelete.serialquestion} with  ${currentTab > 1 ? 'Part' : 'Question'}: ${tabs[currentTab]}.`);
-     
-        handleCloseDialogDelete();
-      })
-      .catch(() => {
-        toast.error(`Failed to delete serial ${itemDelete.serialquestion} with  ${currentTab > 1 ? 'Part' : 'Question'}: ${tabs[currentTab]}.`);
-        handleCloseDialogDelete();
-      });
+      await DeleteQuestionTest(
+        data?.id,
+        itemDelete?.type,
+        itemDelete,
+        serial,
+        minus
+      )
+        .then(() => {
+          toast.success(
+            `Successfully deleted serial ${itemDelete.serialquestion} with  ${
+              currentTab > 1 ? "Part" : "Question"
+            }: ${tabs[currentTab]}.`
+          );
+
+          handleCloseDialogDelete();
+        })
+        .catch(() => {
+          toast.error(
+            `Failed to delete serial ${itemDelete.serialquestion} with  ${
+              currentTab > 1 ? "Part" : "Question"
+            }: ${tabs[currentTab]}.`
+          );
+          handleCloseDialogDelete();
+        });
 
       setQuestionUpdate(itemDelete);
     } catch (error) {
@@ -328,21 +395,32 @@ const handleStatusChange =  async (event, itemUpdate) => {
   };
 
   return (
-    <FormContainer sx={{  p: 3 }}>
-       <ConfirmDialog
+    <FormContainer sx={{ p: 3 }}>
+      <ConfirmDialog
         open={openDialogDelete}
         onClose={handleCloseDialogDelete}
         onAgree={handleAgreeDelete}
-        title="Confirm Deletion"  
-        content={`Are you sure you want to delete serial ${itemDelete.serialquestion} with ${currentTab > 1 ? 'part' : 'question'} ${tabs[currentTab]}?`}
-        cancelText="Cancel"  
-        agreeText="Delete"  
+        title="Confirm Deletion"
+        content={`Are you sure you want to delete serial ${
+          itemDelete.serialquestion
+        } with ${currentTab > 1 ? "part" : "question"} ${tabs[currentTab]}?`}
+        cancelText="Cancel"
+        agreeText="Delete"
       />
-      <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: "bold", mb: 4 }}>
+      <Typography
+        variant="h4"
+        align="center"
+        gutterBottom
+        sx={{ fontWeight: "bold", mb: 4 }}
+      >
         QUESTION LIST
       </Typography>
 
-      <StyledTabs value={currentTab} onChange={handleTabChange} variant="fullWidth">
+      <StyledTabs
+        value={currentTab}
+        onChange={handleTabChange}
+        variant="fullWidth"
+      >
         {tabs.map((tab, index) => (
           <Tab key={index} label={tab} />
         ))}
@@ -361,29 +439,36 @@ const handleStatusChange =  async (event, itemUpdate) => {
           <TableBody>
             {filteredQuestions.map((question) => (
               <TableRow key={question?.id}>
-                <TableCell onClick={() => handleRowClick(question)}>{question?.serialquestion}</TableCell>
-                <TableCell align="center" onClick={() => handleRowClick(question)}>
-                  {question?.type?.charAt(0) + question?.type?.slice(1)?.toLowerCase()}
+                <TableCell onClick={() => handleRowClick(question)}>
+                  {question?.serialquestion}
                 </TableCell>
-             
+                <TableCell
+                  align="center"
+                  onClick={() => handleRowClick(question)}
+                >
+                  {question?.type?.charAt(0) +
+                    question?.type?.slice(1)?.toLowerCase()}
+                </TableCell>
+
                 <TableCell align="center">
                   <Switch
-                  checked={question.status === "ACTIVE"} 
-                  onChange={(event) => handleStatusChange(event,question)}
-                  inputProps={{ "aria-label": "controlled" }}
-                  sx={{
-                    "& .MuiSwitch-switchBase.Mui-checked": {
-                      color: Color2,
-                    },
-                    "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-                      backgroundColor: Color2,
-                    },
-                    "& .MuiSwitch-track": {
-                      backgroundColor: "#ccc", 
-                    },
-                  }}
-                />
-              </TableCell>
+                    checked={question.status === "ACTIVE"}
+                    onChange={(event) => handleStatusChange(event, question)}
+                    inputProps={{ "aria-label": "controlled" }}
+                    sx={{
+                      "& .MuiSwitch-switchBase.Mui-checked": {
+                        color: Color2,
+                      },
+                      "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
+                        {
+                          backgroundColor: Color2,
+                        },
+                      "& .MuiSwitch-track": {
+                        backgroundColor: "#ccc",
+                      },
+                    }}
+                  />
+                </TableCell>
                 <TableCell align="right">
                   <IconButton onClick={() => handleOpenDialogDelete(question)}>
                     <DeleteIcon />
@@ -405,10 +490,8 @@ const handleStatusChange =  async (event, itemUpdate) => {
           marginTop: "1rem",
         }}
       >
-         Add new {currentTab > 1 ? 'Part' : 'Question'} {tabs[currentTab]}
-     
+        Add new {currentTab > 1 ? "Part" : "Question"} {tabs[currentTab]}
       </Button>
-      
     </FormContainer>
   );
 }
