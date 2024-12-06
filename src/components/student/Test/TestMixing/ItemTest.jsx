@@ -292,8 +292,6 @@ const ItemTest = ({ title, datatest, setStatus, setSubmitTest }) => {
 
   const [renderKey, setRenderKey] = useState(0);
 
-  const submitTest = async () => {};
-
   const getDataSubmitTest = async () => {
     let scoreTest = calculateScore();
     let scorePerQuestionSpeaking = 0;
@@ -557,35 +555,23 @@ const ItemTest = ({ title, datatest, setStatus, setSubmitTest }) => {
       submitTest.submitTestMixingAnswers.forEach(
         (answer) => (answer.submitTestId = submitTestId)
       );
-
       await Promise.all([
-        Promise.all(
-          submitTest.submitTestListeningAnswers.map((answer) =>
-            createSubmitTestListeningAnswer(answer)
-          )
+        ...submitTest.submitTestListeningAnswers.map((answer) =>
+          createSubmitTestListeningAnswer(answer)
         ),
-        Promise.all(
-          submitTest.submitTestReadingAnswers.map((answer) =>
-            createSubmitTestReadingAnswer(answer)
-          )
+        ...submitTest.submitTestReadingAnswers.map((answer) =>
+          createSubmitTestReadingAnswer(answer)
         ),
-        Promise.all(
-          submitTest.submitTestSpeakings.map((answer) =>
-            createSubmitTestSpeaking(answer)
-          )
+        ...submitTest.submitTestSpeakings.map((answer) =>
+          createSubmitTestSpeaking(answer)
         ),
-        Promise.all(
-          submitTest.submitTestWritings.map((answer) =>
-            createSubmitTestWriting(answer)
-          )
+        ...submitTest.submitTestWritings.map((answer) =>
+          createSubmitTestWriting(answer)
         ),
-        Promise.all(
-          submitTest.submitTestMixingAnswers.map((answer) =>
-            createSubmitTestMixingAnswer(answer)
-          )
+        ...submitTest.submitTestMixingAnswers.map((answer) =>
+          createSubmitTestMixingAnswer(answer)
         ),
       ]);
-
       const state = {
         id: submitTestId,
         testId: datatest.id,
@@ -594,8 +580,21 @@ const ItemTest = ({ title, datatest, setStatus, setSubmitTest }) => {
       deleteData("MyDatabase", "MyStore" + datatest.id);
 
       navigate("/student/history-test/mixing", { state });
+
     } catch (error) {
       console.error("Error during submission:", error);
+    
+    } finally {
+
+      deleteData("MyDatabase", "MyStore" + datatest.id);
+  
+      
+      navigate("/student/history-test/mixing", {
+        state: {
+          id: submitTestId || null,
+          testId: datatest.id,
+        },
+      });
     }
   };
 
@@ -647,7 +646,6 @@ const ItemTest = ({ title, datatest, setStatus, setSubmitTest }) => {
 
     return Math.round(score * 100) / 100;
   };
-
   return (
     <Grid sx={{ marginBottom: "1rem" }}>
       <Box sx={{}}>

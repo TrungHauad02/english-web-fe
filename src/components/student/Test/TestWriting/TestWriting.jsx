@@ -178,15 +178,15 @@ function TestWriting() {
           id: "",
           submitTestId: "",
           testWritingId: writing.id,
-          content: answers[writing.id]?.essay,
+          content: content,
           comment: comment,
           score: parseFloat(score),
           status: "ACTIVE",
         });
       }
-
       submitTest.score = scoreTest;
       const createdSubmitTest = await createSubmitTest(submitTest);
+
       submitTest.id = createdSubmitTest.id;
 
       for (let i = 0; i < submitTest.submitTestWritings.length; i++) {
@@ -199,6 +199,7 @@ function TestWriting() {
         })
       );
 
+      
       const state = {
         id: createdSubmitTest.id,
         testId: datatest.id,
@@ -208,6 +209,8 @@ function TestWriting() {
     } catch (error) {
       console.error("Error creating submitTest:", error);
     } finally {
+      
+      
       setIsSubmitting(false);
     }
   };
