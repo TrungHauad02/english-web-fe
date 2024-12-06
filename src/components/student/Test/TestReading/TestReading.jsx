@@ -98,8 +98,9 @@ function TestReading() {
           console.error("Error accessing IndexedDB:", error);
         });
     }
-  }, [datatest?.id]);
 
+  }, [datatest?.id]);
+  
   useEffect(() => {
     if (datatest != null) {
       openDB("MyDatabase", storeName)
@@ -110,7 +111,9 @@ function TestReading() {
           console.error("Error saving answers to the database:", error);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers]);
+  
   
   if (loading) {
     return (
