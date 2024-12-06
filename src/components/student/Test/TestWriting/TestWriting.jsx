@@ -165,56 +165,67 @@ function TestWriting() {
       let scoreTest = 0;
   
       let pointPerQuestion = 100 / datatest?.testWritings?.length;
+
+      let comment = "No comment available. You haven't completed this question yet";
+      let content = "No content available. You haven't completed this question yet";
   
       for (let writing of datatest?.testWritings) {
         let score = 0;
-        let comment = "User did not answer the question"; 
-  
-        if (answers[writing.id]?.essay !== null && answers[writing.id]?.essay !== '') {
-          console.log(answers[writing.id]?.essay);
-          console.log(writing.content);
-          
+    
+        if (answers[writing.id]?.essay !== null && answers[writing.id]?.essay !== '' && answers[writing.id]?.essay !== undefined) {
+         
           let dataScore = await scoreTestWriting(answers[writing.id]?.essay, writing.content, pointPerQuestion);
           console.log(dataScore);
           
           score = dataScore.score.split("/")[0];
           comment = dataScore.comment;
           scoreTest = scoreTest + +score;
+          content = answers[writing.id]?.essay;
   
         }
         submitTest.submitTestWritings.push({
           id: "",
           submitTestId: "",
           testWritingId: writing.id,
-          content: answers[writing.id]?.essay,
+          content: content,
           comment: comment,
           score: parseFloat(score),
           status: "ACTIVE",
         });
       }
-  
       submitTest.score = scoreTest;
       const createdSubmitTest = await createSubmitTest(submitTest);
-      submitTest.id = createdSubmitTest.id;
-  
-      for (let i = 0; i < submitTest.submitTestWritings.length; i++) {
-        submitTest.submitTestWritings[i].submitTestId = createdSubmitTest.id;
-      }
-  
-      await Promise.all(submitTest.submitTestWritings.map(async (writing) => {
-        await createSubmitTestWriting(writing);
-      }));
 
+      submitTest.id = createdSubmitTest.id;
+      if (submitTest?.submitTestWritings?.length > 0) {
+     
+        for (let i = 0; i < submitTest.submitTestWritings.length; i++) {
+          submitTest.submitTestWritings[i].submitTestId = createdSubmitTest.id;
+        }
+      
+        await Promise.all(
+          submitTest.submitTestWritings.map(async (writing) => {
+            await createSubmitTestWriting(writing);
+          })
+        );
+      } else {
+        console.warn("No submitTestWritings available to process.");
+      }
+
+      
       const state = {
         id: createdSubmitTest.id,
         testId: datatest.id,
       };
       deleteData('MyDatabase', 'MyStore'+datatest.id);
       navigate("/student/history-test/writing", { state });
-      
+    
+  
     } catch (error) {
       console.error("Error creating submitTest:", error);
     } finally {
+      
+      
       setIsSubmitting(false);
     }
   };

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl, Button, Grid, styled, duration } from '@mui/material';
+import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl, Button, Grid, styled, duration ,CircularProgress} from '@mui/material';
 import ItemTitleTest from './ItemTitleTest';
 import Vocabulary from './Vocabulary';
 import Grammar from './Grammar';
@@ -25,6 +25,7 @@ import { openDB, saveData, getData, deleteData } from '../common/IndexDB';
 
 const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
   const storeName = 'MyStore' + datatest.id;
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const DataTestMixing = [
     {
@@ -246,7 +247,7 @@ const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
           if (selectedAnswer === undefined) {
             return -1;
           }
-          return 1; // Chỉ trả về 1 vì không có correctAnswer để so sánh
+          return 1; 
         });
       });
     } else if (data.title === "Writing") {
@@ -274,11 +275,6 @@ const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
 
 
   const [renderKey, setRenderKey] = useState(0);
-
-  const submitTest = async () => {
-
- 
-  };
 
   const getDataSubmitTest = async () => {
 
@@ -493,76 +489,62 @@ const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
     submitTest.score = scoreTest;
     return submitTest;
   };
-  
   const handlebtnSubmit = async () => {
-
+    setIsSubmitting(true);
+    let submitTestId;
+  
     try {
       let user = await fetchUserInfo();
       const submitTest = await getDataSubmitTest();
       submitTest.userId = user.id;
   
       const response = await createSubmitTest(submitTest);
-      const submitTestId = response.id;
+      submitTestId = response.id;
   
-      submitTest.submitTestListeningAnswers.forEach(
-        (answer) => (answer.submitTestId = submitTestId)
-      );
-      submitTest.submitTestReadingAnswers.forEach(
-        (answer) => (answer.submitTestId = submitTestId)
-      );
-      submitTest.submitTestSpeakings.forEach(
-        (answer) => (answer.submitTestId = submitTestId)
-      );
-      submitTest.submitTestWritings.forEach(
-        (answer) => (answer.submitTestId = submitTestId)
-      );
-      submitTest.submitTestMixingAnswers.forEach(
-        (answer) => (answer.submitTestId = submitTestId)
-      );
+ 
+      [
+        ...submitTest.submitTestListeningAnswers,
+        ...submitTest.submitTestReadingAnswers,
+        ...submitTest.submitTestSpeakings,
+        ...submitTest.submitTestWritings,
+        ...submitTest.submitTestMixingAnswers,
+      ].forEach((answer) => (answer.submitTestId = submitTestId));
   
+   
       await Promise.all([
-        Promise.all(
-          submitTest.submitTestListeningAnswers.map((answer) =>
-            createSubmitTestListeningAnswer(answer)
-          )
+        ...submitTest.submitTestListeningAnswers.map((answer) =>
+          createSubmitTestListeningAnswer(answer)
         ),
-        Promise.all(
-          submitTest.submitTestReadingAnswers.map((answer) =>
-            createSubmitTestReadingAnswer(answer)
-          )
+        ...submitTest.submitTestReadingAnswers.map((answer) =>
+          createSubmitTestReadingAnswer(answer)
         ),
-        Promise.all(
-          submitTest.submitTestSpeakings.map((answer) =>
-            createSubmitTestSpeaking(answer)
-          )
+        ...submitTest.submitTestSpeakings.map((answer) =>
+          createSubmitTestSpeaking(answer)
         ),
-        Promise.all(
-          submitTest.submitTestWritings.map((answer) =>
-            createSubmitTestWriting(answer)
-          )
+        ...submitTest.submitTestWritings.map((answer) =>
+          createSubmitTestWriting(answer)
         ),
-        Promise.all(
-          submitTest.submitTestMixingAnswers.map((answer) =>
-            createSubmitTestMixingAnswer(answer)
-          )
+        ...submitTest.submitTestMixingAnswers.map((answer) =>
+          createSubmitTestMixingAnswer(answer)
         ),
       ]);
-      
-  
-
-      const state = {
-        id: submitTestId,
-        testId: datatest.id,
-      };
-
-      deleteData('MyDatabase', 'MyStore'+datatest.id);
-   
-      
-      navigate("/student/history-test/mixing", { state });
     } catch (error) {
       console.error("Error during submission:", error);
+    
+    } finally {
+
+      deleteData("MyDatabase", "MyStore" + datatest.id);
+  
+      
+      navigate("/student/history-test/mixing", {
+        state: {
+          id: submitTestId || null,
+          testId: datatest.id,
+        },
+      });
     }
   };
+  
   
 
   const calculateScore = () => {
@@ -605,9 +587,32 @@ const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
   
     return Math.round(score * 100) / 100;
   };
-  
+
+
+
+ 
 
   return (
+    <>
+  
+    {isSubmitting && (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100vh",
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+          zIndex: 1000,
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )}
     <Grid sx={{ marginBottom: '1rem' }} >
     <Box sx={{}}>
     <Box sx={{ display: 'flex',  }}>
@@ -677,6 +682,7 @@ const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
       </Box>
     </Box>
   </Grid>
+  </>
   );
 };
 

@@ -270,7 +270,7 @@ const HistoryTestMixing = ({datatest, submitTest ,onClickTestAgain}) => {
                         (submit) => submit?.testSpeakingQuestionId === question.id
                     )?.content;
         
-                    if (Answer === undefined || Answer === '') {
+                    if (Answer === undefined || Answer === '' || Answer.startsWith("No")) {
                         console.warn("Answer is undefined or empty for question ID:", question.id);
                         return -1;
                     }
@@ -288,7 +288,7 @@ const HistoryTestMixing = ({datatest, submitTest ,onClickTestAgain}) => {
                     (submit) => submit?.testWritingId === item.id
                 )?.content;
         
-                if (Answer === undefined || Answer === '') {
+                if (Answer === undefined || Answer === ''  || Answer.startsWith("No")) {
                     console.warn("Answer is undefined or empty for item ID:", item.id);
                     return -1;
                 }
