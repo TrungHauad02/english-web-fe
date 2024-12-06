@@ -113,6 +113,7 @@ export default function ListTopicManagement({ title }) {
           sx={{
             padding: "1rem",
             overflowY: "auto",
+            overflowX: "hidden",
             display: "flex",
             flexDirection: "column",
             position: "relative",
@@ -143,11 +144,13 @@ export default function ListTopicManagement({ title }) {
                   sx={{ color: "#fff" }}
                 />
               )}
-              {openStudyResources ? (
-                <ExpandLessIcon sx={{ color: "#fff" }} />
-              ) : (
-                <ExpandMoreIcon sx={{ color: "#fff" }} />
-              )}
+              {openSidebar ? (
+                openStudyResources ? (
+                  <ExpandLessIcon sx={{ color: "#fff" }} />
+                ) : (
+                  <ExpandMoreIcon sx={{ color: "#fff" }} />
+                )
+              ) : null}
             </ListItem>
 
             {/* Collapse for Study Resources */}
@@ -227,11 +230,13 @@ export default function ListTopicManagement({ title }) {
                   sx={{ color: "#fff" }}
                 />
               )}
-              {openTestResources ? (
-                <ExpandLessIcon sx={{ color: "#fff" }} />
-              ) : (
-                <ExpandMoreIcon sx={{ color: "#fff" }} />
-              )}
+              {openSidebar ? (
+                openTestResources ? (
+                  <ExpandLessIcon sx={{ color: "#fff" }} />
+                ) : (
+                  <ExpandMoreIcon sx={{ color: "#fff" }} />
+                )
+              ) : null}
             </ListItem>
 
             {/* Collapse for Test Resources */}
