@@ -37,15 +37,15 @@ const findCorrectAnswerId = (answers = []) => {
 };
 
 
-const QuestionListeningDetails = ({ question = {}, handleSaveSelectedQuestion }) => {
+const QuestionListeningDetails = ({ question = {}, handleSaveSelectedQuestion,isEditTestParent }) => {
   return (
     <Box sx={{ p: 3, bgcolor: "#fff9e6", minHeight: "100vh" }}>
-      <ContentQuestion question={question} handleSaveSelectedQuestion={handleSaveSelectedQuestion} />
+      <ContentQuestion question={question} handleSaveSelectedQuestion={handleSaveSelectedQuestion} isEditTestParent={isEditTestParent} />
     </Box>
   );
 };
 
-const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion }) => {
+const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion,isEditTestParent }) => {
   const [questionData, setQuestionData] = useState(question || {});
   const [backupData, setBackupData] = useState(question || {});
   const [selectedAnswer, setSelectedAnswer] = useState(
@@ -229,10 +229,13 @@ const ContentQuestion = ({ question = {}, handleSaveSelectedQuestion }) => {
             color="#F08080"
             variant="contained"
             onClick={handleCancel}
+            disabled={!isEditTestParent}
           >
             Cancel
           </ColorButton>
-          <ColorButton color="#FFD700" variant="contained" onClick={handleEdit}>
+          <ColorButton color="#FFD700" variant="contained" onClick={handleEdit}
+          disabled={!isEditTestParent}
+          >
             Edit
           </ColorButton>
           <ColorButton

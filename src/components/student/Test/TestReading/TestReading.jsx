@@ -48,9 +48,29 @@ function TestReading() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getTest(state.id);
+        const data = await getTest(state.id,"ACTIVE");
         if (data) {
-          setdatatest(data);
+       
+          const updateDataTest = (data) => {
+            let serialCounter = 1; 
+            data.testReadings = data.testReadings.map((item) => ({
+              ...item,
+              questions: item.questions.map((question) =>
+                question.serial !== undefined
+                  ? { ...question, serial: serialCounter++ }
+                  : question
+              ),
+            }));
+            return data;
+          };
+  
+          const updatedData = updateDataTest(data);
+     
+          setdatatest(updatedData);
+        
+
+
+
           setDuration(data.duration); 
           setStoreName("MyStore" + data.id)
         } else {

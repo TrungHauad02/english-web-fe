@@ -29,11 +29,26 @@ function HistoryTestReading() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const testResult = await getTest(state.testId);
+        const testResult =  await getTest(state.testId,"ACTIVE");
         const historyTestResult = await getSubmitTest(state.id);
 
         if (testResult) {
-          setTest(testResult);
+          const updateDataTest = (data) => {
+            let serialCounter = 1; 
+            data.testReadings = data.testReadings.map((item) => ({
+              ...item,
+              questions: item.questions.map((question) =>
+                question.serial !== undefined
+                  ? { ...question, serial: serialCounter++ }
+                  : question
+              ),
+            }));
+            return data;
+          };
+  
+          const updatedData = updateDataTest(testResult);
+     
+          setTest(updatedData);
         }
         if (historyTestResult) {
           setHistoryTest(historyTestResult);

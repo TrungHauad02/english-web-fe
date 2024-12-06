@@ -6,12 +6,11 @@ import {
   Button,
   Typography,
   Paper,
-  FormControl,
 } from "@mui/material";
-import {  toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { styled } from "@mui/material/styles";
 import { updateTest } from "api/test/TestApi";
-import HelpTextField from "./HelpTextField"; 
+import HelpTextField from "./HelpTextField";
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -37,7 +36,7 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-function InformationTest({ data }) {
+function InformationTest({ data,BooleanDeleteSubmitTest }) {
   const [formData, setFormData] = useState(data);
   const [backupData, setBackupData] = useState(data);
   const [editMode, setEditMode] = useState(false);
@@ -45,13 +44,42 @@ function InformationTest({ data }) {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    let updatedErrors = { ...errors };
+
+    if (name === "title") {
+      updatedErrors.title = value ? null : "Title is required";
+    }
+
+    if (name === "duration") {
+      if (!/^\d*$/.test(value)) {
+        updatedErrors.duration = "Duration must be a positive number";
+      } else if (value === "" || Number(value) <= 0) {
+        updatedErrors.duration = "Duration must be a positive number";
+      } else if (Number(value) > 120) {
+        updatedErrors.duration = "Duration must be under 120 minutes";
+      } else {
+        updatedErrors.duration = null;
+      }
+    }
+
+    if (name === "status") {
+      updatedErrors.status = value ? null : "Status is required";
+    }
+
+    setErrors(updatedErrors);
+
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: name === "duration" ? Number(value) : value,
     }));
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
+    const result = await BooleanDeleteSubmitTest();
+  
+    if (!result) {
+      return;
+    }
     setEditMode(true);
   };
 
@@ -60,6 +88,8 @@ function InformationTest({ data }) {
     if (!formData.title) formErrors.title = "Title is required";
     if (!formData.duration || isNaN(formData.duration) || formData.duration <= 0) {
       formErrors.duration = "Duration must be a positive number";
+    } else if (formData.duration > 120) {
+      formErrors.duration = "Duration must be under 120 minutes";
     }
     if (!formData.status) formErrors.status = "Status is required";
     setErrors(formErrors);
@@ -73,7 +103,7 @@ function InformationTest({ data }) {
           toast.success(`${data.title} updated successfully!`);
         })
         .catch(() => {
-          toast.error(`Failed to updated ${data.title}`);
+          toast.error(`Failed to update ${data.title}`);
         });
         setFormData((prevState) => ({
           ...prevState,
@@ -127,9 +157,9 @@ function InformationTest({ data }) {
 
         <Box sx={{ mb: 2 }}>
           <HelpTextField
-            label="Duration (minutes) *"
+            label="Duration (min) *"
             name="duration"
-            value={formData.duration}
+            value={formData.duration.toString()} // Ensure string for input
             onChange={handleChange}
             disabled={!editMode}
             error={!!errors.duration}
@@ -137,7 +167,7 @@ function InformationTest({ data }) {
           />
         </Box>
 
-        <Box sx={{ mb: 2}}>
+        <Box sx={{ mb: 2 }}>
           <HelpTextField
             label="Type"
             name="type"
@@ -151,12 +181,16 @@ function InformationTest({ data }) {
           <Box display="flex" alignItems="center">
             <Typography
               variant="body1"
-              style={{ fontWeight: 'bold', marginRight: '16px', minWidth: '150px' }}
+              style={{
+                fontWeight: "bold",
+                marginRight: "16px",
+                minWidth: "120px",
+              }}
             >
               Status
             </Typography>
             <Select
-                fullWidth
+              fullWidth
               value={formData.status}
               onChange={handleChange}
               name="status"
@@ -179,25 +213,25 @@ function InformationTest({ data }) {
             </Select>
           </Box>
           {errors.status && (
-            <Typography color="error" variant="caption" style={{ marginTop: '4px', display: 'block' }}>
+            <Typography
+              color="error"
+              variant="caption"
+              style={{ marginTop: "4px", display: "block" }}
+            >
               {errors.status}
             </Typography>
           )}
         </Box>
 
         <ButtonContainer>
-          <ColorButton
-            color="#F08080"
-            variant="contained"
-            onClick={handleCancel}
-          >
+          <ColorButton color="#F08080" variant="contained" onClick={handleCancel}>
             Cancel
           </ColorButton>
           <ColorButton color="#FFD700" variant="contained" onClick={handleEdit}>
             Edit
           </ColorButton>
           <ColorButton
-            color="#98FB98"
+            color="#00796B"
             variant="contained"
             onClick={handleSave}
             disabled={!editMode}

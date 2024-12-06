@@ -6,6 +6,7 @@ import { getTest } from "api/test/TestApi";
 import { getTestSpeaking } from "api/test/TestSpeakingApi";
 import InformationTest from "../common/InformationTest";
 import QuestionListTest from "./QuestionListTestSpeaking";
+import DeleteSubmitTestDialog from "../common/DeleteSubmitTestDialog";
 
 function SpeakingTest() {
   const location = useLocation();
@@ -35,6 +36,57 @@ function SpeakingTest() {
 
     fetchData();
   }, [state.id, version, questionUpdate]);
+
+   //delete submit test 
+   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
+   const [submitTestIds, setSubmitTestIds] = useState([]);
+ 
+   const [dialogAction, setDialogAction] = React.useState(null);
+   const handleDialogAction = (action) => {
+     if (action === "cancel") {
+       setDialogAction("cancel"); 
+     } else if (action === "confirm") {
+       setDialogAction("confirm");
+     }
+     setOpenDialogDeleteSubmitTest(false);
+   };
+   
+   const waitForDialogAction = (getDialogAction, resetDialogAction) => {
+     return new Promise((resolve) => {
+       const interval = setInterval(() => {
+         const action = getDialogAction();
+         if (action) {
+           clearInterval(interval); 
+           resolve(action); 
+           resetDialogAction(); 
+         }
+       }, 100);
+     });
+   };
+   const BooleanDeleteSubmitTest = async () => {
+     if (datatest?.submitTestsId?.length > 0) {
+       setSubmitTestIds(datatest.submitTestsId);
+       setOpenDialogDeleteSubmitTest(true);
+   
+       const dialogResult = await waitForDialogAction(
+         () => dialogAction,
+         () => setDialogAction(null)
+       );
+   
+       if (dialogResult === "cancel") {
+      
+         return false; 
+       }
+   
+       console.log("User confirmed the action.");
+       return true; 
+     }
+   
+     console.log("No submitTestsId found.");
+     return true; 
+   };
+   
+ 
   
   const handleRowClick = async (question) => {
     setQuestionUpdate(question);
@@ -64,22 +116,27 @@ function SpeakingTest() {
   return (
     <Box
       sx={{
-        marginRight: "5%",
-        marginLeft: "5%",
         marginBottom: "2%",
         marginTop: "2%",
       }}
     >
-      <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch" }}>
+       <DeleteSubmitTestDialog
+        open={openDialogDeleteSubmitTest}
+        onClose={handleDialogAction} 
+        submitTestIds={submitTestIds}
+        content={`Are you sure you want to delete ${submitTestIds?.length || 0} history users of this test?`}
+      />
+      <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch" ,  marginRight: "5%",
+        marginLeft: "5%",}}>
         <Box sx={{ flex: 4, minHeight: 0 }}>
-          <InformationTest data={datatest} />
+          <InformationTest data={datatest} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
         </Box>
         <Box sx={{ marginLeft: "2%", flex: 6, minHeight: 0 }}>
-          <QuestionListTest data={datatest} handleRowClick={handleRowClick} setQuestionUpdate={setQuestionUpdate} />
+          <QuestionListTest data={datatest} handleRowClick={handleRowClick} setQuestionUpdate={setQuestionUpdate} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
         </Box>
       </Box>
       {questionData && (
-        <QuestionSpeaking key={`${questionData.id}-${version}`} initialData={questionData} handleSpeaking={handleRowClick} />
+        <QuestionSpeaking key={`${questionData.id}-${version}`} initialData={questionData} handleSpeaking={handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
       )}
     </Box>
   );

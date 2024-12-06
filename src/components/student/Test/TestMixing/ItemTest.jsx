@@ -60,9 +60,45 @@ const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
  
   ];
 
+  const updateSerialsByOrder = () => {
+    let currentSerial = 1;
+  
+    const order = ["Vocabulary", "Grammar", "Reading", "Listening", "Speaking", "Writing"];
+  
+    order.forEach((title) => {
+      const data = DataTestMixing.find((item) => item.title === title);
+  
+      if (!data) return;
+  
+      if (title === "Vocabulary" || title === "Grammar") {
+        data.questions.forEach((question) => {
+          if (question.serial !== undefined) {
+            question.serial = currentSerial++;
+          }
+        });
+      } else if (title === "Reading" || title === "Listening" || title === "Speaking") {
+        data.dataitem.forEach((item) => {
+          item.questions.forEach((question) => {
+            if (question.serial !== undefined) {
+              question.serial = currentSerial++;
+            }
+          });
+        });
+      } else if (title === "Writing") {
+        data.dataitem.forEach((item) => {
+          if (item.serial !== undefined) {
+            item.serial = currentSerial++;
+          }
+        });
+      }
+    });
+  };
+  
+
   const [answers, setAnswers] = useState({});
   useEffect(() => {
     if (datatest != null) {
+      updateSerialsByOrder();
       openDB("MyDatabase", "MyStore" + datatest.id)
         .then((db) => {
           getData(db, "MyStore" + datatest.id,storeName)
@@ -459,6 +495,7 @@ const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
   };
   
   const handlebtnSubmit = async () => {
+
     try {
       let user = await fetchUserInfo();
       const submitTest = await getDataSubmitTest();
@@ -512,13 +549,14 @@ const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
       ]);
       
   
-      deleteData("MyDatabase", storeName);
+
       const state = {
         id: submitTestId,
         testId: datatest.id,
       };
+
       deleteData('MyDatabase', 'MyStore'+datatest.id);
-      console.log("thanh cong");
+   
       
       navigate("/student/history-test/mixing", { state });
     } catch (error) {

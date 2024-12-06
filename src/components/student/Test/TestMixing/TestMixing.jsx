@@ -24,7 +24,7 @@ function TestMixing() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getTest(state.id);
+        const data = await getTest(state.id,"ACTIVE");
         if (data) {
           setdatatest(data);
         } else {
