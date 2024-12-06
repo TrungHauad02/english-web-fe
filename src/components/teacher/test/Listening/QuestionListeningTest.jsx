@@ -12,7 +12,7 @@ import {
   TableHead,
   TableRow,
   IconButton,
-  Switch
+  Switch,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import ConfirmDialog from "shared/component/confirmDialog/ConfirmDialog";
@@ -32,16 +32,12 @@ import {
   updateTestListeningAnswer,
   deleteTestListeningAnswer,
 } from "api/test/TestListeningAnswerApi";
-import {
-  deleteFile,
-  uploadFile,
-} from "api/feature/uploadFile/uploadFileService";
+import { uploadFile } from "api/feature/uploadFile/uploadFileService";
 import {
   handleFileUpload,
   handleFileChange,
 } from "../../../../shared/utils/uploadFileUtils";
 import { AddQuestionListeningTest } from "./AddQuestionListeningTest";
-
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -65,7 +61,7 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-function QuestionListening({ data, handleListening,BooleanDeleteSubmitTest }) {
+function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest }) {
   const initialData = data || {};
   const { Color2, Color2_1 } = useColor();
   const questions = initialData.questions || [];
@@ -76,7 +72,7 @@ function QuestionListening({ data, handleListening,BooleanDeleteSubmitTest }) {
     selectedQuestion: questions.length > 0 ? questions[0] : null,
   });
 
-  const [isEditing, setIsEditing] = useState(data.id==='' ? true : false);
+  const [isEditing, setIsEditing] = useState(data.id === "" ? true : false);
   const [questionSelected, setQuestionSelected] = useState(
     questions.length > 0 ? questions[0] : null
   );
@@ -118,9 +114,9 @@ function QuestionListening({ data, handleListening,BooleanDeleteSubmitTest }) {
     });
   };
 
-  const handleEditToggle = async() => {
+  const handleEditToggle = async () => {
     const result = await BooleanDeleteSubmitTest();
-  
+
     if (!result) {
       return;
     }
@@ -137,7 +133,6 @@ function QuestionListening({ data, handleListening,BooleanDeleteSubmitTest }) {
   };
 
   const handleSave = async () => {
-
     if (!audio || audio.trim() === "") {
       toast.error("Listening audio cannot be empty.");
       return;
@@ -147,7 +142,9 @@ function QuestionListening({ data, handleListening,BooleanDeleteSubmitTest }) {
       toast.error("Listening transcript cannot be empty.");
       return;
     }
-    const activeQuestions = formData.questions.filter((question) => question.status === "ACTIVE");
+    const activeQuestions = formData.questions.filter(
+      (question) => question.status === "ACTIVE"
+    );
     if (activeQuestions.length === 0) {
       toast.error("Please create at least one question ACTIVE");
       return;
@@ -201,7 +198,9 @@ function QuestionListening({ data, handleListening,BooleanDeleteSubmitTest }) {
               );
             }
           }
-          toast.success(`Successfully created serial ${initialData.serial} of Part Listening.`);
+          toast.success(
+            `Successfully created serial ${initialData.serial} of Part Listening.`
+          );
         } catch (error) {
           console.error("Error saving questions or answers:", error);
         }
@@ -210,15 +209,13 @@ function QuestionListening({ data, handleListening,BooleanDeleteSubmitTest }) {
       }
     } else {
       try {
-
-        if(questionsDelete.length!==0)
-          {
-           const result = await handleOpenDialogDelete();
-           if (result === "cancel") {
-             handleCancel(); 
-             return;
-           }
+        if (questionsDelete.length !== 0) {
+          const result = await handleOpenDialogDelete();
+          if (result === "cancel") {
+            handleCancel();
+            return;
           }
+        }
         const newAudio = await handleFileUpload(
           initialData.content,
           audio,
@@ -307,7 +304,9 @@ function QuestionListening({ data, handleListening,BooleanDeleteSubmitTest }) {
               }
             }
           }
-          toast.success(`Successfully updated serial ${initialData.serial} of Part Listening.`);
+          toast.success(
+            `Successfully updated serial ${initialData.serial} of Part Listening.`
+          );
         } catch (error) {
           console.error("Error saving questions or answers:", error);
         }
@@ -438,14 +437,13 @@ function QuestionListening({ data, handleListening,BooleanDeleteSubmitTest }) {
     setQuestionSelected(newQuestion);
   };
   const handleStatusChange = (event, questionId) => {
-   
-    
     setFormData((prevData) => ({
       ...prevData,
       questions: prevData.questions.map((q) =>
-        q.id === questionId ? { ...q, status: event.target.checked ? "ACTIVE" : "INACTIVE", } : q
+        q.id === questionId
+          ? { ...q, status: event.target.checked ? "ACTIVE" : "INACTIVE" }
+          : q
       ),
-      
     }));
   };
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
@@ -453,230 +451,260 @@ function QuestionListening({ data, handleListening,BooleanDeleteSubmitTest }) {
     onAgree: () => {},
     onClose: () => {},
   });
-  
 
   const handleOpenDialogDelete = () => {
     return new Promise((resolve) => {
       setOpenDialogDelete(true);
-  
+
       const handleSave = () => {
         setOpenDialogDelete(false);
         resolve("save");
       };
-  
+
       const handleCancel = () => {
         setOpenDialogDelete(false);
         resolve("cancel");
       };
-  
+
       setDialogHandlers({ onAgree: handleSave, onClose: handleCancel });
     });
   };
 
   return (
-    <FormContainer sx={{ p: 3, bgcolor: "", minHeight: "100vh", display: "flex" }}>
-    <ConfirmDialog
-      open={openDialogDelete}
-      onClose={dialogHandlers.onClose}
-      onAgree={dialogHandlers.onAgree}
-      title="Confirm Deletion"
-      content={`Are you sure you want to delete ${questionsDelete.length} question(s)?`}
-      cancelText="Cancel"
-      agreeText="Delete"
-    />
-    <Box sx={{ width: "50%", maxWidth: "50%" }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3, marginLeft: "6%" }}>
-        <Typography variant="h4">Listening</Typography>
-      </Box>
-  
-      <Box sx={{ display: "flex", gap: 4, bgcolor: "#F0F0F0", padding: "2rem", marginRight: "5%", marginLeft: "5%" }}>
-        <Box sx={{ flex: 1 }}>
+    <FormContainer
+      sx={{ p: 3, bgcolor: "", minHeight: "100vh", display: "flex" }}
+    >
+      <ConfirmDialog
+        open={openDialogDelete}
+        onClose={dialogHandlers.onClose}
+        onAgree={dialogHandlers.onAgree}
+        title="Confirm Deletion"
+        content={`Are you sure you want to delete ${questionsDelete.length} question(s)?`}
+        cancelText="Cancel"
+        agreeText="Delete"
+      />
+      <Box sx={{ width: "50%", maxWidth: "50%" }}>
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
-            gap: 2, 
-            mb: 2,
+            justifyContent: "space-between",
+            mb: 3,
+            marginLeft: "6%",
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              whiteSpace: "nowrap", 
-              height: "3rem", 
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            Audio
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              height: "3rem",
-              flex: 1, 
-            }}
-          >
-            {audio && (
-              <audio controls src={audio} style={{ height: "100%", flex: 1 }} />
-            )}
-            <Button
-              variant="contained"
-              component="label"
-              disabled={!isEditing}
-              startIcon={<Upload />}
-        
+          <Typography variant="h4">Listening</Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            gap: 4,
+            bgcolor: "#F0F0F0",
+            padding: "2rem",
+            marginRight: "5%",
+            marginLeft: "5%",
+          }}
+        >
+          <Box sx={{ flex: 1 }}>
+            <Box
               sx={{
-                whiteSpace: "nowrap", 
-                bgcolor: Color2_1,
-                "&:hover": { bgcolor: Color2 }, 
-              
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                mb: 2,
               }}
             >
-              Upload
-              <input
-                type="file"
-                hidden
-                accept="audio/*"
-                onChange={handleAudioUpload}
-              />
+              <Typography
+                variant="h6"
+                sx={{
+                  whiteSpace: "nowrap",
+                  height: "3rem",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                Audio
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  height: "3rem",
+                  flex: 1,
+                }}
+              >
+                {audio && (
+                  <audio
+                    controls
+                    src={audio}
+                    style={{ height: "100%", flex: 1 }}
+                  />
+                )}
+                <Button
+                  variant="contained"
+                  component="label"
+                  disabled={!isEditing}
+                  startIcon={<Upload />}
+                  sx={{
+                    whiteSpace: "nowrap",
+                    bgcolor: Color2_1,
+                    "&:hover": { bgcolor: Color2 },
+                  }}
+                >
+                  Upload
+                  <input
+                    type="file"
+                    hidden
+                    accept="audio/*"
+                    onChange={handleAudioUpload}
+                  />
+                </Button>
+              </Box>
+            </Box>
+
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Transcript
+            </Typography>
+            <TextField
+              multiline
+              rows={6}
+              fullWidth
+              value={formData.transcript || ""}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, transcript: e.target.value }))
+              }
+              sx={{ mb: 3 }}
+              disabled={!isEditing}
+            />
+
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Questions
+            </Typography>
+            <TableContainer
+              component={Paper}
+              sx={{ maxHeight: 200, overflowY: "auto" }}
+            >
+              <Table stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Serial</TableCell>
+                    <TableCell align="center">Question Content</TableCell>
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell>Delete</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {formData.questions.map((question) => (
+                    <TableRow key={question.id} sx={{ cursor: "pointer" }}>
+                      <TableCell
+                        onClick={() => handleQuestionSelect(question.id)}
+                      >
+                        {question.serial}
+                      </TableCell>
+                      <TableCell
+                        onClick={() => handleQuestionSelect(question.id)}
+                      >
+                        {question.content}
+                      </TableCell>
+                      <TableCell align="center">
+                        <Switch
+                          disabled={!isEditing}
+                          checked={question.status === "ACTIVE"}
+                          onChange={(event) =>
+                            handleStatusChange(event, question.id)
+                          }
+                          inputProps={{ "aria-label": "controlled" }}
+                          sx={{
+                            "& .MuiSwitch-switchBase.Mui-checked": {
+                              color: Color2,
+                            },
+                            "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
+                              {
+                                backgroundColor: Color2,
+                              },
+                            "& .MuiSwitch-track": {
+                              backgroundColor: "#ccc",
+                            },
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          disabled={!isEditing}
+                          onClick={() => handleDeleteQuestion(question)}
+                          color="error"
+                        >
+                          <Trash />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Button
+              variant="contained"
+              startIcon={<PlusCircle />}
+              sx={{
+                bgcolor: Color2_1,
+                "&:hover": { bgcolor: Color2 },
+                marginTop: "1rem",
+              }}
+              onClick={handleAddQuestion}
+              disabled={!isEditing}
+            >
+              Add new question
             </Button>
           </Box>
         </Box>
 
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Transcript
-          </Typography>
-          <TextField
-            multiline
-            rows={6}
-            fullWidth
-            value={formData.transcript || ""}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, transcript: e.target.value }))
-            }
-            sx={{ mb: 3 }}
-            disabled={!isEditing}
-          />
-  
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Questions
-          </Typography>
-          <TableContainer component={Paper} sx={{ maxHeight: 200, overflowY: "auto" }}>
-            <Table stickyHeader>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Serial</TableCell>
-                  <TableCell align="center">Question Content</TableCell>
-                  <TableCell align="center">Status</TableCell>
-                  <TableCell>Delete</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {formData.questions.map((question) => (
-                  <TableRow key={question.id} sx={{ cursor: "pointer" }}>
-                    <TableCell onClick={() => handleQuestionSelect(question.id)}>
-                      {question.serial}
-                    </TableCell>
-                    <TableCell onClick={() => handleQuestionSelect(question.id)}>
-                      {question.content}
-                    </TableCell>
-                    <TableCell align="center">
-                      <Switch
-                        disabled={!isEditing}
-                        checked={question.status === "ACTIVE"}
-                        onChange={(event) => handleStatusChange(event, question.id)}
-                        inputProps={{ "aria-label": "controlled" }}
-                        sx={{
-                          "& .MuiSwitch-switchBase.Mui-checked": {
-                            color: Color2,
-                          },
-                          "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-                            backgroundColor: Color2,
-                          },
-                          "& .MuiSwitch-track": {
-                            backgroundColor: "#ccc",
-                          },
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <IconButton
-                        disabled={!isEditing}
-                        onClick={() => handleDeleteQuestion(question)}
-                        color="error"
-                      >
-                        <Trash />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Button
-            variant="contained"
-            startIcon={<PlusCircle />}
-            sx={{
-              bgcolor: Color2_1,
-              "&:hover": { bgcolor: Color2 },
-              marginTop: "1rem",
-            }}
-            onClick={handleAddQuestion}
-            disabled={!isEditing}
-          >
-            Add new question
-          </Button>
+        <Box
+          sx={{ display: "flex", marginTop: "1rem", justifyContent: "center" }}
+        >
+          <ButtonContainer>
+            <ColorButton
+              color="#F08080"
+              variant="contained"
+              disabled={initialData.id === "" ? true : false}
+              onClick={handleCancel}
+            >
+              Cancel
+            </ColorButton>
+            <ColorButton
+              color="#FFD700"
+              variant="contained"
+              onClick={handleEditToggle}
+              disabled={isEditing}
+            >
+              Edit
+            </ColorButton>
+            <ColorButton
+              color="#00796B"
+              variant="contained"
+              onClick={handleSave}
+              disabled={!isEditing}
+            >
+              Save
+            </ColorButton>
+          </ButtonContainer>
         </Box>
       </Box>
-  
-      <Box sx={{ display: "flex", marginTop: "1rem", justifyContent: "center" }}>
-        <ButtonContainer>
-          <ColorButton
-            color="#F08080"
-            variant="contained"
-            disabled={initialData.id === "" ? true : false}
-            onClick={handleCancel}
-          >
-            Cancel
-          </ColorButton>
-          <ColorButton
-            color="#FFD700"
-            variant="contained"
-            onClick={handleEditToggle}
-            disabled={isEditing}
-          >
-            Edit
-          </ColorButton>
-          <ColorButton
-            color="#00796B"
-            variant="contained"
-            onClick={handleSave}
-            disabled={!isEditing}
-          >
-            Save
-          </ColorButton>
-        </ButtonContainer>
+      <Box sx={{ flex: 1, width: "50%", maxWidth: "50%" }}>
+        {questionSelected && (
+          <QuestionListeningDetails
+            question={{
+              ...questionSelected,
+              type: "Question detail",
+              details: "true",
+            }}
+            isEditTestParent={!isEditing}
+            key={questionSelected.id}
+            handleSaveSelectedQuestion={handleSaveSelectedQuestion}
+          />
+        )}
       </Box>
-    </Box>
-    <Box sx={{ flex: 1, width: "50%", maxWidth: "50%" }}>
-      {questionSelected && (
-        <QuestionListeningDetails
-          question={{
-            ...questionSelected,
-            type: "Question detail",
-            details: "true",
-          }}
-          isEditTestParent={!isEditing}
-          key={questionSelected.id}
-          handleSaveSelectedQuestion={handleSaveSelectedQuestion}
-        />
-      )}
-    </Box>
-  </FormContainer>
-  
+    </FormContainer>
   );
 }
 

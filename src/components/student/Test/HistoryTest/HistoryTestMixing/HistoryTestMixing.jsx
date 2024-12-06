@@ -14,7 +14,6 @@ function HistoryTestMixing() {
   const [historyTest, setHistoryTest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const score = historyTest?.score;
   const title = test?.type || "";
   const navigate = useNavigate();
 
@@ -27,7 +26,7 @@ function HistoryTestMixing() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const testResult =  await getTest(state.testId,"ACTIVE");
+        const testResult = await getTest(state.testId, "ACTIVE");
         const historyTest = await getSubmitTest(state.id);
 
         if (testResult) {
