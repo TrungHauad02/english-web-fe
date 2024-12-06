@@ -28,7 +28,6 @@ import Reading from "../../components/teacher/test/Reading/Reading";
 import Speaking from "../../components/teacher/test/Speaking/Speaking";
 import Listening from "../../components/teacher/test/Listening/Listening";
 import Writing from "../../components/teacher/test/Writing/Writing";
-import HomeTest from "../../components/teacher/test/HomeTest";
 import ListTest from "../../components/student/Test/ListTest";
 import TestListening from "../../components/student/Test/TestListening";
 import TestReading from "../../components/student/Test/TestReading/TestReading";
