@@ -36,7 +36,7 @@ function SpeakingTest() {
     };
 
     fetchData();
-  }, [state.id, version, questionUpdate,submitTestIds]);
+  }, [state.id, version, questionUpdate]);
 
    //delete submit test 
    const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
@@ -49,6 +49,7 @@ function SpeakingTest() {
      } else if (action === "confirm") {
        setDialogAction("confirm");
      }
+     setVersion(version+1);
      setOpenDialogDeleteSubmitTest(false);
    };
    

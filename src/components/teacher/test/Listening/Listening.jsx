@@ -43,7 +43,7 @@ function ListeningTest() {
    const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
 
  
-   const [dialogAction, setDialogAction] = React.useState(null);
+   const [dialogAction, setDialogAction] = useState(null);
    const handleDialogAction = (action) => {
      if (action === "cancel") {
        setDialogAction("cancel"); 
@@ -51,6 +51,7 @@ function ListeningTest() {
        setDialogAction("confirm");
     
      }
+     setVersion(version+1);
      setOpenDialogDeleteSubmitTest(false);
    };
    

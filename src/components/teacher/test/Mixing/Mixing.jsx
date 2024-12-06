@@ -15,6 +15,7 @@ import { getTestSpeaking } from "api/test/TestSpeakingApi";
 import { getTestMixingQuestion } from "api/test/TestMixingQuestionApi";
 import { getTestWriting } from "api/test/TestWritingApi";
 import DeleteSubmitTestDialog from "../common/DeleteSubmitTestDialog";
+import { da } from "date-fns/locale";
 function Mixing() {
   const location = useLocation();
   const { state } = location;
@@ -35,7 +36,7 @@ function Mixing() {
         const data = await getTest(state.id);
         if (data) {
           setdatatest(data);
-          setSubmitTestIds(data?.submitTestIds);
+    
           
         } else {
           setdatatest(null); 
@@ -50,17 +51,17 @@ function Mixing() {
     fetchData();
   }, [state.id, questionUpdate,version]);
 
-  //delete submit test 
+ 
   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
 
-  const [dialogAction, setDialogAction] = React.useState(null);
+  const [dialogAction, setDialogAction] = useState(null);
   const handleDialogAction = (action) => {
     if (action === "cancel") {
       setDialogAction("cancel"); 
     } else if (action === "confirm") {
       setDialogAction("confirm");
-   
-    }
+    } 
+    setVersion(version+1);
     setOpenDialogDeleteSubmitTest(false);
   };
   
@@ -77,19 +78,20 @@ function Mixing() {
     });
   };
   const BooleanDeleteSubmitTest = async () => {
-    if (submitTestIds?.length > 0) {
+    if (datatest?.submitTestIds?.length > 0) {
+      setSubmitTestIds(datatest?.submitTestIds)
       setOpenDialogDeleteSubmitTest(true);
   
       const dialogResult = await waitForDialogAction(
         () => dialogAction,
         () => setDialogAction(null)
       );
-  
+
       if (dialogResult === "cancel") {
         return false; 
       }
 
-      setVersion(version+1);
+
       console.log("User confirmed the action.");
       return true; 
     }

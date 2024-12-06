@@ -168,7 +168,12 @@ function QuestionList({
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [itemDelete, setItemDelete] = useState(0);
 
-  const handleOpenDialogDelete = (itemDelete) => {
+  const handleOpenDialogDelete =  async(itemDelete) => {
+    const result = await BooleanDeleteSubmitTest();
+
+    if (!result) {
+      return;
+    }
     setItemDelete(itemDelete);
     setOpenDialogDelete(true);
   };

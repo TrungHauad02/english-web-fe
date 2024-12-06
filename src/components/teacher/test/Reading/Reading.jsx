@@ -36,7 +36,7 @@ function ReadingTest() {
     };
 
     fetchData();
-  }, [state.id, version,questionUpdate,submitTestIds]);
+  }, [state.id, version,questionUpdate]);
 
 
   //delete submit test 
@@ -50,6 +50,7 @@ function ReadingTest() {
     } else if (action === "confirm") {
       setDialogAction("confirm");
     }
+    setVersion((prevData) => (prevData || 0) + 1);
     setOpenDialogDeleteSubmitTest(false);
   };
   
