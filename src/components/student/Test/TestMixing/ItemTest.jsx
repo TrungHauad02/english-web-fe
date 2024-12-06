@@ -1,33 +1,34 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { Box, Grid } from "@mui/material";
-import ItemTitleTest from "./ItemTitleTest";
-import Vocabulary from "./Vocabulary";
-import Grammar from "./Grammar";
-import Reading from "./Reading";
-import Listening from "./Listening";
-import Writing from "./Writing";
-import Speaking from "./Speaking";
-import SerialGrid from "./SerialGrid/SerialGrid";
-import { createSubmitTest } from "api/test/submitTest";
-import { fetchUserInfo } from "api/user/userService";
-import { uploadFile } from "api/feature/uploadFile/uploadFileService";
-import { createSubmitTestReadingAnswer } from "api/test/submitTestReadingAnswer";
-import { createSubmitTestMixingAnswer } from "api/test/submitTestMixingAnswer";
-import { createSubmitTestListeningAnswer } from "api/test/submitTestListeningAnswer";
-import { createSubmitTestSpeaking } from "api/test/submitTestSpeaking";
-import { createSubmitTestWriting } from "api/test/submitTestWriting";
-import {
-  commentMixingQuestion,
-  commentReadingQuestion,
-  commentListeningQuestion,
-} from "../../../../api/test/commentTest";
+
+import React, { useState, useCallback, useEffect } from 'react';
+import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl, Button, Grid, styled, duration ,CircularProgress} from '@mui/material';
+import ItemTitleTest from './ItemTitleTest';
+import Vocabulary from './Vocabulary';
+import Grammar from './Grammar';
+import Reading from './Reading';
+import Listening from './Listening';
+import Writing from './Writing';
+import Speaking from './Speaking';
+import SerialGrid from './SerialGrid/SerialGrid';
+import {createSubmitTest} from "../../../../api/test/submitTest"
+import { fetchUserInfo } from "../../../../api/user/userService";
+import { uploadFile } from 'api/feature/uploadFile/uploadFileService';
+import {createSubmitTestReadingAnswer} from "../../../../api/test/submitTestReadingAnswer"
+import {createSubmitTestMixingAnswer} from "../../../../api/test/submitTestMixingAnswer"
+import {createSubmitTestListeningAnswer} from "../../../../api/test/submitTestListeningAnswer"
+import {createSubmitTestSpeaking} from "../../../../api/test/submitTestSpeaking"
+import {createSubmitTestWriting} from "../../../../api/test/submitTestWriting"
+import {commentMixingQuestion,commentReadingQuestion,commentListeningQuestion} from "../../../../api/test/commentTest"
+
 import { scoreTestWriting } from "api/feature/scoreTestWriting/scoreTestWriting";
 import { getSpeechToText } from "api/feature/stt/SpeechToTextService";
 import { useNavigate } from "react-router-dom";
 import { openDB, saveData, getData, deleteData } from "../common/IndexDB";
 
-const ItemTest = ({ title, datatest, setStatus, setSubmitTest }) => {
-  const storeName = "MyStore" + datatest.id;
+
+const ItemTest = ({ title, datatest,setStatus,setSubmitTest }) => {
+  const storeName = 'MyStore' + datatest.id;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const navigate = useNavigate();
   const DataTestMixing = [
     {
@@ -260,6 +261,14 @@ const ItemTest = ({ title, datatest, setStatus, setSubmitTest }) => {
             return -1;
           }
 
+          return 1; 
+        });
+      });
+    } else if (data.title === "Writing") {
+      return (data.dataitem || []).flatMap((item) => {
+        const selectedAnswer = answers[item.id];
+
+
           return item.questions.map((question) => {
             const selectedAnswer = answers[question.id];
 
@@ -292,7 +301,7 @@ const ItemTest = ({ title, datatest, setStatus, setSubmitTest }) => {
 
   const [renderKey, setRenderKey] = useState(0);
 
-  const submitTest = async () => {};
+
 
   const getDataSubmitTest = async () => {
     let scoreTest = calculateScore();
@@ -534,70 +543,69 @@ const ItemTest = ({ title, datatest, setStatus, setSubmitTest }) => {
   };
 
   const handlebtnSubmit = async () => {
+    setIsSubmitting(true);
+    let submitTestId;
+  
+
     try {
       let user = await fetchUserInfo();
       const submitTest = await getDataSubmitTest();
       submitTest.userId = user.id;
 
       const response = await createSubmitTest(submitTest);
-      const submitTestId = response.id;
 
-      submitTest.submitTestListeningAnswers.forEach(
-        (answer) => (answer.submitTestId = submitTestId)
-      );
-      submitTest.submitTestReadingAnswers.forEach(
-        (answer) => (answer.submitTestId = submitTestId)
-      );
-      submitTest.submitTestSpeakings.forEach(
-        (answer) => (answer.submitTestId = submitTestId)
-      );
-      submitTest.submitTestWritings.forEach(
-        (answer) => (answer.submitTestId = submitTestId)
-      );
-      submitTest.submitTestMixingAnswers.forEach(
-        (answer) => (answer.submitTestId = submitTestId)
-      );
+      submitTestId = response.id;
+  
+ 
+      [
+        ...submitTest.submitTestListeningAnswers,
+        ...submitTest.submitTestReadingAnswers,
+        ...submitTest.submitTestSpeakings,
+        ...submitTest.submitTestWritings,
+        ...submitTest.submitTestMixingAnswers,
+      ].forEach((answer) => (answer.submitTestId = submitTestId));
+  
+   
 
       await Promise.all([
-        Promise.all(
-          submitTest.submitTestListeningAnswers.map((answer) =>
-            createSubmitTestListeningAnswer(answer)
-          )
+        ...submitTest.submitTestListeningAnswers.map((answer) =>
+          createSubmitTestListeningAnswer(answer)
         ),
-        Promise.all(
-          submitTest.submitTestReadingAnswers.map((answer) =>
-            createSubmitTestReadingAnswer(answer)
-          )
+        ...submitTest.submitTestReadingAnswers.map((answer) =>
+          createSubmitTestReadingAnswer(answer)
         ),
-        Promise.all(
-          submitTest.submitTestSpeakings.map((answer) =>
-            createSubmitTestSpeaking(answer)
-          )
+        ...submitTest.submitTestSpeakings.map((answer) =>
+          createSubmitTestSpeaking(answer)
         ),
-        Promise.all(
-          submitTest.submitTestWritings.map((answer) =>
-            createSubmitTestWriting(answer)
-          )
+        ...submitTest.submitTestWritings.map((answer) =>
+          createSubmitTestWriting(answer)
         ),
-        Promise.all(
-          submitTest.submitTestMixingAnswers.map((answer) =>
-            createSubmitTestMixingAnswer(answer)
-          )
+        ...submitTest.submitTestMixingAnswers.map((answer) =>
+          createSubmitTestMixingAnswer(answer)
         ),
       ]);
 
-      const state = {
-        id: submitTestId,
-        testId: datatest.id,
-      };
 
-      deleteData("MyDatabase", "MyStore" + datatest.id);
-
-      navigate("/student/history-test/mixing", { state });
     } catch (error) {
       console.error("Error during submission:", error);
+    
+    } finally {
+
+      deleteData("MyDatabase", "MyStore" + datatest.id);
+  
+      
+      navigate("/student/history-test/mixing", {
+        state: {
+          id: submitTestId || null,
+          testId: datatest.id,
+        },
+      });
     }
   };
+
+  
+  
+
 
   const calculateScore = () => {
     let score = 0;
@@ -648,44 +656,87 @@ const ItemTest = ({ title, datatest, setStatus, setSubmitTest }) => {
     return Math.round(score * 100) / 100;
   };
 
+
+
+
+ 
+
   return (
-    <Grid sx={{ marginBottom: "1rem" }}>
-      <Box sx={{}}>
-        <Box sx={{ display: "flex" }}>
-          <Box
-            sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
-          >
-            {DataTestMixing.map((tab, index) => (
-              <Box
-                key={index}
-                sx={{
-                  marginRight: "0.5rem",
-                  padding: "0.5rem 1rem",
-                  borderRadius: "1rem 1rem 0 0",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  cursor: "pointer",
-                  background:
-                    activeTab === index
-                      ? "linear-gradient(to right, #00796B, #00B8A2)"
-                      : "#E0F7FA",
-                  color: activeTab === index ? "#FFFFFF" : "#000000",
-                  boxShadow:
-                    activeTab === index
-                      ? "0px 4px 6px rgba(0, 0, 0, 0.2)"
-                      : "none",
-                  transition: "all 0.3s ease",
-                }}
-                onClick={() => setActiveTab(index)}
-              >
-                {tab.title}
-              </Box>
-            ))}
-          </Box>
-          <Box sx={{ marginLeft: "auto", display: "flex", marginRight: "20%" }}>
-            <ItemTitleTest title={DataTestMixing[activeTab].title} />
-          </Box>
-        </Box>
+    <>
+  
+    {isSubmitting && (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100vh",
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+          zIndex: 1000,
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )}
+    <Grid sx={{ marginBottom: '1rem' }} >
+    <Box sx={{}}>
+    <Box sx={{ display: 'flex',  }}>
+
+  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+  {DataTestMixing.map((tab, index) => (
+     
+     <Box
+       key={index}
+       sx={{
+         marginRight: '0.5rem',
+         padding: "0.5rem 1rem",
+         borderRadius: "1rem 1rem 0 0",
+         fontWeight: "bold",
+         textAlign: "center",
+         cursor: "pointer",
+         background: activeTab === index
+           ? "linear-gradient(to right, #00796B, #00B8A2)"
+           : "#E0F7FA",
+         color: activeTab === index ? "#FFFFFF" : "#000000",
+         boxShadow: activeTab === index
+           ? "0px 4px 6px rgba(0, 0, 0, 0.2)"
+           : "none",
+         transition: "all 0.3s ease",
+       }}
+       onClick={() => setActiveTab(index)}
+     >
+       {tab.title}
+     </Box>
+   ))}
+  </Box>
+  <Box sx={{ marginLeft: 'auto', display: 'flex',marginRight:'20%' ,      
+  }}>
+    <ItemTitleTest title={DataTestMixing[activeTab].title} />
+  </Box>
+</Box>
+    </Box>
+    
+    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+      <Box 
+        sx={{
+          width: '80%',
+          padding: '2rem',
+          border: '1px solid #ccc',
+          borderRadius: '1rem',
+        }}
+      >
+        {activeTab === 0 && <Vocabulary key={renderKey}  dataTest={DataTestMixing[activeTab]}  focusId={focusId} title={title}  answers = {answers} setAnswers = {setAnswers} />}
+        {activeTab === 1 && <Grammar key={renderKey} dataTest={DataTestMixing[activeTab]} focusId={focusId} title={title}  answers = {answers} setAnswers = {setAnswers} />}
+        {activeTab === 2 && <Reading key={renderKey}  dataTest={DataTestMixing[activeTab]} focusId={focusId} title={title}   answers = {answers} setAnswers = {setAnswers} />}
+        {activeTab === 3 && <Listening key={renderKey} dataTest={DataTestMixing[activeTab]} focusId={focusId} title={title}   answers = {answers} setAnswers = {setAnswers} />}
+        {activeTab === 4 && <Speaking key={renderKey} dataTest={DataTestMixing[activeTab].dataitem} focusId={focusId}  answers = {answers} setAnswers = {setAnswers}   />}
+        {activeTab === 5 && <Writing key={renderKey} dataTest={DataTestMixing[activeTab]}  focusId={focusId} title={title}   answers = {answers} setAnswers = {setAnswers} />}
+      
+
       </Box>
 
       <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -770,7 +821,11 @@ const ItemTest = ({ title, datatest, setStatus, setSubmitTest }) => {
           />
         </Box>
       </Box>
-    </Grid>
+
+    </Box>
+  </Grid>
+  </>
+
   );
 };
 

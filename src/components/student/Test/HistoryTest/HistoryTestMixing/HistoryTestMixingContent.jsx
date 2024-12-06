@@ -268,42 +268,41 @@ const HistoryTestMixing = ({ datatest, submitTest, onClickTestAgain }) => {
                   return -1;
                 }
 
-                return selectedAnswer === correctAnswer.id ? 1 : -1;
-              }) || []
-            );
-          }) || []
-        );
-      } else if (data.title === "Speaking") {
-        return (
-          data.testSpeakings?.flatMap((item) => {
-            if (!item || !item.questions) {
-              console.warn(
-                "Invalid item or missing questions in Speaking:",
-                item
-              );
-              return [];
-            }
+        
+                return item.questions.map((question) => {
+                    if (!question || !question.id) {
+                        console.warn("Invalid question or missing ID in Speaking:", question);
+                        return -1;
+                    }
+        
+                    const Answer = data.submitTestSpeakings?.find(
+                        (submit) => submit?.testSpeakingQuestionId === question.id
+                    )?.content;
+        
+                    if (Answer === undefined || Answer === '' || Answer.startsWith("No")) {
+                        console.warn("Answer is undefined or empty for question ID:", question.id);
+                        return -1;
+                    }
+                    return 1;
+                }) || [];
+            }) || [];
+        } else if (data.title === "Writing") {
+            return data.testWritings?.flatMap((item) => {
+                if (!item || !item.id) {
+                    console.warn("Invalid item or missing ID in Writing:", item);
+                    return -1;
 
-            return (
-              item.questions.map((question) => {
-                if (!question || !question.id) {
-                  console.warn(
-                    "Invalid question or missing ID in Speaking:",
-                    question
-                  );
-                  return -1;
                 }
 
                 const Answer = data.submitTestSpeakings?.find(
                   (submit) => submit?.testSpeakingQuestionId === question.id
                 )?.content;
 
-                if (Answer === undefined || Answer === "") {
-                  console.warn(
-                    "Answer is undefined or empty for question ID:",
-                    question.id
-                  );
-                  return -1;
+        
+                if (Answer === undefined || Answer === ''  || Answer.startsWith("No")) {
+                    console.warn("Answer is undefined or empty for item ID:", item.id);
+                    return -1;
+
                 }
                 return 1;
               }) || []
