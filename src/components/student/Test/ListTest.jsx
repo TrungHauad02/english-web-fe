@@ -12,17 +12,6 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
-const MainTitleContainer = styled(Box)(({ theme }) => ({
-  width: "25%",
-  position: "absolute",
-  left: 0,
-  bottom: 0,
-  textAlign: "center",
-  color: "black",
-  background:
-    "linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.4) 100%)",
-  borderRadius: "0 20px 0 0",
-}));
 const TabItem = styled(Tab)(({ theme, selected, isSubTab }) => ({
   backgroundColor: selected ? "#00796B" : isSubTab ? "#E0F7FA" : "#00B8A2",
   color: selected ? "#FFFFFF" : isSubTab ? "#00796B" : "#FFFFFF",

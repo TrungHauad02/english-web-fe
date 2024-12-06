@@ -17,7 +17,8 @@ import {
   Stack,
   IconButton,
   Switch,
-  colors
+  colors,
+  FormControl,InputLabel
 } from "@mui/material";
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -65,6 +66,21 @@ const TestManagement = () => {
   const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [testDelete,setTestDelete] = useState(0);
+  const [status, setStatus] = useState("ALL"); 
+  const [sortOrder, setSortOrder] = useState("ASC");
+
+  const handleStatusChangeFilter = (event) => {
+    const selectedStatus = event.target.value;
+   
+    setStatus(selectedStatus); 
+  };
+  const handleSortChange = (event) => {
+    const selectedSortOrder = event.target.value;
+
+    setSortOrder(selectedSortOrder);
+  };
+  
+  
 
   const handleOpenDialogDelete = (testDelete) => {
     setTestDelete(testDelete);
@@ -111,10 +127,10 @@ const TestManagement = () => {
   useEffect(() => {
     const fetchData = async () => {
       const adjustedType = currtype === "ALL" ? "" : currtype;
-    
-      const data = await getListTest(page, adjustedType,searchTerm);
+      const adjustedStatus = status === "ALL" ? "" : status;
+      const data = await getListTest(page, adjustedType,searchTerm,adjustedStatus,'',sortOrder);
       const tests = data.content;
-      const serial  = 0;
+      const serial  = await getMaxSerial();
       setMaxSerial(serial+1||0);
      
       setVersionPage(versionPage+1);
@@ -128,10 +144,23 @@ const TestManagement = () => {
       }
     };
     fetchData();
-  }, [page, currtype, searchTerm]);
+  }, [page, currtype, searchTerm,status,sortOrder]);
 
+  const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
+  const [submitTests, setSubmitTests] = useState([]);
+  const [contentDeleteSubmit, setContentDeleteSubmit] = useState("");
+
+  const handleDeleteRequest = (submittests, testTitle) => {
+
+  };
+
+  const handleCloseDialogDeleteSubmitTest= () => {
+    setOpenDialogDeleteSubmitTest(false);
+    setSubmitTests([]); 
+  };
 
   const handleStatusChange = (event, test) => {
+   
     updateStatus(test.id)
       .then((response) => {
         toast.success(`Status of "${test.title}" updated successfully!`);
@@ -214,11 +243,13 @@ const TestManagement = () => {
           gap: "1rem",
         }}
       >
+      <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+        <InputLabel id="type-label">Type</InputLabel>
         <Select
+          labelId="type-label"
           value={currtype}
           onChange={handleFilterChange}
-          variant="outlined"
-          sx={{ minWidth: 120 }}
+          label="Type"
         >
           <MenuItem value="ALL">All</MenuItem>
           <MenuItem value={type.mixing}>Mixing</MenuItem>
@@ -227,7 +258,32 @@ const TestManagement = () => {
           <MenuItem value={type.speaking}>Speaking</MenuItem>
           <MenuItem value={type.writing}>Writing</MenuItem>
         </Select>
-
+      </FormControl>
+      <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+        <InputLabel id="status-label">Status</InputLabel>
+        <Select
+          labelId="status-label"
+          value={status}
+          onChange={handleStatusChangeFilter}
+          label="Status"
+        >
+          <MenuItem value="ALL">ALL</MenuItem>
+          <MenuItem value="ACTIVE">ACTIVE</MenuItem>
+          <MenuItem value="INACTIVE">INACTIVE</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl variant="outlined" sx={{ minWidth: 130 }}>
+        <InputLabel id="sortOrder-label">Sort Order</InputLabel>
+        <Select
+          labelId="sortOrder-label"
+          value={sortOrder}
+          onChange={handleSortChange}
+          label="Sort Order"
+        >
+          <MenuItem value="ASC">Serial ASC</MenuItem>
+          <MenuItem value="DESC">Serial DESC</MenuItem>
+        </Select>
+      </FormControl>
         <TextField
           label="Search Test"
           variant="outlined"
@@ -236,15 +292,21 @@ const TestManagement = () => {
           fullWidth
           sx={{ flexGrow: 1 }}
         />
+      <ColorButton
+        color={Color2}
+        variant="contained"
+        sx={{
+          marginLeft: 2,
+          whiteSpace: "nowrap",
+          padding: "8px 16px", 
+          minWidth: "120px", 
+          borderRadius: "8px",
+        }}
+        onClick={handleOpen}
+      >
+        Add new test
+      </ColorButton>
 
-        <ColorButton
-          color={Color2}
-          variant="contained"
-          sx={{ marginLeft: 2, whiteSpace: "nowrap" }}
-          onClick={handleOpen}
-        >
-          Add new test
-        </ColorButton>
       </Box>
       <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: "8px", overflow: "hidden" }}>
   <Table>

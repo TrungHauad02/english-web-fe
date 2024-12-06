@@ -5,7 +5,8 @@ export function getListTest(
   type = "",
   searchTerm = "",
   status = "",
-  userId = ""
+  userId = "",
+  sortDirection = ""
 ) {
   const params = new URLSearchParams({
     page: page - 1,
@@ -13,6 +14,7 @@ export function getListTest(
     title: searchTerm,
     status,
     userId,
+    sortDirection,
   });
   console.log(params.toString());
 
