@@ -117,7 +117,12 @@ function QuestionListWriting({ data, handleRowClick, setQuestionUpdate,BooleanDe
     }
   };
 
-  const handleOpenDialogDelete = (question) => {
+  const handleOpenDialogDelete = async (question) => {
+    const result = await BooleanDeleteSubmitTest();
+
+    if (!result) {
+      return;
+    }
     setItemDelete(question);
     setOpenDialogDelete(true);
   };

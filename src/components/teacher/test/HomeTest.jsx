@@ -79,7 +79,20 @@ const TestManagement = () => {
     setSortOrder(selectedSortOrder);
   };
 
-  const handleOpenDialogDelete = (testDelete) => {
+  const handleOpenDialogDelete = async (testDelete) => {
+
+    if (testDelete?.submitTestIds?.length > 0) {
+      setSubmitTestIds(testDelete?.submitTestIds);
+      setOpenDialogDeleteSubmitTest(true);
+
+      const dialogResult = await waitForDialogAction(
+        () => dialogAction,
+        () => setDialogAction(null)
+      );
+      if (dialogResult === "cancel") {
+        return;
+      }
+    }
     setTestDelete(testDelete);
     setOpenDialogDelete(true);
   };
@@ -88,18 +101,7 @@ const TestManagement = () => {
     setOpenDialogDelete(false);
   };
   const handleAgreeDelete = async () => {
-    if (testDelete?.submitTestsId?.length > 0) {
-      setSubmitTestIds(testDelete?.submitTestsId);
-      setOpenDialogDeleteSubmitTest(true);
-      const dialogResult = await waitForDialogAction(
-        () => dialogAction,
-        () => setDialogAction(null)
-      );
-
-      if (dialogResult === "cancel") {
-        return;
-      }
-    }
+   
     await deleteTest(testDelete.id)
       .then(() => {
         toast.success(`${testDelete.title} deleted successfully!`);
@@ -158,20 +160,22 @@ const TestManagement = () => {
       }
     };
     fetchData();
-  }, [page, currtype, searchTerm, status, sortOrder]);
+  }, [page, currtype, searchTerm, status, sortOrder,version]);
 
   //xoá submit test
   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] =
     useState(false);
   const [submitTestIds, setSubmitTestIds] = useState([]);
 
-  const [dialogAction, setDialogAction] = React.useState(null);
+  const [dialogAction, setDialogAction] = useState(null);
   const handleDialogAction = (action) => {
+  
     if (action === "cancel") {
       setDialogAction("cancel");
     } else if (action === "confirm") {
       setDialogAction("confirm");
     }
+    setVersion((prevVersion) => prevVersion + 1);
     setOpenDialogDeleteSubmitTest(false);
   };
 
@@ -189,8 +193,8 @@ const TestManagement = () => {
   };
 
   const handleStatusChange = async (event, test) => {
-    if (test?.submitTestsId?.length > 0) {
-      setSubmitTestIds(test?.submitTestsId);
+    if (test?.submitTestIds?.length > 0) {
+      setSubmitTestIds(test?.submitTestIds);
       setOpenDialogDeleteSubmitTest(true);
       const dialogResult = await waitForDialogAction(
         () => dialogAction,

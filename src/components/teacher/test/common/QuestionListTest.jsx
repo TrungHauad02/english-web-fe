@@ -167,12 +167,14 @@ function QuestionList({
   };
 
   const handleStatusChange = async (event, itemUpdate) => {
-    console.log(event.target.checked);
+  
     const result = await BooleanDeleteSubmitTest();
-
+   
+    
     if (!result) {
       return;
     }
+  
     let updateStatusFunction;
     switch (itemUpdate.type) {
       case "READING":
@@ -334,7 +336,13 @@ function QuestionList({
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [itemDelete, setItemDelete] = useState(0);
 
-  const handleOpenDialogDelete = (itemDelete) => {
+  const handleOpenDialogDelete = async (itemDelete) => {
+    const result = await BooleanDeleteSubmitTest();
+
+    if (!result) {
+      return;
+    }
+    
     setItemDelete(itemDelete);
     setOpenDialogDelete(true);
   };
