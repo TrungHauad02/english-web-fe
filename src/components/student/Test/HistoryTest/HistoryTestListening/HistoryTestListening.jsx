@@ -1,6 +1,9 @@
+
 import OneListeningTest from "./HistoryOneListening";
 import { Box, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
+import React, { useState, useEffect } from 'react';
 import React, { useState, useEffect } from "react";
 import ScoreGrid from "./ScoreGrid";
 import { useLocation } from "react-router-dom";
@@ -9,6 +12,17 @@ import { getSubmitTest } from "api/test/submitTest";
 import { useNavigate } from "react-router-dom";
 
 function HistoryTestListening() {
+    const [indexVisible, setIndexVisible] = useState(0);
+    const location = useLocation();
+    const { state } = location;
+    const [test, setTest] = useState(null);
+    const [historyTest, setHistoryTest] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const data = test?.testListenings;
+    
   const [indexVisible, setIndexVisible] = useState(0);
   const location = useLocation();
   const { state } = location;
@@ -214,6 +228,14 @@ function HistoryTestListening() {
           </Button>
         </Box>
       </Box>
+      <Box sx={{ display: 'flex',  marginLeft: '5%', marginRight: '5%',marginBottom: '1rem'  }}>
+      <Box sx={{  width: '100%' }}>
+        <Box sx={{ border: '1px solid black', borderRadius: '1rem', padding: '0.5rem',  width: '100%' }}>
+            <OneListeningTest 
+                onelistening={data[indexVisible]} 
+                dataSubmitTest ={historyTest.submitTestListeningAnswers}
+            /> 
+        </Box>
       <Box
         sx={{
           display: "flex",
