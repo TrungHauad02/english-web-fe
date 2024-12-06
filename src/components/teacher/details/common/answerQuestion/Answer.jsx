@@ -12,6 +12,7 @@ import DeleteButton from "../button/DeleteButton";
 
 export default function Answer({
   data,
+  index,
   isEditing,
   onChangeAnswerContent,
   onChangeCorrectAnswer,
@@ -42,7 +43,8 @@ export default function Answer({
       <Grid2 item xs={2} sm={1}>
         <Radio
           checked={data.correct}
-          value={data.id}
+          value={index}
+          name={`question-${data.questionId}`}
           disabled={!isEditing}
           onChange={onChangeCorrectAnswer}
           sx={{
@@ -59,6 +61,7 @@ export default function Answer({
             value={data.status}
             onChange={onChangeAnswerStatus}
             label="Status"
+            disabled={!isEditing || data.correct}
             sx={{
               "& .MuiSelect-root": {
                 fontSize: "0.85rem",
@@ -89,7 +92,11 @@ export default function Answer({
             },
           }}
         >
-          <DeleteButton showText={false} size="small" />
+          <DeleteButton
+            showText={false}
+            disabled={!isEditing || data.correct}
+            size="small"
+          />
         </IconButton>
       </Grid2>
     </Grid2>

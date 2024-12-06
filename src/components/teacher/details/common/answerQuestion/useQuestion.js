@@ -79,8 +79,8 @@ export default function useQuestion(data, fetchData, setError, path) {
   function onChangeCorrectAnswer(e) {
     if (!isEditing) return;
     const newAnswers = [...question.answers];
-    newAnswers.forEach((answer) => {
-      if (answer.id === e.target.value) {
+    newAnswers.forEach((answer, index) => {
+      if (index === parseInt(e.target.value)) {
         answer.correct = true;
       } else {
         answer.correct = false;

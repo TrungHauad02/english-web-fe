@@ -151,6 +151,7 @@ export default function Question({
             {question.answers.map((answer, index) => (
               <Answer
                 data={answer}
+                index={index}
                 isEditing={isEditing}
                 onChangeAnswerContent={(e) => onChangeAnswerContent(e, index)}
                 onChangeCorrectAnswer={onChangeCorrectAnswer}
