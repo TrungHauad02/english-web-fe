@@ -35,7 +35,6 @@ function ManageStudent() {
         filteredStudents,
         setFilteredStudents,
         loadStudents,
-        lastStudentElementRef,
         page,
         setPage,
         totalPages,

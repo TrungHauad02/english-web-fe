@@ -3,7 +3,7 @@ import { Grid, TextField, Button } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import useColor from "shared/color/Color";
 
-const SearchPanel = ({  searchName,  setSearchName,   searchStartDate,   setSearchStartDate,   searchEndDate,   setSearchEndDate,   handleSearch }) => {
+const SearchPanel = ({ searchName, setSearchName, searchStartDate, setSearchStartDate, searchEndDate, setSearchEndDate, handleSearch }) => {
     useEffect(() => {
         if (searchStartDate && searchEndDate && new Date(searchStartDate) > new Date(searchEndDate)) {
             setSearchEndDate(searchStartDate);
@@ -11,7 +11,7 @@ const SearchPanel = ({  searchName,  setSearchName,   searchStartDate,   setSear
     }, [searchStartDate, searchEndDate, setSearchEndDate]);
 
     const isEndDateDisabled = !searchStartDate || new Date(searchStartDate) >= new Date();
-    const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
+    const { Color2_1} = useColor();
 
     return (
         <Grid container spacing={1}>
@@ -40,7 +40,7 @@ const SearchPanel = ({  searchName,  setSearchName,   searchStartDate,   setSear
                     onChange={(e) => {
                         setSearchStartDate(e.target.value);
                         if (searchEndDate && new Date(e.target.value) > new Date(searchEndDate)) {
-                            setSearchEndDate(e.target.value); 
+                            setSearchEndDate(e.target.value);
                         }
                     }}
                     onKeyDown={(e) => {
@@ -60,11 +60,13 @@ const SearchPanel = ({  searchName,  setSearchName,   searchStartDate,   setSear
                     value={searchEndDate}
                     onChange={(e) => {
                         const selectedEndDate = e.target.value;
-                        if (new Date(selectedEndDate) > new Date(searchStartDate)) {
+                        if (!selectedEndDate) {
+                            setSearchEndDate('');
+                        } else if (new Date(selectedEndDate) > new Date(searchStartDate)) {
                             setSearchEndDate(selectedEndDate);
                         }
                     }}
-                    disabled={isEndDateDisabled} 
+                    disabled={isEndDateDisabled}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                             handleSearch();

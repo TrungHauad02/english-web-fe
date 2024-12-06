@@ -11,7 +11,7 @@ const SignIn = ({ toggleForm }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
+  const { Color2 } = useColor();
 
   const navigate = useNavigate();
   const authContext = useAuth();

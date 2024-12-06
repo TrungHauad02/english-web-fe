@@ -87,6 +87,8 @@ function HeaderStudent() {
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
+            textTransform: "none",
+            fontSize: "10rem",
             "&:hover": {
               backgroundColor: isActivePath(location, "/student/topics") ? "#fff" : "rgba(255, 255, 255, 0.2)",
             },
@@ -103,6 +105,7 @@ function HeaderStudent() {
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
+            textTransform: "none",
             "&:hover": {
               backgroundColor: isActivePath(location, "/student/grammars") ? "#fff" : "rgba(255, 255, 255, 0.2)",
             },
@@ -124,6 +127,7 @@ function HeaderStudent() {
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
+            textTransform: "none",
             "&:hover": {
               backgroundColor: isActivePath(location, "/student/tests") ? "#fff" : "rgba(255, 255, 255, 0.2)",
             },
@@ -159,9 +163,6 @@ function HeaderStudent() {
         >
           <MenuItem onClick={handleProfileOpen} sx={{ borderBottom: "1px solid rgba(255, 255, 255, 0.5)", color: "white" }}>
             Profile
-          </MenuItem>
-          <MenuItem onClick={() => navigate("/student/study-schedule")} sx={{ borderBottom: "1px solid rgba(255, 255, 255, 0.5)", color: "white" }}>
-            Study Schedule
           </MenuItem>
           <MenuItem onClick={() => navigate("/student/history-test")} sx={{ borderBottom: "3px solid #ffff", color: "white" }}>
             History Test

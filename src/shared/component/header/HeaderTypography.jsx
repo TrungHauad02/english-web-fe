@@ -4,7 +4,7 @@ function HeaderTypography({
   children,
   variant = "h6",
   component = "h2",
-  sx = { fontWeight: "bold", fontSize: "1rem" },
+  sx = { fontWeight: "bold", fontSize: "1.3rem" },
   onClick,
 }) {
   return (

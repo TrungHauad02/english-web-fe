@@ -3,7 +3,7 @@ import { TextField, Button, Typography } from '@mui/material';
 import useColor from "shared/color/Color";
 
 const OtpStep = ({ otp, setOtp, timer, handleVerifyOtp, handleResendOtp }) => {
-  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor(); 
+  const { Color2} = useColor(); 
 
   return (
     <>

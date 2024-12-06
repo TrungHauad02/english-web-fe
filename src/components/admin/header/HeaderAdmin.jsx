@@ -61,6 +61,7 @@ function HeaderAdmin() {
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
+            textTransform: "none",
             "&:hover": {
               backgroundColor: "rgba(255, 255, 255, 0.2)",
             },
@@ -82,6 +83,7 @@ function HeaderAdmin() {
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
+            textTransform: "none",
             "&:hover": {
               backgroundColor: "rgba(255, 255, 255, 0.2)",
             },
@@ -102,6 +104,7 @@ function HeaderAdmin() {
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
+            textTransform: "none",
             "&:hover": {
               backgroundColor: "rgba(255, 255, 255, 0.2)",
             },

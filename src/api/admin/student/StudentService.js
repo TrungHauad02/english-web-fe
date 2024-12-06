@@ -1,6 +1,6 @@
 import apiClient from "api/apiClient";
 
-export const getStudents = async (page = 0, size = 10, sortBy = "id", sortDir = "asc", filters = {}) => {
+export const getStudents = async (page = 0, size = 5, sortBy = "id", sortDir = "asc", filters = {}) => {
     const token = sessionStorage.getItem("authToken");
 
     try {

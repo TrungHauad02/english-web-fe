@@ -21,7 +21,7 @@ const Profile = ({ open, handleClose }) => {
   const [image, setImage] = useState("");
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { Color1, Color2, Color2_1, Color3, Color4, HeaderBg } = useColor();
+  const { Color2, Color2_1} = useColor();
 
   useEffect(() => {
     const loadUserInfo = async () => {

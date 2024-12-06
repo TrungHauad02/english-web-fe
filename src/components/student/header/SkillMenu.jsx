@@ -23,8 +23,10 @@ function SkillMenu() {
     if (
       !relatedTarget ||
       !(relatedTarget instanceof Node) ||
-      (buttonRef.current && !buttonRef.current.contains(relatedTarget)) &&
-      (menuRef.current && !menuRef.current.contains(relatedTarget))
+      (
+        (buttonRef.current && !buttonRef.current.contains(relatedTarget)) &&
+        (menuRef.current && !menuRef.current.contains(relatedTarget))
+      )
     ) {
       setAnchorEl(null);
     }
@@ -46,9 +48,12 @@ function SkillMenu() {
           backgroundColor: isActivePath("/student/skill") ? "#fff" : "transparent",
           color: isActivePath("/student/skill") ? "#4A475C" : "white",
           textDecoration: "none",
-          padding: "0.5rem 1rem",
+          padding: "1rem",
           borderRadius: "0.5rem",
           fontWeight: "bold",
+          textTransform: "none",
+          fontSize: "1.25rem",
+          lineHeight: .5,
           "&:hover": {
             backgroundColor: isActivePath("/student/skill")
               ? "#fff"

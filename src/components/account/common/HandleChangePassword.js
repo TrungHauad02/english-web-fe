@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 export const handlePasswordChange = async (oldPassword, newPassword, reEnterPassword, handleClose) => {
   try {
-    const response = await changePassword(oldPassword, oldPassword);
+    await changePassword(oldPassword, oldPassword);
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
