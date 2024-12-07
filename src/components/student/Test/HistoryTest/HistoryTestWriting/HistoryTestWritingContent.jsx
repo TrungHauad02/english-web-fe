@@ -85,7 +85,7 @@ function ContentTestWriting({ oneWriting, oneHistoryWriting, onClickTestAgain, M
               </Typography>
             </Box>
             <Typography variant="body1" sx={{ marginTop: '1rem' }}>
-              {oneWriting?.content || 'No content available'}
+              {oneWriting?.content || "No content available. You haven't completed this question yet"}
             </Typography>
           </QuestionSection>
         </TestContainer>
