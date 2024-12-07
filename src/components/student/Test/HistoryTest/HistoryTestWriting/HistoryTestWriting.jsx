@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Box } from "@mui/material";
+import { Box,Typography,Paper } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import MainTitle from "../../MainTitle";
 import BtnPreviousNextContentTest from "../../common/BtnPreviousNextContentTest";
 import { getTest } from "api/test/TestApi";
@@ -7,7 +8,14 @@ import { getSubmitTest } from "api/test/submitTest";
 
 import ContentTestWriting from "./HistoryTestWritingContent";
 import { useLocation, useNavigate } from "react-router-dom";
-
+const DurationContainer = styled(Paper)(({ theme }) => ({
+  background: "#FFF4CC",
+  borderRadius: "20px",
+  fontSize: "14px",
+  float: "right",
+  marginRight: "5%",
+  padding: theme.spacing(2),
+}));
 function TestWriting() {
   const [indexVisible, setIndexVisible] = useState(0);
   const location = useLocation();
@@ -67,7 +75,7 @@ function TestWriting() {
     };
     navigate("/student/test/writing", { state });
   };
-
+  const score = historyTest?.score;
   return (
     <Box>
       <MainTitle
@@ -76,6 +84,29 @@ function TestWriting() {
           "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
         }
       />
+      <DurationContainer
+        sx={{
+          marginRight: "5%",
+          textAlign: "center",
+          backgroundColor: "#E0F7FA",
+          borderRadius: "12px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px solid #E0C080",
+        }}
+        elevation={2}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: 500,
+            color: "#5A5A5A",
+          }}
+        >
+          Score: {score}
+        </Typography>
+      </DurationContainer>
       <Box sx={{ marginLeft: "5%", marginRight: "5%", marginBottom: "1rem" }}>
         <BtnPreviousNextContentTest
           indexVisible={indexVisible}
