@@ -216,12 +216,10 @@ const ContentQuestion = ({
         questionMixing.type,
         questionMixing
       );
-      await Promise.all(
-        questionMixing.answers.map(async (answer) => {
-          answer.testQuestionMixingId = questionMixing.id;
-          await createTestMixingAnswer(answer);
-        })
-      );
+      for (const answer of questionMixing.answers) {
+        answer.testQuestionMixingId = questionMixing.id;
+        await createTestMixingAnswer(answer);
+      }      
       toast.success(
         `Successfully created question ${question.serial} of Part ${question.type} .`
       );
@@ -250,15 +248,14 @@ const ContentQuestion = ({
           );
         }
 
-        await Promise.all(
-          questionMixing.answers.map(async (answer) => {
-            if (answer.id.startsWith("add")) {
-              await createTestMixingAnswer(answer);
-            } else {
-              await updateTestMixingAnswer(answer.id, answer);
-            }
-          })
-        );
+        for (const answer of questionMixing.answers) {
+          if (answer.id.startsWith("add")) {
+            await createTestMixingAnswer(answer);
+          } else {
+            await updateTestMixingAnswer(answer.id, answer);
+          }
+        }
+        
         setSelectedAnswer(findCorrectAnswerId(questionMixing.answers));
         setIsEditMode(false);
         toast.success(

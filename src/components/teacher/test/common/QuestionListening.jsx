@@ -149,7 +149,7 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest }) {
       toast.error("Please create at least one question ACTIVE");
       return;
     }
-
+    setIsEditing(false);
     formData.type = "LISTENING";
     let updatedData = {
       ...initialData,
@@ -255,15 +255,24 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest }) {
                 )
               );
 
-              await Promise.all(
-                (questionData.answers || []).map(async (answer) => {
-                  if (answer.id.startsWith("add")) {
+              const answers = questionData.answers || [];
+
+              for (const answer of answers) {
+                if (answer.id.startsWith("add")) {
+                  try {
                     await createTestListeningAnswer(answer);
-                  } else {
-                    await updateTestListeningAnswer(answer.id, answer);
+                  } catch (error) {
+                    console.error(`Error creating listening answer ${answer.id}:`, error);
                   }
-                })
-              );
+                } else {
+                  try {
+                    await updateTestListeningAnswer(answer.id, answer);
+                  } catch (error) {
+                    console.error(`Error updating listening answer ${answer.id}:`, error);
+                  }
+                }
+              }
+              
             })
         );
         await Promise.all(
@@ -319,7 +328,7 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest }) {
     }
 
     handleListening(formData);
-    setIsEditing(false);
+
   };
 
   const [questionsDelete, setQuestionsDelete] = useState([]);

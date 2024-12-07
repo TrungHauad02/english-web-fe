@@ -37,7 +37,7 @@ function ListeningTest() {
     };
 
     fetchData();
-  }, [state.id, version, questionUpdate,submitTestIds]);
+  }, [state.id, version, questionUpdate]);
 
    //delete submit test 
    const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
