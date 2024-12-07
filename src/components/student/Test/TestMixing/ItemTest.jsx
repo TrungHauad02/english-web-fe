@@ -427,7 +427,6 @@ const ItemTest = ({ title, datatest }) => {
             transcript = (await getSpeechToText(audiobase64)).transcript;
           } catch (error) {
         
-            console.log("Proceeding with the next step...");
           
           }
           if(transcript!==null && transcript!=='')

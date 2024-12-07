@@ -80,7 +80,7 @@ const SubmitTestSpeakingContent = ({ submitTestSpeakingList, testSpeakingList, f
                                         )}
                                     </Box>
                                     <Typography variant="body1" sx={{ mb: 1 }}>
-                                        {question.content || 'No content available'}
+                                        {question?.content || 'No content available'}
                                     </Typography>
                                     {relatedSubmit ? (
                                         <Box mt={1}>
