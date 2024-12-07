@@ -38,7 +38,7 @@ const CountdownTimer = ({ duration, handleSubmit, dbName, storeName }) => {
 
   useEffect(() => {
     initializeTimer();
-  }, [dbName, storeName, duration, handleSubmit, hasSubmitted]);
+  }, [dbName, storeName, duration, handleSubmit, hasSubmitted,timeLeft]);
 
   useEffect(() => {
     if (timeLeft === null || timeLeft <= 0) return;
@@ -52,7 +52,7 @@ const CountdownTimer = ({ duration, handleSubmit, dbName, storeName }) => {
           if (!hasSubmitted) {
             handleSubmit();
             setHasSubmitted(true);
-            toast.info("Hết giờ! Bài tập đã được nộp tự động.");
+            toast.info("Time's up! The assignment has been automatically submitted.");
           }
           return 0; 
         }

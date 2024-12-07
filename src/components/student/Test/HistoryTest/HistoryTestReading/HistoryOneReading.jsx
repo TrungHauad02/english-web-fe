@@ -76,7 +76,7 @@ const QuestionContent = ({ content }) => {
   const paragraphs = content.split("\n");
 
   return (
-    <Box>
+    <Box sx={{padding:'1rem'}}>
       {paragraphs.map((paragraph, index) => (
         <Typography key={index} variant="body1" gutterBottom>
           {paragraph}
