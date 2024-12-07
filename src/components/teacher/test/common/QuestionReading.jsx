@@ -157,6 +157,7 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
       toast.error("Please create at least one question ACTIVE");
       return;
     }
+    setIsEditing(false);
 
     formData.type = "READING";
     let updatedData = {
@@ -199,18 +200,21 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
                 questionData
               );
 
-              await Promise.all(
-                (questionData.answers || []).map(async (answer) => {
-                  answer.testQuestionReadingId = id;
-                  if (answer.id.startsWith("add")) {
-                    try {
-                      await createTestReadingAnswer(answer);
-                    } catch (error) {
-                      console.error(`Error adding answer ${answer.id}:`, error);
-                    }
+              const answers = questionData.answers || [];
+
+              for (let i = 0; i < answers.length; i++) {
+                const answer = answers[i];
+                answer.testQuestionReadingId = id;
+              
+                if (answer.id.startsWith("add")) {
+                  try {
+                    await createTestReadingAnswer(answer);
+                  } catch (error) {
+                    console.error(`Error adding answer ${answer.id}:`, error);
                   }
-                })
-              );
+                }
+              }
+              
             }
           }
           toast.success(
@@ -283,15 +287,25 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
                 )
               );
 
-              await Promise.all(
-                (questionData.answers || []).map(async (answer) => {
-                  if (answer.id.startsWith("add")) {
+              const answers = questionData.answers || [];
+
+              for (const answer of answers) {
+                if (answer.id.startsWith("add")) {
+                  try {
+                    answer.testQuestionReadingId = questionData.id;
                     await createTestReadingAnswer(answer);
-                  } else {
-                    await updateTestReadingAnswer(answer.id, answer);
+                  } catch (error) {
+                    console.error(`Error creating answer ${answer.id}:`, error);
                   }
-                })
-              );
+                } else {
+                  try {
+                    await updateTestReadingAnswer(answer.id, answer);
+                  } catch (error) {
+                    console.error(`Error updating answer ${answer.id}:`, error);
+                  }
+                }
+              }
+              
             })
         );
 
@@ -315,14 +329,14 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
             questionData.id?.startsWith("add")
           )) {
             questionData.testReadingId = formData.id;
-            console.log(questionData);
+            
 
             const id = await AddQuestionTest(
               initialData.test.id,
               "READING",
               questionData
             );
-
+            
             for (const answer of questionData.answers || []) {
               answer.testQuestionReadingId = id;
               if (answer.id.startsWith("add")) {
@@ -346,7 +360,7 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
     }
     handleReading(formData);
 
-    setIsEditing(false);
+   
   };
 
   const [questionsDelete, setQuestionsDelete] = useState([]);
