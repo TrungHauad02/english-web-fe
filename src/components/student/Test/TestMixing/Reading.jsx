@@ -19,8 +19,8 @@ function Reading({
 }) {
   return (
     <Container sx={{ mt: 4 }}>
-      {dataTest && dataTest.dataitem && Array.isArray(dataTest.dataitem) ? (
-        dataTest.dataitem.map((item, index) => {
+      {dataTest && dataTest.dataItem && Array.isArray(dataTest.dataItem) ? (
+        dataTest.dataItem.map((item, index) => {
           return (
             <Box
               key={item.id}

@@ -32,12 +32,12 @@ function TestReading() {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
-  const [datatest, setdatatest] = useState(null);
+  const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [duration, setDuration] = useState(null);
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const title = datatest ? datatest.type : "";
+  const title = test ? test.type : "";
   const [storeName, setStoreName] = useState(null);
 
   useEffect(() => {
@@ -60,12 +60,12 @@ function TestReading() {
 
           const updatedData = updateDataTest(data);
 
-          setdatatest(updatedData);
+          setTest(updatedData);
 
           setDuration(data.duration);
           setStoreName("MyStore" + data.id);
         } else {
-          setdatatest(null);
+          setTest(null);
         }
       } catch (err) {
         setError("Failed to fetch test data");
@@ -78,10 +78,10 @@ function TestReading() {
   }, [state?.id]);
 
   useEffect(() => {
-    if (datatest != null) {
-      openDB("MyDatabase", "MyStore" + datatest.id)
+    if (test != null) {
+      openDB("MyDatabase", "MyStore" + test.id)
         .then((db) => {
-          getData(db, "MyStore" + datatest.id, storeName)
+          getData(db, "MyStore" + test.id, storeName)
             .then((data) => {
               if (data?.answers) {
                 setAnswers(data.answers);
@@ -99,13 +99,13 @@ function TestReading() {
         });
     }
 
-  }, [datatest?.id]);
+  }, [test?.id]);
   
   useEffect(() => {
-    if (datatest != null) {
+    if (test != null) {
       openDB("MyDatabase", storeName)
         .then((db) => {
-          saveData(db, "MyStore" + datatest.id, { id: storeName, answers });
+          saveData(db, "MyStore" + test.id, { id: storeName, answers });
         })
         .catch((error) => {
           console.error("Error saving answers to the database:", error);
@@ -145,7 +145,7 @@ function TestReading() {
     );
   }
 
-  const handlebtnSubmit = async () => {
+  const handleBtnSubmit = async () => {
     setIsSubmitting(true);
     const score = calculateScore();
     let user = await fetchUserInfo();
@@ -154,7 +154,7 @@ function TestReading() {
       .replace(", ", "T");
     let submitTest = {
       id: "",
-      testId: datatest.id,
+      testId: test.id,
       userId: user.id,
       score: score,
       status: "ACTIVE",
@@ -163,7 +163,7 @@ function TestReading() {
     };
 
     try {
-      const commentPromises = datatest.testReadings.flatMap((reading) =>
+      const commentPromises = test.testReadings.flatMap((reading) =>
         reading.questions.map(async (question) => {
           const userAnswerId = answers[question.id];
 
@@ -228,9 +228,9 @@ function TestReading() {
 
       const state = {
         id: savedSubmitTest.id,
-        testId: datatest.id,
+        testId: test.id,
       };
-      deleteData("MyDatabase", "MyStore" + datatest.id);
+      deleteData("MyDatabase", "MyStore" + test.id);
       navigate("/student/history-test/reading", { state });
     } catch (error) {
       console.error("Error creating submitTest:", error);
@@ -243,12 +243,12 @@ function TestReading() {
     let totalQuestions = 0;
     let score = 0;
 
-    datatest.testReadings.forEach((data) => {
+    test.testReadings.forEach((data) => {
       totalQuestions += data.questions.length;
     });
 
     const pointPerQuestion = 100 / totalQuestions;
-    datatest.testReadings.forEach((data) => {
+    test.testReadings.forEach((data) => {
       data.questions.forEach((question) => {
         const correctAnswer = question.answers.find(
           (answer) => answer.isCorrect
@@ -294,10 +294,10 @@ function TestReading() {
       >
         <Typography align="center">Time remaining:</Typography>
         <Typography align="center" sx={{ marginLeft: "1rem" }}>
-          {datatest && (
+          {test && (
             <CountdownTimer
               duration={duration}
-              handleSubmit={handlebtnSubmit}
+              handleSubmit={handleBtnSubmit}
               dbName={"MyDatabase"}
               storeName={storeName}
             />
@@ -307,7 +307,7 @@ function TestReading() {
       <BtnPreviousNextContentTest
         indexVisible={indexVisible}
         setIndexVisible={setIndexVisible}
-        sumContent={datatest.testReadings.length}
+        sumContent={test.testReadings.length}
       />
       <Box
         sx={{
@@ -318,8 +318,8 @@ function TestReading() {
         }}
       >
         <OneReadingTest
-          onereading={datatest.testReadings[indexVisible]}
-          handlebtnSubmit={handlebtnSubmit}
+          oneReading={test.testReadings[indexVisible]}
+          handleBtnSubmit={handleBtnSubmit}
           title={title}
           answers={answers}
           setAnswers={setAnswers}

@@ -1,6 +1,6 @@
 import { Box, Typography, Button, Grid, TextField, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useState, useCallback } from 'react';
+import React, {  useCallback } from 'react';
 
 const TestContainer = styled(Grid)(({ theme }) => ({
   width: '100%',
@@ -63,7 +63,7 @@ const EssayInput = ({ value = '', wordCount = 0, onChange }) => {
   );
 };
 
-function ContentTestWriting({ datatest, handlebtnSubmit ,answers,setAnswers}) {
+function ContentTestWriting({ test, handleBtnSubmit ,answers,setAnswers}) {
 
   const handleAnswerChange = (id, essay, wordCount) => {
     setAnswers((prevAnswers) => ({
@@ -78,19 +78,19 @@ function ContentTestWriting({ datatest, handlebtnSubmit ,answers,setAnswers}) {
         <TestContainer sx={{ flex: '1 1 49%' }}>
           <QuestionSection item>
             <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-              Question {datatest?.serial || ''} 
+              Question {test?.serial || ''} 
             </Typography>
             <Typography variant="body1" sx={{ marginTop: '1rem' }}>
-              {datatest?.content || 'No content available'} 
+              {test?.content || 'No content available'} 
             </Typography>
           </QuestionSection>
         </TestContainer>
         <Partition sx={{ flex: '1 1 0.2%' }} />
         <TestContainer sx={{ flex: '1 1 49%' }}>
           <EssayInput
-            value={answers[datatest?.id]?.essay || ''} 
-            wordCount={answers[datatest?.id]?.wordCount || 0} 
-            onChange={(essay, wordCount) => handleAnswerChange(datatest?.id, essay, wordCount)}
+            value={answers[test?.id]?.essay || ''} 
+            wordCount={answers[test?.id]?.wordCount || 0} 
+            onChange={(essay, wordCount) => handleAnswerChange(test?.id, essay, wordCount)}
           />
           <Button
             sx={{
@@ -102,7 +102,7 @@ function ContentTestWriting({ datatest, handlebtnSubmit ,answers,setAnswers}) {
               marginBottom: '2%',
               padding: '1rem 2rem',
             }}
-            onClick={handlebtnSubmit}
+            onClick={handleBtnSubmit}
           >
             SUBMIT
           </Button>

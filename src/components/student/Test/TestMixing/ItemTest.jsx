@@ -26,42 +26,42 @@ import { getSpeechToText } from "api/feature/stt/SpeechToTextService";
 import { useNavigate } from "react-router-dom";
 import { openDB, saveData, getData, deleteData } from "../common/IndexDB";
 
-const ItemTest = ({ title, datatest }) => {
-  const storeName = "MyStore" + datatest.id;
+const ItemTest = ({ title, test }) => {
+  const storeName = "MyStore" + test.id;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const DataTestMixing = [
     {
       title: "Vocabulary",
       questions:
-        datatest?.testMixingQuestions.filter(
+        test?.testMixingQuestions.filter(
           (question) => question.type === "VOCABULARY"
         ) || [],
-      testId: datatest.id,
+      testId: test.id,
     },
     {
       title: "Grammar",
       questions:
-        datatest?.testMixingQuestions.filter(
+        test?.testMixingQuestions.filter(
           (question) => question.type === "GRAMMAR"
         ) || [],
-      testId: datatest.id,
+      testId: test.id,
     },
     {
       title: "Reading",
-      dataitem: datatest?.testReadings || [],
+      dataItem: test?.testReadings || [],
     },
     {
       title: "Listening",
-      dataitem: datatest?.testListenings || [],
+      dataItem: test?.testListenings || [],
     },
     {
       title: "Speaking",
-      dataitem: datatest?.testSpeakings || [],
+      dataItem: test?.testSpeakings || [],
     },
     {
       title: "Writing",
-      dataitem: datatest?.testWritings || [],
+      dataItem: test?.testWritings || [],
     },
   ];
 
@@ -93,7 +93,7 @@ const ItemTest = ({ title, datatest }) => {
         title === "Listening" ||
         title === "Speaking"
       ) {
-        data.dataitem.forEach((item) => {
+        data.dataItem.forEach((item) => {
           item.questions.forEach((question) => {
             if (question.serial !== undefined) {
               question.serial = currentSerial++;
@@ -101,7 +101,7 @@ const ItemTest = ({ title, datatest }) => {
           });
         });
       } else if (title === "Writing") {
-        data.dataitem.forEach((item) => {
+        data.dataItem.forEach((item) => {
           if (item.serial !== undefined) {
             item.serial = currentSerial++;
           }
@@ -112,11 +112,11 @@ const ItemTest = ({ title, datatest }) => {
 
   const [answers, setAnswers] = useState({});
   useEffect(() => {
-    if (datatest != null) {
+    if (test != null) {
       updateSerialsByOrder();
-      openDB("MyDatabase", "MyStore" + datatest.id)
+      openDB("MyDatabase", "MyStore" + test.id)
         .then((db) => {
-          getData(db, "MyStore" + datatest.id, storeName)
+          getData(db, "MyStore" + test.id, storeName)
             .then((data) => {
               if (data?.answers) {
                 setAnswers(data.answers);
@@ -133,13 +133,13 @@ const ItemTest = ({ title, datatest }) => {
           console.error("Error accessing IndexedDB:", error);
         });
     }
-  }, [datatest?.id]);
+  }, [test?.id]);
 
   useEffect(() => {
-    if (datatest != null) {
+    if (test != null) {
       openDB("MyDatabase", storeName)
         .then((db) => {
-          saveData(db, "MyStore" + datatest.id, { id: storeName, answers });
+          saveData(db, "MyStore" + test.id, { id: storeName, answers });
         })
         .catch((error) => {
           console.error("Error saving answers to the database:", error);
@@ -169,7 +169,7 @@ const ItemTest = ({ title, datatest }) => {
       ) {
         TitleAndSerials.title.push(data.title);
         const serialsForCurrentTitle = [];
-        data.dataitem.forEach((item) => {
+        data.dataItem.forEach((item) => {
           item.questions.forEach((question) => {
             serialsForCurrentTitle.push(question.serial);
           });
@@ -179,7 +179,7 @@ const ItemTest = ({ title, datatest }) => {
       } else if (data.title === "Writing") {
         TitleAndSerials.title.push(data.title);
         const serialsForCurrentTitle = [];
-        data.dataitem.forEach((item) => {
+        data.dataItem.forEach((item) => {
           serialsForCurrentTitle.push(item.serial);
         });
         TitleAndSerials.serials.push(serialsForCurrentTitle);
@@ -188,7 +188,7 @@ const ItemTest = ({ title, datatest }) => {
     return TitleAndSerials;
   };
 
-  const [focusId, setfocusId] = useState();
+  const [focusId, setFocusId] = useState();
   const [activeTab, setActiveTab] = useState(0);
   const TitleAndSerials = getListSerialTest();
 
@@ -199,7 +199,7 @@ const ItemTest = ({ title, datatest }) => {
         console.log(TitleAndSerials);
 
         if (serials && serials.includes(serial)) {
-          setfocusId(serial);
+          setFocusId(serial);
           setActiveTab(index);
           break;
         }
@@ -207,8 +207,6 @@ const ItemTest = ({ title, datatest }) => {
     },
     [TitleAndSerials]
   );
-  const [score, setScore] = useState(0);
-
   const generateGridData = () => {
     return DataTestMixing.flatMap((data) => {
       if (data.title === "Vocabulary" || data.title === "Grammar") {
@@ -231,7 +229,7 @@ const ItemTest = ({ title, datatest }) => {
           return correctAnswer && selectedAnswer === correctAnswer.id ? 1 : 0;
         });
       } else if (data.title === "Reading" || data.title === "Listening") {
-        return (data.dataitem || []).flatMap((item) => {
+        return (data.dataItem || []).flatMap((item) => {
           if (!item || !item.questions) {
             console.warn("Item or questions array is undefined");
             return -1;
@@ -255,7 +253,7 @@ const ItemTest = ({ title, datatest }) => {
           });
         });
       } else if (data.title === "Speaking") {
-        return (data.dataitem || []).flatMap((item) => {
+        return (data.dataItem || []).flatMap((item) => {
           if (!item || !item.questions) {
             console.warn("Item or questions array is undefined");
             return -1;
@@ -271,7 +269,7 @@ const ItemTest = ({ title, datatest }) => {
           });
         });
       } else if (data.title === "Writing") {
-        return (data.dataitem || []).flatMap((item) => {
+        return (data.dataItem || []).flatMap((item) => {
           const selectedAnswer = answers[item.id];
 
           if (selectedAnswer === undefined || selectedAnswer.essay === "") {
@@ -291,13 +289,11 @@ const ItemTest = ({ title, datatest }) => {
     setGridData(generateGridData());
   }, [answers]);
 
-  const [renderKey, setRenderKey] = useState(0);
-
   const getDataSubmitTest = async () => {
     let scoreTest = calculateScore();
     let scorePerQuestionSpeaking = 0;
-    if (datatest?.testSpeakings?.length > 0) {
-      const totalQuestions = datatest.testSpeakings.reduce(
+    if (test?.testSpeakings?.length > 0) {
+      const totalQuestions = test.testSpeakings.reduce(
         (sum, speaking) => sum + (speaking.questions?.length || 0),
         0
       );
@@ -305,8 +301,8 @@ const ItemTest = ({ title, datatest }) => {
         totalQuestions > 0 ? 100 / 6 / totalQuestions : 0;
     }
     let scorePerQuestionWriting = 0;
-    if (datatest?.testWritings?.length > 0) {
-      scorePerQuestionWriting = 100 / 6 / datatest.testWritings.length;
+    if (test?.testWritings?.length > 0) {
+      scorePerQuestionWriting = 100 / 6 / test.testWritings.length;
     }
 
     const vietnamTime = new Date()
@@ -314,7 +310,7 @@ const ItemTest = ({ title, datatest }) => {
       .replace(", ", "T");
     let submitTest = {
       id: "",
-      testId: datatest.id,
+      testId: test.id,
       userId: "",
       score: "",
       submitTime: vietnamTime,
@@ -371,7 +367,7 @@ const ItemTest = ({ title, datatest }) => {
           submitTest.submitTestMixingAnswers.push(submitTestMixingAnswer);
         }
       } else if (data.title === "Reading" || data.title === "Listening") {
-        for (const item of data.dataitem) {
+        for (const item of data.dataItem) {
           if (!item || !item.questions) {
             console.warn("Item or questions array is undefined");
             continue;
@@ -434,28 +430,28 @@ const ItemTest = ({ title, datatest }) => {
           }
         }
       } else if (data.title === "Speaking") {
-        for (const item of data.dataitem) {
+        for (const item of data.dataItem) {
           if (!item || !item.questions) {
             console.warn("Item or questions array is undefined");
             continue;
           }
 
           for (const question of item.questions) {
-            const audiobase64 = answers[question.id];
+            const audioBase64 = answers[question.id];
             let content = "No audio available. You haven't completed this question yet.";
-            let transcript = "No transcipt available. You haven't completed this question yet."
+            let transcript = "No transcript available. You haven't completed this question yet."
             let comment = "No comment available. You haven't completed this question yet."
           let score = 0;
-        if (audiobase64) {
+        if (audioBase64) {
           const result = await uploadFile(
             "test/speaking",
             question.id.replace(/\s+/g, "_") + "_" + Date.now() + "-" + Math.random().toString(36).substr(2, 9),
-            audiobase64,
+            audioBase64,
           );
           content = result.url;
           try {
   
-            transcript = (await getSpeechToText(audiobase64, 2)).transcript;
+            transcript = (await getSpeechToText(audioBase64, 2)).transcript;
           } catch (error) {
         
           
@@ -484,7 +480,7 @@ const ItemTest = ({ title, datatest }) => {
           }
         }
       } else if (data.title === "Writing") {
-        for (const item of data.dataitem) {
+        for (const item of data.dataItem) {
           if (!item) {
             console.warn("Item is undefined");
             continue;
@@ -524,7 +520,7 @@ const ItemTest = ({ title, datatest }) => {
     submitTest.score = scoreTest;
     return submitTest;
   };
-  const handlebtnSubmit = async () => {
+  const handleBtnSubmit = async () => {
     setIsSubmitting(true);
     let submitTestId;
 
@@ -564,12 +560,12 @@ const ItemTest = ({ title, datatest }) => {
     } catch (error) {
       console.error("Error during submission:", error);
     } finally {
-      deleteData("MyDatabase", "MyStore" + datatest.id);
+      deleteData("MyDatabase", "MyStore" + test.id);
 
       navigate("/student/history-test/mixing", {
         state: {
           id: submitTestId || null,
-          testId: datatest.id,
+          testId: test.id,
         },
       });
     }
@@ -593,22 +589,22 @@ const ItemTest = ({ title, datatest }) => {
       });
     };
 
-    const totalReadingQuestions = datatest.testReadings.reduce(
+    const totalReadingQuestions = test.testReadings.reduce(
       (total, data) => total + data.questions.length,
       0
     );
-    const totalListeningQuestions = datatest.testListenings.reduce(
+    const totalListeningQuestions = test.testListenings.reduce(
       (total, data) => total + data.questions.length,
       0
     );
-    calculateSectionScore(datatest?.testReadings, totalReadingQuestions);
-    calculateSectionScore(datatest?.testListenings, totalListeningQuestions);
+    calculateSectionScore(test?.testReadings, totalReadingQuestions);
+    calculateSectionScore(test?.testListenings, totalListeningQuestions);
 
-    const vocabularyQuestions = datatest?.testMixingQuestions.filter(
+    const vocabularyQuestions = test?.testMixingQuestions.filter(
       (question) => question.TYPE === "VOCABULARY"
     );
 
-    const grammarQuestions = datatest?.testMixingQuestions.filter(
+    const grammarQuestions = test?.testMixingQuestions.filter(
       (question) => question.TYPE === "GRAMMAR"
     );
     calculateSectionScore(
@@ -700,7 +696,6 @@ const ItemTest = ({ title, datatest }) => {
           >
             {activeTab === 0 && (
               <Vocabulary
-                key={renderKey}
                 dataTest={DataTestMixing[activeTab]}
                 focusId={focusId}
                 title={title}
@@ -710,7 +705,6 @@ const ItemTest = ({ title, datatest }) => {
             )}
             {activeTab === 1 && (
               <Grammar
-                key={renderKey}
                 dataTest={DataTestMixing[activeTab]}
                 focusId={focusId}
                 title={title}
@@ -720,7 +714,6 @@ const ItemTest = ({ title, datatest }) => {
             )}
             {activeTab === 2 && (
               <Reading
-                key={renderKey}
                 dataTest={DataTestMixing[activeTab]}
                 focusId={focusId}
                 title={title}
@@ -730,7 +723,6 @@ const ItemTest = ({ title, datatest }) => {
             )}
             {activeTab === 3 && (
               <Listening
-                key={renderKey}
                 dataTest={DataTestMixing[activeTab]}
                 focusId={focusId}
                 title={title}
@@ -740,8 +732,7 @@ const ItemTest = ({ title, datatest }) => {
             )}
             {activeTab === 4 && (
               <Speaking
-                key={renderKey}
-                dataTest={DataTestMixing[activeTab].dataitem}
+                dataTest={DataTestMixing[activeTab].dataItem}
                 focusId={focusId}
                 answers={answers}
                 setAnswers={setAnswers}
@@ -749,7 +740,6 @@ const ItemTest = ({ title, datatest }) => {
             )}
             {activeTab === 5 && (
               <Writing
-                key={renderKey}
                 dataTest={DataTestMixing[activeTab]}
                 focusId={focusId}
                 title={title}
@@ -765,8 +755,8 @@ const ItemTest = ({ title, datatest }) => {
               TitleAndSerials={TitleAndSerials}
               gridData={gridData}
               onItemClick={onItemClick}
-              handlebtnSubmit={handlebtnSubmit}
-              duration={datatest.duration}
+              handleBtnSubmit={handleBtnSubmit}
+              duration={test.duration}
               storeName={storeName}
             />
           </Box>

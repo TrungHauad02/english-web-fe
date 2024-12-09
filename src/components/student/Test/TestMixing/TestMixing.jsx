@@ -8,21 +8,21 @@ import { getTest } from "api/test/TestApi";
 function TestMixing() {
   const location = useLocation();
   const { state } = location;
-  const [datatest, setdatatest] = useState(null);
+  const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState("Testing");
  
 
-  const title = datatest ? datatest.type : "";
+  const title = test ? test.type : "";
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getTest(state.id,"ACTIVE");
         if (data) {
-          setdatatest(data);
+          setTest(data);
         } else {
-          setdatatest(null);
+          setTest(null);
         }
       } catch (err) {
         setError("Failed to fetch test data");
@@ -54,7 +54,7 @@ function TestMixing() {
         {status === "Testing" && (
           <ItemTest
             title={title}
-            datatest={datatest}
+            test={test}
             setStatus={setStatus}
           />
         )}

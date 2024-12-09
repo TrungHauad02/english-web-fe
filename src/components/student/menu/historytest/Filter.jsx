@@ -141,7 +141,6 @@ const Filter = ({
       </Grid>
       <Grid item xs={1}>
         <IconButton
-          color="secondary"
           onClick={handleResetFilter}
           sx={{ marginTop: ".5rem" }}
         >

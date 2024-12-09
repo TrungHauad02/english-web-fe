@@ -54,19 +54,19 @@ const EssayInput = ({ value, wordCount, onChange }) => {
   );
 };
 
-function ContentWritingMixing({ datatestList, title, answers,setAnswers ,focusId }) {
+function ContentWritingMixing({ dataTestList, answers,setAnswers ,focusId }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const questionRefs = useRef([]);
 
  
   useEffect(() => {
-    const targetIndex = datatestList.findIndex(item => item.serial === focusId);
+    const targetIndex = dataTestList.findIndex(item => item.serial === focusId);
     if (targetIndex !== -1) {
       setCurrentIndex(targetIndex);
       questionRefs.current[targetIndex]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, [focusId, datatestList]);
+  }, [focusId, dataTestList]);
 
   const handleAnswerChange = useCallback((id, essay, wordCount) => {
     setAnswers(prev => ({
@@ -76,7 +76,7 @@ function ContentWritingMixing({ datatestList, title, answers,setAnswers ,focusId
   }, []);
 
   const handleNext = () => {
-    if (currentIndex < datatestList.length - 1) {
+    if (currentIndex < dataTestList.length - 1) {
       setCurrentIndex(currentIndex + 1);
       questionRefs.current[currentIndex + 1]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
@@ -89,7 +89,7 @@ function ContentWritingMixing({ datatestList, title, answers,setAnswers ,focusId
     }
   };
 
-  const currentQuestion = datatestList[currentIndex];
+  const currentQuestion = dataTestList[currentIndex];
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginTop: '2rem' }}>
@@ -125,12 +125,12 @@ function ContentWritingMixing({ datatestList, title, answers,setAnswers ,focusId
             variant="contained"
             endIcon={<ArrowForwardIcon />}
             onClick={handleNext}
-            disabled={currentIndex === datatestList.length - 1}
+            disabled={currentIndex === dataTestList.length - 1}
             sx={{
-              backgroundColor: currentIndex === datatestList.length - 1 ? '#e0e0e0' : '#42a5f5',
+              backgroundColor: currentIndex === dataTestList.length - 1 ? '#e0e0e0' : '#42a5f5',
               color: '#fff',
               '&:hover': {
-                backgroundColor: currentIndex === datatestList.length - 1 ? '#e0e0e0' : '#1e88e5',
+                backgroundColor: currentIndex === dataTestList.length - 1 ? '#e0e0e0' : '#1e88e5',
               },
             }}
           >
