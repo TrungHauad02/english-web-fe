@@ -24,37 +24,47 @@ docker container run -d -p [host_port]:[container_port] [repository]:[tag]
 ## Example
 docker container run -d -p 3000:3000 english-web-fe:0.0.1
 ```
+
 ---
 
 ## View running container
+
 ```bash
 docker container ps
 ```
+
 ---
 
 ## View container stop
+
 ```bash
 docker ps -a
 ```
+
 ---
 
 ## Start a container
+
 ```bash
 docker container start <containerId>
 ```
+
 ---
 
 ## Stop a container
+
 ```bash
 docker container stop <containerId>
 ```
 
 ## Remove a container
+
 ```bash
 docker rm <containerId>
 ```
 
 ## Remove an image
+
 ```bash
 docker rmi <imageId>
 ```
