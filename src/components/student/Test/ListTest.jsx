@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { getListTest } from "api/test/listTestApi";
 import CustomPagination from "shared/component/pagination/CustomPagination";
 import ListTestContent from "./ListTestContent";
-import { fetchUserInfo } from "api/user/userService";
 import { Box, Tabs, Tab, Stack, styled } from "@mui/material";
 import MainPicture from "../common/listTopic/MainPicture";
 
-const TabItem = styled(Tab)(({ theme, selected, isSubTab }) => ({
+const TabItem = styled(Tab)(({ selected, isSubTab }) => ({
   backgroundColor: selected ? "#00796B" : isSubTab ? "#E0F7FA" : "#00B8A2",
   color: selected ? "#FFFFFF" : isSubTab ? "#00796B" : "#FFFFFF",
   borderRadius: "1rem 1rem 0 0",
@@ -37,7 +36,6 @@ function ListTest() {
   const [page, setPage] = useState(1);
   const [list, setList] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
-  const [version, setVersion] = useState(0);
   const type = {
     mixed: "MIXING",
     skills: {
@@ -73,19 +71,18 @@ function ListTest() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const user = await fetchUserInfo();
-  
+        const userId = sessionStorage.getItem('userId');
         const data = await getListTest(
           page,
           currType,
           "",
           "ACTIVE",
-          user.id,
+          userId,
           "ASC"
         );
   
         const tests = data.content;
-        setVersion((prevVersion) => prevVersion + 1);
+        
   
         setTotalPage(data.totalPages);
         if (tests) {

@@ -9,7 +9,6 @@ import Writing from "./Writing";
 import Speaking from "./Speaking";
 import SerialGrid from "./SerialGrid/SerialGrid";
 import { createSubmitTest } from "api/test/submitTest";
-import { fetchUserInfo } from "api/user/userService";
 import { uploadFile } from "api/feature/uploadFile/uploadFileService";
 import { createSubmitTestReadingAnswer } from "api/test/submitTestReadingAnswer";
 import { createSubmitTestMixingAnswer } from "api/test/submitTestMixingAnswer";
@@ -525,9 +524,9 @@ const ItemTest = ({ title, test }) => {
     let submitTestId;
 
     try {
-      let user = await fetchUserInfo();
+      const userId = sessionStorage.getItem('userId');
       const submitTest = await getDataSubmitTest();
-      submitTest.userId = user.id;
+      submitTest.userId = userId;
 
       const response = await createSubmitTest(submitTest);
       submitTestId = response.id;

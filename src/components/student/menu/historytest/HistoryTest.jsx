@@ -6,7 +6,6 @@ import Filter from "./Filter";
 import { getListSubmitTests } from "../../../../api/test/submitTest";
 import CustomPagination from "shared/component/pagination/CustomPagination";
 import { useLocation,useNavigate } from 'react-router-dom';
-import { fetchUserInfo } from "api/user/userService";
 
 const CardStyled = styled(Card)(({ theme }) => ({
   backgroundColor: "#f5f5f5",
@@ -62,11 +61,11 @@ const HistoryTest = () => {
  
   const fetchTests = async () => {
     try {
-      const user = await fetchUserInfo();
+      const userId = sessionStorage.getItem('userId');
       const adjustedType = filter === "ALL" ? "" : filter;
       const data = await getListSubmitTests(
         currentPage,
-        user.id,
+        userId,
         adjustedType,
         searchText,
         searchStartDate,

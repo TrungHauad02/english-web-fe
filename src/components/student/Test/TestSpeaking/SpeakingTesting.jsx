@@ -19,7 +19,6 @@ import { ReactMic } from "react-mic";
 import MicNoneIcon from "@mui/icons-material/MicNone";
 import { uploadFile } from "../../../../api/feature/uploadFile/uploadFileService";
 import { createSubmitTest } from "../../../../api/test/submitTest";
-import { fetchUserInfo } from "../../../../api/user/userService";
 import { createSubmitTestSpeaking } from "../../../../api/test/submitTestSpeaking";
 import { openDB, saveData, getData, deleteData } from "../common/IndexDB";
 import { scoreTestWriting } from "api/feature/scoreTestWriting/scoreTestWriting";
@@ -255,7 +254,7 @@ export default function SpeakingTesting({
   };
 
   const handleBtnSubmit = async () => {
-    let user = await fetchUserInfo();
+    const userId = sessionStorage.getItem('userId');
     let scoreTest = 0;
     const vietnamTime = new Date()
       .toLocaleString("en-CA", { timeZone: "Asia/Ho_Chi_Minh", hour12: false })
@@ -263,7 +262,7 @@ export default function SpeakingTesting({
     const newSubmitTest = {
       id: "",
       testId: test.id,
-      userId: user.id,
+      userId: userId,
       score: 1,
       status: "ACTIVE",
       submitTime: vietnamTime,
