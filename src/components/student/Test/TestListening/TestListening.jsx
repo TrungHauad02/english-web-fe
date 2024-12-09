@@ -1,15 +1,15 @@
-import MainTitle from "./MainTitle";
+import MainTitle from "../MainTitle";
 import OneListeningTest from "./OneListeningTest";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button,CircularProgress } from "@mui/material";
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getTest } from "api/test/TestApi";
-import { createSubmitTest } from "../../../api/test/submitTest";
-import { fetchUserInfo } from "../../../api/user/userService";
-import { createSubmitTestListeningAnswer } from "../../../api/test/submitTestListeningAnswer";
-import { commentListeningQuestion } from "../../../api/test/commentTest";
-import CountdownTimer from "./common/CountdownTimer";
-import { openDB, saveData, getData, deleteData } from "./common/IndexDB";
+import { createSubmitTest } from "../../../../api/test/submitTest";
+import { fetchUserInfo } from "../../../../api/user/userService";
+import { createSubmitTestListeningAnswer } from "../../../../api/test/submitTestListeningAnswer";
+import { commentListeningQuestion } from "../../../../api/test/commentTest";
+import CountdownTimer from "../common/CountdownTimer";
+import { openDB, saveData, getData, deleteData } from "../common/IndexDB";
 import { styled } from "@mui/material/styles";
 const DurationContainer = styled(Box)(({ theme }) => ({
   background: "#E0F7FA",
@@ -25,11 +25,11 @@ const DurationContainer = styled(Box)(({ theme }) => ({
 function TestListening() {
   const location = useLocation();
   const { state } = location;
-  const [datatest, setdatatest] = useState(null);
+  const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const title = datatest ? datatest.type : "";
-  const data = datatest?.testListenings;
+  const title = test ? test.type : "";
+  const data = test?.testListenings;
   const [indexVisible, setIndexVisible] = useState(0);
   const [answers, setAnswers] = useState({});
   const navigate = useNavigate();
@@ -57,11 +57,11 @@ function TestListening() {
 
           const updatedData = updateDataTest(data);
 
-          setdatatest(updatedData);
+          setTest(updatedData);
           setDuration(data.duration);
           setStoreName("MyStore" + data.id);
         } else {
-          setdatatest(null);
+          setTest(null);
         }
       } catch (err) {
         setError("Failed to fetch test data");
@@ -74,8 +74,8 @@ function TestListening() {
   }, [state.id]);
 
   useEffect(() => {
-    if (datatest != null) {
-      openDB("MyDatabase", "MyStore" + datatest.id)
+    if (test != null) {
+      openDB("MyDatabase", "MyStore" + test.id)
         .then((db) => {
           getData(db, "MyStore" + storeName)
             .then((data) => {
@@ -87,7 +87,7 @@ function TestListening() {
             .catch((error) => {
               console.error("Error fetching answers:", error);
             });
-          getData(db, "MyStore" + datatest.id, "duration")
+          getData(db, "MyStore" + test.id, "duration")
             .then((data) => {
               if (data?.duration) {
                 setDuration(data.duration);
@@ -102,10 +102,10 @@ function TestListening() {
           console.error("Error accessing IndexedDB:", error);
         });
     }
-  }, [datatest?.id]);
+  }, [test?.id]);
 
   useEffect(() => {
-    if (datatest != null) {
+    if (test != null) {
       openDB("MyDatabase", storeName)
         .then((db) => {
           saveData(db, storeName, { id: storeName, answers });
@@ -138,7 +138,7 @@ function TestListening() {
       .replace(", ", "T");
     let submitTest = {
       id: "",
-      testId: datatest.id,
+      testId: test.id,
       userId: user.id,
       score: score,
       status: "ACTIVE",
@@ -147,7 +147,7 @@ function TestListening() {
     };
 
     try {
-      const commentPromises = datatest.testListenings.flatMap((listening) =>
+      const commentPromises = test.testListenings.flatMap((listening) =>
         listening.questions.map(async (question) => {
           const userAnswerId = answers[question.id];
 
@@ -209,10 +209,10 @@ function TestListening() {
       );
 
       await Promise.all(saveAnswerPromises);
-      deleteData("MyDatabase", "MyStore" + datatest.id);
+      deleteData("MyDatabase", "MyStore" + test.id);
       const state = {
         id: savedSubmitTest.id,
-        testId: datatest.id,
+        testId: test.id,
       };
       navigate("/student/history-test/listening", { state });
     } catch (error) {
@@ -226,12 +226,12 @@ function TestListening() {
     let totalQuestions = 0;
     let score = 0;
 
-    datatest?.testListenings.forEach((data) => {
+    test?.testListenings.forEach((data) => {
       totalQuestions += data.questions.length;
     });
 
     const pointPerQuestion = 100 / totalQuestions;
-    datatest?.testListenings.forEach((data) => {
+    test?.testListenings.forEach((data) => {
       data.questions.forEach((question) => {
         const correctAnswer = question.answers.find(
           (answer) => answer.isCorrect
@@ -247,8 +247,26 @@ function TestListening() {
 
   return (
     <Box>
+       {isSubmitting && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100vh",
+            backgroundColor: "rgba(255, 255, 255, 0.7)",
+            zIndex: 1000,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
       <MainTitle
-        title={datatest.type}
+        title={test.type}
         bg="https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
       />
       <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
@@ -262,7 +280,7 @@ function TestListening() {
           <DurationContainer>
             <Typography align="center">Time remaining:</Typography>
             <Typography align="center" sx={{ marginLeft: "1rem" }}>
-              {datatest && (
+              {test && (
                 <CountdownTimer
                   duration={duration}
                   handleSubmit={handleSubmit}
@@ -320,7 +338,7 @@ function TestListening() {
               }}
             >
               <OneListeningTest
-                onelistening={data[indexVisible]}
+                oneListening={data[indexVisible]}
                 audioRef={audioRef}
                 title={title}
                 onAudioEnd={onAudioEnd}
@@ -352,50 +370,6 @@ function TestListening() {
   );
 }
 
-function IntroduceTest({ setStatus, datatest }) {
-  return (
-    <Box
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "60vh",
-          width: "80vh",
-          textAlign: "center",
-          border: "0.2rem solid",
-          padding: "20px",
-          borderRadius: "2rem",
-          backgroundColor: "#f9f9f9",
-          margin: "5%",
-        }}
-      >
-        <Typography variant="h4" gutterBottom>
-          {datatest.title}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          Duration: {datatest.duration} minutes
-        </Typography>
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: "#ACCD0A",
-            "&:hover": { backgroundColor: "#8CAB0A" },
-          }}
-          onClick={() => setStatus("Testing")}
-        >
-          Start {datatest.question}
-        </Button>
-      </Box>
-    </Box>
-  );
-}
 
-function TestingListening({ audioRef, datatest, title, duration }) {
-  return <></>;
-}
 
 export default TestListening;

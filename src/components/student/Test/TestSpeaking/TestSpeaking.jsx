@@ -8,11 +8,11 @@ import { useLocation } from "react-router-dom";
 function TestSpeaking() {
   const location = useLocation();
   const { state } = location;
-  const [datatest, setDataTest] = useState(null);
+  const [test, setTest] = useState(null);
  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const title = datatest ? datatest.type : "";
+  const title = test ? test.type : "";
 
 
 
@@ -36,10 +36,10 @@ function TestSpeaking() {
 
           const updatedData = updateDataTest(data);
 
-          setDataTest(updatedData);
+          setTest(updatedData);
 
         } else {
-          setDataTest(null);
+          setTest(null);
         }
       } catch (err) {
         setError("Failed to fetch test data");
@@ -71,7 +71,7 @@ function TestSpeaking() {
         <Box sx={{ marginTop: "1rem" }}>
           <SpeakingTesting
 
-            datatest={datatest}
+            test={test}
  
           />
         </Box>

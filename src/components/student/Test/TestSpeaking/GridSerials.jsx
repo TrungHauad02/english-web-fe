@@ -23,11 +23,9 @@ const GridItem = styled(Box)(({ hasAudio }) => ({
   },
 }));
 
-const ScoreGrid = ({ duration,storeName, serials = [], serialSet = {}, handleSerialClick, handleBtnSubmit }) => {
+const ScoreGrid = ({serials = [], serialSet = {}, handleSerialClick, handleBtnSubmit }) => {
   return (
     <StyledBox>
-     
-
       <Grid container spacing={1} sx={{ marginBottom: 2, marginTop: '1rem' }}>
         {serials.length > 0 ? (
           serials.map((item, index) => (

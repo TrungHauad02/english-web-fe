@@ -3,7 +3,6 @@ import { Box, Typography, Fab, Button } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import PropTypes from 'prop-types';
 import { ReactMic } from 'react-mic';
 
 const SpeakingTest = ({ dataTest, focusId,answers,setAnswers }) => {

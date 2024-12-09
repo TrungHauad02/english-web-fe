@@ -35,7 +35,7 @@ function TestWriting() {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
-  const [datatest, setdatatest] = useState(null);
+  const [test, setTest] = useState(null);
   const [storeName, setStoreName] = useState(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,10 +46,9 @@ function TestWriting() {
         const data = await getTest(state.id);
         setStoreName("MyStore" + data.id)
         if (data) {
-          setdatatest(data);
-          console.log(data);
+          setTest(data);
         } else {
-          setdatatest(null);
+          setTest(null);
         }
       } catch (err) {
     
@@ -76,16 +75,12 @@ function TestWriting() {
         
             return data;
           };
-        
-      
           const updatedData = updateDataTest(data);
-        
-
-          setdatatest(updatedData);
+          setTest(updatedData);
           setDuration(data.duration); 
           setStoreName("MyStore" + data.id)
         } else {
-          setdatatest(null);
+          setTest(null);
         }
       } catch (err) {
 
@@ -98,10 +93,10 @@ function TestWriting() {
   }, [state?.id]);
   
   useEffect(() => {
-    if (datatest != null) {
-      openDB("MyDatabase", "MyStore" + datatest.id)
+    if (test != null) {
+      openDB("MyDatabase", "MyStore" + test.id)
         .then((db) => {
-          getData(db, "MyStore" + datatest.id,storeName)
+          getData(db, "MyStore" + test.id,storeName)
             .then((data) => {
               if (data?.answers) {
                 console.log(data?.answers);
@@ -121,19 +116,19 @@ function TestWriting() {
         });
     }
 
-  }, [datatest?.id]);
+  }, [test?.id]);
   
   useEffect(() => {
-    if (datatest != null) {
+    if (test != null) {
       openDB("MyDatabase", storeName).then((db) => {
-        saveData(db, "MyStore" + datatest.id, { id: storeName, answers });
+        saveData(db, "MyStore" + test.id, { id: storeName, answers });
       }).catch((error) => {
         console.error("Error saving answers to the database:", error);
       });
     }
   }, [answers]);
 
-  const handlebtnSubmit = async () => {
+  const handleBtnSubmit = async () => {
     setIsSubmitting(true);
  
     try {
@@ -142,7 +137,7 @@ function TestWriting() {
   
       let submitTest = {
         id: "",
-        testId: datatest.id,
+        testId: test.id,
         userId: user.id,
         score: 0,
         status: "ACTIVE",
@@ -151,12 +146,12 @@ function TestWriting() {
       };
       let scoreTest = 0;
   
-      let pointPerQuestion = 100 / datatest?.testWritings?.length;
+      let pointPerQuestion = 100 / test?.testWritings?.length;
 
       let comment = "No comment available. You haven't completed this question yet";
       let content = "No content available. You haven't completed this question yet";
   
-      for (let writing of datatest?.testWritings) {
+      for (let writing of test?.testWritings) {
         let score = 0;
     
         if (answers[writing.id]?.essay !== null && answers[writing.id]?.essay !== '' && answers[writing.id]?.essay !== undefined) {
@@ -202,9 +197,9 @@ function TestWriting() {
       
       const state = {
         id: createdSubmitTest.id,
-        testId: datatest.id,
+        testId: test.id,
       };
-      deleteData('MyDatabase', 'MyStore'+datatest.id);
+      deleteData('MyDatabase', 'MyStore'+test.id);
       navigate("/student/history-test/writing", { state });
     
   
@@ -252,10 +247,10 @@ function TestWriting() {
         </Typography>
         <Typography align="center" sx={{marginLeft:'1rem'}} >
         {
-      datatest && 
+      test && 
       <CountdownTimer
       duration={duration}
-      handleSubmit={handlebtnSubmit}
+      handleSubmit={handleBtnSubmit}
       dbName={"MyDatabase"}
       storeName={storeName}
     />
@@ -268,11 +263,11 @@ function TestWriting() {
       <BtnPreviousNextContentTest
         indexVisible={indexVisible}
         setIndexVisible={setIndexVisible}
-        sumContent={datatest?.testWritings.length}
+        sumContent={test?.testWritings.length}
       />
       <ContentTestWriting
-        datatest={datatest?.testWritings[indexVisible]}
-        handlebtnSubmit={handlebtnSubmit}
+        test={test?.testWritings[indexVisible]}
+        handleBtnSubmit={handleBtnSubmit}
         onClickTestAgain={onClickTestAgain}
         answers={answers}
         setAnswers={setAnswers}

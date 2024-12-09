@@ -16,7 +16,7 @@ function SerialGrid({
   gridData = [],
   TitleAndSerials,
   onItemClick,
-  handlebtnSubmit,
+  handleBtnSubmit,
   duration,
   storeName
 }) {
@@ -28,7 +28,7 @@ function SerialGrid({
             <br />
             <CountdownTimer
       duration={duration}
-      handleSubmit={handlebtnSubmit}
+      handleSubmit={handleBtnSubmit}
       dbName={"MyDatabase"}
       storeName={storeName}
     />
@@ -63,7 +63,7 @@ function SerialGrid({
             color: 'white',
             padding: '1rem 2rem',
           }}
-          onClick={handlebtnSubmit}
+          onClick={handleBtnSubmit}
         >
         SUBMIT
         </Button>

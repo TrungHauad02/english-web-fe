@@ -42,9 +42,9 @@ const DurationContainer = styled(Box)(({ theme }) => ({
 }));
 
 export default function SpeakingTesting({
-  datatest,
+  test,
 }) {
-  const storeName = "MyStore" + datatest.id;
+  const storeName = "MyStore" + test.id;
   const navigate = useNavigate();
   const [indexSpeaking, setIndexSpeaking] = useState(0);
   const [indexQuestion, setIndexQuestion] = useState(0);
@@ -55,10 +55,10 @@ export default function SpeakingTesting({
   const [serialSet, setSerialSet] = useState(new Set());
 
   useEffect(() => {
-    if (datatest != null) {
-      openDB("MyDatabase", "MyStore" + datatest.id)
+    if (test != null) {
+      openDB("MyDatabase", "MyStore" + test.id)
         .then((db) => {
-          getData(db, "MyStore" + datatest.id, storeName)
+          getData(db, "MyStore" + test.id, storeName)
             .then((data) => {
               if (data?.recordings) {
                 setRecordings(data.recordings);
@@ -79,11 +79,11 @@ export default function SpeakingTesting({
   }, []);
 
   useEffect(() => {
-    if (datatest != null) {
+    if (test != null) {
       openDB("MyDatabase", storeName)
         .then((db) => {
-          saveData(db, "MyStore" + datatest.id, { id: storeName, recordings });
-          saveData(db, "MyStore" + datatest.id, { id: storeName, serialSet });
+          saveData(db, "MyStore" + test.id, { id: storeName, recordings });
+          saveData(db, "MyStore" + test.id, { id: storeName, serialSet });
           console.log(recordings);
         })
         .catch((error) => {
@@ -92,7 +92,7 @@ export default function SpeakingTesting({
     }
   }, [recordings]);
 
-  const currentSpeaking = datatest.testSpeakings[indexSpeaking];
+  const currentSpeaking = test.testSpeakings[indexSpeaking];
   const currentQuestion = currentSpeaking?.questions[indexQuestion];
 
   const getSerialNumber = () =>
@@ -113,7 +113,7 @@ export default function SpeakingTesting({
         }
         if (indexQuestion < currentSpeaking.questions.length - 1) {
           setIndexQuestion(indexQuestion + 1);
-        } else if (indexSpeaking < datatest?.testSpeakings.length - 1) {
+        } else if (indexSpeaking < test?.testSpeakings.length - 1) {
           setIndexSpeaking(indexSpeaking + 1);
           setIndexQuestion(0);
         }
@@ -122,7 +122,7 @@ export default function SpeakingTesting({
     } else {
       if (indexQuestion < currentSpeaking.questions.length - 1) {
         setIndexQuestion(indexQuestion + 1);
-      } else if (indexSpeaking < datatest?.testSpeakings.length - 1) {
+      } else if (indexSpeaking < test?.testSpeakings.length - 1) {
         setIndexSpeaking(indexSpeaking + 1);
         setIndexQuestion(0);
       }
@@ -142,7 +142,7 @@ export default function SpeakingTesting({
         } else if (indexSpeaking > 0) {
           setIndexSpeaking(indexSpeaking - 1);
           setIndexQuestion(
-            datatest?.testSpeakings[indexSpeaking - 1].questions.length - 1
+            test?.testSpeakings[indexSpeaking - 1].questions.length - 1
           );
         }
       });
@@ -153,7 +153,7 @@ export default function SpeakingTesting({
       } else if (indexSpeaking > 0) {
         setIndexSpeaking(indexSpeaking - 1);
         setIndexQuestion(
-          datatest?.testSpeakings[indexSpeaking - 1].questions.length - 1
+          test?.testSpeakings[indexSpeaking - 1].questions.length - 1
         );
       }
     }
@@ -182,7 +182,7 @@ export default function SpeakingTesting({
         setIsRecording(false);
         const { speakingIndex, questionIndex } = findIndicesBySerial(
           serial,
-          datatest?.testSpeakings
+          test?.testSpeakings
         );
         setIndexSpeaking(speakingIndex);
         setIndexQuestion(questionIndex);
@@ -195,7 +195,7 @@ export default function SpeakingTesting({
     } else {
       const { speakingIndex, questionIndex } = findIndicesBySerial(
         serial,
-        datatest?.testSpeakings
+        test?.testSpeakings
       );
       setIndexSpeaking(speakingIndex);
       setIndexQuestion(questionIndex);
@@ -204,7 +204,7 @@ export default function SpeakingTesting({
 
   const getListSerials = () => {
     const serials = [];
-    datatest?.testSpeakings.forEach((speaking) => {
+    test?.testSpeakings.forEach((speaking) => {
       if (speaking && speaking.questions) {
         speaking.questions.forEach((question) => {
           serials.push(question.serial);
@@ -262,7 +262,7 @@ export default function SpeakingTesting({
       .replace(", ", "T");
     const newSubmitTest = {
       id: "",
-      testId: datatest.id,
+      testId: test.id,
       userId: user.id,
       score: 1,
       status: "ACTIVE",
@@ -271,7 +271,7 @@ export default function SpeakingTesting({
     };
     let totalQuestions = 0;
     let scorePerQuestion = 0;
-    for (const testSpeaking of datatest.testSpeakings) {
+    for (const testSpeaking of test.testSpeakings) {
       totalQuestions += testSpeaking.questions.length;
     }
 
@@ -279,7 +279,7 @@ export default function SpeakingTesting({
       scorePerQuestion = 100 / totalQuestions;
     }
 
-    for (const testSpeaking of datatest.testSpeakings) {
+    for (const testSpeaking of test.testSpeakings) {
       for (const question of testSpeaking.questions) {
         let content =
           "No audio available. You haven't completed this question yet.";
@@ -345,17 +345,17 @@ export default function SpeakingTesting({
         createSubmitTestSpeaking(question)
       )
     );
-    deleteData("MyDatabase", "MyStore" + datatest.id);
+    deleteData("MyDatabase", "MyStore" + test.id);
     const state = {
       id: createdSubmitTest.id,
-      testId: datatest.id,
+      testId: test.id,
     };
-    deleteData("MyDatabase", "MyStore" + datatest.id);
+    deleteData("MyDatabase", "MyStore" + test.id);
     navigate("/student/history-test/speaking", { state });
   };
 
   const isLastQuestion =
-    indexSpeaking === datatest?.testSpeakings.length - 1 &&
+    indexSpeaking === test?.testSpeakings.length - 1 &&
     indexQuestion === currentSpeaking?.questions.length - 1;
 
   return (
@@ -364,9 +364,9 @@ export default function SpeakingTesting({
       <DurationContainer sx={{ fontWeight: "bold" }} elevation={1}>
         <Typography align="center">Time remaining:</Typography>
         <Typography align="center" sx={{ marginLeft: "1rem" }}>
-          {datatest && (
+          {test && (
             <CountdownTimer
-              duration={datatest?.duration}
+              duration={test?.duration}
               handleSubmit={handleBtnSubmit}
               dbName={"MyDatabase"}
               storeName={storeName}

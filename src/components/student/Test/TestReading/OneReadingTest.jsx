@@ -1,7 +1,7 @@
 import { Box, Typography, Button, Grid, styled } from "@mui/material";
 import ListQuestion from "../common/ListQuestion";
 import ImageWithLoading from "../common/ImageWithLoading"
-function OneReadingTest({ onereading, handlebtnSubmit, title, answers, setAnswers }) {
+function OneReadingTest({ oneReading, handleBtnSubmit, title, answers, setAnswers }) {
   const TestContainer = styled(Grid)(({ theme }) => ({
     width: "100%",
     height: "auto",
@@ -25,20 +25,20 @@ function OneReadingTest({ onereading, handlebtnSubmit, title, answers, setAnswer
     <>
       <TestContainer sx={{ flex: "1 1 49%" }}>
         <QuestionSection item>
-        {onereading.image !== ''? (
+        {oneReading.image !== ''? (
     <>
-   <ImageWithLoading imageSrc={onereading.image} />
+   <ImageWithLoading imageSrc={oneReading.image} />
       <Box    sx={{ height: "400px", overflowY: "auto" }}>
       <QuestionContent
      
-     content={onereading.content}
+     content={oneReading.content}
    />
       </Box>
     </>
   ) : (
     <Box    sx={{ height: "500px", overflowY: "auto" }}>
       <QuestionContent
-     content={onereading.content}
+     content={oneReading.content}
    />
 
           </Box>
@@ -58,7 +58,7 @@ function OneReadingTest({ onereading, handlebtnSubmit, title, answers, setAnswer
           <Box sx={  {  height: "500px", overflowY: "auto" ,
     padding: "1rem"}}>
           <ListQuestion
-            dataTest={onereading}
+            dataTest={oneReading}
             answers={answers}
             setAnswers={setAnswers}
             title={title}
@@ -76,7 +76,7 @@ function OneReadingTest({ onereading, handlebtnSubmit, title, answers, setAnswer
             marginBottom: "2%",
             padding: "1rem 2rem",
           }}
-          onClick={handlebtnSubmit}
+          onClick={handleBtnSubmit}
         >
           SUBMIT
         </Button>

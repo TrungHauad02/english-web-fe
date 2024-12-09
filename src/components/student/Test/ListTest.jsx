@@ -72,29 +72,37 @@ function ListTest() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = await fetchUserInfo();
-
-      const data = await getListTest(
-        page,
-        currType,
-        "",
-        "ACTIVE",
-        user.id,
-        "ASC"
-      );
-      const tests = data.content;
-      setVersion(version + 1);
-
-      setTotalPage(data.totalPages);
-      if (tests) {
-        setList(tests);
-      } else {
-        setList([]);
+      try {
+        const user = await fetchUserInfo();
+  
+        const data = await getListTest(
+          page,
+          currType,
+          "",
+          "ACTIVE",
+          user.id,
+          "ASC"
+        );
+  
+        const tests = data.content;
+        setVersion((prevVersion) => prevVersion + 1);
+  
+        setTotalPage(data.totalPages);
+        if (tests) {
+          setList(tests);
+        } else {
+          setList([]);
+        }
+      } catch (error) {
+        
+      } finally {
+     
       }
     };
-
+  
     fetchData();
   }, [page, currType]);
+  
 
   const onChangePage = (event, value) => {
     setPage(value);
