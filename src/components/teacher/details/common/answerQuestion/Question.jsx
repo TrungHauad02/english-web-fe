@@ -11,6 +11,7 @@ import {
 import SaveEditDeleteButton from "../button/SaveEditDeleteButton";
 import useQuestion from "./useQuestion";
 import Answer from "./Answer";
+import ConfirmDialogV2 from "shared/component/confirmDialog/ConfirmDialogV2";
 
 export default function Question({
   data,
@@ -33,6 +34,9 @@ export default function Question({
     onChangeAnswerStatus,
     onChangeStatus,
     onDeleteAnswer,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   } = useQuestion(data, fetchData, setError, path);
 
   const questionContainerStyle = {
@@ -155,7 +159,7 @@ export default function Question({
                 isEditing={isEditing}
                 onChangeAnswerContent={(e) => onChangeAnswerContent(e, index)}
                 onChangeCorrectAnswer={onChangeCorrectAnswer}
-                onDeleteAnswer={() => onDeleteAnswer(answer.id, index)}
+                onDeleteAnswer={() => handleOpenDialog(answer.id, index)}
                 onChangeAnswerStatus={(e) => onChangeAnswerStatus(e, index)}
               />
             ))}
@@ -197,6 +201,12 @@ export default function Question({
           </Grid2>
         </Grid2>
       </Grid2>
+      <ConfirmDialogV2
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onConfirm={onDeleteAnswer}
+        message="Are you sure you want to delete this answer?"
+      />
     </Grid2>
   );
 }
