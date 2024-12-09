@@ -4,8 +4,7 @@ import HistoryTestSpeakingContent from "./HistoryTestSpeakingContent";
 import React, { useState, useEffect } from "react";
 import ScoreGrid from "./ScoreGrid";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getTest } from "api/test/TestApi";
-import { getSubmitTest } from "api/test/submitTest";
+import { getHistoryTest } from "../common/getHistoryTest";
 
 function HistoryTestSpeaking() {
   const location = useLocation();
@@ -20,29 +19,32 @@ function HistoryTestSpeaking() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const testResult = await getTest(state.testId, "ACTIVE");
-        const historyTestResult = await getSubmitTest(state.id);
-
-        if (testResult) {
-          const updateDataTest = (data) => {
-            let serialCounter = 1;
-            data.testSpeakings = data.testSpeakings.map((item) => ({
-              ...item,
-              questions: item.questions.map((question) =>
-                question.serial !== undefined
-                  ? { ...question, serial: serialCounter++ }
-                  : question
-              ),
-            }));
-            return data;
-          };
-
-          const updatedData = updateDataTest(testResult);
-
-          setTest(updatedData);
-        }
-        if (historyTestResult) {
-          setHistoryTest(historyTestResult);
+        const result = await getHistoryTest(state, navigate);
+        if (result) {
+          const { test, submitTest } = result;
+  
+          if (test) {
+            const updateDataTest = (data) => {
+              let serialCounter = 1;
+              return {
+                ...data,
+                testSpeakings: data.testSpeakings.map((item) => ({
+                  ...item,
+                  questions: item.questions.map((question) => ({
+                    ...question,
+                    serial: question.serial !== undefined ? serialCounter++ : question.serial,
+                  })),
+                })),
+              };
+            };
+  
+            const updatedData = updateDataTest(test);
+            setTest(updatedData); 
+          }
+  
+          if (submitTest) {
+            setHistoryTest(submitTest); 
+          }
         }
       } catch (err) {
         setError("Failed to fetch test data");
@@ -52,7 +54,7 @@ function HistoryTestSpeaking() {
     };
 
     fetchData();
-  }, [state.id, state.testId]);
+  }, [state, state?.id, state?.testId]);
 
   function startsWithHttp(url) {
     return url.startsWith("http");

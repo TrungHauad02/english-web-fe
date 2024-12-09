@@ -1,10 +1,10 @@
-import ListQuestionSubmit from "./HistoryListQuestion";
+import HistoryListQuestion from "../common/HistoryListQuestion";
 
 function SubmitGrammar({dataTest,focusId}) 
 {
     return(
         <>
-        <ListQuestionSubmit  dataTest={dataTest.questions} dataSubmitTest = {dataTest.submitTestMixingAnswers}
+        <HistoryListQuestion  dataTest={dataTest.questions} dataSubmitTest = {dataTest.submitTestMixingAnswers}
         focusId ={focusId} 
         />
         </>

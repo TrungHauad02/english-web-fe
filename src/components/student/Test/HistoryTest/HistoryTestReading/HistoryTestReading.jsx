@@ -5,8 +5,7 @@ import HistoryOneReading from "./HistoryOneReading";
 import React, { useState, useEffect } from "react";
 import BtnPreviousNextContentTest from "../../common/BtnPreviousNextContentTest";
 import { useLocation } from "react-router-dom";
-import { getTest } from "api/test/TestApi";
-import { getSubmitTest } from "api/test/submitTest";
+import { getHistoryTest } from "../common/getHistoryTest";
 import { useNavigate } from "react-router-dom";
 const DurationContainer = styled(Paper)(({ theme }) => ({
   background: "#FFF4CC",
@@ -29,29 +28,32 @@ function HistoryTestReading() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const testResult =  await getTest(state.testId,"ACTIVE");
-        const historyTestResult = await getSubmitTest(state.id);
-
-        if (testResult) {
-          const updateDataTest = (data) => {
-            let serialCounter = 1; 
-            data.testReadings = data.testReadings.map((item) => ({
-              ...item,
-              questions: item.questions.map((question) =>
-                question.serial !== undefined
-                  ? { ...question, serial: serialCounter++ }
-                  : question
-              ),
-            }));
-            return data;
-          };
+        const result = await getHistoryTest(state, navigate);
+        if (result) {
+          const { test, submitTest } = result;
   
-          const updatedData = updateDataTest(testResult);
-     
-          setTest(updatedData);
-        }
-        if (historyTestResult) {
-          setHistoryTest(historyTestResult);
+          if (test) {
+            const updateDataTest = (data) => {
+              let serialCounter = 1;
+              return {
+                ...data,
+                testReadings: data.testReadings.map((item) => ({
+                  ...item,
+                  questions: item.questions.map((question) => ({
+                    ...question,
+                    serial: question.serial !== undefined ? serialCounter++ : question.serial,
+                  })),
+                })),
+              };
+            };
+  
+            const updatedData = updateDataTest(test);
+            setTest(updatedData); 
+          }
+  
+          if (submitTest) {
+            setHistoryTest(submitTest); 
+          }
         }
       } catch (err) {
         setError("Failed to fetch test data");
@@ -61,7 +63,7 @@ function HistoryTestReading() {
     };
 
     fetchData();
-  }, [state.id, state.testId]);
+  }, [state, state?.id, state?.testId]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -114,7 +116,7 @@ function HistoryTestReading() {
       <BtnPreviousNextContentTest
         indexVisible={indexVisible}
         setIndexVisible={setIndexVisible}
-        sumcontent={test?.testReadings?.length || 0}
+        sumContent={test?.testReadings?.length || 0}
       />
       <Box
         sx={{
@@ -126,7 +128,7 @@ function HistoryTestReading() {
       >
         {test && historyTest ? (
           <HistoryOneReading
-            onereading={test.testReadings[indexVisible]}
+            oneReading={test.testReadings[indexVisible]}
             title={title}
             dataSubmitTest={historyTest.submitTestReadingAnswers}
             handleTestAgain={handleTestAgain}

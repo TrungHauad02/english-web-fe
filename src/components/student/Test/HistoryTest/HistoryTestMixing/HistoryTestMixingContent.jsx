@@ -9,7 +9,7 @@ import Writing from "./HistoryWriting";
 import Speaking from "./HistorySpeaking";
 import SerialGrid from "./SerialGrid/SerialGrid";
 
-const HistoryTestMixing = ({ datatest, submitTest, onClickTestAgain }) => {
+const HistoryTestMixing = ({ test, submitTest, onClickTestAgain }) => {
   const DataTestMixing = (() => {
     let currentSerial = 1;
 
@@ -17,7 +17,7 @@ const HistoryTestMixing = ({ datatest, submitTest, onClickTestAgain }) => {
       {
         title: "Vocabulary",
         questions: (
-          datatest?.testMixingQuestions.filter(
+          test?.testMixingQuestions.filter(
             (question) => question.type === "VOCABULARY"
           ) || []
         ).map((question) =>
@@ -30,7 +30,7 @@ const HistoryTestMixing = ({ datatest, submitTest, onClickTestAgain }) => {
       {
         title: "Grammar",
         questions: (
-          datatest?.testMixingQuestions.filter(
+          test?.testMixingQuestions.filter(
             (question) => question.type === "GRAMMAR"
           ) || []
         ).map((question) =>
@@ -42,7 +42,7 @@ const HistoryTestMixing = ({ datatest, submitTest, onClickTestAgain }) => {
       },
       {
         title: "Reading",
-        testReadings: (datatest?.testReadings || []).map((item) => ({
+        testReadings: (test?.testReadings || []).map((item) => ({
           ...item,
           questions: (item.questions || []).map((question) =>
             question.serial !== undefined
@@ -54,7 +54,7 @@ const HistoryTestMixing = ({ datatest, submitTest, onClickTestAgain }) => {
       },
       {
         title: "Listening",
-        testListenings: (datatest?.testListenings || []).map((item) => ({
+        testListenings: (test?.testListenings || []).map((item) => ({
           ...item,
           questions: (item.questions || []).map((question) =>
             question.serial !== undefined
@@ -66,7 +66,7 @@ const HistoryTestMixing = ({ datatest, submitTest, onClickTestAgain }) => {
       },
       {
         title: "Speaking",
-        testSpeakings: (datatest?.testSpeakings || []).map((item) => ({
+        testSpeakings: (test?.testSpeakings || []).map((item) => ({
           ...item,
           questions: (item.questions || []).map((question) =>
             question.serial !== undefined
@@ -78,7 +78,7 @@ const HistoryTestMixing = ({ datatest, submitTest, onClickTestAgain }) => {
       },
       {
         title: "Writing",
-        testWritings: (datatest?.testWritings || []).map((item) =>
+        testWritings: (test?.testWritings || []).map((item) =>
           item.serial !== undefined
             ? { ...item, serial: currentSerial++ }
             : item
@@ -147,7 +147,7 @@ const HistoryTestMixing = ({ datatest, submitTest, onClickTestAgain }) => {
     return TitleAndSerials;
   };
 
-  const [focusId, setfocusId] = useState();
+  const [focusId, setFocusId] = useState();
   const [activeTab, setActiveTab] = useState(0);
   const TitleAndSerials = getListSerialTest();
 
@@ -156,7 +156,7 @@ const HistoryTestMixing = ({ datatest, submitTest, onClickTestAgain }) => {
       for (let index = 0; index < TitleAndSerials.title.length; index++) {
         const serials = TitleAndSerials.serials[index];
         if (serials && serials.includes(serial)) {
-          setfocusId(serial);
+          setFocusId(serial);
           setActiveTab(index);
           break;
         }

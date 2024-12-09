@@ -3,9 +3,7 @@ import { Box,Typography,Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import MainTitle from "../../MainTitle";
 import BtnPreviousNextContentTest from "../../common/BtnPreviousNextContentTest";
-import { getTest } from "api/test/TestApi";
-import { getSubmitTest } from "api/test/submitTest";
-
+import { getHistoryTest } from "../common/getHistoryTest";
 import ContentTestWriting from "./HistoryTestWritingContent";
 import { useLocation, useNavigate } from "react-router-dom";
 const DurationContainer = styled(Paper)(({ theme }) => ({
@@ -29,27 +27,28 @@ function TestWriting() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const testResult = await getTest(state.testId, "ACTIVE");
-        const historyTestResult = await getSubmitTest(state.id);
-
-        if (testResult) {
-          const updateDataTest = (data) => {
-            let serialCounter = 1;
-            data.testWritings = data.testWritings.map((item) =>
-              item.serial !== undefined
-                ? { ...item, serial: serialCounter++ }
-                : item
-            );
-
-            return data;
-          };
-
-          const updatedData = updateDataTest(testResult);
-
-          setTest(updatedData);
-        }
-        if (historyTestResult) {
-          setHistoryTest(historyTestResult);
+        const result = await getHistoryTest(state, navigate);
+        if (result) {
+          const { test, submitTest } = result;
+  
+          if (test) {
+            const updateDataTest = (data) => {
+              let serialCounter = 1;
+              data.testWritings = data.testWritings.map((item) =>
+                item.serial !== undefined
+                  ? { ...item, serial: serialCounter++ }
+                  : item
+              );
+          
+              return data;
+            };
+            const updatedData = updateDataTest(test);
+            setTest(updatedData); 
+          }
+  
+          if (submitTest) {
+            setHistoryTest(submitTest); 
+          }
         }
       } catch (err) {
         setError("Failed to fetch test data");
@@ -59,7 +58,7 @@ function TestWriting() {
     };
 
     fetchData();
-  }, [state.id, state.testId]);
+  }, [state, state?.id, state?.testId]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -111,13 +110,13 @@ function TestWriting() {
         <BtnPreviousNextContentTest
           indexVisible={indexVisible}
           setIndexVisible={setIndexVisible}
-          sumcontent={test?.testWritings.length}
+          sumContent={test?.testWritings.length}
         />
         <ContentTestWriting
           oneWriting={test?.testWritings[indexVisible]}
           onClickTestAgain={onClickTestAgain}
           oneHistoryWriting={historyTest?.submitTestWritings[indexVisible]}
-          Maxscore={100 / test?.testWritings?.length}
+          maxScore={100 / test?.testWritings?.length}
         />
       </Box>
     </Box>

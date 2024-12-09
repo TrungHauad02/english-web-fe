@@ -1,9 +1,8 @@
-import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl,Button,Grid,styled   } from '@mui/material';
-import { useEffect, useState } from 'react';
-import ListQuestionSubmit from '../common/ListQuestionSubmit';
+import { Box, Typography,Button,Grid,styled   } from '@mui/material';
+import ListQuestionSubmit from '../common/HistoryListQuestion';
 import ImageWithLoading from "../../common/ImageWithLoading"
 
-function OneReadingTest({onereading,title,dataSubmitTest,handleTestAgain}){
+function OneReadingTest({oneReading,title,dataSubmitTest,handleTestAgain}){
 
   const TestContainer = styled(Grid)(({ theme }) => ({
     width: '100%',
@@ -27,20 +26,20 @@ function OneReadingTest({onereading,title,dataSubmitTest,handleTestAgain}){
     <>
     <TestContainer sx={{ flex: '1 1 49%'  }}>
     <QuestionSection item>
-        {onereading.image !== ''? (
+        {oneReading.image !== ''? (
     <>
-  <ImageWithLoading imageSrc={onereading.image} />
+  <ImageWithLoading imageSrc={oneReading.image} />
       <Box    sx={{ height: "400px", overflowY: "auto" }}>
       <QuestionContent
      
-     content={onereading.content}
+     content={oneReading.content}
    />
       </Box>
     </>
   ) : (
     <Box    sx={{ height: "500px", overflowY: "auto" }}>
       <QuestionContent
-     content={onereading.content}
+     content={oneReading.content}
    />
 
       </Box>
@@ -54,7 +53,7 @@ function OneReadingTest({onereading,title,dataSubmitTest,handleTestAgain}){
       <Box sx={  {  height: "500px", overflowY: "auto" ,
     padding: "1rem"}}>
   <ListQuestionSubmit 
-    dataTest= {onereading.questions}   
+    dataTest= {oneReading.questions}   
     dataSubmitTest= {dataSubmitTest} 
     title = {title} 
     />    

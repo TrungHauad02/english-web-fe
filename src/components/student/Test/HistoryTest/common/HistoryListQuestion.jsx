@@ -6,16 +6,14 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 function ListQuestionSubmit({ dataTest, focusId, dataSubmitTest }) {
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const questionRefs = useRef({});
-    const [isFocused, setIsFocused] = useState({});
-    const [expandedSections, setExpandedSections] = useState({}); 
+    const [expandedSections, setExpandedSections] = useState({});  
 
     useEffect(() => {
         if (focusId && questionRefs.current[focusId]) {
+            console.log(focusId);
             questionRefs.current[focusId].focus();
-            setIsFocused((prev) => ({ ...prev, [focusId]: true }));
             setTimeout(() => {
-                questionRefs.current[focusId].blur();
-                setIsFocused((prev) => ({ ...prev, [focusId]: false }));
+                questionRefs.current[focusId].blur(); 
             }, 500);
         }
     }, [focusId]);
@@ -85,7 +83,7 @@ function ListQuestionSubmit({ dataTest, focusId, dataSubmitTest }) {
                                     value={answer.id}
                                     control={
                                         <Radio
-                                            onClick={(e) => e.preventDefault()} // Prevent selecting again
+                                            onClick={(e) => e.preventDefault()} // 
                                         />
                                     }
                                     label={` ${answer.content}`}
@@ -97,25 +95,25 @@ function ListQuestionSubmit({ dataTest, focusId, dataSubmitTest }) {
                             );
                         })}
                     </RadioGroup>
-                        {questionNumber.explanation && (
-                        <>
-                            <Button
-                                onClick={() => toggleSection(questionNumber.id, 'explain')}
-                                sx={{ mt: 1, color: 'primary.main', textTransform: 'none', fontSize: '0.875rem' }}
-                                variant="text"
-                                endIcon={
-                                    expandedSections[questionNumber.id]?.explain ? <ExpandLessIcon /> : <ExpandMoreIcon />
-                                }
-                            >
-                                Explain
-                            </Button>
-                            <Collapse in={expandedSections[questionNumber.id]?.explain}>
-                                <Typography variant="body2" sx={{ ml: 2, mt: 1 }}>
-                                    {questionNumber.explanation}
-                                </Typography>
-                            </Collapse>
-                        </>
-                    )}
+                            {questionNumber.explanation && (
+                            <>
+                                <Button
+                                    onClick={() => toggleSection(questionNumber.id, 'explain')}
+                                    sx={{ mt: 1, color: 'primary.main', textTransform: 'none', fontSize: '0.875rem' }}
+                                    variant="text"
+                                    endIcon={
+                                        expandedSections[questionNumber.id]?.explain ? <ExpandLessIcon /> : <ExpandMoreIcon />
+                                    }
+                                >
+                                    Explain
+                                </Button>
+                                <Collapse in={expandedSections[questionNumber.id]?.explain}>
+                                    <Typography variant="body2" sx={{ ml: 2, mt: 1 }}>
+                                        {questionNumber.explanation}
+                                    </Typography>
+                                </Collapse>
+                            </>
+                        )}
                     <Button
                         onClick={() => toggleSection(questionNumber.id, 'comment')}
                         sx={{ mt: 1, color: 'primary.main', textTransform: 'none', fontSize: '0.875rem' }}
@@ -125,7 +123,7 @@ function ListQuestionSubmit({ dataTest, focusId, dataSubmitTest }) {
                         Comment
                     </Button>
                     <Collapse in={expandedSections[questionNumber.id]?.comment}>
-                            <Typography
+                    <Typography
                         variant="body2"
                         sx={{
                         ml: 2,
@@ -136,11 +134,14 @@ function ListQuestionSubmit({ dataTest, focusId, dataSubmitTest }) {
                                 : 'red'     
                         }}
                     >
-                        {Array.isArray(dataSubmitTest) &&
-                        dataSubmitTest.find(submit => submit?.questionId === questionNumber.id)?.comment
-                        || "No comment available. You haven't completed this question yet"}
+                    {Array.isArray(dataSubmitTest) ? 
+                    (dataSubmitTest.find(submit => submit?.questionId === questionNumber.id)?.comment || 
+                    "No comment available. You haven't completed this question yet") 
+                    : 
+                    "Data not available"}
                     </Typography>
                     </Collapse>
+
 
                 </Box>
             ))}
