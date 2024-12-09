@@ -1,10 +1,10 @@
-import { CircularProgress, Grid2 } from "@mui/material";
+import { Grid2 } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import SpeakingInfo from "./SpeakingInfo";
 import PeopleInConversation from "./PeopleInConversation";
 import Conversation from "./Conversation";
 import useSpeakingDetail from "./useSpeakingDetail";
 import ErrorComponent from "shared/component/error/ErrorComponent";
-import { Box } from "lucide-react";
 
 export default function SpeakingDetail() {
   const {
@@ -46,9 +46,7 @@ export default function SpeakingDetail() {
         justifyContent="center"
         sx={{ height: "100vh" }}
       >
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <CircularProgress />
-        </Box>
+        <CircularProgress size="3rem" />
       </Grid2>
     );
   }
