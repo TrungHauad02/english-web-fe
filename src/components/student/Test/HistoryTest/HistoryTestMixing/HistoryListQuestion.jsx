@@ -125,9 +125,21 @@ function ListQuestionSubmit({ dataTest, focusId, dataSubmitTest }) {
                         Comment
                     </Button>
                     <Collapse in={expandedSections[questionNumber.id]?.comment}>
-                        <Typography variant="body2" sx={{ ml: 2, mt: 1 }}>
-                            {Array.isArray(dataSubmitTest) && dataSubmitTest.find(submit => submit?.questionId === questionNumber.id)?.comment || 'No comment provided.'}
-                        </Typography>
+                            <Typography
+                        variant="body2"
+                        sx={{
+                        ml: 2,
+                        mt: 1,
+                        color: Array.isArray(dataSubmitTest) &&
+                                dataSubmitTest.find(submit => submit?.questionId === questionNumber.id)?.comment
+                                ? 'inherit' 
+                                : 'red'     
+                        }}
+                    >
+                        {Array.isArray(dataSubmitTest) &&
+                        dataSubmitTest.find(submit => submit?.questionId === questionNumber.id)?.comment
+                        || "No comment available. You haven't completed this question yet"}
+                    </Typography>
                     </Collapse>
 
                 </Box>

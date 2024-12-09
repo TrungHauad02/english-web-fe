@@ -495,7 +495,7 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
             marginLeft: "5%",
           }}
         >
-          <Box sx={{ flex: 1 }}>
+          <Box sx={{ flex: 1,marginTop:'2rem', }}>
           <Box
               sx={{
                 display: "flex",

@@ -8,19 +8,19 @@ import Listening from "./Listening";
 import Writing from "./Writing";
 import Speaking from "./Speaking";
 import SerialGrid from "./SerialGrid/SerialGrid";
-import { createSubmitTest } from "../../../../api/test/submitTest";
-import { fetchUserInfo } from "../../../../api/user/userService";
+import { createSubmitTest } from "api/test/submitTest";
+import { fetchUserInfo } from "api/user/userService";
 import { uploadFile } from "api/feature/uploadFile/uploadFileService";
-import { createSubmitTestReadingAnswer } from "../../../../api/test/submitTestReadingAnswer";
-import { createSubmitTestMixingAnswer } from "../../../../api/test/submitTestMixingAnswer";
-import { createSubmitTestListeningAnswer } from "../../../../api/test/submitTestListeningAnswer";
-import { createSubmitTestSpeaking } from "../../../../api/test/submitTestSpeaking";
-import { createSubmitTestWriting } from "../../../../api/test/submitTestWriting";
+import { createSubmitTestReadingAnswer } from "api/test/submitTestReadingAnswer";
+import { createSubmitTestMixingAnswer } from "api/test/submitTestMixingAnswer";
+import { createSubmitTestListeningAnswer } from "api/test/submitTestListeningAnswer";
+import { createSubmitTestSpeaking } from "api/test/submitTestSpeaking";
+import { createSubmitTestWriting } from "api/test/submitTestWriting";
 import {
   commentMixingQuestion,
   commentReadingQuestion,
   commentListeningQuestion,
-} from "../../../../api/test/commentTest";
+} from "api/test/commentTest";
 import { scoreTestWriting } from "api/feature/scoreTestWriting/scoreTestWriting";
 import { getSpeechToText } from "api/feature/stt/SpeechToTextService";
 import { useNavigate } from "react-router-dom";
@@ -442,51 +442,44 @@ const ItemTest = ({ title, datatest }) => {
 
           for (const question of item.questions) {
             const audiobase64 = answers[question.id];
+            let content = "No audio available. You haven't completed this question yet.";
+            let transcript = "No transcipt available. You haven't completed this question yet."
+            let comment = "No comment available. You haven't completed this question yet."
+          let score = 0;
+        if (audiobase64) {
+          const result = await uploadFile(
+            "test/speaking",
+            question.id.replace(/\s+/g, "_") + "_" + Date.now() + "-" + Math.random().toString(36).substr(2, 9),
+            audiobase64,
+          );
+          content = result.url;
+          try {
+  
+            transcript = (await getSpeechToText(audiobase64, 2)).transcript;
+          } catch (error) {
+        
+          
+          }
+          if(transcript!==null && transcript!=='')
+          {
 
-            let content =
-              "No audio available. You haven't completed this question yet.";
-            let transcript =
-              "No transcipt available. You haven't completed this question yet.";
-            let comment =
-              "No comment available. You haven't completed this question yet.";
-            let score = 0;
-            if (audiobase64) {
-              const result = await uploadFile(
-                "test/speaking",
-                question.id.replace(/\s+/g, "_") +
-                  "_" +
-                  Date.now() +
-                  "-" +
-                  Math.random().toString(36).substr(2, 9),
-                audiobase64
-              );
-              content = result.url;
-              try {
-                transcript = (await getSpeechToText(audiobase64, 2)).transcript;
-              } catch (error) {
-                console.log("Proceeding with the next step...");
-              }
-              if (transcript !== null && transcript !== "") {
-                let dataScore = await scoreTestWriting(
-                  transcript,
-                  question.content,
-                  scorePerQuestionSpeaking
-                );
-                score = dataScore.score.split("/")[0];
-                comment = dataScore.comment;
-              }
-            }
-            scoreTest = scoreTest + +score;
-            let submitTestSpeakingQuestion = {
-              id: "",
-              testSpeakingQuestionId: question.id,
-              submitTestId: "",
-              score: score,
-              content: content,
-              transcript: transcript,
-              comment: comment,
-              status: "ACTIVE",
-            };
+            let  dataScore= await scoreTestWriting(transcript, question.content,scorePerQuestionSpeaking);
+            score = dataScore.score.split("/")[0];;
+            comment = dataScore.comment;
+          }
+          
+        }
+        scoreTest=scoreTest+ +score;
+        let submitTestSpeakingQuestion = {
+          id: '',
+          testSpeakingQuestionId: question.id,
+          submitTestId: '',
+          score: score,
+          content: content,
+          transcript: transcript,
+          comment: comment,
+          status: "ACTIVE"
+        }
             submitTest.submitTestSpeakings.push(submitTestSpeakingQuestion);
           }
         }

@@ -41,8 +41,8 @@ function OneReadingTest({ onereading, handlebtnSubmit, title, answers, setAnswer
      content={onereading.content}
    />
 
-      </Box>
-  )}
+          </Box>
+      )}
         </QuestionSection>
       </TestContainer>
       <Partition sx={{ flex: "1 1 0.2%" }} />
@@ -89,7 +89,7 @@ const QuestionContent = ({ content }) => {
   const paragraphs = content.split("\n");
 
   return (
-    <Box>
+    <Box sx={{ padding: '1rem' }} >
       {paragraphs.map((paragraph, index) => (
         <Typography key={index} variant="body1" gutterBottom>
           {paragraph}
