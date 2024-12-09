@@ -81,7 +81,7 @@ const HistoryTest = () => {
 
   useEffect(() => {
     fetchTests();
-  }, []);
+  }, [currentPage]);
 
   return (
     <>

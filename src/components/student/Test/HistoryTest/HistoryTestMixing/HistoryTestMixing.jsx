@@ -64,7 +64,7 @@ function HistoryTestMixing() {
       <Box sx={{ marginTop: "5%", marginLeft: "5%", marginRight: "5%" }}>
         <HistoryTestMixingContent
           title={title}
-          datatest={test}
+          test={test}
           onClickTestAgain={onClickTestAgain}
           submitTest={historyTest}
         />

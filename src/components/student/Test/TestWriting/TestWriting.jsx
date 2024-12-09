@@ -268,7 +268,7 @@ function TestWriting() {
       <BtnPreviousNextContentTest
         indexVisible={indexVisible}
         setIndexVisible={setIndexVisible}
-        sumcontent={datatest?.testWritings.length}
+        sumContent={datatest?.testWritings.length}
       />
       <ContentTestWriting
         datatest={datatest?.testWritings[indexVisible]}

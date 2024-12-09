@@ -10,7 +10,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  duration,
 } from "@mui/material";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -26,8 +25,8 @@ import { openDB, saveData, getData, deleteData } from "../common/IndexDB";
 import { scoreTestWriting } from "api/feature/scoreTestWriting/scoreTestWriting";
 import { getSpeechToText } from "api/feature/stt/SpeechToTextService";
 import { styled } from "@mui/material/styles";
-import { useLocation, useNavigate } from "react-router-dom";
-import SubmitTestSpeaking from "./SubmitTestSpeaking/SubmitTestSpeaking";
+import { useNavigate } from "react-router-dom";
+
 
 import CountdownTimer from "../common/CountdownTimer";
 const DurationContainer = styled(Box)(({ theme }) => ({
@@ -44,9 +43,6 @@ const DurationContainer = styled(Box)(({ theme }) => ({
 
 export default function SpeakingTesting({
   datatest,
-  status,
-  setStatus,
-  setSubmitTest,
 }) {
   const storeName = "MyStore" + datatest.id;
   const navigate = useNavigate();
@@ -54,7 +50,6 @@ export default function SpeakingTesting({
   const [indexQuestion, setIndexQuestion] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
   const [recordings, setRecordings] = useState({});
-  const [submitTestQuestions, setSubmitTestQuestions] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [onDialogConfirm, setOnDialogConfirm] = useState(() => () => {});
   const [serialSet, setSerialSet] = useState(new Set());
@@ -556,7 +551,6 @@ export default function SpeakingTesting({
         <Grid item xs={6} md={3}>
           <GridSerials
             serials={getListSerials()}
-            status={status}
             key={indexSpeaking + "-" + indexQuestion}
             handleSerialClick={handleSerialClick}
             serialSet={serialSet}

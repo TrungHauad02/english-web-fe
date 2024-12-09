@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, Button, Collapse } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ListQuestion from "./HistoryListQuestion";
+import HistoryListQuestion from "../common/HistoryListQuestion";
 
 function SubmitListening({ dataTest, focusId }) {
 
@@ -39,7 +39,7 @@ function SubmitListening({ dataTest, focusId }) {
                             {item.transcript ? item.transcript : "No transcript available."}
                         </Typography>
                     </Collapse>
-                    <ListQuestion 
+                    <HistoryListQuestion 
                         dataTest={item.questions} 
                         focusId={focusId} 
                         dataSubmitTest={dataTest.submitTestListeningAnswers} 

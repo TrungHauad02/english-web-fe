@@ -1,4 +1,4 @@
-import ListQuestion from "./HistoryListQuestion";
+import HistoryListQuestion from "../common/HistoryListQuestion";
 import { Box, Typography, Paper, Container } from "@mui/material";
 import ImageWithLoading from "../../common/ImageWithLoading"
 
@@ -19,7 +19,7 @@ function SubmitReading({ dataTest, focusId }) {
                             {item.content}
                         </Typography>
                     </Box>
-                    <ListQuestion 
+                    <HistoryListQuestion 
                         dataTest={item.questions} 
                         focusId={focusId} 
                         dataSubmitTest={dataTest.submitTestReadingAnswers}

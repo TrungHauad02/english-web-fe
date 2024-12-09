@@ -1,4 +1,4 @@
-import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl ,Button } from '@mui/material';
+import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl  } from '@mui/material';
 import { useEffect, useState,useRef } from 'react';
 
 
@@ -6,7 +6,7 @@ function ListQuestion({dataTest,focusId,answers,setAnswers}){
 
     const [selectedAnswers, setSelectedAnswers] = useState(answers || {});
     const questionRefs = useRef({}); 
-    const [isFocused, setIsFocused] = useState({});
+ 
 
   const handleAnswerChange = (questionId, answer) => {
     
@@ -23,16 +23,14 @@ function ListQuestion({dataTest,focusId,answers,setAnswers}){
 
   }, [answers]);
 
-    useEffect(() => {
-        if (focusId && questionRefs.current[focusId]) {
-            questionRefs.current[focusId].focus();
-            setIsFocused((prev) => ({ ...prev, [focusId]: true }));
-            setTimeout(() => {
-                questionRefs.current[focusId].blur(); 
-                setIsFocused((prev) => ({ ...prev, [focusId]: false })); 
-            }, 500);
-        }
-    }, [focusId]);
+  useEffect(() => {
+    if (focusId && questionRefs.current[focusId]) {
+        questionRefs.current[focusId].focus();
+        setTimeout(() => {
+            questionRefs.current[focusId].blur(); 
+        }, 500);
+    }
+}, [focusId]);
  
     return(
 
@@ -73,7 +71,6 @@ function ListQuestion({dataTest,focusId,answers,setAnswers}){
  
     >
       {questionNumber.answers.map((answer) => {
-        const isCorrect = answer.isCorrect; 
         const isSelected = selectedAnswers[questionNumber.id] === answer.id;
 
         return (

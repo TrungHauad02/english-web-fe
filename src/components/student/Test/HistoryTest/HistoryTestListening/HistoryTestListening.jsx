@@ -1,14 +1,13 @@
 import MainTitle from "../../MainTitle";
 import OneListeningTest from "./HistoryOneListening";
-import { Box, Typography, Button, duration } from "@mui/material";
+import { Box } from "@mui/material";
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import ScoreGrid from "./ScoreGrid";
 import { useLocation } from 'react-router-dom';
-import { getTest } from 'api/test/TestApi';
-import { getSubmitTest } from 'api/test/submitTest';
 import { useNavigate } from 'react-router-dom';
-
+import {getHistoryTest} from "../common/getHistoryTest";
+import BtnPreviousNextContentTest from "../../common/BtnPreviousNextContentTest";
 function HistoryTestListening() {
     const [indexVisible, setIndexVisible] = useState(0);
     const location = useLocation();
@@ -18,37 +17,39 @@ function HistoryTestListening() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const title = test ? test.type : ''; 
     const data = test?.testListenings;
-    const [focusId,setfocusId] = useState();
+    const [focusId,setFocusId] = useState();
     
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const testResult =  await getTest(state.testId,"ACTIVE");
-        const historyTestResult = await getSubmitTest(state.id);
-
-        if (testResult) {
-          const updateDataTest = (data) => {
-            let serialCounter = 1; 
-            data.testListenings = data.testListenings.map((item) => ({
-              ...item,
-              questions: item.questions.map((question) =>
-                question.serial !== undefined
-                  ? { ...question, serial: serialCounter++ }
-                  : question
-              ),
-            }));
-            return data;
-          };
+        const result = await getHistoryTest(state, navigate);
+        if (result) {
+          const { test, submitTest } = result;
   
-          const updatedData = updateDataTest(testResult);
-     
-          setTest(updatedData);
-        }
-        if (historyTestResult) {
-          setHistoryTest(historyTestResult);
+          if (test) {
+            const updateDataTest = (data) => {
+              let serialCounter = 1;
+              return {
+                ...data,
+                testListenings: data.testListenings.map((item) => ({
+                  ...item,
+                  questions: item.questions.map((question) => ({
+                    ...question,
+                    serial: question.serial !== undefined ? serialCounter++ : question.serial,
+                  })),
+                })),
+              };
+            };
+  
+            const updatedData = updateDataTest(test);
+            setTest(updatedData); 
+          }
+  
+          if (submitTest) {
+            setHistoryTest(submitTest); 
+          }
         }
       } catch (err) {
         setError("Failed to fetch test data");
@@ -58,7 +59,7 @@ function HistoryTestListening() {
     };
 
     fetchData();
-  }, [state.id, state.testId]);
+  }, [state, state?.id, state?.testId]);
 
 if (loading) {
     return <div>Loading...</div>;
@@ -76,23 +77,6 @@ const handleTestAgain = () => {
     navigate('/student/test/listening', { state });
   };
 
-const handlebtnPrevious = () => {
-  setIndexVisible((prevIndex) => {
-    if (prevIndex > 0) {
-      return prevIndex - 1;
-    }
-    return prevIndex;
-  });
-};
-
-const handlebtnNext = () => {
-  setIndexVisible((prevIndex) => {
-    if (data.length > prevIndex + 1) {
-      return prevIndex + 1;
-    }
-    return prevIndex;
-  });
-};
 
 const evaluateListeningTestResults = () => {
 
@@ -114,27 +98,26 @@ const evaluateListeningTestResults = () => {
   );
 };
 
-
-
-
 const handleItemClick = (serial) => {
 
     const newIndex = data.findIndex(dataItem => 
       dataItem.questions.some(question => question.serial === serial)
     );
-
+    setFocusId(serial);
+    
     if (newIndex !== -1) {
       setIndexVisible(newIndex); 
     } else {
       console.error("TestListening not found for serial:", serial);
     }
+
   };
 
 const getListSerialQuestion = () => {
   const serials = []; 
 
-  data.map(dataitem => 
-    dataitem.questions.map(question => {
+  data.map(dataListening => 
+    dataListening.questions.map(question => {
       serials.push(question.serial);
       return question.serial; 
     })
@@ -144,20 +127,22 @@ const getListSerialQuestion = () => {
 
   return (
     <Box>
+       <MainTitle
+        title="Listening"
+        bg="https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
+      />
       <Box sx={{ marginTop: '5%', marginBottom: '1rem', padding: '0.5rem 1rem', display: 'flex', justifyContent: 'center', marginLeft: '5%', marginRight:  '25%' }}>
-        <Box sx={{ display: 'flex', mt: 5, marginLeft: '5%', width: '45%', justifyContent: 'center' }}>
-         <Button variant="contained" sx={{ background: '#00796B', padding: '0.5rem', width: '7rem', fontSize: '1rem', fontFamily: 'Roboto', fontWeight: '500' }}
-              startIcon={<img src="/btn_previous.png" alt="Previous" style={{ width: '1rem', height: '1rem' }} />} onClick={handlebtnPrevious}  >Previous</Button>
-          <Box variant="body1" sx={{ mx: 2, background: '#E0F7FA', padding: '0.5rem 2rem', textAlign: 'center', alignContent: 'center', fontSize: '1rem', fontFamily: 'Roboto', fontWeight: '500' }}>{(indexVisible + 1)}/{data.length}</Box>
-            <Button variant="contained" sx={{ background: '#00796B', padding: '0.5rem 1rem', width: '7rem', fontSize: '1rem', fontFamily: 'Roboto', fontWeight: '500' }}
-              endIcon={<img src="/btn_next.png" alt="Next" style={{ width: '1rem', height: '1rem' }}  />} onClick={handlebtnNext}>Next</Button>
-        </Box>
+      <BtnPreviousNextContentTest
+        indexVisible={indexVisible}
+        setIndexVisible={setIndexVisible}
+        sumContent={test?.testListenings?.length || 0}
+      />
       </Box>
       <Box sx={{ display: 'flex',  marginLeft: '5%', marginRight: '5%',marginBottom: '1rem'  }}>
       <Box sx={{  width: '100%' }}>
         <Box sx={{ border: '1px solid black', borderRadius: '1rem', padding: '0.5rem',  width: '100%' }}>
             <OneListeningTest 
-                onelistening={data[indexVisible]} 
+                oneListening={data[indexVisible]} 
                 dataSubmitTest ={historyTest.submitTestListeningAnswers}
                 focusId={focusId}
             /> 

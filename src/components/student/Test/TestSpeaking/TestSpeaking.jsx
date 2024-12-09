@@ -9,14 +9,12 @@ function TestSpeaking() {
   const location = useLocation();
   const { state } = location;
   const [datatest, setDataTest] = useState(null);
-  const [submitTest, setSubmitTest] = useState(null);
-  const [storeName, setStoreName] = useState(null);
+ 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const title = datatest ? datatest.type : "";
-  const [version, setVersion] = useState(0);
 
-  const [status, setStatus] = useState("Testing");
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,7 +37,7 @@ function TestSpeaking() {
           const updatedData = updateDataTest(data);
 
           setDataTest(updatedData);
-          setStoreName("MyStore" + data.id);
+
         } else {
           setDataTest(null);
         }
@@ -72,11 +70,9 @@ function TestSpeaking() {
       <Box sx={{ marginLeft: "5%", marginRight: "5%", marginBottom: "1rem" }}>
         <Box sx={{ marginTop: "1rem" }}>
           <SpeakingTesting
-            key={version}
+
             datatest={datatest}
-            status={status}
-            setStatus={setStatus}
-            setSubmitTest={setSubmitTest}
+ 
           />
         </Box>
       </Box>

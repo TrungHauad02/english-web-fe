@@ -64,7 +64,7 @@ const EssayInput = ({ value = '' }) => {
   );
 };
 
-function ContentTestWriting({ oneWriting, oneHistoryWriting, onClickTestAgain, Maxscore }) {
+function ContentTestWriting({ oneWriting, oneHistoryWriting, onClickTestAgain, maxScore }) {
   return (
     <>
       <Box sx={{ display: 'flex', marginTop: '2%' }}>
@@ -81,7 +81,7 @@ function ContentTestWriting({ oneWriting, oneHistoryWriting, onClickTestAgain, M
                   color: 'red',
                 }}
               >
-                {oneHistoryWriting?.score + "/" + Maxscore || ''}
+                {oneHistoryWriting?.score + "/" + maxScore || ''}
               </Typography>
             </Box>
             <Typography variant="body1" sx={{ marginTop: '1rem' }}>

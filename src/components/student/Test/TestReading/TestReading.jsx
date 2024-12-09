@@ -307,7 +307,7 @@ function TestReading() {
       <BtnPreviousNextContentTest
         indexVisible={indexVisible}
         setIndexVisible={setIndexVisible}
-        sumcontent={datatest.testReadings.length}
+        sumContent={datatest.testReadings.length}
       />
       <Box
         sx={{
