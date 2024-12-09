@@ -9,8 +9,8 @@ export default function useAnswerQuestion(path) {
   const [localData, setLocalData] = useState(null);
   const [error, setError] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
-  const { id } = useParams();
   const [idIndex, setIdIndex] = useState(null);
+  const { id } = useParams();
 
   const fetchData = async () => {
     try {

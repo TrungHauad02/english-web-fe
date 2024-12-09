@@ -11,11 +11,21 @@ import handleError from "shared/utils/handleError";
 export default function useQuestion(data, fetchData, setError, path) {
   const [question, setQuestion] = useState(data);
   const [isEditing, setIsEditing] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [idIndex, setIdIndex] = useState(null);
 
   useEffect(() => {
     setQuestion(data);
   }, [data]);
+  const handleOpenDialog = (id, index) => {
+    setIdIndex({ id, index });
+    setOpenDialog(true);
+  };
 
+  const handleCloseDialog = () => {
+    setIdIndex(null);
+    setOpenDialog(false);
+  };
   function handleEdit() {
     setIsEditing(true);
   }
@@ -96,7 +106,8 @@ export default function useQuestion(data, fetchData, setError, path) {
     setQuestion({ ...question, answers: newAnswers });
   }
 
-  async function onDeleteAnswer(id, index) {
+  async function onDeleteAnswer() {
+    const { id, index } = idIndex;
     if (!isEditing) return;
     if (id === "-1") {
       setQuestion((prevData) => ({
@@ -155,5 +166,8 @@ export default function useQuestion(data, fetchData, setError, path) {
     onChangeAnswerStatus,
     onChangeStatus,
     onDeleteAnswer,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   };
 }
