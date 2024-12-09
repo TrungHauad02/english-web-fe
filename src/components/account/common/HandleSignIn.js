@@ -9,9 +9,7 @@ export const handleSignIn = async (email, password, authContext, navigate) => {
     if (!authenticate) {
       throw new Error("Authentication failed");
     }
-
-    sessionStorage.setItem("authToken", token);
-    localStorage.setItem("userId", id);
+    sessionStorage.setItem("userId", id);
 
     authContext.SignIn(token);
 

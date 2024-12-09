@@ -16,7 +16,7 @@ export default function AuthProvider({ children }) {
 
   useEffect(() => {
     const token = sessionStorage.getItem("authToken");
-    const expirationTime = localStorage.getItem("tokenExpiration");
+    const expirationTime = sessionStorage.getItem("tokenExpiration");
 
     if (token && expirationTime && new Date() < new Date(expirationTime)) {
       setAuthenticated(true);
@@ -24,7 +24,7 @@ export default function AuthProvider({ children }) {
       setUserRole(getRoleFromToken());
     } else {
       sessionStorage.removeItem("authToken");
-      localStorage.removeItem("tokenExpiration");
+      sessionStorage.removeItem("tokenExpiration");
       setAuthenticated(false);
       setAuthToken(null);
       setUserRole(null);
@@ -36,7 +36,7 @@ export default function AuthProvider({ children }) {
     setAuthenticated(true);
     setAuthToken(token);
     sessionStorage.setItem("authToken", token);
-    localStorage.setItem("tokenExpiration", expirationTime);
+    sessionStorage.setItem("tokenExpiration", expirationTime);
     setUserRole(getRoleFromToken());
     toast.success("Login successfully")
   }
@@ -46,7 +46,7 @@ export default function AuthProvider({ children }) {
     setAuthToken(null);
     setUserRole(null);
     sessionStorage.removeItem("authToken");
-    localStorage.removeItem("tokenExpiration");
+    sessionStorage.removeItem("tokenExpiration");
     Cookies.remove('JSESSIONID'); 
     toast.info("Logout");
   }
