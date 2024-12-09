@@ -82,15 +82,21 @@ function HeaderStudent() {
           component={NavLink}
           to="/student/topics"
           sx={{
-            backgroundColor: isActivePath(location, "/student/topics") ? "#fff" : "transparent",
-            color: isActivePath(location, "/student/topics") ? "#4A475C" : "white",
+            backgroundColor: isActivePath(location, "/student/topics")
+              ? "#fff"
+              : "transparent",
+            color: isActivePath(location, "/student/topics")
+              ? "#4A475C"
+              : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             textTransform: "none",
             fontSize: "10rem",
             "&:hover": {
-              backgroundColor: isActivePath(location, "/student/topics") ? "#fff" : "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath(location, "/student/topics")
+                ? "#fff"
+                : "rgba(255, 255, 255, 0.2)",
             },
           }}
         >
@@ -100,14 +106,20 @@ function HeaderStudent() {
           component={NavLink}
           to="/student/grammars"
           sx={{
-            backgroundColor: isActivePath(location, "/student/grammars") ? "#fff" : "transparent",
-            color: isActivePath(location, "/student/grammars") ? "#4A475C" : "white",
+            backgroundColor: isActivePath(location, "/student/grammars")
+              ? "#fff"
+              : "transparent",
+            color: isActivePath(location, "/student/grammars")
+              ? "#4A475C"
+              : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             textTransform: "none",
             "&:hover": {
-              backgroundColor: isActivePath(location, "/student/grammars") ? "#fff" : "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath(location, "/student/grammars")
+                ? "#fff"
+                : "rgba(255, 255, 255, 0.2)",
             },
           }}
         >
@@ -122,14 +134,20 @@ function HeaderStudent() {
           component={NavLink}
           to="/student/tests"
           sx={{
-            backgroundColor: isActivePath(location, "/student/tests") ? "#fff" : "transparent",
-            color: isActivePath(location, "/student/tests") ? "#4A475C" : "white",
+            backgroundColor: isActivePath(location, "/student/tests")
+              ? "#fff"
+              : "transparent",
+            color: isActivePath(location, "/student/tests")
+              ? "#4A475C"
+              : "white",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             textTransform: "none",
             "&:hover": {
-              backgroundColor: isActivePath(location, "/student/tests") ? "#fff" : "rgba(255, 255, 255, 0.2)",
+              backgroundColor: isActivePath(location, "/student/tests")
+                ? "#fff"
+                : "rgba(255, 255, 255, 0.2)",
             },
           }}
         >
@@ -161,14 +179,32 @@ function HeaderStudent() {
             },
           }}
         >
-          <MenuItem onClick={handleProfileOpen} sx={{ borderBottom: "1px solid rgba(255, 255, 255, 0.5)", color: "white" }}>
+          <MenuItem
+            onClick={handleProfileOpen}
+            sx={{
+              borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+              color: "white",
+            }}
+          >
             Profile
           </MenuItem>
-          <MenuItem onClick={() => navigate("/student/history-test")} sx={{ borderBottom: "3px solid #ffff", color: "white" }}>
+          <MenuItem
+            onClick={() => navigate("/student/history-test")}
+            sx={{ borderBottom: "3px solid #ffff", color: "white" }}
+          >
             History Test
           </MenuItem>
           {isAuthenticated && (
-            <MenuItem onClick={handleLogout} sx={{ color: "red", fontWeight: "bold" }}>
+            <MenuItem
+              onClick={handleLogout}
+              sx={{
+                color: "#000",
+                fontWeight: "bold",
+                "&:hover": {
+                  color: "#df4242",
+                },
+              }}
+            >
               Logout
             </MenuItem>
           )}

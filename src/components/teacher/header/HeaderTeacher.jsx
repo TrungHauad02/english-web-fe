@@ -74,7 +74,7 @@ function HeaderTeacher() {
 
       <Stack direction={"row"} alignItems={"center"} spacing={2}>
         <IconButton onClick={handleMenuClick}>
-        <img
+          <img
             src={avatar}
             alt="User Icon"
             style={{
@@ -98,11 +98,26 @@ function HeaderTeacher() {
             },
           }}
         >
-          <MenuItem onClick={handleProfileOpen} sx={{ borderBottom: "1px solid rgba(255, 255, 255, 0.5)", color: "white" }}>
+          <MenuItem
+            onClick={handleProfileOpen}
+            sx={{
+              borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+              color: "white",
+            }}
+          >
             Profile
           </MenuItem>
           {isAuthenticated && (
-            <MenuItem onClick={handleLogout} sx={{ color: "red", fontWeight: "bold" }}>
+            <MenuItem
+              onClick={handleLogout}
+              sx={{
+                color: "#000",
+                fontWeight: "bold",
+                "&:hover": {
+                  color: "#df4242",
+                },
+              }}
+            >
               Logout
             </MenuItem>
           )}
