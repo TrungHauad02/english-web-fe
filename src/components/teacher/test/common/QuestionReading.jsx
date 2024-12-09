@@ -310,16 +310,16 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
         );
 
         await Promise.all(
-          questionsDelete.map(async (questiondelete) => {
-            await updateTestReadingQuestion(questiondelete.id, questiondelete);
+          questionsDelete.map(async (questionDelete) => {
+            await updateTestReadingQuestion(questionDelete.id, questionDelete);
           })
         );
-        for (const questiondelete of questionsDelete) {
+        for (const questionDelete of questionsDelete) {
           await DeleteQuestionTest(
             initialData.test.id,
             "READING",
-            questiondelete,
-            questiondelete.serial,
+            questionDelete,
+            questionDelete.serial,
             1
           );
         }

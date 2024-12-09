@@ -15,11 +15,10 @@ import { getTestSpeaking } from "api/test/TestSpeakingApi";
 import { getTestMixingQuestion } from "api/test/TestMixingQuestionApi";
 import { getTestWriting } from "api/test/TestWritingApi";
 import DeleteSubmitTestDialog from "../common/DeleteSubmitTestDialog";
-import { da } from "date-fns/locale";
 function Mixing() {
   const location = useLocation();
   const { state } = location;
-  const [datatest, setdatatest] = useState(null);
+  const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [questionUpdate, setQuestionUpdate] = useState();
@@ -35,11 +34,11 @@ function Mixing() {
       try {
         const data = await getTest(state.id);
         if (data) {
-          setdatatest(data);
+          setTest(data);
     
           
         } else {
-          setdatatest(null); 
+          setTest(null); 
         }
       } catch (err) {
         setError("Failed to fetch test data");
@@ -78,8 +77,8 @@ function Mixing() {
     });
   };
   const BooleanDeleteSubmitTest = async () => {
-    if (datatest?.submitTestIds?.length > 0) {
-      setSubmitTestIds(datatest?.submitTestIds)
+    if (test?.submitTestIds?.length > 0) {
+      setSubmitTestIds(test?.submitTestIds)
       setOpenDialogDeleteSubmitTest(true);
   
       const dialogResult = await waitForDialogAction(
@@ -149,7 +148,7 @@ function Mixing() {
         default:
           fetchedData = null;
       }
-      fetchedData.test = datatest;
+      fetchedData.test = test;
 
 
       setQuestionData(fetchedData);
@@ -213,10 +212,10 @@ function Mixing() {
       <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch", marginRight: "5%",
         marginLeft: "5%", }}>
         <Box sx={{ flex: 4, minHeight: 0 }}>
-          <InformationTest data={datatest} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}/>
+          <InformationTest data={test} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}/>
         </Box>
         <Box sx={{ marginLeft: "2%", flex: 6, minHeight: 0 }}>
-          <QuestionListTest   data={datatest} handleRowClick={handleRowClick} setQuestionUpdate = { setQuestionUpdate} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
+          <QuestionListTest   data={test} handleRowClick={handleRowClick} setQuestionUpdate = { setQuestionUpdate} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
         </Box>
       </Box>
       {renderQuestionComponent()}

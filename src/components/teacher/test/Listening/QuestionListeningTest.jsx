@@ -266,18 +266,18 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest }) {
             })
         );
         await Promise.all(
-          questionsDelete.map(async (questiondelete) => {
+          questionsDelete.map(async (questionDelete) => {
             await updateTestListeningQuestion(
-              questiondelete.id,
-              questiondelete
+              questionDelete.id,
+              questionDelete
             );
           })
         );
-        for (const questiondelete of questionsDelete) {
+        for (const questionDelete of questionsDelete) {
           await DeleteQuestionListeningTest(
             initialData.test.id,
-            questiondelete,
-            questiondelete.serial,
+            questionDelete,
+            questionDelete.serial,
             1
           );
         }

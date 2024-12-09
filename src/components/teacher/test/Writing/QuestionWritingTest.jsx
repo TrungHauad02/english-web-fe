@@ -45,9 +45,9 @@ const QuestionWriting = ({ data, handleWriting, BooleanDeleteSubmitTest }) => {
           `Successfully created question serial ${data.serial} of Part Writing.`
         );
       } else {
-        const testwriting = await updateTestWriting(data.id, data);
-        testwriting.type = "WRITING";
-        handleWriting(testwriting);
+        const testWriting = await updateTestWriting(data.id, data);
+        testWriting.type = "WRITING";
+        handleWriting(testWriting);
         toast.success(
           `Successfully updated question serial ${data.serial} of Part Writing.`
         );

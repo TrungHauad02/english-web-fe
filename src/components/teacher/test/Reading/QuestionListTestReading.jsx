@@ -44,17 +44,17 @@ function QuestionList({
   setQuestionUpdate,
   BooleanDeleteSubmitTest,
 }) {
-  const [datamixing, setDatamixing] = useState([]);
+  const [dataMixing, setDataMixing] = useState([]);
   const { Color2, Color2_1 } = useColor();
 
   useEffect(() => {
     const initialDataMixing = [
       {
         type: "READING",
-        dataitem: data?.testReadings || [],
+        dataItem: data?.testReadings || [],
       },
     ];
-    setDatamixing(initialDataMixing);
+    setDataMixing(initialDataMixing);
   }, [data]);
 
   const handleStatusChange = async (event, itemUpdate) => {
@@ -70,7 +70,7 @@ function QuestionList({
     })
       .then((response) => {
         toast.success(
-          `Status of serial ${itemUpdate.serialquestion} with Reading updated successfully!`
+          `Status of serial ${itemUpdate.serialQuestion} with Reading updated successfully!`
         );
         setQuestionUpdate(itemUpdate);
       })
@@ -81,23 +81,23 @@ function QuestionList({
   const getListSerialTest = () => {
     const questions = [];
 
-    datamixing.forEach((data) => {
+    dataMixing.forEach((data) => {
       if (data.type === "READING") {
-        data.dataitem?.forEach((item) => {
+        data.dataItem?.forEach((item) => {
           item.type = data.type;
           const serials =
             item?.questions
               ?.map((q) => q.serial)
               .filter((serial) => serial != null) || [];
           if (serials.length === 1) {
-            item.serialquestion = serials[0];
+            item.serialQuestion = serials[0];
           } else if (serials.length === 2) {
-            item.serialquestion = serials[0] + "-" + serials[1];
+            item.serialQuestion = serials[0] + "-" + serials[1];
           } else if (serials.length > 2) {
-            item.serialquestion =
+            item.serialQuestion =
               serials[0] + "-" + serials[serials.length - 1];
           } else {
-            item.serialquestion = "";
+            item.serialQuestion = "";
           }
           questions.push(item);
         });
@@ -189,7 +189,7 @@ function QuestionList({
         onClose={handleCloseDialogDelete}
         onAgree={handleDeleteQuestion}
         title="Confirm Deletion"
-        content={`Are you sure you want to delete serial ${itemDelete.serialquestion} of Test Reading?`}
+        content={`Are you sure you want to delete serial ${itemDelete.serialQuestion} of Test Reading?`}
         cancelText="Cancel"
         agreeText="Delete"
       />
@@ -216,7 +216,7 @@ function QuestionList({
             {questions.map((question) => (
               <TableRow key={question?.id}>
                 <TableCell onClick={() => handleRowClick(question)}>
-                  {question?.serialquestion}
+                  {question?.serialQuestion}
                 </TableCell>
                 <TableCell
                   align="center"

@@ -67,6 +67,7 @@ function QuestionList({
   BooleanDeleteSubmitTest,
 }) {
   const [currentTab, setCurrentTab] = useState(0);
+  const [dataMixing, setDataMixing] = useState([]);
 
   const { Color2, Color2_1 } = useColor();
   const tabs = [
@@ -77,8 +78,7 @@ function QuestionList({
     "SPEAKING",
     "WRITING",
   ];
-  const [datamixing, setDatamixing] = useState([]);
-
+  
   useEffect(() => {
     const initialDataMixing = [
       {
@@ -97,22 +97,22 @@ function QuestionList({
       },
       {
         type: "READING",
-        dataitem: data?.testReadings || [],
+        dataItem: data?.testReadings || [],
       },
       {
         type: "LISTENING",
-        dataitem: data?.testListenings || [],
+        dataItem: data?.testListenings || [],
       },
       {
         type: "SPEAKING",
-        dataitem: data?.testSpeakings || [],
+        dataItem: data?.testSpeakings || [],
       },
       {
         type: "WRITING",
-        dataitem: data?.testWritings || [],
+        dataItem: data?.testWritings || [],
       },
     ];
-    setDatamixing(initialDataMixing);
+    setDataMixing(initialDataMixing);
   }, [data]);
 
   const handleTabChange = (event, newValue) => {
@@ -122,10 +122,10 @@ function QuestionList({
   const getListSerialTest = () => {
     const questions = [];
 
-    datamixing.forEach((data) => {
+    dataMixing.forEach((data) => {
       if (data.type === "GRAMMAR" || data.type === "VOCABULARY") {
         data.questions?.forEach((question) => {
-          question.serialquestion = question.serial || "";
+          question.serialQuestion = question.serial || "";
           questions.push(question);
         });
       }
@@ -135,29 +135,29 @@ function QuestionList({
         data.type === "LISTENING" ||
         data.type === "SPEAKING"
       ) {
-        data.dataitem?.forEach((item) => {
+        data.dataItem?.forEach((item) => {
           item.type = data.type;
           const serials =
             item?.questions
               ?.map((q) => q.serial)
               .filter((serial) => serial != null) || [];
           if (serials.length === 1) {
-            item.serialquestion = serials[0];
+            item.serialQuestion = serials[0];
           } else if (serials.length === 2) {
-            item.serialquestion = serials[0] + "-" + serials[1];
+            item.serialQuestion = serials[0] + "-" + serials[1];
           } else if (serials.length > 2) {
-            item.serialquestion =
+            item.serialQuestion =
               serials[0] + "-" + serials[serials.length - 1];
           } else {
-            item.serialquestion = "";
+            item.serialQuestion = "";
           }
           questions.push(item);
         });
       }
       if (data.type === "WRITING") {
-        data.dataitem?.forEach((item) => {
+        data.dataItem?.forEach((item) => {
           item.type = data.type;
-          item.serialquestion = item.serial;
+          item.serialQuestion = item.serial;
           questions.push(item);
         });
       }
@@ -201,7 +201,7 @@ function QuestionList({
     })
       .then((response) => {
         toast.success(
-          `Status of serial ${itemUpdate.serialquestion} with  ${
+          `Status of serial ${itemUpdate.serialQuestion} with  ${
             currentTab > 1 ? "Part" : "Question"
           }  ${tabs[currentTab]} updated successfully!`
         );
@@ -234,7 +234,7 @@ function QuestionList({
         type: "VOCABULARY",
         explanation: "",
         serial:
-          (datamixing
+          (dataMixing
             .find((data) => data.type === "VOCABULARY")
             ?.questions?.slice(-1)[0]?.serial || 0) + 1,
         content: "",
@@ -244,10 +244,10 @@ function QuestionList({
         type: "GRAMMAR",
         explanation: "",
         serial:
-          (datamixing
+          (dataMixing
             .find((data) => data.type === "GRAMMAR")
             ?.questions?.slice(-1)[0]?.serial ||
-            datamixing
+            dataMixing
               .find((data) => data.type === "VOCABULARY")
               ?.questions?.slice(-1)[0]?.serial ||
             0) + 1,
@@ -342,7 +342,7 @@ function QuestionList({
     if (!result) {
       return;
     }
-    
+
     setItemDelete(itemDelete);
     setOpenDialogDelete(true);
   };
@@ -382,7 +382,7 @@ function QuestionList({
       )
         .then(() => {
           toast.success(
-            `Successfully deleted serial ${itemDelete.serialquestion} with  ${
+            `Successfully deleted serial ${itemDelete.serialQuestion} with  ${
               currentTab > 1 ? "Part" : "Question"
             }: ${tabs[currentTab]}.`
           );
@@ -391,7 +391,7 @@ function QuestionList({
         })
         .catch(() => {
           toast.error(
-            `Failed to delete serial ${itemDelete.serialquestion} with  ${
+            `Failed to delete serial ${itemDelete.serialQuestion} with  ${
               currentTab > 1 ? "Part" : "Question"
             }: ${tabs[currentTab]}.`
           );
@@ -412,7 +412,7 @@ function QuestionList({
         onAgree={handleAgreeDelete}
         title="Confirm Deletion"
         content={`Are you sure you want to delete serial ${
-          itemDelete.serialquestion
+          itemDelete.serialQuestion
         } with ${currentTab > 1 ? "part" : "question"} ${tabs[currentTab]}?`}
         cancelText="Cancel"
         agreeText="Delete"
@@ -450,7 +450,7 @@ function QuestionList({
             {filteredQuestions.map((question) => (
               <TableRow key={question?.id}>
                 <TableCell onClick={() => handleRowClick(question)}>
-                  {question?.serialquestion}
+                  {question?.serialQuestion}
                 </TableCell>
                 <TableCell
                   align="center"

@@ -7,8 +7,8 @@ import { deleteTestWriting, updateTestWriting } from 'api/test/TestWritingApi';
 import { deleteTestSpeaking, updateTestSpeaking } from 'api/test/TestSpeakingApi';
 import { getTest  } from 'api/test/TestApi';
 import { deleteTestListening, updateTestListening } from "api/test/TestListeningApi";
-export async function DeleteQuestionTest(idtest, type, testDelete, serialQuestionUpdateOfQuestionMaxTest,minus) {
-    const test = await getTest(idtest);
+export async function DeleteQuestionTest(idTest, type, testDelete, serialQuestionUpdateOfQuestionMaxTest,minus) {
+    const test = await getTest(idTest);
 
     const testMixingQuestions = test.testMixingQuestions;
     const testListenings = test.testListenings;

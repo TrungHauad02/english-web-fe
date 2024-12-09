@@ -2,8 +2,8 @@ import { deleteTestReadingQuestion, updateTestReadingQuestion } from "api/test/T
 import { getTest } from 'api/test/TestApi';
 import { deleteTestReading, updateTestReading } from 'api/test/TestReadingApi';
 
-export async function DeleteQuestionReadingTest(idtest, testDelete, serialQuestionUpdateOfQuestionMaxTest, minus) {
-    const test = await getTest(idtest);
+export async function DeleteQuestionReadingTest(idTest, testDelete, serialQuestionUpdateOfQuestionMaxTest, minus) {
+    const test = await getTest(idTest);
 
     const testReadings = test.testReadings;
 
