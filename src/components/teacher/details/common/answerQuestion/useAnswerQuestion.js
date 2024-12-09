@@ -8,7 +8,9 @@ import {
 export default function useAnswerQuestion(path) {
   const [localData, setLocalData] = useState(null);
   const [error, setError] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
   const { id } = useParams();
+  const [idIndex, setIdIndex] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -17,7 +19,8 @@ export default function useAnswerQuestion(path) {
         return;
       }
       const listQuestionData = await getAnswerQuestions(path, id);
-      setLocalData(listQuestionData);
+      const sortedList = listQuestionData.sort((a, b) => a.serial - b.serial);
+      setLocalData(sortedList);
     } catch (error) {
       setError(error.response.data.message);
     }
@@ -26,6 +29,16 @@ export default function useAnswerQuestion(path) {
   useEffect(() => {
     fetchData();
   }, [id, path]);
+
+  const handleOpenDialog = (id, index) => {
+    setIdIndex({ id, index });
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIdIndex(null);
+    setOpenDialog(false);
+  };
 
   function handleAddNewQuestion() {
     if (id === "-1" || !localData) {
@@ -61,7 +74,8 @@ export default function useAnswerQuestion(path) {
     setLocalData([...localData, newQuestion[path]]);
   }
 
-  async function onDelQuestion(id, index) {
+  async function onDelQuestion() {
+    const { id, index } = idIndex;
     if (id === "-1") {
       setLocalData((prevData) => prevData.filter((_, i) => i !== index));
       return;
@@ -81,5 +95,8 @@ export default function useAnswerQuestion(path) {
     onDelQuestion,
     error,
     setError,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   };
 }
