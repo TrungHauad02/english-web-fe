@@ -7,7 +7,6 @@ import BtnPreviousNextContentTest from "../common/BtnPreviousNextContentTest";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getTest } from "api/test/TestApi";
 import { createSubmitTest } from "../../../../api/test/submitTest";
-import { fetchUserInfo } from "../../../../api/user/userService";
 import { createSubmitTestReadingAnswer } from "../../../../api/test/submitTestReadingAnswer";
 import { commentReadingQuestion } from "../../../../api/test/commentTest";
 import CountdownTimer from "../common/CountdownTimer";
@@ -148,14 +147,14 @@ function TestReading() {
   const handleBtnSubmit = async () => {
     setIsSubmitting(true);
     const score = calculateScore();
-    let user = await fetchUserInfo();
+    const userId = sessionStorage.getItem('userId');
     const vietnamTime = new Date()
       .toLocaleString("en-CA", { timeZone: "Asia/Ho_Chi_Minh", hour12: false })
       .replace(", ", "T");
     let submitTest = {
       id: "",
       testId: test.id,
-      userId: user.id,
+      userId: userId,
       score: score,
       status: "ACTIVE",
       submitTime: vietnamTime,

@@ -49,7 +49,7 @@ function QuestionListWriting({ data, handleRowClick, setQuestionUpdate,BooleanDe
       const formattedQuestions = data.testWritings.map((item) => ({
         ...item,
         type: "WRITING",
-        serialquestion: item.serial,
+        serialQuestion: item.serial,
       }));
       setQuestions(formattedQuestions);
     }
@@ -108,11 +108,11 @@ function QuestionListWriting({ data, handleRowClick, setQuestionUpdate,BooleanDe
       );
 
       await deleteTestWriting(itemDelete.id);
-      toast.success(`Deleted serial ${itemDelete.serialquestion} test writing successfully!`);
+      toast.success(`Deleted serial ${itemDelete.serialQuestion} test writing successfully!`);
       setQuestionUpdate(itemDelete);
       setOpenDialogDelete(false);
     } catch (error) {
-      toast.error(`Failed to delete serial ${itemDelete.serialquestion}!`);
+      toast.error(`Failed to delete serial ${itemDelete.serialQuestion}!`);
       console.error("Failed to delete question:", error);
     }
   };
@@ -139,7 +139,7 @@ function QuestionListWriting({ data, handleRowClick, setQuestionUpdate,BooleanDe
         onClose={handleCloseDialogDelete}
         onAgree={handleDeleteQuestion}
         title="Confirm Deletion"
-        content={`Are you sure you want to delete serial ${itemDelete?.serialquestion} of Test Writing?`}
+        content={`Are you sure you want to delete serial ${itemDelete?.serialQuestion} of Test Writing?`}
         cancelText="Cancel"
         agreeText="Delete"
         sx={{
@@ -167,7 +167,7 @@ function QuestionListWriting({ data, handleRowClick, setQuestionUpdate,BooleanDe
           <TableBody>
             {questions.map((question) => (
               <TableRow key={question?.id}>
-                <TableCell onClick={() => handleRowClick(question)}>{question?.serialquestion}</TableCell>
+                <TableCell onClick={() => handleRowClick(question)}>{question?.serialQuestion}</TableCell>
                 <TableCell align="center" onClick={() => handleRowClick(question)}>
                   {question?.type?.charAt(0) + question?.type?.slice(1)?.toLowerCase()}
                 </TableCell>

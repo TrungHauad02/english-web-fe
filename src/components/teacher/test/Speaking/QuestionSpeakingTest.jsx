@@ -77,11 +77,11 @@ const TestSpeakingForm = ({
         formData.questions && formData.questions.length > 0
           ? Math.max(...formData.questions.map((q) => q.serial)) + 1
           : (() => {
-              const smalllerSpeaking = (
+              const speakings = (
                 initialData.test.testSpeakings || []
               ).filter((Speaking) => Speaking.serial < formData.serial);
-              if (smalllerSpeaking.length > 0) {
-                const allQuestions = smalllerSpeaking.flatMap(
+              if (speakings.length > 0) {
+                const allQuestions = speakings.flatMap(
                   (Speaking) => Speaking.questions || []
                 );
                 if (allQuestions.length > 0) {
@@ -288,11 +288,11 @@ const TestSpeakingForm = ({
           })
       );
 
-      for (const questiondelete of questionsDelete) {
+      for (const questionDelete of questionsDelete) {
         await DeleteQuestionSpeakingTest(
           initialData.test.id,
-          questiondelete,
-          questiondelete.serial,
+          questionDelete,
+          questionDelete.serial,
           1
         );
       }

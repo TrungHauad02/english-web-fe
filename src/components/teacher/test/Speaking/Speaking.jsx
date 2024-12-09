@@ -11,7 +11,7 @@ import DeleteSubmitTestDialog from "../common/DeleteSubmitTestDialog";
 function SpeakingTest() {
   const location = useLocation();
   const { state } = location;
-  const [datatest, setdatatest] = useState(null);
+  const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [questionData, setQuestionData] = useState(null);
@@ -23,10 +23,10 @@ function SpeakingTest() {
       try {
         const data = await getTest(state.id);
         if (data) {
-          setdatatest(data);
+          setTest(data);
           setSubmitTestIds(data.submitTestIds);
         } else {
-          setdatatest(null);
+          setTest(null);
         }
       } catch (err) {
         setError("Failed to fetch test data");
@@ -100,7 +100,7 @@ function SpeakingTest() {
         fetchedData = await getTestSpeaking(question.id);
       }
 
-      fetchedData.test = datatest;
+      fetchedData.test = test;
       setQuestionData(fetchedData);
       setVersion((prevData) => (prevData || 0) + 1);
     } catch (err) {
@@ -131,10 +131,10 @@ function SpeakingTest() {
       <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch" ,  marginRight: "5%",
         marginLeft: "5%",}}>
         <Box sx={{ flex: 4, minHeight: 0 }}>
-          <InformationTest data={datatest} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
+          <InformationTest data={test} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
         </Box>
         <Box sx={{ marginLeft: "2%", flex: 6, minHeight: 0 }}>
-          <QuestionListTest data={datatest} handleRowClick={handleRowClick} setQuestionUpdate={setQuestionUpdate} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
+          <QuestionListTest data={test} handleRowClick={handleRowClick} setQuestionUpdate={setQuestionUpdate} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
         </Box>
       </Box>
       {questionData && (

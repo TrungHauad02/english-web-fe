@@ -5,7 +5,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getTest } from "api/test/TestApi";
 import { createSubmitTest } from "../../../../api/test/submitTest";
-import { fetchUserInfo } from "../../../../api/user/userService";
 import { createSubmitTestListeningAnswer } from "../../../../api/test/submitTestListeningAnswer";
 import { commentListeningQuestion } from "../../../../api/test/commentTest";
 import CountdownTimer from "../common/CountdownTimer";
@@ -132,14 +131,14 @@ function TestListening() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const score = calculateScore();
-    let user = await fetchUserInfo();
+    const userId = sessionStorage.getItem('userId');
     const vietnamTime = new Date()
       .toLocaleString("en-CA", { timeZone: "Asia/Ho_Chi_Minh", hour12: false })
       .replace(", ", "T");
     let submitTest = {
       id: "",
       testId: test.id,
-      userId: user.id,
+      userId: userId,
       score: score,
       status: "ACTIVE",
       submitTime: vietnamTime,

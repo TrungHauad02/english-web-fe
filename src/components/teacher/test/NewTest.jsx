@@ -16,7 +16,7 @@ import { createTest } from '../../../api/test/TestApi';
 import { toast } from 'react-toastify';
 import HelpTextField from './common/HelpTextField';
 
-const NewTest = ({ open, onClose, serial, handlebtnDetail }) => {
+const NewTest = ({ open, onClose, serial, handleBtnDetail }) => {
   const [title, setTitle] = useState('');
   const [duration, setDuration] = useState('');
   const [testType, setTestType] = useState('');
@@ -37,7 +37,7 @@ const NewTest = ({ open, onClose, serial, handlebtnDetail }) => {
         });
 
         toast.success(`Created ${test.title} successfully!`);
-        handlebtnDetail(test);
+        handleBtnDetail(test);
         onClose();
       } catch (error) {
         toast.error(`Failed to create test ${title}`);

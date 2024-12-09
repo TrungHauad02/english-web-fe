@@ -9,7 +9,6 @@ import BtnPreviousNextContentTest from "../common/BtnPreviousNextContentTest";
 import { getTest } from "api/test/TestApi";
 import { createSubmitTest } from "../../../../api/test/submitTest";
 import { createSubmitTestWriting } from "../../../../api/test/submitTestWriting";
-import { fetchUserInfo } from "../../../../api/user/userService";
 import ContentTestWriting from "./ContentTestWriting";
 import { useLocation, useNavigate } from "react-router-dom";
 import CountdownTimer from "../common/CountdownTimer";
@@ -132,13 +131,13 @@ function TestWriting() {
     setIsSubmitting(true);
  
     try {
-      let user = await fetchUserInfo();
+      const userId = sessionStorage.getItem('userId');
       const vietnamTime = new Date().toLocaleString("en-CA", { timeZone: "Asia/Ho_Chi_Minh", hour12: false }).replace(", ", "T");
   
       let submitTest = {
         id: "",
         testId: test.id,
-        userId: user.id,
+        userId: userId,
         score: 0,
         status: "ACTIVE",
         submitTime: vietnamTime,

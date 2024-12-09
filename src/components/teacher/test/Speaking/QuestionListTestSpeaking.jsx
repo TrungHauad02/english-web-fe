@@ -39,7 +39,7 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
 }));
 
 function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSubmitTest }) {
-  const [datamixing, setDatamixing] = useState([]);
+  const [dataMixing, setDataMixing] = useState([]);
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [itemDelete, setItemDelete] = useState(null);
   const { Color2, Color2_1 } = useColor();
@@ -47,10 +47,10 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSub
     const initialDataMixing = [
       {
         type: "SPEAKING",
-        dataitem: data?.testSpeakings || [],
+        dataItem: data?.testSpeakings || [],
       },
     ];
-    setDatamixing(initialDataMixing);
+    setDataMixing(initialDataMixing);
   }, [data]);
 
   const handleStatusChange = async (event, itemUpdate) => {
@@ -64,30 +64,30 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSub
       status: event.target.checked ? "INACTIVE" : "ACTIVE",
     })
       .then(() => {
-        toast.success(`Status of serial ${itemUpdate.serialquestion} updated successfully!`);
+        toast.success(`Status of serial ${itemUpdate.serialQuestion} updated successfully!`);
         setQuestionUpdate(itemUpdate);
       })
       .catch(() => {
-        toast.error(`Failed to update status of serial ${itemUpdate.serialquestion}!`);
+        toast.error(`Failed to update status of serial ${itemUpdate.serialQuestion}!`);
       });
   };
 
   const getListSerialTest = () => {
     const questions = [];
 
-    datamixing.forEach((data) => {
+    dataMixing.forEach((data) => {
       if (data.type === "SPEAKING") {
-        data.dataitem?.forEach((item) => {
+        data.dataItem?.forEach((item) => {
           item.type = data.type;
           const serials = item?.questions?.map((q) => q.serial).filter((serial) => serial != null) || [];
           if (serials.length === 1) {
-            item.serialquestion = serials[0];
+            item.serialQuestion = serials[0];
           } else if (serials.length === 2) {
-            item.serialquestion = serials[0] + "-" + serials[1];
+            item.serialQuestion = serials[0] + "-" + serials[1];
           } else if (serials.length > 2) {
-            item.serialquestion = serials[0] + "-" + serials[serials.length - 1];
+            item.serialQuestion = serials[0] + "-" + serials[serials.length - 1];
           } else {
-            item.serialquestion = "";
+            item.serialQuestion = "";
           }
           questions.push(item);
         });
@@ -139,11 +139,11 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSub
 
       await DeleteQuestionSpeakingTest(data?.id, itemDelete, serial, minus)
         .then(() => {
-          toast.success(`Deleted serial ${itemDelete.serialquestion} successfully!`);
+          toast.success(`Deleted serial ${itemDelete.serialQuestion} successfully!`);
           setQuestionUpdate(itemDelete);
         })
         .catch(() => {
-          toast.error(`Failed to delete serial ${itemDelete.serialquestion}!`);
+          toast.error(`Failed to delete serial ${itemDelete.serialQuestion}!`);
         });
 
       setOpenDialogDelete(false);
@@ -174,7 +174,7 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSub
         onClose={handleCloseDialogDelete}
         onAgree={handleDeleteQuestion}
         title="Confirm Deletion"
-        content={`Are you sure you want to delete serial ${itemDelete?.serialquestion} of Test Speaking?`}
+        content={`Are you sure you want to delete serial ${itemDelete?.serialQuestion} of Test Speaking?`}
         cancelText="Cancel"
         agreeText="Delete"
       />
@@ -196,7 +196,7 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSub
           <TableBody>
             {questions.map((question) => (
               <TableRow key={question?.id}>
-                <TableCell onClick={() => handleRowClick(question)}>{question?.serialquestion}</TableCell>
+                <TableCell onClick={() => handleRowClick(question)}>{question?.serialQuestion}</TableCell>
                 <TableCell align="center" onClick={() => handleRowClick(question)}>
                   {question?.type?.charAt(0) + question?.type?.slice(1)?.toLowerCase()}
                 </TableCell>

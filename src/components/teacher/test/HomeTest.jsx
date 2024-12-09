@@ -246,9 +246,9 @@ const TestManagement = () => {
 
   const navigate = useNavigate();
 
-  const handlebtnDetail = (datatest) => {
+  const handleBtnDetail = (test) => {
     let newPath = "";
-    switch (datatest.type) {
+    switch (test.type) {
       case type.mixing:
         newPath = `/teacher/test/mixing`;
         break;
@@ -270,8 +270,8 @@ const TestManagement = () => {
 
     navigate(newPath, {
       state: {
-        id: datatest.id,
-        type: datatest.type,
+        id: test.id,
+        type: test.type,
       },
     });
   };
@@ -290,7 +290,7 @@ const TestManagement = () => {
         open={open}
         onClose={handleClose}
         serial={maxSerial}
-        handlebtnDetail={handlebtnDetail}
+        handleBtnDetail={handleBtnDetail}
       />
       <ConfirmDialog
         open={openDialogDelete}
@@ -426,7 +426,7 @@ const TestManagement = () => {
                 <TableCell>{test.type}</TableCell>
                 <TableCell align="center">
                   <Button
-                    onClick={() => handlebtnDetail(test)}
+                    onClick={() => handleBtnDetail(test)}
                     sx={{
                       backgroundColor: "#000",
                       color: "#fff",
