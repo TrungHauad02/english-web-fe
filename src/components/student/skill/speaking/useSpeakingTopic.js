@@ -55,13 +55,22 @@ export default function useSpeakingTopic() {
     try {
       setIsScoring(true);
       const data = await getSpeechToText(audio);
-      setTextRecognize(data.transcript);
-      const dataScore = await scoreWriting(data.transcript, speaking.topic);
+      setTextRecognize(
+        data.transcript === "" ? "No transcript found" : data.transcript
+      );
+
+      const dataScore = await scoreWriting(
+        !data || data.transcript === ""
+          ? "No transcript found"
+          : data.transcript,
+        speaking.topic
+      );
       setComment(dataScore.comment);
       setScore(dataScore.score);
       setIsScoring(false);
     } catch (err) {
       toast.error("Error while scoring");
+      setIsScoring(false);
     }
   };
 

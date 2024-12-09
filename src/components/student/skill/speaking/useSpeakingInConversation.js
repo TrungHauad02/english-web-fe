@@ -141,7 +141,9 @@ export default function useSpeakingInConversation() {
             const speechText = await getSpeechToText(audio);
 
             const scoreData = await scoreConversation(
-              speechText.transcript,
+              speechText.transcript === ""
+                ? "No transcript found"
+                : speechText.transcript,
               conversation.content
             );
 
