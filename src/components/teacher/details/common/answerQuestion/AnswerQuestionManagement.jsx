@@ -2,6 +2,7 @@ import { Button, Stack, Typography } from "@mui/material";
 import Question from "./Question";
 import useAnswerQuestion from "./useAnswerQuestion";
 import ErrorComponent from "../../../../../shared/component/error/ErrorComponent";
+import ConfirmDialogV2 from "shared/component/confirmDialog/ConfirmDialogV2";
 
 export default function AnswerQuestionManagement({ path }) {
   const {
@@ -11,6 +12,9 @@ export default function AnswerQuestionManagement({ path }) {
     onDelQuestion,
     error,
     setError,
+    openDialog,
+    handleOpenDialog,
+    handleCloseDialog,
   } = useAnswerQuestion(path);
 
   return (
@@ -66,7 +70,7 @@ export default function AnswerQuestionManagement({ path }) {
               data={question}
               path={path}
               fetchData={fetchData}
-              onDelQuestion={() => onDelQuestion(question.id, index)}
+              onDelQuestion={() => handleOpenDialog(question.id, index)}
               setError={setError}
             />
           ))}
@@ -75,6 +79,12 @@ export default function AnswerQuestionManagement({ path }) {
       {error && (
         <ErrorComponent errorMessage={error} onClose={() => setError("")} />
       )}
+      <ConfirmDialogV2
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onConfirm={onDelQuestion}
+        message="Are you sure you want to delete this question?"
+      />
     </Stack>
   );
 }

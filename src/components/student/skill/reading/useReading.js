@@ -22,8 +22,9 @@ export default function useReading() {
           getReadingDetail(id),
           getAnswerQuestions("reading", id, "ACTIVE"),
         ]);
+        const sortedList = listQuestionData.sort((a, b) => a.serial - b.serial);
         setTopic(readingData);
-        setListQuestion(listQuestionData);
+        setListQuestion(sortedList);
         if (!listQuestionData || listQuestionData.length === 0)
           setError("This lesson doesn't available yet");
       } catch (error) {

@@ -27,8 +27,9 @@ export default function useVocabulary() {
           setError("Lesson isn't available yet");
           return;
         }
+        const sortedList = listQuestionData.sort((a, b) => a.serial - b.serial);
         setTopic(topicData);
-        setListQuestion(listQuestionData);
+        setListQuestion(sortedList);
         if (vocabData.content.length > 0) {
           const stateVocab = {
             listVocab: vocabData.content,
