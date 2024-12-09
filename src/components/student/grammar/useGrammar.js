@@ -22,7 +22,10 @@ export default function useGrammar() {
           id,
           "ACTIVE"
         );
-        setListQuestion(answerQuestionData);
+        const sortedList = answerQuestionData.sort(
+          (a, b) => a.serial - b.serial
+        );
+        setListQuestion(sortedList);
         setGrammar(data);
         if (!answerQuestionData || answerQuestionData.length === 0)
           setError("This lesson doesn't available yet");

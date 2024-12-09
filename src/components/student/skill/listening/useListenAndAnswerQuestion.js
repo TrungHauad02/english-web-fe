@@ -15,7 +15,8 @@ export default function useListenAndAnswerQuestion() {
         getAnswerQuestions("listening", id, "ACTIVE"),
       ]);
       setListening(data);
-      setListQuestion(listQuestionData);
+      const sortedList = listQuestionData.sort((a, b) => a.serial - b.serial);
+      setListQuestion(sortedList);
     };
     fetchData();
   }, [id]);
