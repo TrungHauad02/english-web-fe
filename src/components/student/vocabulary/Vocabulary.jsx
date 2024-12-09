@@ -3,14 +3,14 @@ import Introduction from "../common/introduction/Introduction";
 import ListFlashcard from "./listFlashcard/ListFlashcard";
 import MainPicture from "../common/listTopic/MainPicture";
 import AnswerQuestion from "../common/answerQuestion/AnswerQuestion";
-import LoadingComponent from "../common/loadingPage/LoadingComponent";
-import { Grid } from "@mui/material";
+import { CircularProgress, Stack } from "@mui/material";
 import useVocabulary from "./useVocabulary";
 import ErrorComponent from "shared/component/error/ErrorComponent";
-import CollapsibleSection from "shared/collapsible/CollapsibleSection";  // Import CollapsibleSection
+import CollapsibleSection from "shared/collapsible/CollapsibleSection"; // Import CollapsibleSection
 
 function Vocabulary() {
-  const { topic, stateVocab, listQuestion, error, setError, handleCloseError } = useVocabulary();
+  const { topic, stateVocab, listQuestion, error, setError, handleCloseError } =
+    useVocabulary();
 
   if (error) {
     return <ErrorComponent errorMessage={error} onClose={handleCloseError} />;
@@ -18,7 +18,7 @@ function Vocabulary() {
 
   if (!topic)
     return (
-      <Grid
+      <Stack
         sx={{
           marginY: "4rem",
           textAlign: "center",
@@ -28,10 +28,8 @@ function Vocabulary() {
           height: "100vh",
         }}
       >
-        <Grid item>
-          <LoadingComponent />
-        </Grid>
-      </Grid>
+        <CircularProgress size="3rem" />
+      </Stack>
     );
 
   return (
@@ -42,8 +40,8 @@ function Vocabulary() {
         <MatchImageWithWord stateVocab={stateVocab} />
       </CollapsibleSection>
 
-      <Introduction 
-        title="Welcome to the Vocabulary Adventure!" 
+      <Introduction
+        title="Welcome to the Vocabulary Adventure!"
         subtitle="Dive into new words and expressions that will help you explore and understand English in depth."
         bodyText="Each word is a step closer to mastering this topic. Take your time, review the flashcards, and see how your understanding grows!"
       />
@@ -56,7 +54,9 @@ function Vocabulary() {
         <AnswerQuestion listQuestion={listQuestion} />
       </CollapsibleSection>
 
-      {error && <ErrorComponent errorMessage={error} onClose={handleCloseError} />}
+      {error && (
+        <ErrorComponent errorMessage={error} onClose={handleCloseError} />
+      )}
     </>
   );
 }
