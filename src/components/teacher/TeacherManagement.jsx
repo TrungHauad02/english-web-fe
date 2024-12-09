@@ -72,11 +72,11 @@ export default function TeacherManagement() {
         variant="h4"
         sx={{ fontWeight: "bold", textAlign: "center", color: "#333" }}
       >
-        Quản lý tài nguyên học tập
+        Learning Resource Management
       </Typography>
       <Typography variant="body1" sx={{ textAlign: "center", color: "#666" }}>
-        Chào mừng bạn đến với trình quản lý tài nguyên học tập của website học
-        tập tiếng Anh. Chọn mục bên dưới để bắt đầu.
+        Welcome to the learning resource management system of our English
+        learning website. Please select a topic below to get started.
       </Typography>
 
       <Grid container spacing={3} justifyContent="center">
