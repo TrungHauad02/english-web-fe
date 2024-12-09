@@ -2,7 +2,7 @@ import { Button, Grid2, Stack, Typography, Box } from "@mui/material";
 import SearchBar from "shared/component/searchbar/SearchBar";
 import TopicContent from "./TopicContent";
 import Divider from "@mui/material/Divider";
-import DotLoader from "shared/component/loader/DotLoader";
+import CircularProgress from "@mui/material/CircularProgress";
 import useTopicList from "./useTopicList";
 import ErrorComponent from "shared/component/error/ErrorComponent";
 
@@ -98,7 +98,7 @@ export default function TopicList({ title }) {
                 sx={{
                   backgroundColor: "#ffffffff",
                   padding: "1rem 1.5rem",
-                  color: "#6EC2F7",
+                  color: "#000",
                   fontSize: "1.05rem",
                   textDecoration: "underline",
                 }}
@@ -107,7 +107,7 @@ export default function TopicList({ title }) {
               >
                 {isLoading ? (
                   <Stack justifyContent="center" alignItems={"center"}>
-                    <DotLoader />
+                    <CircularProgress size="2rem" />
                   </Stack>
                 ) : (
                   "Load more"
