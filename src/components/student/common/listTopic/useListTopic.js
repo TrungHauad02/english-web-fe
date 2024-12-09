@@ -9,10 +9,12 @@ export default function useListTopic(path) {
   const [totalPage, setTotalPage] = useState(0);
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         const [data, quoteRes] = await Promise.all([
           getListTopicActive(path, page - 1, 10, "serial"),
           getRandomQuotes(),
@@ -28,6 +30,7 @@ export default function useListTopic(path) {
         } else {
           setList([]);
         }
+        setIsLoading(false);
       } catch (error) {
         toast.error("Error while fetching data");
       }
@@ -45,5 +48,6 @@ export default function useListTopic(path) {
     onChangePage,
     quote,
     author,
+    isLoading,
   };
 }
