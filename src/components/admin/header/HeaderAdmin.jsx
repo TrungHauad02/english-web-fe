@@ -14,7 +14,7 @@ function HeaderAdmin() {
     auContext.Logout();
     navigate("/account");
   };
-  const {HeaderBg} = useColor();
+  const { HeaderBg } = useColor();
 
   return (
     <Stack
@@ -34,7 +34,7 @@ function HeaderAdmin() {
     >
       <Stack direction={"row"} alignItems={"center"} spacing={5}>
         <img
-          src={icon }
+          src={icon}
           alt="icon"
           style={{ width: "50px", marginLeft: "1rem" }}
           onClick={() => navigate("/admin")}
@@ -99,18 +99,24 @@ function HeaderAdmin() {
         <Button
           onClick={handleLogout}
           sx={{
-            backgroundColor: "transparent",
-            color: "red",
+            backgroundColor: "black",
+            color: "#fff",
             textDecoration: "none",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             textTransform: "none",
             "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
+              backgroundColor: "#fff",
+              color: "#000",
             },
           }}
         >
-          <HeaderTypography>Logout</HeaderTypography>
+          <HeaderTypography
+            variant="body1"
+            sx={{ fontWeight: "bold", fontSize: "1.1rem" }}
+          >
+            Logout
+          </HeaderTypography>
         </Button>
       </Stack>
     </Stack>
