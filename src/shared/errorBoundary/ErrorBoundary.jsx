@@ -1,5 +1,6 @@
 import React from "react";
 import { toast } from "react-toastify";
+import ErrorPage from "shared/utils/ErrorPage";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -12,13 +13,14 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
+    this.setState({ hasError: true });
     console.error("Error caught by Error Boundary:", error, errorInfo);
     toast.error("Some error occurred");
   }
 
   render() {
     if (this.state.hasError) {
-      return null;
+      return <ErrorPage />;
     }
     return this.props.children;
   }
