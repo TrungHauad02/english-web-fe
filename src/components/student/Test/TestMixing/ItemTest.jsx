@@ -757,6 +757,7 @@ const ItemTest = ({ title, test }) => {
               handleBtnSubmit={handleBtnSubmit}
               duration={test.duration}
               storeName={storeName}
+              isSubmitting={isSubmitting}
             />
           </Box>
         </Box>

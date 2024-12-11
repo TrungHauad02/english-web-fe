@@ -299,6 +299,7 @@ function TestReading() {
               handleSubmit={handleBtnSubmit}
               dbName={"MyDatabase"}
               storeName={storeName}
+              isSubmitting = {isSubmitting}
             />
           )}
         </Typography>
