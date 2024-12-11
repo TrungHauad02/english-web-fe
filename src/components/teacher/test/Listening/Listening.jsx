@@ -16,7 +16,6 @@ function ListeningTest() {
   const [error, setError] = useState(null);
   const [questionData, setQuestionData] = useState(null);
   const [version, setVersion] = useState(0);
-  const [questionUpdate, setQuestionUpdate] = useState();
   const [submitTestIds, setSubmitTestIds] = useState([]);
 
   useEffect(() => {
@@ -37,7 +36,7 @@ function ListeningTest() {
     };
 
     fetchData();
-  }, [state.id, version, questionUpdate]);
+  }, [state.id, version]);
 
    //delete submit test 
    const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
@@ -92,7 +91,6 @@ function ListeningTest() {
  
   
   const handleRowClick = async (question) => {
-    setQuestionUpdate(question);
     try {
       let fetchedData;
       if (question.id === '') {
@@ -136,7 +134,9 @@ function ListeningTest() {
           <InformationTest data={test}  BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}/>
         </Box>
         <Box sx={{ marginLeft: "2%", flex: 6, minHeight: 0 }}>
-          <QuestionListTest data={test} handleRowClick={handleRowClick} setQuestionUpdate={setQuestionUpdate}  BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
+        <QuestionListTest   data={test} handleRowClick={handleRowClick} setQuestionCurrent = { setQuestionData} setVersion = { setVersion} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} 
+          questionCurrent ={questionData}
+          />
         </Box>
       </Box>
       {questionData && (

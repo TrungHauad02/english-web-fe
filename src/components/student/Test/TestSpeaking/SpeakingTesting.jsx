@@ -283,7 +283,7 @@ export default function SpeakingTesting({
         let content =
           "No audio available. You haven't completed this question yet.";
         let transcript =
-          "No transcipt available. You haven't completed this question yet.";
+          "No transcript available. You haven't completed this question yet.";
         let comment =
           "No comment available. You haven't completed this question yet.";
         let score = 0;
