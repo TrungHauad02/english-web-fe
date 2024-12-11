@@ -18,7 +18,8 @@ function SerialGrid({
   onItemClick,
   handleBtnSubmit,
   duration,
-  storeName
+  storeName,
+  isSubmitting
 }) {
   return (
     <StyledBox>
@@ -27,11 +28,12 @@ function SerialGrid({
             <strong>Time remaining:</strong>
             <br />
             <CountdownTimer
-      duration={duration}
-      handleSubmit={handleBtnSubmit}
-      dbName={"MyDatabase"}
-      storeName={storeName}
-    />
+            duration={duration}
+            handleSubmit={handleBtnSubmit}
+            dbName={"MyDatabase"}
+            storeName={storeName}
+            isSubmitting={isSubmitting}
+          />
           </Typography>
         </Box>
 

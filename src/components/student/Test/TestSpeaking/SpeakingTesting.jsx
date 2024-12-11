@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  CircularProgress
 } from "@mui/material";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -53,6 +54,7 @@ export default function SpeakingTesting({
   const [onDialogConfirm, setOnDialogConfirm] = useState(() => () => {});
   const [serialSet, setSerialSet] = useState(new Set());
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
     if (test != null) {
       openDB("MyDatabase", "MyStore" + test.id)
@@ -254,6 +256,7 @@ export default function SpeakingTesting({
   };
 
   const handleBtnSubmit = async () => {
+    setIsSubmitting(true)
     const userId = sessionStorage.getItem('userId');
     let scoreTest = 0;
     const vietnamTime = new Date()
@@ -359,7 +362,24 @@ export default function SpeakingTesting({
 
   return (
     <>
-      {" "}
+      {isSubmitting && (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100vh",
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+          zIndex: 1000,
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )}
       <DurationContainer sx={{ fontWeight: "bold" }} elevation={1}>
         <Typography align="center">Time remaining:</Typography>
         <Typography align="center" sx={{ marginLeft: "1rem" }}>
@@ -369,6 +389,8 @@ export default function SpeakingTesting({
               handleSubmit={handleBtnSubmit}
               dbName={"MyDatabase"}
               storeName={storeName}
+              isSubmitting={isSubmitting}
+              
             />
           )}
         </Typography>

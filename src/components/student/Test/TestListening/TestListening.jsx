@@ -285,6 +285,7 @@ function TestListening() {
                   handleSubmit={handleSubmit}
                   dbName={"MyDatabase"}
                   storeName={storeName}
+                  isSubmitting = {isSubmitting}
                 />
               )}
             </Typography>

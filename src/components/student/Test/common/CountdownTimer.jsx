@@ -2,9 +2,22 @@ import React, { useState, useEffect } from "react";
 import { openDB, saveData, getData } from "./IndexDB";
 import { toast } from "react-toastify";
 
-const CountdownTimer = ({ duration, handleSubmit, dbName, storeName }) => {
+const CountdownTimer = ({ duration, handleSubmit, dbName, storeName, isSubmitting }) => {
   const [timeLeft, setTimeLeft] = useState(null);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+
+  const calculateEndTime = (durationInMinutes) => Math.floor(Date.now() / 1000) + durationInMinutes * 60;
+
+  const autoSubmit = () => {
+    if (!isSubmitting) {
+      handleSubmit();
+      toast.info("Time's up! The assignment has been automatically submitted.");
+    }
+  };
+
+  const saveEndTime = async (db, endTime) => {
+    await saveData(db, storeName, { id: storeName, endTime });
+    setTimeLeft(endTime - Math.floor(Date.now() / 1000));
+  };
 
   const initializeTimer = async () => {
     try {
@@ -19,42 +32,46 @@ const CountdownTimer = ({ duration, handleSubmit, dbName, storeName }) => {
           setTimeLeft(remainingTime);
         } else {
           setTimeLeft(0);
-          if (!hasSubmitted) {
-            handleSubmit();
-            setHasSubmitted(true);
-            toast.info("Time's up! The assignment has been automatically submitted.");
-          }
+          autoSubmit();
         }
       } else {
-        const endTime = Math.floor(Date.now() / 1000) + duration * 60;
-        await saveData(db, storeName, { id: storeName, endTime });
-        setTimeLeft(duration * 60);
+        if (duration <= 0) {
+          setTimeLeft(0);
+          autoSubmit();
+          return;
+        }
+        const endTime = calculateEndTime(duration);
+        await saveEndTime(db, endTime);
       }
     } catch (error) {
       console.error("Error initializing timer:", error);
-    
+      const endTimeFallback = calculateEndTime(duration);
+      try {
+        const db = await openDB(dbName, storeName);
+        await saveEndTime(db, endTimeFallback);
+      } catch (saveError) {
+        console.error("Error saving fallback timer data:", saveError);
+      }
     }
   };
 
   useEffect(() => {
     initializeTimer();
-  }, [dbName, storeName, duration, handleSubmit, hasSubmitted,timeLeft]);
+  }, [dbName, storeName, duration, handleSubmit]);
 
   useEffect(() => {
-    if (timeLeft === null || timeLeft <= 0) return;
+    if (timeLeft === null || timeLeft <= 0 || isSubmitting) return;
 
+    let submitted = false;
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
         const newTime = prevTime - 1;
 
-        if (newTime <= 0) {
+        if (newTime <= 0 && !submitted) {
           clearInterval(timer);
-          if (!hasSubmitted) {
-            handleSubmit();
-            setHasSubmitted(true);
-            toast.info("Time's up! The assignment has been automatically submitted.");
-          }
-          return 0; 
+          submitted = true;
+          autoSubmit();
+          return 0;
         }
 
         return newTime;
@@ -62,7 +79,7 @@ const CountdownTimer = ({ duration, handleSubmit, dbName, storeName }) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, handleSubmit, hasSubmitted]);
+  }, [timeLeft, isSubmitting]);
 
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
@@ -72,11 +89,13 @@ const CountdownTimer = ({ duration, handleSubmit, dbName, storeName }) => {
 
   return (
     <div aria-live="polite">
-      {timeLeft === null
-        ? "Loading..."
-        : timeLeft > 0
-        ? formatTime(timeLeft)
-        : "00:00"}
+      {timeLeft === null ? (
+        <span>Loading...</span>
+      ) : timeLeft > 0 ? (
+        <span>{formatTime(timeLeft)}</span>
+      ) : (
+        <span>00:00</span>
+      )}
     </div>
   );
 };

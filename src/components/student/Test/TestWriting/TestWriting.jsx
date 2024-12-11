@@ -252,6 +252,7 @@ function TestWriting() {
       handleSubmit={handleBtnSubmit}
       dbName={"MyDatabase"}
       storeName={storeName}
+      isSubmitting = {isSubmitting}
     />
      }
         </Typography>
