@@ -41,8 +41,10 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
 function QuestionList({
   data,
   handleRowClick,
-  setQuestionUpdate,
   BooleanDeleteSubmitTest,
+  setVersion,
+  setQuestionCurrent,
+  questionCurrent
 }) {
   const [dataMixing, setDataMixing] = useState([]);
   const { Color2, Color2_1 } = useColor();
@@ -72,7 +74,7 @@ function QuestionList({
         toast.success(
           `Status of serial ${itemUpdate.serialQuestion} with Reading updated successfully!`
         );
-        setQuestionUpdate(itemUpdate);
+        setVersion((prevData) => (prevData || 0) + 1);
       })
       .catch((error) => {
         toast.error("Failed to update status!");
@@ -152,14 +154,22 @@ function QuestionList({
       await DeleteQuestionReadingTest(data?.id, itemDelete, serial, minus)
         .then((response) => {
           toast.success(`Deleted ${data.serial} of Test Reading successfully!`);
-          setQuestionUpdate(data);
+          if(questionCurrent.id===itemDelete.id)
+            {
+              setQuestionCurrent(null)
+              setVersion((prevData) => (prevData || 0) + 1);
+            }
+            else
+            {
+              handleRowClick(questionCurrent)
+            }
         })
         .catch((error) => {
           toast.error("Failed to delete !");
         });
       setOpenDialogDelete(false);
 
-      setQuestionUpdate(itemDelete);
+     
     } catch (error) {
       console.error("Failed to delete question:", error);
     }

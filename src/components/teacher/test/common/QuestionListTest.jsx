@@ -63,8 +63,10 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
 function QuestionList({
   data,
   handleRowClick,
-  setQuestionUpdate,
   BooleanDeleteSubmitTest,
+  setVersion,
+  setQuestionCurrent,
+  questionCurrent
 }) {
   const [currentTab, setCurrentTab] = useState(0);
   const [dataMixing, setDataMixing] = useState([]);
@@ -205,7 +207,7 @@ function QuestionList({
             currentTab > 1 ? "Part" : "Question"
           }  ${tabs[currentTab]} updated successfully!`
         );
-        setQuestionUpdate(itemUpdate);
+        setVersion((prevData) => (prevData || 0) + 1);
       })
       .catch((error) => {
         toast.error("Failed to update status!");
@@ -397,8 +399,17 @@ function QuestionList({
           );
           handleCloseDialogDelete();
         });
-
-      setQuestionUpdate(itemDelete);
+        if(questionCurrent.id===itemDelete.id)
+        {
+          setQuestionCurrent(null)
+          setVersion((prevData) => (prevData || 0) + 1);
+        }
+        else
+        {
+          handleRowClick(questionCurrent)
+        }
+        
+        
     } catch (error) {
       console.error("Failed to delete question:", error);
     }

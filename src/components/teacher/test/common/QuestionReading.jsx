@@ -454,6 +454,7 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
 
       content: "",
       status: "ACTIVE",
+      explanation:"",
       testReadingId: formData.id,
       test: initialData.test,
       answers: [],

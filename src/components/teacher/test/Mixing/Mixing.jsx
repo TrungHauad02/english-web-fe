@@ -21,7 +21,6 @@ function Mixing() {
   const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [questionUpdate, setQuestionUpdate] = useState();
   const [type, setType] = useState("");
   const [questionData, setQuestionData] = useState();
   const [version,setVersion] = useState(0);
@@ -48,7 +47,7 @@ function Mixing() {
     };
 
     fetchData();
-  }, [state.id, questionUpdate,version]);
+  }, [state.id,version]);
 
  
   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
@@ -99,10 +98,8 @@ function Mixing() {
     return true; 
   };
   
-
-
+  
   const handleRowClick = async (question) => {
-    setQuestionUpdate(question);
     try {
       let fetchedData;
       switch (question.type) {
@@ -215,7 +212,9 @@ function Mixing() {
           <InformationTest data={test} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}/>
         </Box>
         <Box sx={{ marginLeft: "2%", flex: 6, minHeight: 0 }}>
-          <QuestionListTest   data={test} handleRowClick={handleRowClick} setQuestionUpdate = { setQuestionUpdate} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
+          <QuestionListTest   data={test} handleRowClick={handleRowClick} setQuestionCurrent = { setQuestionData} setVersion = { setVersion} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} 
+          questionCurrent ={questionData}
+          />
         </Box>
       </Box>
       {renderQuestionComponent()}

@@ -38,7 +38,9 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   },
 }));
 
-function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSubmitTest }) {
+function QuestionList({ data, handleRowClick,BooleanDeleteSubmitTest,  setVersion,
+  setQuestionCurrent,
+  questionCurrent }) {
   const [dataMixing, setDataMixing] = useState([]);
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [itemDelete, setItemDelete] = useState(null);
@@ -65,7 +67,7 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSub
     })
       .then(() => {
         toast.success(`Status of serial ${itemUpdate.serialQuestion} updated successfully!`);
-        setQuestionUpdate(itemUpdate);
+        setVersion((prevData) => (prevData || 0) + 1);
       })
       .catch(() => {
         toast.error(`Failed to update status of serial ${itemUpdate.serialQuestion}!`);
@@ -140,7 +142,15 @@ function QuestionList({ data, handleRowClick, setQuestionUpdate,BooleanDeleteSub
       await DeleteQuestionSpeakingTest(data?.id, itemDelete, serial, minus)
         .then(() => {
           toast.success(`Deleted serial ${itemDelete.serialQuestion} successfully!`);
-          setQuestionUpdate(itemDelete);
+          if(questionCurrent.id===itemDelete.id)
+            {
+              setQuestionCurrent(null)
+              setVersion((prevData) => (prevData || 0) + 1);
+            }
+            else
+            {
+              handleRowClick(questionCurrent)
+            }
         })
         .catch(() => {
           toast.error(`Failed to delete serial ${itemDelete.serialQuestion}!`);

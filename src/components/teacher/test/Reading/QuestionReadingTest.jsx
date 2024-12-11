@@ -139,6 +139,7 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
       toast.error("Please create at least one question ACTIVE");
       return;
     }
+    setIsEditing(false);
 
     formData.type = "READING";
     let updatedData = {
@@ -177,7 +178,6 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
 
               const id = await AddQuestionReadingTest(
                 initialData.test.id,
-                "READING",
                 questionData
               );
 
@@ -326,7 +326,7 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
     }
     handleReading(formData);
 
-    setIsEditing(false);
+   
   };
 
   const [questionsDelete, setQuestionsDelete] = useState([]);
