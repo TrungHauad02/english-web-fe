@@ -140,7 +140,8 @@ function ListeningTest() {
         </Box>
       </Box>
       {questionData && (
-        <QuestionListening key={`${questionData.id}-${version}`} data={questionData} handleListening={handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
+        <QuestionListening key={`${questionData.id}-${version}`} data={questionData} handleListening={handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} 
+        setQuestionCurrent = { setQuestionData}/>
       )}
     </Box>
   );

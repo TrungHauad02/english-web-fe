@@ -139,7 +139,8 @@ function WritingTest() {
         </Box>
       </Box>
       {questionData && (
-        <QuestionWriting key={`${questionData.id}-${version}`} data={questionData} handleWriting={handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
+        <QuestionWriting key={`${questionData.id}-${version}`} data={questionData} handleWriting={handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}
+        setQuestionCurrent = { setQuestionData} />
       )}
     </Box>
   );

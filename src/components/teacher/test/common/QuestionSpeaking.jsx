@@ -53,6 +53,7 @@ const TestSpeakingForm = ({
   initialData,
   handleSpeaking,
   BooleanDeleteSubmitTest,
+  setQuestionCurrent
 }) => {
   const [formData, setFormData] = useState({
     ...initialData,
@@ -318,6 +319,10 @@ const TestSpeakingForm = ({
   };
 
   const handleCancel = () => {
+    if(initialData.id==='')
+    {
+      setQuestionCurrent(null)
+    }
     setIsEditMode(false);
     setFormData(initialData);
   };
@@ -491,7 +496,6 @@ const TestSpeakingForm = ({
             <ColorButton
               color="#F08080"
               variant="contained"
-              disabled={initialData.id === "" ? true : false}
               onClick={handleCancel}
             >
               Cancel
@@ -500,6 +504,7 @@ const TestSpeakingForm = ({
               color="#FFD700"
               variant="contained"
               onClick={handleEdit}
+              disabled={isEditMode}
             >
               Edit
             </ColorButton>

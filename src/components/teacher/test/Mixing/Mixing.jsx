@@ -170,22 +170,29 @@ function Mixing() {
     switch (type) {
       case "VOCABULARY":
         return (
-          <QuestionVocabulary key={`${questionData.id}-${version}`} question={questionData} handleQuestion = {handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
+          <QuestionVocabulary key={`${questionData.id}-${version}`} question={questionData} handleQuestion = {handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}
+          setQuestionCurrent = { setQuestionData}
+           />
         );
       case "GRAMMAR":
         return (
-          <QuestionVocabulary key={`${questionData.id}-${version}`} question={questionData} handleQuestion = {handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}/>
+          <QuestionVocabulary key={`${questionData.id}-${version}`} question={questionData} handleQuestion = {handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}
+          setQuestionCurrent = { setQuestionData}/>
         );
       case "LISTENING":
-        return <QuestionListening key={`${questionData.id}-${version}`} data={questionData} handleListening = {handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}/>;
+        return <QuestionListening key={`${questionData.id}-${version}`} data={questionData} handleListening = {handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}
+        setQuestionCurrent = { setQuestionData}/>;
       case "READING":
-        return <QuestionReading key={`${questionData.id}-${version}`} data={questionData} handleReading = {handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />;
+        return <QuestionReading key={`${questionData.id}-${version}`} data={questionData} handleReading = {handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}
+        setQuestionCurrent = { setQuestionData} />;
       case "WRITING":
         return <QuestionWriting key={`${questionData.id}-${version}`} data={questionData}
-        handleWriting = {handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />;
+        handleWriting = {handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}
+        setQuestionCurrent = { setQuestionData} />;
       case "SPEAKING":
         return (
-          <QuestionSpeaking key={`${questionData.id}-${version}`} initialData={questionData}  handleSpeaking = {handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}/>
+          <QuestionSpeaking key={`${questionData.id}-${version}`} initialData={questionData}  handleSpeaking = {handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} 
+          setQuestionCurrent = { setQuestionData}/>
         );
       default:
         return null;

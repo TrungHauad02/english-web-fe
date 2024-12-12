@@ -138,7 +138,7 @@ function SpeakingTest() {
         </Box>
       </Box>
       {questionData && (
-        <QuestionSpeaking key={`${questionData.id}-${version}`} initialData={questionData} handleSpeaking={handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
+        <QuestionSpeaking key={`${questionData.id}-${version}`} initialData={questionData} handleSpeaking={handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}setQuestionCurrent = { setQuestionData} />
       )}
     </Box>
   );

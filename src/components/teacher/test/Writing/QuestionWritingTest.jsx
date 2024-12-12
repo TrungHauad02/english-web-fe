@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import { updateTestWriting } from "api/test/TestWritingApi";
 import { createTestWriting } from "api/test/TestWritingApi";
 import { toast } from "react-toastify";
+import { da } from "date-fns/locale";
 
 const ColorButton = styled(Button)(({ color }) => ({
   borderRadius: "8px",
@@ -16,7 +17,7 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-const QuestionWriting = ({ data, handleWriting, BooleanDeleteSubmitTest }) => {
+const QuestionWriting = ({ data, handleWriting, BooleanDeleteSubmitTest,setQuestionCurrent }) => {
   const [content, setContent] = useState(data?.content || "");
   const serialNumber = data.serial;
   const [isEditing, setIsEditing] = useState(data.id === "" ? true : false);
@@ -58,6 +59,10 @@ const QuestionWriting = ({ data, handleWriting, BooleanDeleteSubmitTest }) => {
   };
 
   const handleCancel = () => {
+    if(data.id==='')
+    {
+      setQuestionCurrent(null)
+    }
     setContent(data?.content || "");
     setIsEditing(false);
   };
@@ -131,7 +136,6 @@ const QuestionWriting = ({ data, handleWriting, BooleanDeleteSubmitTest }) => {
             color="#F08080"
             variant="contained"
             onClick={handleCancel}
-            disabled={data.id === "" ? true : false}
           >
             Cancel
           </ColorButton>

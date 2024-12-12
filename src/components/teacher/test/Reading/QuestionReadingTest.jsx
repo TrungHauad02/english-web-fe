@@ -54,7 +54,7 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
+function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest,setQuestionCurrent }) {
   const initialData = data || {};
   const { Color2, Color2_1 } = useColor();
   const questions = initialData.questions || [];
@@ -119,6 +119,10 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
   };
 
   const handleCancel = () => {
+    if(initialData.id==='')
+    {
+      setQuestionCurrent(null)
+    }
     setIsEditing(false);
     setFormData({
       ...formData,
@@ -658,7 +662,6 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest }) {
             <ColorButton
               color="#F08080"
               variant="contained"
-              disabled={initialData.id === "" ? true : false}
               onClick={handleCancel}
             >
               Cancel

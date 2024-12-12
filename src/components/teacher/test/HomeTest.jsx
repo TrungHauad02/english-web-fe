@@ -107,9 +107,7 @@ const TestManagement = () => {
     await deleteTest(testDelete.id)
       .then(() => {
         toast.success(`${testDelete.title} deleted successfully!`);
-        setList((prevList) =>
-          prevList.filter((test) => test.id !== testDelete.id)
-        );
+        setVersion((prevVersion) => prevVersion + 1);
         handleCloseDialogDelete();
       })
       .catch(() => {
