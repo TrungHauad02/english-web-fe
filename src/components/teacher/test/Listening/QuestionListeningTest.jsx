@@ -153,7 +153,7 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest,setQ
       toast.error("Please create at least one question ACTIVE");
       return;
     }
-
+    setIsEditing(false);
     formData.type = "LISTENING";
     let updatedData = {
       ...initialData,

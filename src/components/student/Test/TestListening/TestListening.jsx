@@ -1,6 +1,7 @@
 import MainTitle from "../MainTitle";
 import OneListeningTest from "./OneListeningTest";
 import { Box, Typography, Button,CircularProgress } from "@mui/material";
+import { IntroduceTestListening } from "./IntroduceTestListening";
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getTest } from "api/test/TestApi";
@@ -31,10 +32,13 @@ function TestListening() {
   const data = test?.testListenings;
   const [indexVisible, setIndexVisible] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [isStart, setIsStart] = useState(false);
   const navigate = useNavigate();
   const [duration, setDuration] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [storeName, setStoreName] = useState(null);
+  const [currentAudioTime, setCurrentAudioTime] = useState(null);
+  const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef(null);
   useEffect(() => {
     const fetchData = async () => {
@@ -75,45 +79,63 @@ function TestListening() {
   useEffect(() => {
     if (test != null) {
       openDB("MyDatabase", "MyStore" + test.id)
-        .then((db) => {
-          getData(db, "MyStore" + storeName)
-            .then((data) => {
-              if (data?.answers) {
+      .then((db) => {
+        getData(db, storeName)
+          .then((data) => {
+            if (data) {
+              console.log(data);
+              if (data.answers) {
                 setAnswers(data.answers);
-                setDuration(data.duration);
               }
-            })
-            .catch((error) => {
-              console.error("Error fetching answers:", error);
-            });
-          getData(db, "MyStore" + test.id, "duration")
-            .then((data) => {
-              if (data?.duration) {
-                setDuration(data.duration);
-                console.log(data);
+              if (data.currentAudioIndex !== undefined) {
+                setIndexVisible(data.currentAudioIndex);
               }
-            })
-            .catch((error) => {
-              console.error("Error fetching answers:", error);
-            });
-        })
-        .catch((error) => {
-          console.error("Error accessing IndexedDB:", error);
-        });
+              
+              if (data.currentAudioTime) {
+                setCurrentAudioTime(data.currentAudioTime)
+              }
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching saved state:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error accessing IndexedDB:", error);
+      });
     }
   }, [test?.id]);
 
-  useEffect(() => {
-    if (test != null) {
-      openDB("MyDatabase", storeName)
-        .then((db) => {
-          saveData(db, storeName, { id: storeName, answers });
-        })
-        .catch((error) => {
-          console.error("Error saving answers to the database:", error);
-        });
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current ? audioRef.current.currentTime : 0);
     }
-  }, [answers]);
+  }, 1000); 
+
+  return () => clearInterval(interval);
+}, []);
+
+
+useEffect(() => {
+  console.log(indexVisible);
+  
+  if (test != null) {
+    openDB("MyDatabase", storeName)
+      .then((db) => {
+        saveData(db, storeName, { 
+          id: storeName, 
+          answers, 
+          currentAudioIndex: indexVisible,
+          currentAudioTime: currentTime
+        });
+      })
+      .catch((error) => {
+        console.error("Error saving state to the database:", error);
+      });
+  }
+}, [answers, indexVisible, currentTime]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -124,7 +146,7 @@ function TestListening() {
   }
 
   const onAudioEnd = () => {
-    if (data.length > indexVisible + 1) {
+    if (data?.length > indexVisible + 1) {
       setIndexVisible(indexVisible + 1);
     }
   };
@@ -268,7 +290,14 @@ function TestListening() {
         title={test.type}
         bg="https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
       />
-      <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
+    {
+      isStart===false &&(
+        <IntroduceTestListening test={test} setIsStart ={setIsStart}/>
+      )
+    }
+      {
+        isStart && (
+          <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
         <Box
           sx={{
             display: "flex",
@@ -344,6 +373,7 @@ function TestListening() {
                 onAudioEnd={onAudioEnd}
                 answers={answers}
                 setAnswers={setAnswers}
+                currentAudioTime= {currentAudioTime}
               />
             </Box>
           </Box>
@@ -366,6 +396,10 @@ function TestListening() {
           </Button>
         </Box>
       </Box>
+        )
+      }
+      
+      
     </Box>
   );
 }
