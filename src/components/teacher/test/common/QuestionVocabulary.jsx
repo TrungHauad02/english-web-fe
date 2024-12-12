@@ -77,7 +77,7 @@ const validateQuestion = (field, value, question) => {
   return errors;
 };
 
-const MixingQuiz = ({ question, handleQuestion, BooleanDeleteSubmitTest }) => {
+const MixingQuiz = ({ question, handleQuestion, BooleanDeleteSubmitTest ,setQuestionCurrent}) => {
   return (
     <>
       <FormContainer
@@ -93,6 +93,7 @@ const MixingQuiz = ({ question, handleQuestion, BooleanDeleteSubmitTest }) => {
           question={question}
           handleQuestion={handleQuestion}
           BooleanDeleteSubmitTest={BooleanDeleteSubmitTest}
+          setQuestionCurrent ={setQuestionCurrent}
         />
       </FormContainer>
     </>
@@ -103,6 +104,7 @@ const ContentQuestion = ({
   question,
   handleQuestion,
   BooleanDeleteSubmitTest,
+  setQuestionCurrent
 }) => {
   const [questionMixing, setQuestionMixing] = useState(question);
   const [selectedAnswer, setSelectedAnswer] = useState(
@@ -269,6 +271,10 @@ const ContentQuestion = ({
   };
 
   const handleCancel = () => {
+    if(question.id==='')
+    {
+      setQuestionCurrent(null);
+    }
     setIsEditMode(false);
     setQuestionMixing(question);
     setSelectedAnswer(findCorrectAnswerId(question.answers));
@@ -350,7 +356,6 @@ const ContentQuestion = ({
           <ColorButton
             color="#F08080"
             variant="contained"
-            disabled={question.id === "" ? true : false}
             onClick={handleCancel}
           >
             Cancel

@@ -137,7 +137,8 @@ function ReadingTest() {
         </Box>
       </Box>
       {questionData &&  (
-        <QuestionReading key={`${questionData.id}-${version}`} data={questionData} handleReading={handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} />
+        <QuestionReading key={`${questionData.id}-${version}`} data={questionData} handleReading={handleRowClick} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest} 
+        setQuestionCurrent = { setQuestionData}/>
       )}
     </Box>
 

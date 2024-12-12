@@ -61,7 +61,7 @@ const ColorButton = styled(Button)(({ color }) => ({
   },
 }));
 
-function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest }) {
+function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest ,setQuestionCurrent}) {
   const initialData = data || {};
   const { Color2, Color2_1 } = useColor();
   const questions = initialData.questions || [];
@@ -124,6 +124,10 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest }) {
   };
 
   const handleCancel = () => {
+    if(initialData.id==='')
+    {
+      setQuestionCurrent(null)
+    }
     setIsEditing(false);
     setFormData({
       ...formData,
@@ -678,7 +682,6 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest }) {
             <ColorButton
               color="#F08080"
               variant="contained"
-              disabled={initialData.id === "" ? true : false}
               onClick={handleCancel}
             >
               Cancel
