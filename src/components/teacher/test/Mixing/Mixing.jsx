@@ -7,7 +7,7 @@ import QuestionReading from "../common/QuestionReading";
 import QuestionWriting from "../common/QuestionWriting";
 import QuestionSpeaking from "../common/QuestionSpeaking";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import { getTest } from "api/test/TestApi";
 import { getTestReading } from "api/test/TestReadingApi";
 import { getTestListening } from "api/test/TestListeningApi";
@@ -17,6 +17,7 @@ import { getTestWriting } from "api/test/TestWritingApi";
 import DeleteSubmitTestDialog from "../common/DeleteSubmitTestDialog";
 function Mixing() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { state } = location;
   const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,9 +29,13 @@ function Mixing() {
   
   
   useEffect(() => {
-    
+    if (!state || !state.id) {
+      navigate("/teacher/test");
+      return;
+    }
     const fetchData = async () => {
       try {
+        
         const data = await getTest(state.id);
         if (data) {
           setTest(data);
@@ -47,7 +52,7 @@ function Mixing() {
     };
 
     fetchData();
-  }, [state.id,version]);
+  }, [state?.id,version]);
 
  
   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);

@@ -135,31 +135,38 @@ const TestManagement = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const adjustedType = currType === "ALL" ? "" : currType;
-      const adjustedStatus = status === "ALL" ? "" : status;
-      const data = await getListTest(
-        page,
-        adjustedType,
-        searchTerm,
-        adjustedStatus,
-        "",
-        sortOrder
-      );
-      const tests = data.content;
-      const serial = await getMaxSerial();
-      setMaxSerial(serial + 1 || 0);
-
-      setVersionPage(versionPage + 1);
-
-      setTotalPage(data.totalPages);
-
-      if (tests) {
-        setList(tests);
-      } else {
+      try {
+        const adjustedType = currType === "ALL" ? "" : currType;
+        const adjustedStatus = status === "ALL" ? "" : status;
+        const data = await getListTest(
+          page,
+          adjustedType,
+          searchTerm,
+          adjustedStatus,
+          "",
+          sortOrder
+        );
+        const tests = data.content;
+        const serial = await getMaxSerial();
+        setMaxSerial(serial + 1 || 0);
+    
+        setVersionPage(versionPage + 1);
+        setTotalPage(data.totalPages);
+    
+        if (tests) {
+          setList(tests);
+        } else {
+          setList([]);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
         setList([]);
+        setTotalPage(0);
+        setMaxSerial(0);
       }
     };
     fetchData();
+    
   }, [page, currType, searchTerm, status, sortOrder,version]);
 
   //xoá submit test
