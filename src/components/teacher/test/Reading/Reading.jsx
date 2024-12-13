@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import QuestionReading from "./QuestionReadingTest";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import { getTest } from "api/test/TestApi";
 import { getTestReading } from "api/test/TestReadingApi";
 import InformationTest from "../common/InformationTest";
@@ -9,6 +9,7 @@ import QuestionListTest from "./QuestionListTestReading";
 import DeleteSubmitTestDialog from "../common/DeleteSubmitTestDialog";
 function ReadingTest() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { state } = location;
   const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,6 +19,10 @@ function ReadingTest() {
   const [submitTestIds,setSubmitTestIds] = useState([]);
 
   useEffect(() => {
+    if (!state || !state.id) {
+      navigate("/teacher/test");
+      return;
+    }
     const fetchData = async () => {
       try {
         const data = await getTest(state.id);
@@ -35,7 +40,7 @@ function ReadingTest() {
     };
 
     fetchData();
-  }, [state.id, version]);
+  }, [state?.id, version]);
 
 
   //delete submit test 

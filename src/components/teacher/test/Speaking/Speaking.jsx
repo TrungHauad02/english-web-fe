@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import QuestionSpeaking from "./QuestionSpeakingTest";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import { getTest } from "api/test/TestApi";
 import { getTestSpeaking } from "api/test/TestSpeakingApi";
 import InformationTest from "../common/InformationTest";
@@ -10,6 +10,7 @@ import DeleteSubmitTestDialog from "../common/DeleteSubmitTestDialog";
 
 function SpeakingTest() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { state } = location;
   const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,6 +19,10 @@ function SpeakingTest() {
   const [version, setVersion] = useState(0);
   const [submitTestIds, setSubmitTestIds] = useState([]);
   useEffect(() => {
+    if (!state || !state.id) {
+      navigate("/teacher/test");
+      return;
+    }
     const fetchData = async () => {
       try {
         const data = await getTest(state.id);
@@ -35,7 +40,7 @@ function SpeakingTest() {
     };
 
     fetchData();
-  }, [state.id, version]);
+  }, [state?.id, version]);
 
    //delete submit test 
    const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
