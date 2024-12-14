@@ -11,6 +11,7 @@ import {
   Grid,
   Box,
 } from '@mui/material';
+import useColor from "shared/color/Color";
 import { Add, Cancel, Send } from '@mui/icons-material';
 import { createTest } from '../../../api/test/TestApi';
 import { toast } from 'react-toastify';
@@ -19,11 +20,10 @@ import HelpTextField from './common/HelpTextField';
 const NewTest = ({ open, onClose, serial, handleBtnDetail }) => {
   const [title, setTitle] = useState('');
   const [duration, setDuration] = useState('');
-  const [testType, setTestType] = useState('');
+  const [testType, setTestType] = useState('MIXING');
   const [titleError, setTitleError] = useState('');
   const [durationError, setDurationError] = useState('');
-  const [typeError, setTypeError] = useState('');
-
+  const { Color2,Color2_1 } = useColor();
   const handleSubmit = async () => {
     if (validateInput()) {
       try {
@@ -71,14 +71,6 @@ const NewTest = ({ open, onClose, serial, handleBtnDetail }) => {
     } else {
       setDurationError("");
     }
-    
-
-    if (testType.trim() === '') {
-      setTypeError('Please select a test type');
-      isValid = false;
-    } else {
-      setTypeError('');
-    }
 
     return isValid;
   };
@@ -99,8 +91,8 @@ const NewTest = ({ open, onClose, serial, handleBtnDetail }) => {
     >
       <DialogTitle>
         <Box display="flex" alignItems="center">
-          <Add color="primary" style={{ marginRight: '8px' }} />
-          <Typography variant="h5" component="div" color="primary">
+          <Add color={Color2} style={{ marginRight: '8px' }} />
+          <Typography variant="h5" component="div" color= {Color2}>
             Create New Test
           </Typography>
         </Box>
@@ -157,32 +149,31 @@ const NewTest = ({ open, onClose, serial, handleBtnDetail }) => {
                 <MenuItem value="WRITING">Writing</MenuItem>
               </Select>
             </Box>
-            {typeError && (
-              <Typography color="error" variant="caption" style={{ marginTop: '4px', display: 'block' }}>
-                {typeError}
-              </Typography>
-            )}
+          </Grid>
+          <Grid item xs={12} container justifyContent="flex-end">
+            <Button
+              onClick={onClose}
+              variant="contained"
+              style={{ backgroundColor: "#D9D9D9", color: 'black', marginRight: '8px' }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              color="primary"
+              variant="contained"
+              sx={{
+                backgroundColor: Color2_1,
+                "&:hover": {
+                  backgroundColor: Color2,
+                },
+              }}
+            >
+              Submit
+            </Button>
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions>
-        <Button
-          onClick={onClose}
-          variant="contained"
-          startIcon={<Cancel />}
-          style={{ backgroundColor: "#D9D9D9", color: 'black' }}
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          color="primary"
-          variant="contained"
-          startIcon={<Send />}
-        >
-          Submit
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };
