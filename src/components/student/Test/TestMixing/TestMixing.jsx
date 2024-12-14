@@ -2,20 +2,22 @@ import React, { useState, useEffect } from "react";
 import MainTitle from "../MainTitle";
 import ItemTest from "./ItemTest";
 import { Box } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import { getTest } from "api/test/TestApi";
-
+import ErrorMessage from "../common/ErrorMessage";
 function TestMixing() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { state } = location;
   const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [status, setStatus] = useState("Testing");
- 
-
   const title = test ? test.type : "";
   useEffect(() => {
+    if (!state || !state.id) {
+      navigate("/student/tests");
+      return;
+    }
     const fetchData = async () => {
       try {
         const data = await getTest(state.id,"ACTIVE");
@@ -32,7 +34,7 @@ function TestMixing() {
     };
 
     fetchData();
-  }, [state.id]);
+  }, [state?.id]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -51,13 +53,21 @@ function TestMixing() {
         }
       />
       <Box sx={{ marginTop: "5%", marginLeft: "5%", marginRight: "5%" }}>
-        {status === "Testing" && (
-          <ItemTest
-            title={title}
-            test={test}
-            setStatus={setStatus}
-          />
-        )}
+            {[
+            test?.testListenings?.length || 0,
+            test?.testReadings?.length || 0,
+            test?.testWritings?.length || 0,
+            test?.testSpeakings?.length || 0,
+            test?.testMixingQuestions?.length || 0,
+          ].reduce((acc, cur) => acc + cur, 0) > 0 ? (
+            <>
+                <ItemTest
+                  title={title}
+                  test={test}
+                />
+                      </> )   : (
+              <ErrorMessage message={"The teacher has not added the test information yet"}/>
+            )}
       </Box>
     </>
   );

@@ -11,7 +11,7 @@ import { createSubmitTestReadingAnswer } from "../../../../api/test/submitTestRe
 import { commentReadingQuestion } from "../../../../api/test/commentTest";
 import CountdownTimer from "../common/CountdownTimer";
 import { openDB, saveData, getData, deleteData } from "../common/IndexDB";
-
+import ErrorMessage from "../common/ErrorMessage";
 const DurationContainer = styled(Box)(({ theme }) => ({
   background: "#E0F7FA",
   borderRadius: "20px",
@@ -40,6 +40,10 @@ function TestReading() {
   const [storeName, setStoreName] = useState(null);
 
   useEffect(() => {
+    if (!state || !state.id) {
+      navigate("/student/tests");
+      return;
+    }
     const fetchData = async () => {
       try {
         const data = await getTest(state.id, "ACTIVE");
@@ -287,6 +291,8 @@ function TestReading() {
           "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
         }
       />
+       {test?.testReadings?.length > 0 ? (
+      <>
       <DurationContainer
         sx={{ marginRight: "5%", fontWeight: "bold" }}
         elevation={1}
@@ -325,6 +331,9 @@ function TestReading() {
           setAnswers={setAnswers}
         />
       </Box>
+      </> )   : (
+        <ErrorMessage message={"The teacher has not added the test information yet"}/>
+    )}
     </Box>
   );
 }

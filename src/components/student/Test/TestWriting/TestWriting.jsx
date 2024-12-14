@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CountdownTimer from "../common/CountdownTimer";
 import { openDB, saveData, getData, deleteData } from '../common/IndexDB';
 import { scoreTestWriting } from "api/feature/scoreTestWriting/scoreTestWriting";
+import ErrorMessage from "../common/ErrorMessage";
 const DurationContainer = styled(Box)(({ theme }) => ({
   background: "#E0F7FA",
   borderRadius: "20px",
@@ -40,25 +41,10 @@ function TestWriting() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getTest(state.id);
-        setStoreName("MyStore" + data.id)
-        if (data) {
-          setTest(data);
-        } else {
-          setTest(null);
-        }
-      } catch (err) {
-    
-      } finally {
-    
-      }
-    };
-
-    fetchData();
-  }, [state.id]);
-  useEffect(() => {
+    if (!state || !state.id) {
+      navigate("/student/tests");
+      return;
+    }
     const fetchData = async () => {
       try {
         const data = await getTest(state.id,"ACTIVE");
@@ -211,9 +197,6 @@ function TestWriting() {
     }
   };
   
-  
-  const onClickTestAgain = () => {};
-
   return (
     <Box>
       {isSubmitting && (
@@ -240,40 +223,39 @@ function TestWriting() {
           "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
         }
       />
-        <DurationContainer sx={{ marginRight: "5%" ,fontWeight: 'bold'  }} >
-        <Typography align="center" >
-        Time remaining: 
-        </Typography>
-        <Typography align="center" sx={{marginLeft:'1rem'}} >
-        {
-      test && 
-      <CountdownTimer
-      duration={duration}
-      handleSubmit={handleBtnSubmit}
-      dbName={"MyDatabase"}
-      storeName={storeName}
-      isSubmitting = {isSubmitting}
-    />
-     }
-        </Typography>
-      </DurationContainer>
-      <Box sx={{marginLeft:'5%',marginRight:'5%',marginBottom:'1rem'}}>
-    
+      {test?.testWritings?.length > 0 ? (
+      <>
+        <DurationContainer sx={{ marginRight: "5%", fontWeight: "bold" }}>
+          <Typography align="center">Time remaining:</Typography>
+          <Typography align="center" sx={{ marginLeft: "1rem" }}>
+            <CountdownTimer
+              duration={duration}
+              handleSubmit={handleBtnSubmit}
+              dbName={"MyDatabase"}
+              storeName={storeName}
+              isSubmitting={isSubmitting}
+            />
+          </Typography>
+        </DurationContainer>
 
-      <BtnPreviousNextContentTest
-        indexVisible={indexVisible}
-        setIndexVisible={setIndexVisible}
-        sumContent={test?.testWritings.length}
-      />
-      <ContentTestWriting
-        test={test?.testWritings[indexVisible]}
-        handleBtnSubmit={handleBtnSubmit}
-        onClickTestAgain={onClickTestAgain}
-        answers={answers}
-        setAnswers={setAnswers}
-      />
-    </Box>
-      </Box>
+        <Box sx={{ marginLeft: "5%", marginRight: "5%", marginBottom: "1rem" }}>
+          <BtnPreviousNextContentTest
+            indexVisible={indexVisible}
+            setIndexVisible={setIndexVisible}
+            sumContent={test.testWritings.length}
+          />
+          <ContentTestWriting
+            test={test.testWritings[indexVisible]}
+            handleBtnSubmit={handleBtnSubmit}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        </Box>
+      </>
+    ) : (
+        <ErrorMessage message={"The teacher has not added the test information yet"}/>
+    )}
+  </Box>
       
   );
 }

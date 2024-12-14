@@ -3,10 +3,11 @@ import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import SpeakingTesting from "./SpeakingTesting";
 import { getTest } from "api/test/TestApi";
-import { useLocation } from "react-router-dom";
-
+import { useLocation,useNavigate } from "react-router-dom";
+import ErrorMessage from "../common/ErrorMessage";
 function TestSpeaking() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { state } = location;
   const [test, setTest] = useState(null);
  
@@ -17,6 +18,10 @@ function TestSpeaking() {
 
 
   useEffect(() => {
+    if (!state || !state.id) {
+      navigate("/student/tests");
+      return;
+    }
     const fetchData = async () => {
       try {
         const data = await getTest(state.id, "ACTIVE");
@@ -49,7 +54,7 @@ function TestSpeaking() {
     };
 
     fetchData();
-  }, [state.id]);
+  }, [state?.id]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -68,13 +73,16 @@ function TestSpeaking() {
         }
       />
       <Box sx={{ marginLeft: "5%", marginRight: "5%", marginBottom: "1rem" }}>
+      {test?.testWritings?.length > 0 ? (
+      <>
         <Box sx={{ marginTop: "1rem" }}>
           <SpeakingTesting
-
             test={test}
- 
           />
         </Box>
+        </> )   : (
+        <ErrorMessage message={"The teacher has not added the test information yet"}/>
+    )}
       </Box>
     </Box>
   );

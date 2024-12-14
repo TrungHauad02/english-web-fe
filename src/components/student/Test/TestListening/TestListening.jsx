@@ -11,6 +11,8 @@ import { commentListeningQuestion } from "../../../../api/test/commentTest";
 import CountdownTimer from "../common/CountdownTimer";
 import { openDB, saveData, getData, deleteData } from "../common/IndexDB";
 import { styled } from "@mui/material/styles";
+import ErrorMessage from "../common/ErrorMessage";
+
 const DurationContainer = styled(Box)(({ theme }) => ({
   background: "#E0F7FA",
   borderRadius: "20px",
@@ -41,6 +43,10 @@ function TestListening() {
   const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef(null);
   useEffect(() => {
+    if (!state || !state.id) {
+      navigate("/student/tests");
+      return;
+    }
     const fetchData = async () => {
       try {
         const data = await getTest(state.id, "ACTIVE");
@@ -74,7 +80,7 @@ function TestListening() {
     };
 
     fetchData();
-  }, [state.id]);
+  }, [state?.id]);
 
   useEffect(() => {
     if (test != null) {
@@ -290,11 +296,13 @@ useEffect(() => {
         title={test.type}
         bg="https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
       />
-    {
-      isStart===false &&(
-        <IntroduceTestListening test={test} setIsStart ={setIsStart}/>
-      )
-    }
+      {test?.testListenings?.length > 0 ? (
+      <>
+      {
+        isStart===false &&(
+          <IntroduceTestListening test={test} setIsStart ={setIsStart}/>
+        )
+      }
       {
         isStart && (
           <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
@@ -398,8 +406,9 @@ useEffect(() => {
       </Box>
         )
       }
-      
-      
+        </> )   : (
+        <ErrorMessage message={"The teacher has not added the test information yet"}/>
+    )}
     </Box>
   );
 }
