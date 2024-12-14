@@ -42,7 +42,6 @@ const ItemSerialTest = ({ gridData = [], serials = [], onItemClick, title }) => 
           ))
         ) : (
           <Grid item xs={12}>
-            <Typography variant="body2">No data available</Typography>
           </Grid>
         )}
       </Grid>

@@ -27,7 +27,8 @@ const PracticeTestSlider = () => {
       }
 
       try {
-        const data = await getListTest(1, "MIXING");
+        const userId = sessionStorage.getItem('userId');
+        const data = await getListTest(1, "MIXING",'','ACTIVE',userId,"ASC");
         const formattedSlides = data.content.map((item, index) => ({
           id: item.id,
           type: item.type,

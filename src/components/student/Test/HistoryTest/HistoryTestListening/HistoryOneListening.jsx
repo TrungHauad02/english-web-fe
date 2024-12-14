@@ -53,11 +53,21 @@ function OneListeningTest({ oneListening, dataSubmitTest,focusId }) {
           </Typography>
         </Collapse>
       </Box>
-      <HistoryListQuestion
+      <Box
+      sx={{
+        maxHeight: '400px', 
+        overflowY: 'auto',
+        padding: '1rem',
+      }}
+    >
+       <HistoryListQuestion
         dataTest={oneListening.questions}
         dataSubmitTest={dataSubmitTest}
         focusId={focusId}
       />
+
+    </Box>
+     
     </>
   );
 }
