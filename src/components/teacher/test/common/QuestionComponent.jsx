@@ -211,12 +211,15 @@ const QuestionComponent = ({
                     flex: 1,
                     "& .MuiInputBase-root": {
                       bgcolor: "#F0F0F0",
+                      height: "4rem",
                     },
                     "& .MuiFormHelperText-root": {
                       height: "1rem", 
                       margin: 0, 
                     },
                   }}
+                  multiline
+                  rows={2}  
                   value={questionData.explanation || ""}
                   onChange={(e) => handleInputChange("explanation", e.target.value)}
                   disabled={!isEditMode}
@@ -234,7 +237,7 @@ const QuestionComponent = ({
                 bgcolor: Color2_1,
                 "&:hover": { bgcolor: Color2 },
                 whiteSpace: "nowrap",
-                height: "3.5rem",
+                height: "4rem",
                 mb: errors.explanation ? '1rem' : 0,
               }}
               disabled={!isEditMode}
