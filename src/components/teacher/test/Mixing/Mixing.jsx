@@ -209,7 +209,8 @@ function Mixing() {
     <Box
       sx={{
         marginBottom: "2%",
-        marginTop: "2%",
+        marginTop: "2%", 
+        marginRight: "5%",marginLeft: "5%", 
       }}
     >
       <DeleteSubmitTestDialog
@@ -218,8 +219,7 @@ function Mixing() {
         submitTestIds={submitTestIds}
         content={`Are you sure you want to delete ${submitTestIds?.length || 0} history users of this test?`}
       />
-      <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch", marginRight: "5%",
-        marginLeft: "5%", }}>
+      <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch", }}>
         <Box sx={{ flex: 4, minHeight: 0 }}>
           <InformationTest data={test} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}/>
         </Box>
@@ -229,7 +229,13 @@ function Mixing() {
           />
         </Box>
       </Box>
+      <Box  sx={{
+        marginTop: "3rem", 
+      }}>
       {renderQuestionComponent()}
+      </Box>
+   
+  
     </Box>
   );
 }

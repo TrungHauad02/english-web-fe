@@ -38,27 +38,13 @@ import {
   handleFileChange,
 } from "../../../../shared/utils/uploadFileUtils";
 import { AddQuestionListeningTest } from "./AddQuestionListeningTest";
+import SaveEditCancelButton from "../common/SaveEditCancelButton";
 
-const FormContainer = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  backgroundColor: "",
-  borderRadius: theme.spacing(2),
-}));
 const ButtonContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   gap: theme.spacing(2),
   marginTop: theme.spacing(4),
-}));
-const ColorButton = styled(Button)(({ color }) => ({
-  borderRadius: "8px",
-  padding: "8px 24px",
-  backgroundColor: color,
-  color: color === "#98FB98" ? "black" : "white",
-  "&:hover": {
-    backgroundColor: color,
-    opacity: 0.9,
-  },
 }));
 
 function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest,setQuestionCurrent }) {
@@ -475,8 +461,8 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest,setQ
   };
 
   return (
-    <FormContainer
-      sx={{ p: 3, bgcolor: "", minHeight: "100vh", display: "flex" }}
+    <Box
+      sx={{ display: "flex" }}
     >
       <ConfirmDialog
         open={openDialogDelete}
@@ -487,29 +473,23 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest,setQ
         cancelText="Cancel"
         agreeText="Delete"
       />
-      <Box sx={{ width: "50%", maxWidth: "50%" }}>
+      <Box sx={{ width: "50%", maxWidth: "50%",flex: 1 ,marginRight:'1rem' }}>
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
             mb: 3,
-            marginLeft: "6%",
           }}
         >
-          <Typography variant="h4">Listening</Typography>
+        <Typography variant="h4"
+          align="center"
+          sx={{ fontWeight: "bold" }}>LISTENING</Typography>
         </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            gap: 4,
+        <Box   sx={{
             bgcolor: "#F0F0F0",
-            padding: "2rem",
-            marginRight: "5%",
-            marginLeft: "5%",
-          }}
-        >
-          <Box sx={{ flex: 1 }}>
+            boxShadow: 3,
+            padding:'1rem'
+          }}>
             <Box
               sx={{
                 display: "flex",
@@ -660,45 +640,28 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest,setQ
             >
               Add new question
             </Button>
-          </Box>
-        </Box>
-
-        <Box
-          sx={{ display: "flex", marginTop: "1rem", justifyContent: "center" }}
+            <Box
+          sx={{ display: "flex", padding:'1rem', justifyContent: "center" }}
         >
           <ButtonContainer>
-            <ColorButton
-              color="#F08080"
-              variant="contained"
-              onClick={handleCancel}
-            >
-              Cancel
-            </ColorButton>
-            <ColorButton
-              color="#FFD700"
-              variant="contained"
-              onClick={handleEditToggle}
-              disabled={isEditing}
-            >
-              Edit
-            </ColorButton>
-            <ColorButton
-              color="#00796B"
-              variant="contained"
-              onClick={handleSave}
-              disabled={!isEditing}
-            >
-              Save
-            </ColorButton>
+          <SaveEditCancelButton
+            onCancel={handleCancel}
+            onEdit={handleEditToggle}
+            onSave={handleSave}
+            isEditing={isEditing}
+            size="large"
+            spacing={2}
+          />
           </ButtonContainer>
         </Box>
+      </Box>
       </Box>
       <Box sx={{ flex: 1, width: "50%", maxWidth: "50%" }}>
         {questionSelected && (
           <QuestionListeningDetails
             question={{
               ...questionSelected,
-              type: "Question detail",
+              type: "QUESTION DETAILS",
               details: "true",
             }}
             isEditTestParent={!isEditing}
@@ -707,7 +670,7 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest,setQ
           />
         )}
       </Box>
-    </FormContainer>
+    </Box>
   );
 }
 

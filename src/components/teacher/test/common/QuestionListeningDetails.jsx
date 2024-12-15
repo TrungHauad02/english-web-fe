@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Box, Typography, Paper, Button } from "@mui/material";
+import { Box, Typography, Paper } from "@mui/material";
 import useColor from "shared/color/Color";
 import QuestionComponent from "./QuestionComponent";
 import { toast } from "react-toastify";
 import { styled } from "@mui/material/styles";
-
+import SaveEditCancelButton from "./SaveEditCancelButton";
 import ConfirmDialog from "shared/component/confirmDialog/ConfirmDialog";
 
 const ButtonContainer = styled(Box)(({ theme }) => ({
@@ -14,16 +14,6 @@ const ButtonContainer = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(4),
 }));
 
-const ColorButton = styled(Button)(({ color }) => ({
-  borderRadius: "8px",
-  padding: "8px 24px",
-  backgroundColor: color,
-  color: color === "#98FB98" ? "black" : "white",
-  "&:hover": {
-    backgroundColor: color,
-    opacity: 0.9,
-  },
-}));
 
 const findCorrectAnswerId = (answers = []) => {
   const correctAnswer = answers.find((answer) => answer.isCorrect === true);
@@ -230,7 +220,9 @@ const ContentQuestion = ({
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
-        <Typography variant="h4">{question?.type || ""}</Typography>
+      <Typography variant="h4"
+          align="center"
+          sx={{ fontWeight: "bold" }}>{question?.type || ""}</Typography>
       </Box>
       <ConfirmDialog
         open={openDialogDelete}
@@ -265,30 +257,15 @@ const ContentQuestion = ({
         ></QuestionComponent>
 
         <ButtonContainer>
-          <ColorButton
-            color="#F08080"
-            variant="contained"
-            disabled={isEditTestParent}
-            onClick={handleCancel}
-          >
-            Cancel
-          </ColorButton>
-          <ColorButton
-            color="#FFD700"
-            variant="contained"
-            onClick={handleEdit}
-            disabled={isEditTestParent || isEditMode}
-          >
-            Edit
-          </ColorButton>
-          <ColorButton
-            color="#00796B"
-            variant="contained"
-            onClick={handleSave}
-            disabled={!isEditMode}
-          >
-            Save
-          </ColorButton>
+        <SaveEditCancelButton
+            onCancel={handleCancel}
+            onEdit={handleEdit}
+            onSave={handleSave}
+            isEditing={isEditMode}
+            isEditingParent ={!isEditTestParent}
+            size="large"
+            spacing={2}
+          />
         </ButtonContainer>
       </Paper>
     </>

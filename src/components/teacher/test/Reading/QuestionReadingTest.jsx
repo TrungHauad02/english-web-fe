@@ -36,22 +36,13 @@ import {
   handleFileChange,
 } from "../../../../shared/utils/uploadFileUtils";
 import { uploadFile } from "api/feature/uploadFile/uploadFileService";
+import SaveEditCancelButton from "../common/SaveEditCancelButton";
 
 const ButtonContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   gap: theme.spacing(2),
   marginTop: theme.spacing(4),
-}));
-const ColorButton = styled(Button)(({ color }) => ({
-  borderRadius: "8px",
-  padding: "8px 24px",
-  backgroundColor: color,
-  color: color === "#98FB98" ? "black" : "white",
-  "&:hover": {
-    backgroundColor: color,
-    opacity: 0.9,
-  },
 }));
 
 function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest,setQuestionCurrent }) {
@@ -467,7 +458,7 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest,setQuest
   };
 
   return (
-    <Box sx={{ p: 3, bgcolor: "#", minHeight: "100vh", display: "flex" }}>
+    <Box sx={{ display: "flex" }}>
       <ConfirmDialog
         open={openDialogDelete}
         onClose={dialogHandlers.onClose}
@@ -477,35 +468,31 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest,setQuest
         cancelText="Cancel"
         agreeText="Delete"
       />
-      <Box sx={{ width: "50%", maxWidth: "50%" }}>
+      <Box sx={{flex: 1, width: "50%", maxWidth: "50%", marginRight:'1rem' }}>
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
             mb: 3,
-            marginLeft: "6%",
           }}
         >
-          <Typography variant="h4">Reading</Typography>
+          <Typography variant="h4"
+          align="center"
+          sx={{ fontWeight: "bold" }}>READING</Typography>
         </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            gap: 4,
+          <Box   sx={{
             bgcolor: "#F0F0F0",
-            padding: "2rem",
-            marginRight: "5%",
-            marginLeft: "5%",
-          }}
-        >
-          <Box sx={{ flex: 1,marginTop:'2rem', }}>
+            boxShadow: 3,
+            padding:'1rem'
+          }}>
+          
           <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
                 gap: 2,
                 mb: 2,
+                marginTop:'3rem'
               }}
             >
               <Typography
@@ -648,49 +635,32 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest,setQuest
             >
               Add new question
             </Button>
-          </Box>
-        </Box>
-
-        <Box
+            <Box
           sx={{
             display: "flex",
-            marginTop: "1rem",
             justifyContent: "center",
+            padding:'1rem'
           }}
         >
           <ButtonContainer>
-            <ColorButton
-              color="#F08080"
-              variant="contained"
-              onClick={handleCancel}
-            >
-              Cancel
-            </ColorButton>
-            <ColorButton
-              color="#FFD700"
-              variant="contained"
-              onClick={handleEditToggle}
-              disabled={isEditing}
-            >
-              Edit
-            </ColorButton>
-            <ColorButton
-              color="#00796B"
-              variant="contained"
-              onClick={handleSave}
-              disabled={!isEditing}
-            >
-              Save
-            </ColorButton>
+          <SaveEditCancelButton
+            onCancel={handleCancel}
+            onEdit={handleEditToggle}
+            onSave={handleSave}
+            isEditing={isEditing}
+            size="large"
+            spacing={2}
+          />
           </ButtonContainer>
         </Box>
+      </Box>
       </Box>
       <Box sx={{ flex: 1, width: "50%", maxWidth: "50%" }}>
         {questionSelected && (
           <QuestionReadingDetails
             question={{
               ...questionSelected,
-              type: "Question detail",
+              type: "QUESTION DETAILS",
               details: "true",
             }}
             isEditTestParent={!isEditing}

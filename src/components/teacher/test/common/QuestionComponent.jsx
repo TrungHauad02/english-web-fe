@@ -41,8 +41,9 @@ const QuestionComponent = ({
             alignItems: "center",
             mb: 2,
             padding: "0.5rem 1rem",
-            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.5)",
-            transform: "translateX(-10px)",
+            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.6)",
+            transform: "translateX(-5px) translateY(-3px)",
+    
           }}
         >
           <Typography variant="h6" sx={{ mr: 1 }}>
@@ -133,7 +134,6 @@ const QuestionComponent = ({
                           : ""
                       }
                     />
-
                     <FormControl sx={{ width: 120, ml: 2 }}>
                       <Select
                         value={answer.status || "ACTIVE"}
@@ -189,13 +189,11 @@ const QuestionComponent = ({
                   sx={{
                     flex: 1,
                     "& .MuiInputBase-root": {
-                      height: "3rem",
+               
                       bgcolor: "#F0F0F0",
-                      borderRadius: "4px",
+                
                     },
                   }}
-                  multiline
-                  rows={2}
                   value={questionData.explanation || ""}
                   onChange={(e) =>
                     handleInputChange("explanation", e.target.value)
@@ -214,7 +212,7 @@ const QuestionComponent = ({
                 bgcolor: Color2_1,
                 "&:hover": { bgcolor: Color2 },
                 whiteSpace: "nowrap",
-                height: "3rem",
+                height: "3.5rem",
               }}
               disabled={!isEditMode}
             >
