@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { styled } from "@mui/material/styles";
 import { updateTest } from "api/test/TestApi";
 import HelpTextField from "./HelpTextField";
+import SaveEditCancelButton from "./SaveEditCancelButton";
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -23,17 +24,6 @@ const ButtonContainer = styled(Box)(({ theme }) => ({
   justifyContent: "center",
   gap: theme.spacing(2),
   marginTop: theme.spacing(4),
-}));
-
-const ColorButton = styled(Button)(({ color }) => ({
-  borderRadius: "1rem",
-  padding: "1rem 2rem",
-  backgroundColor: color,
-  color: "white",
-  "&:hover": {
-    backgroundColor: color,
-    opacity: 0.9,
-  },
 }));
 
 function InformationTest({ data, BooleanDeleteSubmitTest }) {
@@ -229,24 +219,14 @@ function InformationTest({ data, BooleanDeleteSubmitTest }) {
         </Box>
 
         <ButtonContainer>
-          <ColorButton
-            color="#F08080"
-            variant="contained"
-            onClick={handleCancel}
-          >
-            Cancel
-          </ColorButton>
-          <ColorButton color="#FFD700" variant="contained" onClick={handleEdit}>
-            Edit
-          </ColorButton>
-          <ColorButton
-            color="#00796B"
-            variant="contained"
-            onClick={handleSave}
-            disabled={!editMode}
-          >
-            Save
-          </ColorButton>
+        <SaveEditCancelButton
+            onCancel={handleCancel}
+            onEdit={handleEdit}
+            onSave={handleSave}
+            isEditing={editMode}
+            size="large"
+            spacing={2}
+          />
         </ButtonContainer>
       </FormContainer>
     </Box>

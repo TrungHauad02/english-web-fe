@@ -1,20 +1,9 @@
 import React, { useState } from "react";
-import { Box, Typography, Paper, Button, TextField } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Box, Typography, Paper, TextField } from "@mui/material";
 import { updateTestWriting } from "api/test/TestWritingApi";
 import { createTestWriting } from "api/test/TestWritingApi";
 import { toast } from "react-toastify";
-
-const ColorButton = styled(Button)(({ color }) => ({
-  borderRadius: "8px",
-  padding: "8px 24px",
-  backgroundColor: color,
-  color: color === "#98FB98" ? "black" : "white",
-  "&:hover": {
-    backgroundColor: color,
-    opacity: 0.9,
-  },
-}));
+import SaveEditCancelButton from "./SaveEditCancelButton";
 
 const QuestionWriting = ({ data, handleWriting, BooleanDeleteSubmitTest,setQuestionCurrent }) => {
   const [content, setContent] = useState(data?.content || "");
@@ -69,18 +58,15 @@ const QuestionWriting = ({ data, handleWriting, BooleanDeleteSubmitTest,setQuest
   return (
     <Box
       sx={{
-        p: 3,
         bgcolor: "#F7F7F7",
-        minHeight: "100vh",
-        marginRight: "5%",
-        marginLeft: "5%",
         borderRadius: "8px",
         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+        padding:'1rem'
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
         <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-          Writing
+          WRITING
         </Typography>
       </Box>
 
@@ -130,30 +116,15 @@ const QuestionWriting = ({ data, handleWriting, BooleanDeleteSubmitTest,setQuest
           />
         </Paper>
 
-        <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
-          <ColorButton
-            color="#F08080"
-            variant="contained"
-            onClick={handleCancel}
-          >
-            Cancel
-          </ColorButton>
-          <ColorButton
-            color="#FFD700"
-            variant="contained"
-            onClick={handleEdit}
-            disabled={isEditing}
-          >
-            Edit
-          </ColorButton>
-          <ColorButton
-            color="#00796B"
-            variant="contained"
-            onClick={handleSave}
-            disabled={!isEditing}
-          >
-            Save
-          </ColorButton>
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 2 ,marginTop:'2rem'}}>
+        <SaveEditCancelButton
+            onCancel={handleCancel}
+            onEdit={handleEdit}
+            onSave={handleSave}
+            isEditing={isEditing}
+            size="large"
+            spacing={2}
+          />
         </Box>
       </Box>
     </Box>

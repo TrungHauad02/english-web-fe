@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Typography, Paper, Button } from "@mui/material";
+import { Box, Typography, Paper } from "@mui/material";
 import { toast } from "react-toastify";
 import QuestionComponent from "./QuestionComponent";
 import { styled } from "@mui/material/styles";
@@ -11,25 +11,14 @@ import {
   deleteTestMixingAnswer,
 } from "api/test/TestMixingAnswerApi";
 import { AddQuestionTest } from "../Mixing/AddQuestionTest";
-
 import useColor from "shared/color/Color";
+import SaveEditCancelButton from "../common/SaveEditCancelButton"
 
 const ButtonContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   gap: theme.spacing(2),
   marginTop: theme.spacing(4),
-}));
-
-const ColorButton = styled(Button)(({ color }) => ({
-  borderRadius: "8px",
-  padding: "8px 24px",
-  backgroundColor: color,
-  color: color === "#98FB98" ? "black" : "white",
-  "&:hover": {
-    backgroundColor: color,
-    opacity: 0.9,
-  },
 }));
 
 const findCorrectAnswerId = (answers) => {
@@ -82,11 +71,7 @@ const MixingQuiz = ({ question, handleQuestion, BooleanDeleteSubmitTest ,setQues
     <>
       <FormContainer
         sx={{
-          p: 3,
           bgcolor: "#F0F0F0",
-          minHeight: "100vh",
-          marginRight: "5%",
-          marginLeft: "5%",
         }}
       >
         <ContentQuestion
@@ -329,10 +314,12 @@ const ContentQuestion = ({
           agreeText="Delete"
         />
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-          <Typography variant="h4">{question.type}</Typography>
+        <Typography variant="h4"
+          gutterBottom
+          sx={{ fontWeight: "bold" }}>{question?.type}</Typography>
         </Box>
-
-        <QuestionComponent
+      <Box>
+      <QuestionComponent
           question={question}
           questionData={questionMixing}
           isEditMode={isEditMode}
@@ -353,30 +340,17 @@ const ContentQuestion = ({
         ></QuestionComponent>
 
         <ButtonContainer>
-          <ColorButton
-            color="#F08080"
-            variant="contained"
-            onClick={handleCancel}
-          >
-            Cancel
-          </ColorButton>
-          <ColorButton
-            color="#FFD700"
-            variant="contained"
-            onClick={handleEdit}
-            disabled={isEditMode}
-          >
-            Edit
-          </ColorButton>
-          <ColorButton
-            color="#00796B"
-            variant="contained"
-            onClick={handleSave}
-            disabled={!isEditMode}
-          >
-            Save
-          </ColorButton>
+        <SaveEditCancelButton
+            onCancel={handleCancel}
+            onEdit={handleEdit}
+            onSave={handleSave}
+            isEditing={isEditMode}
+            size="large"
+            spacing={2}
+          />
         </ButtonContainer>
+      </Box>
+        
       </Box>
     </>
   );

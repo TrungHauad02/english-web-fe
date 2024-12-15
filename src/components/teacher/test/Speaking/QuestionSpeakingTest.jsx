@@ -23,6 +23,7 @@ import {
   updateTestSpeaking,
 } from "api/test/TestSpeakingApi";
 import { updateTestSpeakingQuestion } from "api/test/TestSpeakingQuestionApi";
+import SaveEditCancelButton from "../common/SaveEditCancelButton";
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -38,16 +39,6 @@ const ButtonContainer = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(4),
 }));
 
-const ColorButton = styled(Button)(({ color }) => ({
-  borderRadius: "8px",
-  padding: "8px 24px",
-  backgroundColor: color,
-  color: color === "#98FB98" ? "black" : "white",
-  "&:hover": {
-    backgroundColor: color,
-    opacity: 0.9,
-  },
-}));
 
 const TestSpeakingForm = ({
   initialData,
@@ -378,9 +369,9 @@ const TestSpeakingForm = ({
           cancelText="Cancel"
           agreeText="Delete"
         />
-        <Typography variant="h4" gutterBottom>
-          SPEAKING
-        </Typography>
+        <Typography variant="h4"
+          gutterBottom
+          sx={{ fontWeight: "bold" }}>SPEAKING</Typography>
         <FormContainer>
           <Box
             mb={3}
@@ -488,29 +479,14 @@ const TestSpeakingForm = ({
           </Button>
 
           <ButtonContainer>
-            <ColorButton
-              color="#F08080"
-              variant="contained"
-              onClick={handleCancel}
-            >
-              Cancel
-            </ColorButton>
-            <ColorButton
-              color="#FFD700"
-              variant="contained"
-              disabled={isEditMode}
-              onClick={handleEdit}
-            >
-              Edit
-            </ColorButton>
-            <ColorButton
-              color={Color2}
-              variant="contained"
-              onClick={handleSave}
-              disabled={!isEditMode}
-            >
-              Save
-            </ColorButton>
+          <SaveEditCancelButton
+            onCancel={handleCancel}
+            onEdit={handleEdit}
+            onSave={handleSave}
+            isEditing={isEditMode}
+            size="large"
+            spacing={2}
+          />
           </ButtonContainer>
         </FormContainer>
       </Box>
