@@ -394,12 +394,17 @@ const TestSpeakingForm = ({
               sx={{
                 whiteSpace: "nowrap",
                 flexShrink: 0,
+                mb: errors.title ? '1rem' : 0
               }}
             >
               Test Speaking Title
             </Typography>
             <TextField
               label=""
+              sx={{  "& .MuiFormHelperText-root": {
+                height: "1rem", 
+                margin: 0, 
+              },}}
               fullWidth
               value={formData.title}
               onChange={(e) => handleTitleChange(e.target.value)}
@@ -419,6 +424,7 @@ const TestSpeakingForm = ({
                 sx={{
                   whiteSpace: "nowrap",
                   flexShrink: 0,
+                  mb: errors.questions[index] ? '1rem' : 0
                 }}
               >
                 Serial {question.serial}
@@ -437,9 +443,14 @@ const TestSpeakingForm = ({
                     bgcolor: "#F8F8F8",
                     borderRadius: "4px",
                   },
+                  "& .MuiFormHelperText-root": {
+                    height: "1rem", 
+                    margin: 0, 
+                  },
                 }}
               />
-              <FormControl sx={{ width: "160px", ml: 2 }}>
+              <Box sx={{mb: errors.questions[index] ? '1rem' : 0,display: "flex", alignItems: "center",}}>
+              <FormControl sx={{ width: "160px", }}>
                 <Select
                   value={question.status || "ACTIVE"}
                   disabled={!isEditMode}
@@ -461,6 +472,8 @@ const TestSpeakingForm = ({
               >
                 <Trash />
               </IconButton>
+              </Box>
+              
             </Box>
           ))}
 
