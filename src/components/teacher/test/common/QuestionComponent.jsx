@@ -46,7 +46,11 @@ const QuestionComponent = ({
     
           }}
         >
-          <Typography variant="h6" sx={{ mr: 1 }}>
+
+       <Box sx={{  display: "flex", alignItems: "center",
+        mb: errors.content ? '1rem' : 0,
+       }}>
+       <Typography variant="h6" sx={{ mr: 1 }}>
             Serial
           </Typography>
           <Box
@@ -67,7 +71,18 @@ const QuestionComponent = ({
           <Typography variant="h6" sx={{ mr: 1 }}>
             :
           </Typography>
+       </Box>
           <TextField
+          sx={{
+            "& .MuiInputBase-root": {
+              bgcolor: "#F0F0F0",
+              borderRadius: "4px",
+            },
+            "& .MuiFormHelperText-root": {
+              height: "1rem", 
+              margin: 0, 
+            },
+          }}
             fullWidth
             disabled={!isEditMode}
             value={questionData.content || ""}
@@ -120,6 +135,10 @@ const QuestionComponent = ({
                           bgcolor: "#F0F0F0",
                           borderRadius: "4px",
                         },
+                        "& .MuiFormHelperText-root": {
+                          height: "1rem", 
+                          margin: 0, 
+                        },
                       }}
                       value={answer.content}
                       onChange={(e) =>
@@ -134,6 +153,7 @@ const QuestionComponent = ({
                           : ""
                       }
                     />
+                    <Box sx={{mb: errors.answers && errors.answers.includes(answer.id) ? '1rem' : 0, display: "flex", alignItems: "center", }}>
                     <FormControl sx={{ width: 120, ml: 2 }}>
                       <Select
                         value={answer.status || "ACTIVE"}
@@ -173,6 +193,7 @@ const QuestionComponent = ({
                     >
                       <Trash />
                     </IconButton>
+                    </Box>
                   </Box>
                 ))}
               </RadioGroup>
@@ -182,28 +203,29 @@ const QuestionComponent = ({
           <Box sx={{ mt: 2, display: "flex", alignItems: "center", gap: 2 }}>
             {!listening && (
               <>
-                <Typography variant="h6" sx={{ whiteSpace: "nowrap" }}>
+                <Typography variant="h6" sx={{ whiteSpace: "nowrap",mb: errors.explanation ? '1rem' : 0, }}>
                   Explain:
                 </Typography>
                 <TextField
                   sx={{
                     flex: 1,
                     "& .MuiInputBase-root": {
-               
                       bgcolor: "#F0F0F0",
-                
+                    },
+                    "& .MuiFormHelperText-root": {
+                      height: "1rem", 
+                      margin: 0, 
                     },
                   }}
                   value={questionData.explanation || ""}
-                  onChange={(e) =>
-                    handleInputChange("explanation", e.target.value)
-                  }
+                  onChange={(e) => handleInputChange("explanation", e.target.value)}
                   disabled={!isEditMode}
                   error={!!errors.explanation}
                   helperText={errors.explanation}
                 />
               </>
             )}
+
             <Button
               variant="contained"
               onClick={handleAddAnswer}
@@ -213,6 +235,7 @@ const QuestionComponent = ({
                 "&:hover": { bgcolor: Color2 },
                 whiteSpace: "nowrap",
                 height: "3.5rem",
+                mb: errors.explanation ? '1rem' : 0,
               }}
               disabled={!isEditMode}
             >

@@ -14,15 +14,18 @@ const HelpTextField = ({
 }) => {
   return (
     <Box display="flex" alignItems="center" mb={2}>
+      <Box sx={{ mb: error ? '1rem' : 0 }}>
       <Typography
         variant="body1"
-        style={{ fontWeight: 'bold', marginRight: '16px', minWidth: minWidth }} 
+        style={{ fontWeight: 'bold', marginRight: '16px', minWidth: minWidth,}} 
       >
         {label}
       </Typography>
+      </Box>
+     
       <Box flexGrow={1}>
         <TextField
-          sx={{       backgroundColor: "white",}}
+          sx={{  backgroundColor: "white",}}
           value={value}
           onChange={onChange}
           error={error}
@@ -36,7 +39,7 @@ const HelpTextField = ({
           <Typography
             variant="caption"
             color="error"
-            style={{ marginTop: '4px', display: 'block' }}
+            style={{ height:'1rem', display: 'block' }}
           >
             {errorText}
           </Typography>
