@@ -16,7 +16,7 @@ export const handleSave = async (name, userNote, image, setEditMode, setIsLoadin
     const newImage = await handleFileUpload(
       user.avatar,
       image,
-      name,
+      id,
       "user/profile"
     );
 
