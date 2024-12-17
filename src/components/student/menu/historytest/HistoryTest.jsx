@@ -3,11 +3,11 @@ import { Box, Grid, Typography, Card, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import MainPicture from "../../common/listTopic/MainPicture";
 import Filter from "./Filter";
-import { getListSubmitTests } from "../../../../api/test/submitTest";
+import { getListSubmitTests } from "api/test/submitTest";
 import CustomPagination from "shared/component/pagination/CustomPagination";
-import { useLocation,useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router-dom";
 
-const CardStyled = styled(Card)(({ theme }) => ({
+const CardStyled = styled(Card)(() => ({
   backgroundColor: "#f5f5f5",
   padding: "10px",
   marginBottom: "10px",
@@ -20,18 +20,16 @@ const HistoryTest = () => {
   const navigate = useNavigate();
   const { title, type } = location.state || {};
 
-
   const [filter, setFilter] = useState(type || "ALL");
   const [searchText, setSearchText] = useState(title || "");
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchStartDate, setSearchStartDate] = useState('');
-  const [searchEndDate, setSearchEndDate] = useState('');
-  
+  const [searchStartDate, setSearchStartDate] = useState("");
+  const [searchEndDate, setSearchEndDate] = useState("");
+
   const [tests, setTests] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
-  
-  const navigateSubmitTest =   (submitTest) => {
 
+  const navigateSubmitTest = (submitTest) => {
     let newPath = "";
     const state = {
       id: submitTest.id,
@@ -58,10 +56,10 @@ const HistoryTest = () => {
     }
     navigate(newPath, { state });
   };
- 
+
   const fetchTests = async () => {
     try {
-      const userId = sessionStorage.getItem('userId');
+      const userId = sessionStorage.getItem("userId");
       const adjustedType = filter === "ALL" ? "" : filter;
       const data = await getListSubmitTests(
         currentPage,
@@ -106,28 +104,31 @@ const HistoryTest = () => {
               fetchTests();
             }}
           />
-        <Grid container spacing={2}>
-        {tests.map((test, index) => (
-          <Grid item xs={12} sm={6} key={index}>
-            <CardStyled variant="outlined"
-              onClick={() => navigateSubmitTest(test)}
-            >
-              <Typography variant="h6">{test.testTitle}</Typography>
-              <Typography>Date: {new Date(test.submitTime).toLocaleString()}</Typography>
-              <Typography>
-                <strong>Score:</strong> {test.score === -1 ? "Haven’t done yet" : test.score}
-              </Typography>
-            </CardStyled>
+          <Grid container spacing={2}>
+            {tests.map((test, index) => (
+              <Grid item xs={12} sm={6} key={index}>
+                <CardStyled
+                  variant="outlined"
+                  onClick={() => navigateSubmitTest(test)}
+                >
+                  <Typography variant="h6">{test.testTitle}</Typography>
+                  <Typography>
+                    Date: {new Date(test.submitTime).toLocaleString()}
+                  </Typography>
+                  <Typography>
+                    <strong>Score:</strong>{" "}
+                    {test.score === -1 ? "Haven’t done yet" : test.score}
+                  </Typography>
+                </CardStyled>
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
-
         </Box>
         <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
           <CustomPagination
             count={Math.ceil(totalItems / ITEMS_PER_PAGE)}
             page={currentPage}
-            onChange={(event, page) => setCurrentPage(page)}
+            onChange={(page) => setCurrentPage(page)}
           />
         </Stack>
       </Box>

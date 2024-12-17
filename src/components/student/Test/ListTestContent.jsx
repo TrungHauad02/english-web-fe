@@ -8,7 +8,7 @@ import {
   styled,
 } from "@mui/material";
 import useColor from "../../../shared/color/Color";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const type = {
   mixing: "MIXING",
@@ -21,7 +21,7 @@ const type = {
 };
 
 const ListTestContainer = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(12),
+  marginTop: theme.spacing(8),
   paddingLeft: theme.spacing(2),
 }));
 
@@ -39,12 +39,11 @@ const TestCard = styled(Card)(({ theme }) => {
 function ListTestContent({ list }) {
   const colors = useColor();
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const handleClick = (datatest) => {
+  const handleClick = (dataTest) => {
     let newPath = "";
 
-    switch (datatest.type) {
+    switch (dataTest.type) {
       case type.mixing:
         newPath = "/student/test/mixing";
         break;
@@ -63,7 +62,7 @@ function ListTestContent({ list }) {
       default:
         break;
     }
-    navigate(newPath, { state: datatest });
+    navigate(newPath, { state: dataTest });
   };
 
   const handleNavigateHistoryTest = (test) => {
@@ -74,50 +73,80 @@ function ListTestContent({ list }) {
 
   return (
     <>
-      <ListTestContainer    sx={{
-    backgroundColor: "#F5F5F5", 
-    padding: "2rem",
-    borderRadius: "1rem" 
-      }}>
-   
+      <ListTestContainer
+        sx={{
+          backgroundColor: "#e0e0e0",
+          padding: "2rem",
+          borderRadius: "1rem",
+        }}
+      >
         <Grid container spacing={4}>
           {list.map((test, index) => (
-        <Grid item xs={12} sm={4} key={index}>
-        <TestCard sx={{ backgroundColor: "#e0e0e0" }}>
-          <CardContent>
-            <Typography variant="h5" component="h4">
-              {test.title}
-            </Typography>
-            <Typography  sx={{ marginTop: "0.5rem" }}>
-              <strong>Duration:</strong> {test.duration} minutes
-            </Typography>
-            <Typography  sx={{ marginTop: "0.5rem" }}>
-              <strong>Number of Questions:</strong> {test.numberOfQuestions}
-            </Typography>
-            <Typography  sx={{ marginTop: "0.5rem" }}>
-              <strong>Score:</strong> {test.scoreLastOfTest === -1
-                ? "Haven’t done yet"
-                : test.scoreLastOfTest}
-            </Typography>
-          </CardContent>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-            <Button
-              sx={{ padding: "0.5rem 1rem", color: "#000000", borderColor: "#000000", textDecoration: "underline" }}
-              onClick={() => handleNavigateHistoryTest(test)}
-            >
-              See History
-            </Button>
-            <Button
-              variant="contained"
-              sx={{ padding: "0.5rem 1rem", backgroundColor: colors.Color2, color: "#ffffff", marginBottom:'1rem', marginRight:"1rem"} }
-              onClick={() => handleClick(test)}
-            >
-              Do test
-            </Button>
-          </div>
-        </TestCard>
-      </Grid>
-           
+            <Grid item xs={12} sm={4} key={index}>
+              <TestCard sx={{ backgroundColor: "#fff" }}>
+                <CardContent>
+                  <Typography variant="h5" component="h4">
+                    {test.title}
+                  </Typography>
+                  <Typography sx={{ marginTop: "0.5rem" }}>
+                    <strong>Duration:</strong> {test.duration} minutes
+                  </Typography>
+                  <Typography sx={{ marginTop: "0.5rem" }}>
+                    <strong>Number of Questions:</strong>{" "}
+                    {test.numberOfQuestions}
+                  </Typography>
+                  <Typography sx={{ marginTop: "0.5rem" }}>
+                    <strong>Score:</strong>{" "}
+                    {test.scoreLastOfTest === -1
+                      ? "Haven’t done yet"
+                      : test.scoreLastOfTest}
+                  </Typography>
+                </CardContent>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    sx={{
+                      marginLeft: "0.5rem",
+                      padding: "0.5rem 1rem",
+                      color: "#000000",
+                      borderColor: "#000000",
+                      textDecoration: "underline",
+                      borderRadius: "99rem",
+                      ":hover": {
+                        bgcolor: colors.Color1,
+                      },
+                    }}
+                    onClick={() => handleNavigateHistoryTest(test)}
+                  >
+                    See History
+                  </Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      padding: "0.5rem 1rem",
+                      backgroundColor: colors.Color2,
+                      color: "#ffffff",
+                      marginBottom: "1rem",
+                      marginRight: "1.5rem",
+                      borderRadius: "2rem",
+                      transition: "1s",
+                      ":hover": {
+                        paddingX: "2rem",
+                        marginRight: "1rem",
+                      },
+                    }}
+                    onClick={() => handleClick(test)}
+                  >
+                    Do test
+                  </Button>
+                </div>
+              </TestCard>
+            </Grid>
           ))}
         </Grid>
       </ListTestContainer>

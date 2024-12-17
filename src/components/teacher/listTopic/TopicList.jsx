@@ -92,22 +92,47 @@ export default function TopicList({ title }) {
           ))}
         <Stack justifyContent="center" alignItems={"center"}>
           {displayList.length < totalElements && (
-            <Box display="flex" justifyContent="center">
+            <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
               <Button
-                variant={"text"}
+                variant="contained"
+                fullWidth
                 sx={{
-                  backgroundColor: "#ffffffff",
-                  padding: "1rem 1.5rem",
-                  color: "#000",
-                  fontSize: "1.05rem",
-                  textDecoration: "underline",
+                  background: "linear-gradient(135deg, #00796b, #48a999)",
+                  padding: "0.8rem 2rem",
+                  color: "#fff",
+                  fontSize: "1rem",
+                  fontWeight: 600,
+                  textTransform: "capitalize",
+                  borderRadius: "0.5rem",
+                  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    background: "linear-gradient(135deg, #005f55, #3b9384)",
+                    boxShadow: "0px 6px 10px rgba(0, 0, 0, 0.2)",
+                  },
+                  "&:active": {
+                    background: "linear-gradient(135deg, #00473e, #2c796b)",
+                    boxShadow: "inset 0px 4px 8px rgba(0, 0, 0, 0.2)",
+                  },
+                  "&:disabled": {
+                    background: "#E0E0E0",
+                    color: "#BDBDBD",
+                    cursor: "not-allowed",
+                  },
                 }}
                 onClick={handleLoadMore}
                 disabled={isLoading}
               >
                 {isLoading ? (
-                  <Stack justifyContent="center" alignItems={"center"}>
-                    <CircularProgress size="2rem" />
+                  <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={1}
+                    sx={{ width: "100%" }}
+                  >
+                    <CircularProgress size="1.5rem" sx={{ color: "#fff" }} />
+                    <span>Loading...</span>
                   </Stack>
                 ) : (
                   "Load more"

@@ -23,7 +23,11 @@ function ListTopic({ path, title, bg }) {
           <CircularProgress size="3rem" />
         </Stack>
       ) : (
-        <Stack direction={"column"}>
+        <Stack
+          direction={"column"}
+          spacing={4}
+          sx={{ padding: "2rem 1rem 1rem 1rem" }}
+        >
           <Box
             sx={{
               backgroundColor: Color1,
