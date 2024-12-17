@@ -48,7 +48,7 @@ function HeaderStudent() {
       direction={"row"}
       justifyContent={"space-between"}
       sx={{
-        backgroundColor: HeaderBg,
+        backgroundColor: HeaderBg + "99",
         color: "#fff",
         padding: "0.5rem",
         position: "fixed",
@@ -56,7 +56,8 @@ function HeaderStudent() {
         left: 0,
         right: 0,
         zIndex: 1100,
-        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+        backdropFilter: "blur(10px)",
       }}
     >
       <Stack direction={"row"} alignItems={"center"} spacing={5}>

@@ -7,8 +7,10 @@ import {
   Grid2,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import useColor from "shared/color/Color";
 
 function ListContent({ list }) {
+  const color = useColor();
   const navigate = useNavigate();
   const handleClick = (id) => {
     navigate(`${id}`);
@@ -31,7 +33,7 @@ function ListContent({ list }) {
               transition: "all 0.5s",
               ":hover": {
                 transform: "scale(1.05)",
-                boxShadow: "0 0 10px 5px #6EC2F7",
+                boxShadow: `0 0 10px 5px ${color.Color2_1}`,
               },
             }}
           >

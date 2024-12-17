@@ -44,6 +44,7 @@ export default function useListTopic(path) {
 
   return {
     list,
+    page,
     totalPage,
     onChangePage,
     quote,
