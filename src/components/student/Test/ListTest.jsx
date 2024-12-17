@@ -187,6 +187,7 @@ function ListTest() {
         <ListTestContent list={list} />
         <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
           <CustomPagination
+            page={page}
             count={totalPage}
             onChange={onChangePage}
             key={currType}
