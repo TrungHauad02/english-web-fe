@@ -161,6 +161,10 @@ function HeaderStudent() {
           <img
             src={loading ? "/header_user.png" : avatar}
             alt="User Icon"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/header_user.png";
+            }}
             style={{
               width: "40px",
               height: "40px",
