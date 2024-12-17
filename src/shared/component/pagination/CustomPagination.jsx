@@ -4,12 +4,13 @@ import Stack from "@mui/material/Stack";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-export default function CustomPagination({ count, onChange }) {
+export default function CustomPagination({ page, count, onChange }) {
   return (
     <Stack spacing={2}>
       <Pagination
         shape="rounded"
         count={count}
+        page={page}
         onChange={onChange}
         sx={{
           "& .MuiPaginationItem-page.Mui-selected": {

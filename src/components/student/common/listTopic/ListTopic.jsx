@@ -7,7 +7,7 @@ import useColor from "shared/color/Color";
 import "./ListTopic.css";
 
 function ListTopic({ path, title, bg }) {
-  const { list, totalPage, onChangePage, quote, author, isLoading } =
+  const { list, page, totalPage, onChangePage, quote, author, isLoading } =
     useListTopic(path);
   const { Color1, Color2, Color3, Color4 } = useColor();
 
@@ -64,7 +64,11 @@ function ListTopic({ path, title, bg }) {
 
           <ListContent list={list} />
           <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
-            <CustomPagination count={totalPage} onChange={onChangePage} />
+            <CustomPagination
+              page={page}
+              count={totalPage}
+              onChange={onChangePage}
+            />
           </Stack>
         </Stack>
       )}

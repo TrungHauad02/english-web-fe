@@ -13,6 +13,7 @@ const icon = "/icon.png";
 function HeaderStudent() {
   const { HeaderBg } = useColor();
   const [avatar, setAvatar] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const loadUserInfo = async () => {
       try {
@@ -21,6 +22,8 @@ function HeaderStudent() {
       } catch (error) {
         console.error("Failed to fetch user info:", error);
         setAvatar("/header_user.png");
+      } finally {
+        setLoading(false);
       }
     };
     loadUserInfo();
@@ -157,8 +160,12 @@ function HeaderStudent() {
 
         <IconButton onClick={handleMenuClick}>
           <img
-            src={avatar}
+            src={loading ? "/header_user.png" : avatar}
             alt="User Icon"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/header_user.png";
+            }}
             style={{
               width: "40px",
               height: "40px",
