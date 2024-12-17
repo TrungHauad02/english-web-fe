@@ -125,11 +125,11 @@ const HistoryTest = () => {
           </Grid>
         </Box>
         <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
-          <CustomPagination
-            count={Math.ceil(totalItems / ITEMS_PER_PAGE)}
-            page={currentPage}
-            onChange={(page) => setCurrentPage(page)}
-          />
+        <CustomPagination
+          page={currentPage}
+          count={Math.ceil(totalItems / ITEMS_PER_PAGE)}
+          onChange={(event, page) => setCurrentPage(page)} 
+        />
         </Stack>
       </Box>
     </>
