@@ -63,7 +63,11 @@ export default function TopicList({ title }) {
             </Typography>
           </Grid2>
           <Grid2 item size={3}>
-            <Typography variant={"h6"} textAlign={"center"}>
+            <Typography
+              variant={"h6"}
+              textAlign={"left"}
+              sx={{ paddingLeft: "2rem" }}
+            >
               Title
             </Typography>
           </Grid2>

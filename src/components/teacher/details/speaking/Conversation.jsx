@@ -1,4 +1,10 @@
-import { Button, Grid2, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Grid2,
+  Stack,
+  Typography,
+} from "@mui/material";
 import EditButton from "../common/button/EditButton";
 import SaveButton from "../common/button/SaveButton";
 import Line from "./Line";
@@ -9,8 +15,9 @@ export default function Conversation({
   conversation,
   setConversation,
   setError,
+  loading,
 }) {
-  const { isEditing, handleAddNewLine, handleEditing, handleSave } =
+  const { isEditing, isSaving, handleAddNewLine, handleEditing, handleSave } =
     useConversation(listPeople, conversation, setConversation, setError);
 
   return (
@@ -32,8 +39,8 @@ export default function Conversation({
           <Typography variant="h6">Conversation</Typography>
         </Grid2>
         <Grid2 container direction={"row"} spacing={4}>
-          <EditButton showText onEdit={handleEditing} />
-          <SaveButton showText onSave={handleSave} />
+          <EditButton showText onEdit={handleEditing} disabled={isSaving} />
+          <SaveButton showText onSave={handleSave} disabled={isSaving} />
         </Grid2>
       </Grid2>
       <Grid2
@@ -44,18 +51,25 @@ export default function Conversation({
           width: "100%",
           padding: "1rem 1rem",
         }}
+        disabled={isSaving}
       >
-        {conversation.map((line, index) => (
-          <Line
-            key={index}
-            listPeople={listPeople}
-            line={line}
-            disabled={!isEditing}
-            conversation={conversation}
-            setConversation={setConversation}
-            index={index}
-          />
-        ))}
+        {loading && (
+          <Stack justifyContent={"center"} alignItems={"center"}>
+            <CircularProgress />
+          </Stack>
+        )}
+        {!loading &&
+          conversation.map((line, index) => (
+            <Line
+              key={index}
+              listPeople={listPeople}
+              line={line}
+              disabled={!isEditing}
+              conversation={conversation}
+              setConversation={setConversation}
+              index={index}
+            />
+          ))}
         <Button
           onClick={handleAddNewLine}
           disabled={!isEditing}

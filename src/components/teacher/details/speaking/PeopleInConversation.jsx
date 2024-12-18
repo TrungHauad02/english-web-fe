@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, memo } from "react";
-import { Grid2, Typography } from "@mui/material";
+import { CircularProgress, Grid2, Stack, Typography } from "@mui/material";
 import SoundViewer from "shared/component/soundViewer/SoundViewer";
 
 const VoiceItem = memo(({ voice }) => {
@@ -66,7 +66,7 @@ const VoiceItem = memo(({ voice }) => {
   );
 });
 
-export default function PeopleInConversation({ voices }) {
+export default function PeopleInConversation({ voices, loading }) {
   return (
     <Grid2
       container
@@ -100,9 +100,13 @@ export default function PeopleInConversation({ voices }) {
         spacing={2}
         sx={{ padding: "0.5rem", marginBottom: "1rem" }}
       >
-        {voices.map((voice) => (
-          <VoiceItem key={voice.id} voice={voice} />
-        ))}
+        {loading && (
+          <Stack justifyContent={"center"} alignItems={"center"}>
+            <CircularProgress />
+          </Stack>
+        )}
+        {!loading &&
+          voices.map((voice) => <VoiceItem key={voice.id} voice={voice} />)}
       </Grid2>
     </Grid2>
   );

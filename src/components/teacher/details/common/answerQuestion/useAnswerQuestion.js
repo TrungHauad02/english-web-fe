@@ -10,10 +10,12 @@ export default function useAnswerQuestion(path) {
   const [error, setError] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [idIndex, setIdIndex] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
 
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       if (id === "-1") {
         setLocalData([]);
         return;
@@ -23,6 +25,8 @@ export default function useAnswerQuestion(path) {
       setLocalData(sortedList);
     } catch (error) {
       setError(error.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -98,5 +102,6 @@ export default function useAnswerQuestion(path) {
     openDialog,
     handleOpenDialog,
     handleCloseDialog,
+    isLoading,
   };
 }

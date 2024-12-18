@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 import Question from "./Question";
 import useAnswerQuestion from "./useAnswerQuestion";
 import ErrorComponent from "../../../../../shared/component/error/ErrorComponent";
@@ -15,6 +15,7 @@ export default function AnswerQuestionManagement({ path }) {
     openDialog,
     handleOpenDialog,
     handleCloseDialog,
+    isLoading,
   } = useAnswerQuestion(path);
 
   return (
@@ -60,6 +61,19 @@ export default function AnswerQuestionManagement({ path }) {
           </Button>
         </Stack>
       </Stack>
+      {/**Hiển thị khi đang loading */}
+      {isLoading && (
+        <Stack
+          sx={{
+            height: "100%",
+            minHeight: "20rem",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress size="4rem" />
+        </Stack>
+      )}
       <Stack sx={{ padding: "1rem" }}>
         {/** Questions */}
         {localData &&

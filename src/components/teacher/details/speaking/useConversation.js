@@ -12,6 +12,7 @@ export default function useConversation(
   setError
 ) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const { id } = useParams();
 
   const handleAddNewLine = () => {
@@ -44,6 +45,8 @@ export default function useConversation(
 
   const handleSave = async () => {
     try {
+      setIsSaving(true);
+      setIsEditing(false);
       const listRequest = conversation.map((line) => {
         if (line.id === "-1") return createConversation(line);
         else return updateConversation(line.id, line);
@@ -51,14 +54,16 @@ export default function useConversation(
       const newData = await Promise.all(listRequest);
       console.log(newData);
       setConversation(newData);
-      setIsEditing(false);
     } catch (error) {
       console.error("Error saving conversation: ", error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
   return {
     isEditing,
+    isSaving,
     handleAddNewLine,
     handleEditing,
     handleSave,
