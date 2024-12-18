@@ -1,4 +1,4 @@
-import { Box, Typography, Paper } from "@mui/material";
+import { Box, Typography, Paper,CircularProgress } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import MainTitle from "../../MainTitle";
 import HistoryOneReading from "./HistoryOneReading";
@@ -7,6 +7,7 @@ import BtnPreviousNextContentTest from "../../common/BtnPreviousNextContentTest"
 import { useLocation } from "react-router-dom";
 import { getHistoryTest } from "../common/getHistoryTest";
 import { useNavigate } from "react-router-dom";
+import useColor from "shared/color/Color";
 const DurationContainer = styled(Paper)(({ theme }) => ({
   background: "#FFF4CC",
   borderRadius: "20px",
@@ -25,6 +26,7 @@ function HistoryTestReading() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const color = useColor();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -66,7 +68,21 @@ function HistoryTestReading() {
   }, [state, state?.id, state?.testId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Box
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100vh",
+      zIndex: 1000,
+    }}
+  >
+    <CircularProgress sx={{color: color.Color2}} />
+  </Box>;
   }
 
   if (error) {

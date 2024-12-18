@@ -6,6 +6,7 @@ import {
 import { styled } from "@mui/material/styles";
 import MainTitle from "../MainTitle";
 import BtnPreviousNextContentTest from "../common/BtnPreviousNextContentTest";
+import useColor from "shared/color/Color";
 import { getTest } from "api/test/TestApi";
 import { createSubmitTest } from "../../../../api/test/submitTest";
 import { createSubmitTestWriting } from "../../../../api/test/submitTestWriting";
@@ -37,7 +38,8 @@ function TestWriting() {
   const { state } = location;
   const [test, setTest] = useState(null);
   const [storeName, setStoreName] = useState(null);
-
+  const color = useColor();
+  const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -70,12 +72,14 @@ function TestWriting() {
       } catch (err) {
 
       } finally {
+        setLoading(false);
  
       }
     };
   
     fetchData();
   }, [state?.id]);
+  
   
   useEffect(() => {
     if (test != null) {
@@ -112,6 +116,7 @@ function TestWriting() {
       });
     }
   }, [answers]);
+  
 
   const handleBtnSubmit = async () => {
     setIsSubmitting(true);
@@ -196,6 +201,21 @@ function TestWriting() {
       setIsSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress sx={{color: color.Color2}} />
+      </Box>
+    );
+  }
   
   return (
     <Box>
@@ -214,7 +234,7 @@ function TestWriting() {
           zIndex: 1000,
         }}
       >
-        <CircularProgress />
+        <CircularProgress sx={{color: color.Color2}} />
       </Box>
     )}
       <MainTitle

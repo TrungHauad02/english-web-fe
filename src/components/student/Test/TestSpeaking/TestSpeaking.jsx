@@ -1,22 +1,20 @@
 import MainTitle from "../MainTitle";
 import React, { useState, useEffect } from "react";
-import { Box } from "@mui/material";
+import { Box,CircularProgress } from "@mui/material";
 import SpeakingTesting from "./SpeakingTesting";
 import { getTest } from "api/test/TestApi";
 import { useLocation,useNavigate } from "react-router-dom";
 import ErrorMessage from "../common/ErrorMessage";
+import useColor from "shared/color/Color";
 function TestSpeaking() {
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = location;
   const [test, setTest] = useState(null);
- 
+  const color = useColor();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const title = test ? test.type : "";
-
-
-
   useEffect(() => {
     if (!state || !state.id) {
       navigate("/student/tests");
@@ -57,7 +55,18 @@ function TestSpeaking() {
   }, [state?.id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress sx={{color: color.Color2}} />
+      </Box>
+    );
   }
 
   if (error) {
@@ -73,7 +82,7 @@ function TestSpeaking() {
         }
       />
       <Box sx={{ marginLeft: "5%", marginRight: "5%", marginBottom: "1rem" }}>
-      {test?.testWritings?.length > 0 ? (
+      {test?.testSpeakings?.length > 0 ? (
       <>
         <Box sx={{ marginTop: "1rem" }}>
           <SpeakingTesting

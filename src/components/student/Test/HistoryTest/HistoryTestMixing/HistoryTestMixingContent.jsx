@@ -25,7 +25,7 @@ const HistoryTestMixing = ({ test, submitTest, onClickTestAgain }) => {
             ? { ...question, serial: currentSerial++ }
             : question
         ),
-        submitTestMixingAnswers: submitTest.submitTestMixingAnswers,
+        submitTestMixingAnswers: submitTest?.submitTestMixingAnswers,
       },
       {
         title: "Grammar",
@@ -38,7 +38,7 @@ const HistoryTestMixing = ({ test, submitTest, onClickTestAgain }) => {
             ? { ...question, serial: currentSerial++ }
             : question
         ),
-        submitTestMixingAnswers: submitTest.submitTestMixingAnswers,
+        submitTestMixingAnswers: submitTest?.submitTestMixingAnswers,
       },
       {
         title: "Reading",
@@ -50,7 +50,7 @@ const HistoryTestMixing = ({ test, submitTest, onClickTestAgain }) => {
               : question
           ),
         })),
-        submitTestReadingAnswers: submitTest.submitTestReadingAnswers,
+        submitTestReadingAnswers: submitTest?.submitTestReadingAnswers,
       },
       {
         title: "Listening",
@@ -62,7 +62,7 @@ const HistoryTestMixing = ({ test, submitTest, onClickTestAgain }) => {
               : question
           ),
         })),
-        submitTestListeningAnswers: submitTest.submitTestListeningAnswers,
+        submitTestListeningAnswers: submitTest?.submitTestListeningAnswers,
       },
       {
         title: "Speaking",
@@ -74,7 +74,7 @@ const HistoryTestMixing = ({ test, submitTest, onClickTestAgain }) => {
               : question
           ),
         })),
-        submitTestSpeakings: submitTest.submitTestSpeakings,
+        submitTestSpeakings: submitTest?.submitTestSpeakings,
       },
       {
         title: "Writing",
@@ -83,7 +83,7 @@ const HistoryTestMixing = ({ test, submitTest, onClickTestAgain }) => {
             ? { ...item, serial: currentSerial++ }
             : item
         ),
-        submitTestWritings: submitTest.submitTestWritings,
+        submitTestWritings: submitTest?.submitTestWritings,
       },
     ];
   })();
