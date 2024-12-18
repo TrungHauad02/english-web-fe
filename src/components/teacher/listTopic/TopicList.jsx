@@ -5,6 +5,7 @@ import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
 import useTopicList from "./useTopicList";
 import ErrorComponent from "shared/component/error/ErrorComponent";
+import useColor from "shared/color/Color";
 
 export default function TopicList({ title }) {
   const {
@@ -17,7 +18,7 @@ export default function TopicList({ title }) {
     error,
     handleCloseError,
   } = useTopicList(title);
-
+  const color = useColor();
   return (
     <Stack direction={"column"} spacing={4} sx={{ marginY: "2rem" }}>
       {/**Hiển thị khi có lỗi */}
@@ -36,8 +37,9 @@ export default function TopicList({ title }) {
             color={"primary"}
             onClick={handleAddNewTopic}
             sx={{
-              backgroundColor: "#000",
-              padding: "1rem 1.5rem",
+              backgroundColor: color.Color2,
+              padding: "0.75rem 1.5rem",
+              borderRadius: "0.5rem",
               color: "#fff",
               textTransform: "capitalize",
             }}
@@ -51,12 +53,20 @@ export default function TopicList({ title }) {
         direction={"column"}
         spacing={2}
         sx={{
-          padding: "2rem",
-          borderLeft: "1px solid #00000040",
-          borderRight: "1px solid #00000040",
+          padding: "1rem",
+          borderRadius: "0.5rem 0.5rem 0 0",
+          boxShadow: "0 -1rem 1.25rem 0.15rem #00000030",
         }}
       >
-        <Grid2 container spacing={2}>
+        <Grid2
+          container
+          spacing={2}
+          sx={{
+            bgcolor: "#f1f1f1",
+            padding: "1rem 0.5rem",
+            borderRadius: "0.5rem 0.5rem 0 0",
+          }}
+        >
           <Grid2 item size={2}>
             <Typography variant={"h6"} textAlign={"center"}>
               Serial
@@ -87,6 +97,11 @@ export default function TopicList({ title }) {
             </Typography>
           </Grid2>
         </Grid2>
+        {isLoading && (
+          <Stack justifyContent="center" alignItems={"center"}>
+            <CircularProgress />
+          </Stack>
+        )}
         {displayList &&
           displayList.map((topic) => (
             <Stack key={topic.id}>
@@ -136,7 +151,6 @@ export default function TopicList({ title }) {
                     sx={{ width: "100%" }}
                   >
                     <CircularProgress size="1.5rem" sx={{ color: "#fff" }} />
-                    <span>Loading...</span>
                   </Stack>
                 ) : (
                   "Load more"
