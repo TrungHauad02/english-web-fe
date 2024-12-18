@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { getListTest } from "api/test/listTestApi";
 import CustomPagination from "shared/component/pagination/CustomPagination";
 import ListTestContent from "./ListTestContent";
-import { Box, Tabs, Tab, Stack, styled } from "@mui/material";
+import { Box, Tabs, Tab, Stack, styled,CircularProgress } from "@mui/material";
 import MainPicture from "../common/listTopic/MainPicture";
-
+import useColor from "shared/color/Color";
 const TabItem = styled(Tab)(({ selected, isSubTab }) => ({
   backgroundColor: selected ? "#00796B" : isSubTab ? "#E0F7FA" : "#00B8A2",
   color: selected ? "#FFFFFF" : isSubTab ? "#00796B" : "#FFFFFF",
@@ -36,6 +36,9 @@ function ListTest() {
   const [page, setPage] = useState(1);
   const [list, setList] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const color = useColor();
+  
   const type = {
     mixed: "MIXING",
     skills: {
@@ -70,6 +73,7 @@ function ListTest() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true)
       try {
         const userId = sessionStorage.getItem('userId');
         const data = await getListTest(
@@ -93,6 +97,7 @@ function ListTest() {
       } catch (error) {
         
       } finally {
+        setIsLoading(false)
      
       }
     };
@@ -120,6 +125,25 @@ function ListTest() {
             alignItems: "center",
           }}
         >
+          {isLoading && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                position: "absolute",
+                top: "50%", 
+                left: "50%", 
+                transform: "translate(-50%, -50%)",
+                width: "100%",
+                height: "100%",
+                zIndex: 10,
+                
+              }}
+            >
+              <CircularProgress sx={{color:color.Color2}} />
+            </Box>
+          )}
           <Tabs
             value={mainTab}
             onChange={handleMainTabChange}

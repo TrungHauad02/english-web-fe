@@ -12,6 +12,7 @@ import { commentReadingQuestion } from "../../../../api/test/commentTest";
 import CountdownTimer from "../common/CountdownTimer";
 import { openDB, saveData, getData, deleteData } from "../common/IndexDB";
 import ErrorMessage from "../common/ErrorMessage";
+import useColor from "shared/color/Color";
 const DurationContainer = styled(Box)(({ theme }) => ({
   background: "#E0F7FA",
   borderRadius: "20px",
@@ -38,7 +39,7 @@ function TestReading() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const title = test ? test.type : "";
   const [storeName, setStoreName] = useState(null);
-
+  const color = useColor();
   useEffect(() => {
     if (!state || !state.id) {
       navigate("/student/tests");
@@ -128,7 +129,7 @@ function TestReading() {
           height: "100vh",
         }}
       >
-        <CircularProgress />
+        <CircularProgress sx={{color: color.Color2}} />
       </Box>
     );
   }
@@ -282,7 +283,7 @@ function TestReading() {
             zIndex: 1000,
           }}
         >
-          <CircularProgress />
+          <CircularProgress sx={{color: color.Color2}}  />
         </Box>
       )}
       <MainTitle

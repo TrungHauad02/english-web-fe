@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import MainTitle from "../MainTitle";
 import ItemTest from "./ItemTest";
-import { Box } from "@mui/material";
+import { Box,CircularProgress } from "@mui/material";
 import { useLocation,useNavigate } from "react-router-dom";
 import { getTest } from "api/test/TestApi";
+import useColor from "shared/color/Color";
 import ErrorMessage from "../common/ErrorMessage";
 function TestMixing() {
   const location = useLocation();
@@ -12,6 +13,7 @@ function TestMixing() {
   const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const color = useColor();
   const title = test ? test.type : "";
   useEffect(() => {
     if (!state || !state.id) {
@@ -36,13 +38,13 @@ function TestMixing() {
     fetchData();
   }, [state?.id]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  
 
   if (error) {
     return <div>{error}</div>;
   }
+  
+  
 
   return (
     <>
@@ -52,8 +54,25 @@ function TestMixing() {
           "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/static%2Fbg_test.png?alt=media"
         }
       />
-      <Box sx={{ marginTop: "5%", marginLeft: "5%", marginRight: "5%" }}>
-            {[
+      {loading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100vh",
+            zIndex: 1000,
+          }}
+        >
+          <CircularProgress sx={{ color: color.Color2 }} />
+        </Box>
+      ) : (
+        <Box sx={{ marginTop: "5%", marginLeft: "5%", marginRight: "5%" }}>
+          {[
             test?.testListenings?.length || 0,
             test?.testReadings?.length || 0,
             test?.testWritings?.length || 0,
@@ -61,14 +80,13 @@ function TestMixing() {
             test?.testMixingQuestions?.length || 0,
           ].reduce((acc, cur) => acc + cur, 0) > 0 ? (
             <>
-                <ItemTest
-                  title={title}
-                  test={test}
-                />
-                      </> )   : (
-              <ErrorMessage message={"The teacher has not added the test information yet"}/>
-            )}
-      </Box>
+              <ItemTest title={title} test={test} />
+            </>
+          ) : (
+            <ErrorMessage message={"The teacher has not added the test information yet"} />
+          )}
+        </Box>
+      )}
     </>
   );
 }

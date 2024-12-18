@@ -12,7 +12,7 @@ import CountdownTimer from "../common/CountdownTimer";
 import { openDB, saveData, getData, deleteData } from "../common/IndexDB";
 import { styled } from "@mui/material/styles";
 import ErrorMessage from "../common/ErrorMessage";
-
+import useColor from "shared/color/Color";
 const DurationContainer = styled(Box)(({ theme }) => ({
   background: "#E0F7FA",
   borderRadius: "20px",
@@ -42,6 +42,7 @@ function TestListening() {
   const [currentAudioTime, setCurrentAudioTime] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef(null);
+  const color = useColor();
   useEffect(() => {
     if (!state || !state.id) {
       navigate("/student/tests");
@@ -144,7 +145,21 @@ useEffect(() => {
 }, [answers, indexVisible, currentTime]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Box
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100vh",
+      zIndex: 1000,
+    }}
+  >
+    <CircularProgress sx={{color: color.Color2}} />
+  </Box>;
   }
 
   if (error) {
@@ -289,7 +304,7 @@ useEffect(() => {
             zIndex: 1000,
           }}
         >
-          <CircularProgress />
+          <CircularProgress sx={{color: color.Color2}} />
         </Box>
       )}
       <MainTitle

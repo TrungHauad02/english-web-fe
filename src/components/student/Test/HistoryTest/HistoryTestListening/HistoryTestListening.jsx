@@ -1,12 +1,13 @@
 import MainTitle from "../../MainTitle";
 import OneListeningTest from "./HistoryOneListening";
-import { Box } from "@mui/material";
+import { Box,CircularProgress } from "@mui/material";
 
 import React, { useState, useEffect } from 'react';
 import ScoreGrid from "./ScoreGrid";
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import {getHistoryTest} from "../common/getHistoryTest";
+import useColor from "shared/color/Color";
 import BtnPreviousNextContentTest from "../../common/BtnPreviousNextContentTest";
 function HistoryTestListening() {
     const [indexVisible, setIndexVisible] = useState(0);
@@ -19,6 +20,7 @@ function HistoryTestListening() {
     const navigate = useNavigate();
     const data = test?.testListenings;
     const [focusId,setFocusId] = useState();
+    const color = useColor();
     
 
   useEffect(() => {
@@ -61,9 +63,23 @@ function HistoryTestListening() {
     fetchData();
   }, [state, state?.id, state?.testId]);
 
-if (loading) {
-    return <div>Loading...</div>;
-}
+  if (loading) {
+    return <Box
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100vh",
+      zIndex: 1000,
+    }}
+  >
+    <CircularProgress sx={{color: color.Color2}} />
+  </Box>;
+  }
 
 if (error) {
     return <div>{error}</div>;

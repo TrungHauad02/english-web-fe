@@ -1,11 +1,11 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography,CircularProgress } from "@mui/material";
 import MainTitle from "../../MainTitle";
 import HistoryTestSpeakingContent from "./HistoryTestSpeakingContent";
 import React, { useState, useEffect } from "react";
 import ScoreGrid from "./ScoreGrid";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getHistoryTest } from "../common/getHistoryTest";
-
+import useColor from "shared/color/Color";
 function HistoryTestSpeaking() {
   const location = useLocation();
   const { state } = location;
@@ -15,7 +15,7 @@ function HistoryTestSpeaking() {
   const [error, setError] = useState(null);
   const [focusSerial, setFocusSerial] = useState(null);
   const navigate = useNavigate();
-
+  const color = useColor();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -93,7 +93,21 @@ function HistoryTestSpeaking() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Box
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100vh",
+      zIndex: 1000,
+    }}
+  >
+    <CircularProgress sx={{color: color.Color2}} />
+  </Box>;
   }
 
   if (error) {

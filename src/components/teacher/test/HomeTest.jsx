@@ -20,6 +20,7 @@ import {
   FormControl,
   InputLabel,
   Grid,
+  CircularProgress
 } from "@mui/material";
 import {  Replay } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -69,6 +70,7 @@ const TestManagement = () => {
   const [testDelete, setTestDelete] = useState(0);
   const [status, setStatus] = useState("ALL");
   const [sortOrder, setSortOrder] = useState("ASC");
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleStatusChangeFilter = (event) => {
     const selectedStatus = event.target.value;
@@ -135,6 +137,7 @@ const TestManagement = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true)
       try {
         const adjustedType = currType === "ALL" ? "" : currType;
         const adjustedStatus = status === "ALL" ? "" : status;
@@ -152,7 +155,7 @@ const TestManagement = () => {
     
         setVersionPage(versionPage + 1);
         setTotalPage(data.totalPages);
-    
+        setIsLoading(false)
         if (tests) {
           setList(tests);
         } else {
@@ -395,10 +398,10 @@ const TestManagement = () => {
       </ColorButton>
           </Grid>
         </Grid>
-      </Box>
+      </Box>      
       <TableContainer
         component={Paper}
-        sx={{ boxShadow: 3, borderRadius: "8px", overflow: "hidden" }}
+        sx={{ boxShadow: 3, borderRadius: "8px", overflow: "hidden",position: "relative" }}
       >
         <Table>
           <TableHead>
@@ -417,6 +420,25 @@ const TestManagement = () => {
               </TableCell>
             </TableRow>
           </TableHead>
+          {isLoading && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                position: "absolute",
+                top: "50%", 
+                left: "50%", 
+                transform: "translate(-50%, -50%)",
+                width: "100%",
+                height: "100%",
+                zIndex: 10,
+                
+              }}
+            >
+              <CircularProgress sx={{color:Color2}} />
+            </Box>
+          )}
           <TableBody>
             {list.map((test, index) => (
               <TableRow
@@ -426,6 +448,7 @@ const TestManagement = () => {
                   "&:hover": { backgroundColor: "#f1f1f1" },
                 }}
               >
+                
                 <TableCell>{test.serial}</TableCell>
                 <TableCell>{test.title}</TableCell>
                 <TableCell>{test.type}</TableCell>

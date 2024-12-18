@@ -377,7 +377,7 @@ export default function SpeakingTesting({
           zIndex: 1000,
         }}
       >
-        <CircularProgress />
+         <CircularProgress sx={{color: "#004d40"}} />
       </Box>
     )}
       <DurationContainer sx={{ fontWeight: "bold" }} elevation={1}>

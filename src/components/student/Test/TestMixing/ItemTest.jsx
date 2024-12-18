@@ -24,11 +24,13 @@ import { scoreTestWriting } from "api/feature/scoreTestWriting/scoreTestWriting"
 import { getSpeechToText } from "api/feature/stt/SpeechToTextService";
 import { useNavigate } from "react-router-dom";
 import { openDB, saveData, getData, deleteData } from "../common/IndexDB";
+import useColor from "shared/color/Color";
 
 const ItemTest = ({ title, test }) => {
   const storeName = "MyStore" + test.id;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const color = useColor();
   const DataTestMixing = [
     {
       title: "Vocabulary",
@@ -636,7 +638,7 @@ const ItemTest = ({ title, test }) => {
             zIndex: 1000,
           }}
         >
-          <CircularProgress />
+          <CircularProgress sx={{color: color.Color2}} />
         </Box>
       )}
       <Grid sx={{ marginBottom: "1rem" }}>
