@@ -16,7 +16,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import TopicIcon from "@mui/icons-material/LibraryBooks";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import TopicList from "./TopicList";
 import useColor from "shared/color/Color";
 import VocabularyIcon from "@mui/icons-material/EmojiObjects";
@@ -31,6 +31,7 @@ import TestManagement from "../test/HomeTest";
 export default function ListTopicManagement({ title }) {
   const color = useColor();
   const theme = useTheme();
+  const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openStudyResources, setOpenStudyResources] = useState(false);
@@ -170,7 +171,10 @@ export default function ListTopicManagement({ title }) {
                     component={Link}
                     to={resource.path}
                     sx={{
-                      backgroundColor: "#f9f9f9",
+                      backgroundColor:
+                        location.pathname === resource.path
+                          ? color.Color2_1
+                          : "#f9f9f9",
                       minWidth: "2.5rem",
                       borderRadius: "4px",
                       marginBottom: "0.5rem",
@@ -183,6 +187,10 @@ export default function ListTopicManagement({ title }) {
                   >
                     <ListItemIcon
                       sx={{
+                        color:
+                          location.pathname === resource.path
+                            ? "#fff"
+                            : "#454545",
                         minWidth: "auto",
                         paddingRight: "0.25rem",
                         marginLeft: openSidebar ? 0 : "-0.5rem",
@@ -195,8 +203,11 @@ export default function ListTopicManagement({ title }) {
                         inset
                         primary={resource.name}
                         sx={{
+                          color:
+                            location.pathname === resource.path
+                              ? "#fff"
+                              : "#454545",
                           fontWeight: "bold",
-                          color: color.Color2,
                           paddingLeft: "0.5rem",
                         }}
                       />
@@ -250,7 +261,10 @@ export default function ListTopicManagement({ title }) {
                     component={Link}
                     to={resource.path}
                     sx={{
-                      backgroundColor: "#f9f9f9",
+                      backgroundColor:
+                        location.pathname === resource.path
+                          ? color.Color2_1
+                          : "#f9f9f9",
                       borderRadius: "4px",
                       marginBottom: "0.5rem",
                       position: openSidebar ? "static" : "absolute",
@@ -264,6 +278,10 @@ export default function ListTopicManagement({ title }) {
                   >
                     <ListItemIcon
                       sx={{
+                        color:
+                          location.pathname === resource.path
+                            ? "#fff"
+                            : "#454545",
                         minWidth: "auto",
                         paddingRight: "0.25rem",
                         marginLeft: openSidebar ? 0 : "-0.25rem",
@@ -276,8 +294,11 @@ export default function ListTopicManagement({ title }) {
                         inset
                         primary={resource.name}
                         sx={{
+                          color:
+                            location.pathname === resource.path
+                              ? "#fff"
+                              : "#454545",
                           fontWeight: "bold",
-                          color: color.Color2,
                           paddingLeft: "0.5rem",
                         }}
                       />

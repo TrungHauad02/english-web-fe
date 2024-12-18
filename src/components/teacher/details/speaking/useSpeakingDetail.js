@@ -9,9 +9,11 @@ export default function useSpeakingDetail() {
   const [people, setPeople] = useState(null);
   const [voices, setVoices] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const voiceData = await getVoices();
       setVoices(voiceData);
 
@@ -22,11 +24,13 @@ export default function useSpeakingDetail() {
 
       if (id === "-1") {
         setConversation([]);
+        setLoading(false);
         return;
       }
       const data = await getConversationInSpeaking(id);
       const sortedData = (data || []).sort((a, b) => a.serial - b.serial);
       setConversation(sortedData);
+      setLoading(false);
     };
     fetchData();
   }, [id]);
@@ -43,5 +47,6 @@ export default function useSpeakingDetail() {
     error,
     setError,
     handleCloseError,
+    loading,
   };
 }

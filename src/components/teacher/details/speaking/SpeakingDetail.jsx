@@ -1,5 +1,4 @@
-import { Grid2 } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
+import { Stack } from "@mui/material";
 import SpeakingInfo from "./SpeakingInfo";
 import PeopleInConversation from "./PeopleInConversation";
 import Conversation from "./Conversation";
@@ -15,6 +14,7 @@ export default function SpeakingDetail() {
     error,
     setError,
     handleCloseError,
+    loading,
   } = useSpeakingDetail();
 
   const scrollableContainerStyles = {
@@ -37,46 +37,34 @@ export default function SpeakingDetail() {
     },
   };
 
-  if (!people || !conversation) {
-    return (
-      <Grid2
-        container
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        sx={{ height: "100vh" }}
-      >
-        <CircularProgress size="3rem" />
-      </Grid2>
-    );
-  }
   return (
-    <Grid2
-      container
+    <Stack
       direction="row"
       sx={{ margin: "2rem 4%" }}
       justifyContent={"space-between"}
+      spacing={4}
     >
-      <Grid2 item xs={12} sm={5}>
+      <Stack xs={12} sm={5}>
         <SpeakingInfo setError={setError} />
-      </Grid2>
-      <Grid2 container xs={12} sm={7} direction="column" spacing={4}>
-        <Grid2 item sx={{ ...scrollableContainerStyles, height: "50vh" }}>
-          <PeopleInConversation voices={voices} />
-        </Grid2>
-        <Grid2 item sx={{ ...scrollableContainerStyles, height: "72vh" }}>
+      </Stack>
+      <Stack container direction="column" spacing={4}>
+        <Stack sx={{ ...scrollableContainerStyles, height: "50vh" }}>
+          <PeopleInConversation voices={voices} loading={loading} />
+        </Stack>
+        <Stack sx={{ ...scrollableContainerStyles, height: "72vh" }}>
           <Conversation
             listPeople={people}
             conversation={conversation}
             setConversation={setConversation}
             setError={setError}
+            loading={loading}
           />
-        </Grid2>
-      </Grid2>
+        </Stack>
+      </Stack>
       {/*Hiển thị khi có lỗi*/}
       {error && (
         <ErrorComponent errorMessage={error} onClose={handleCloseError} />
       )}
-    </Grid2>
+    </Stack>
   );
 }

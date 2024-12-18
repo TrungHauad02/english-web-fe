@@ -13,8 +13,12 @@ export default function TopicContent({ topic, path }) {
           {topic.serial}
         </Typography>
       </Grid2>
-      <Grid2 size={3} textAlign={"center"}>
-        <Typography variant="body" fontSize={"1.5rem"}>
+      <Grid2 size={3} textAlign={"left"}>
+        <Typography
+          variant="body"
+          fontSize={"1.5rem"}
+          sx={{ paddingLeft: "2rem" }}
+        >
           {topic.title}
         </Typography>
       </Grid2>
