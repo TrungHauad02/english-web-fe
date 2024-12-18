@@ -20,9 +20,9 @@ import {
   FormControl,
   InputLabel,
   Grid,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
-import {  Replay } from "@mui/icons-material";
+import { Replay } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { styled } from "@mui/material/styles";
@@ -84,7 +84,6 @@ const TestManagement = () => {
   };
 
   const handleOpenDialogDelete = async (testDelete) => {
-
     if (testDelete?.submitTestIds?.length > 0) {
       setSubmitTestIds(testDelete?.submitTestIds);
       setOpenDialogDeleteSubmitTest(true);
@@ -105,7 +104,6 @@ const TestManagement = () => {
     setOpenDialogDelete(false);
   };
   const handleAgreeDelete = async () => {
-   
     await deleteTest(testDelete.id)
       .then(() => {
         toast.success(`${testDelete.title} deleted successfully!`);
@@ -137,7 +135,7 @@ const TestManagement = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true)
+      setIsLoading(true);
       try {
         const adjustedType = currType === "ALL" ? "" : currType;
         const adjustedStatus = status === "ALL" ? "" : status;
@@ -152,10 +150,10 @@ const TestManagement = () => {
         const tests = data.content;
         const serial = await getMaxSerial();
         setMaxSerial(serial + 1 || 0);
-    
+
         setVersionPage(versionPage + 1);
         setTotalPage(data.totalPages);
-        setIsLoading(false)
+        setIsLoading(false);
         if (tests) {
           setList(tests);
         } else {
@@ -169,8 +167,7 @@ const TestManagement = () => {
       }
     };
     fetchData();
-    
-  }, [page, currType, searchTerm, status, sortOrder,version]);
+  }, [page, currType, searchTerm, status, sortOrder, version]);
 
   //xoá submit test
   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] =
@@ -179,7 +176,6 @@ const TestManagement = () => {
 
   const [dialogAction, setDialogAction] = useState(null);
   const handleDialogAction = (action) => {
-  
     if (action === "cancel") {
       setDialogAction("cancel");
     } else if (action === "confirm") {
@@ -202,14 +198,11 @@ const TestManagement = () => {
     });
   };
 
-
   const handleResetFilter = () => {
     setStatus("ALL");
     setSortOrder("ASC");
     setCurrType("ALL");
     setSearchTerm("");
-
-   
   };
 
   const handleStatusChange = async (event, test) => {
@@ -318,193 +311,235 @@ const TestManagement = () => {
         } history users of this test?`}
       />
       <Box sx={{ marginBottom: "2rem" }}>
-  <Grid container spacing={2} alignItems="center">
-
-    <Grid item xs={12} sm={6} md={2} sx={{ display: "flex" }}>
-      <FormControl variant="outlined" fullWidth>
-        <InputLabel id="type-label">Type</InputLabel>
-        <Select
-          labelId="type-label"
-          value={currType}
-          onChange={handleFilterChange}
-          label="Type"
-        >
-          <MenuItem value="ALL">All</MenuItem>
-          <MenuItem value={type.mixing}>Mixing</MenuItem>
-          <MenuItem value={type.reading}>Reading</MenuItem>
-          <MenuItem value={type.listening}>Listening</MenuItem>
-          <MenuItem value={type.speaking}>Speaking</MenuItem>
-          <MenuItem value={type.writing}>Writing</MenuItem>
-        </Select>
-      </FormControl>
-    </Grid>
-    <Grid item xs={12} sm={6} md={2} sx={{ display: "flex" }}>
-      <FormControl variant="outlined" fullWidth>
-        <InputLabel id="status-label">Status</InputLabel>
-        <Select
-          labelId="status-label"
-          value={status}
-          onChange={handleStatusChangeFilter}
-          label="Status"
-        >
-          <MenuItem value="ALL">ALL</MenuItem>
-          <MenuItem value="ACTIVE">ACTIVE</MenuItem>
-          <MenuItem value="INACTIVE">INACTIVE</MenuItem>
-        </Select>
-      </FormControl>
-    </Grid>
-    <Grid item xs={12} sm={6} md={2} sx={{ display: "flex" }}>
-      <FormControl variant="outlined" fullWidth>
-        <InputLabel id="sortOrder-label">Sort Order</InputLabel>
-        <Select
-          labelId="sortOrder-label"
-          value={sortOrder}
-          onChange={handleSortChange}
-          label="Sort Order"
-        >
-          <MenuItem value="ASC">Serial ASC</MenuItem>
-          <MenuItem value="DESC">Serial DESC</MenuItem>
-        </Select>
-      </FormControl>
-    </Grid>
-    <Grid item xs={12} sm={6} md={4} sx={{ display: "flex", alignItems: "center" }}>
-      <TextField
-        label="Search Test"
-        variant="outlined"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        fullWidth
-      />
-      <IconButton
-        sx={{ marginLeft: 1 }}
-        onClick={() => handleResetFilter()} 
-      >
-        <Replay />
-      </IconButton>
-    </Grid>
-    <Grid item xs={12} sm={6} md={2}>
-      <ColorButton
-        color={Color2}
-        variant="contained"
-        fullWidth
-        sx={{
-          whiteSpace: "nowrap",
-          padding: "8px 16px",
-          borderRadius: "8px",
-        }}
-        onClick={handleOpen}
-      >
-        Add new test
-      </ColorButton>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} sm={6} md={2} sx={{ display: "flex" }}>
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel id="type-label">Type</InputLabel>
+              <Select
+                labelId="type-label"
+                value={currType}
+                onChange={handleFilterChange}
+                label="Type"
+              >
+                <MenuItem value="ALL">All</MenuItem>
+                <MenuItem value={type.mixing}>Mixing</MenuItem>
+                <MenuItem value={type.reading}>Reading</MenuItem>
+                <MenuItem value={type.listening}>Listening</MenuItem>
+                <MenuItem value={type.speaking}>Speaking</MenuItem>
+                <MenuItem value={type.writing}>Writing</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6} md={2} sx={{ display: "flex" }}>
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel id="status-label">Status</InputLabel>
+              <Select
+                labelId="status-label"
+                value={status}
+                onChange={handleStatusChangeFilter}
+                label="Status"
+              >
+                <MenuItem value="ALL">ALL</MenuItem>
+                <MenuItem value="ACTIVE">ACTIVE</MenuItem>
+                <MenuItem value="INACTIVE">INACTIVE</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6} md={2} sx={{ display: "flex" }}>
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel id="sortOrder-label">Sort Order</InputLabel>
+              <Select
+                labelId="sortOrder-label"
+                value={sortOrder}
+                onChange={handleSortChange}
+                label="Sort Order"
+              >
+                <MenuItem value="ASC">Serial ASC</MenuItem>
+                <MenuItem value="DESC">Serial DESC</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            sx={{ display: "flex", alignItems: "center" }}
+          >
+            <TextField
+              label="Search Test"
+              variant="outlined"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              fullWidth
+            />
+            <IconButton
+              sx={{ marginLeft: 1 }}
+              onClick={() => handleResetFilter()}
+            >
+              <Replay />
+            </IconButton>
+          </Grid>
+          <Grid item xs={12} sm={6} md={2}>
+            <ColorButton
+              color={Color2}
+              variant="contained"
+              fullWidth
+              sx={{
+                whiteSpace: "nowrap",
+                padding: "8px 16px",
+                borderRadius: "8px",
+              }}
+              onClick={handleOpen}
+            >
+              Add new test
+            </ColorButton>
           </Grid>
         </Grid>
-      </Box>      
-      <TableContainer
-        component={Paper}
-        sx={{ boxShadow: 3, borderRadius: "8px", overflow: "hidden",position: "relative" }}
+      </Box>
+      <Paper
+        sx={{
+          boxShadow: 3,
+          borderRadius: "8px",
+          padding: 2,
+          overflow: "hidden",
+          margin: "1rem 0",
+        }}
       >
-        <Table>
-          <TableHead>
-            <TableRow sx={{ backgroundColor: "#f0f0f0" }}>
-              <TableCell sx={{ fontWeight: "bold" }}>Serial</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Title</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Type</TableCell>
-              <TableCell sx={{ fontWeight: "bold", textAlign: "center" }}>
-                Details
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", textAlign: "center" }}>
-                Change Status
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", textAlign: "center" }}>
-                Delete
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          {isLoading && (
-            <Box
+        {/* Header Row */}
+        <Grid
+          container
+          sx={{
+            fontWeight: "bold",
+            backgroundColor: "#f1f1f1",
+            borderRadius: "0.5rem 0.5rem 0 0",
+            padding: "1rem 0",
+            textAlign: "center",
+          }}
+        >
+          <Grid item xs={1}>
+            <Typography variant="body1" fontWeight={"bold"}>
+              Serial
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography variant="body1" fontWeight={"bold"}>
+              Title
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography variant="body1" fontWeight={"bold"}>
+              Type
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography variant="body1" fontWeight={"bold"}>
+              Details
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography variant="body1" fontWeight={"bold"}>
+              Change Status
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography variant="body1" fontWeight={"bold"}>
+              Delete
+            </Typography>
+          </Grid>
+        </Grid>
+
+        {/* Loading Indicator */}
+        {isLoading ? (
+          <Stack
+            justifyContent="center"
+            alignItems="center"
+            sx={{ padding: "2rem" }}
+          >
+            <CircularProgress sx={{ color: Color2 }} />
+          </Stack>
+        ) : (
+          list.map((test, index) => (
+            <Grid
+              container
+              key={test.id}
               sx={{
-                display: "flex",
-                justifyContent: "center",
+                backgroundColor: index % 2 === 0 ? "#fafafa" : "#ffffff",
+                "&:hover": { backgroundColor: "#f1f1f1" },
+                padding: "1rem 0",
+                textAlign: "center",
                 alignItems: "center",
-                position: "absolute",
-                top: "50%", 
-                left: "50%", 
-                transform: "translate(-50%, -50%)",
-                width: "100%",
-                height: "100%",
-                zIndex: 10,
-                
               }}
             >
-              <CircularProgress sx={{color:Color2}} />
-            </Box>
-          )}
-          <TableBody>
-            {list.map((test, index) => (
-              <TableRow
-                key={test.id}
-                sx={{
-                  backgroundColor: index % 2 === 0 ? "#fafafa" : "#ffffff",
-                  "&:hover": { backgroundColor: "#f1f1f1" },
-                }}
-              >
-                
-                <TableCell>{test.serial}</TableCell>
-                <TableCell>{test.title}</TableCell>
-                <TableCell>{test.type}</TableCell>
-                <TableCell align="center">
-                  <Button
-                    onClick={() => handleBtnDetail(test)}
-                    sx={{
-                      backgroundColor: "#000",
-                      color: "#fff",
-                      borderRadius: "1rem",
-                      textTransform: "none",
-                      fontWeight: "bold",
-                      padding: "0.5rem 1rem",
-                      "&:hover": { backgroundColor: "#333" },
-                    }}
-                  >
-                    Details
-                  </Button>
-                </TableCell>
+              {/* Serial */}
+              <Grid item xs={1}>
+                <Typography variant="body2">{test.serial}</Typography>
+              </Grid>
 
-                <TableCell align="center">
-                  <Switch
-                    checked={test.status === "ACTIVE"}
-                    onChange={(event) => handleStatusChange(event, test)}
-                    inputProps={{ "aria-label": "controlled" }}
-                    sx={{
-                      "& .MuiSwitch-switchBase.Mui-checked": {
-                        color: Color2,
-                      },
-                      "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
-                        {
-                          backgroundColor: Color2,
-                        },
-                      "& .MuiSwitch-track": {
-                        backgroundColor: "#ccc",
-                      },
-                    }}
-                  />
-                </TableCell>
+              {/* Title */}
+              <Grid item xs={3}>
+                <Typography variant="body2">{test.title}</Typography>
+              </Grid>
 
-                <TableCell align="center">
-                  <IconButton
-                    onClick={() => handleOpenDialogDelete(test)}
-                    sx={{
-                      color: "red",
-                      "&:hover": { backgroundColor: "rgba(255, 0, 0, 0.1)" },
-                    }}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              {/* Type */}
+              <Grid item xs={2}>
+                <Typography variant="body2">{test.type}</Typography>
+              </Grid>
+
+              {/* Details Button */}
+              <Grid item xs={2}>
+                <Button
+                  onClick={() => handleBtnDetail(test)}
+                  sx={{
+                    backgroundColor: "#000",
+                    color: "#fff",
+                    borderRadius: "1rem",
+                    textTransform: "none",
+                    fontWeight: "bold",
+                    padding: "0.4rem 1rem",
+                    "&:hover": { backgroundColor: Color2, color: "#fff" },
+                  }}
+                >
+                  Details
+                </Button>
+              </Grid>
+
+              {/* Status Switch */}
+              <Grid item xs={2}>
+                <Switch
+                  checked={test.status === "ACTIVE"}
+                  onChange={(event) => handleStatusChange(event, test)}
+                  inputProps={{ "aria-label": "controlled" }}
+                  sx={{
+                    "& .MuiSwitch-switchBase.Mui-checked": {
+                      color: Color2,
+                    },
+                    "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                      backgroundColor: Color2,
+                    },
+                    "& .MuiSwitch-track": {
+                      backgroundColor: "#ccc",
+                    },
+                  }}
+                />
+              </Grid>
+
+              {/* Delete Button */}
+              <Grid item xs={2}>
+                <IconButton
+                  onClick={() => handleOpenDialogDelete(test)}
+                  sx={{
+                    color: "red",
+                    "&:hover": { backgroundColor: "rgba(255, 0, 0, 0.1)" },
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+          ))
+        )}
+      </Paper>
 
       <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
         <CustomPagination

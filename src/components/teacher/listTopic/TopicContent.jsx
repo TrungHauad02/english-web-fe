@@ -14,11 +14,7 @@ export default function TopicContent({ topic, path }) {
         </Typography>
       </Grid2>
       <Grid2 size={3} textAlign={"left"}>
-        <Typography
-          variant="body"
-          fontSize={"1.5rem"}
-          sx={{ paddingLeft: "2rem" }}
-        >
+        <Typography variant="body" fontSize={"1.5rem"}>
           {topic.title}
         </Typography>
       </Grid2>
