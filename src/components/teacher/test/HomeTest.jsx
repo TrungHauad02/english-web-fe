@@ -6,12 +6,6 @@ import {
   Typography,
   Container,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   MenuItem,
   Select,
   Stack,
@@ -389,6 +383,7 @@ const TestManagement = () => {
                 whiteSpace: "nowrap",
                 padding: "8px 16px",
                 borderRadius: "8px",
+                textTransform: "capitalize",
               }}
               onClick={handleOpen}
             >
@@ -473,12 +468,20 @@ const TestManagement = () => {
             >
               {/* Serial */}
               <Grid item xs={1}>
-                <Typography variant="body2">{test.serial}</Typography>
+                <Typography variant="body2" fontSize={"1rem"}>
+                  {test.serial}
+                </Typography>
               </Grid>
 
               {/* Title */}
               <Grid item xs={3}>
-                <Typography variant="body2">{test.title}</Typography>
+                <Typography
+                  variant="body2"
+                  fontSize={"1rem"}
+                  textAlign={"left"}
+                >
+                  {test.title}
+                </Typography>
               </Grid>
 
               {/* Type */}
