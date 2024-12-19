@@ -1,91 +1,129 @@
-import React, { useState, useRef } from "react";
-import { Box, Button, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import React from "react";
+import {
+  Box,
+  Button,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import useSkillMenu from "./useSkillMenu";
+import { useTheme } from "theme/ThemeContext";
+import useColor from "shared/color/ColorVer2";
 
 function SkillMenu() {
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null); 
-  const open = Boolean(anchorEl);
-  const [height, setHeight] = useState(50);
-  const location = useLocation();
-  const isActivePath = (path) => location.pathname === path; 
-  const menuRef = useRef(null);
-  const buttonRef = useRef(null);  
+  const {
+    height,
+    menuRef,
+    handleMouseLeaveMenu,
+    buttonRef,
+    open,
+    handleMouseEnterMenu,
+    isActivePath,
+  } = useSkillMenu();
+  const { darkMode } = useTheme();
+  const color = useColor();
 
-  const handleMouseEnterMenu = () => {
-    setAnchorEl(buttonRef.current);  
-    setHeight(300);
+  // Danh sách các mục menu
+  const menuItems = [
+    { path: "/student/readings", label: "Reading" },
+    { path: "/student/speakings", label: "Speaking" },
+    { path: "/student/writings", label: "Writing" },
+    { path: "/student/listenings", label: "Listening" },
+  ];
+
+  const linkStyles = (isActive) => {
+    let textColor, bgColor, hoverBgColor;
+    if (isActive && darkMode) {
+      // Trường hợp active + dark mode
+      textColor = color.gray950;
+      bgColor = color.gray200;
+      hoverBgColor = color.gray200;
+    } else if (isActive && !darkMode) {
+      // Trường hợp active + light mode
+      textColor = color.white;
+      bgColor = color.gray700;
+      hoverBgColor = color.gray700;
+    } else if (!isActive && darkMode) {
+      // Trường hợp inactive + dark mode
+      textColor = color.white;
+      bgColor = "transparent";
+      hoverBgColor = `${color.gray200}30`;
+    } else {
+      // Trường hợp inactive + light mode
+      textColor = color.gray950;
+      bgColor = "transparent";
+      hoverBgColor = `${color.gray200}80`;
+    }
+
+    return {
+      color: textColor,
+      backgroundColor: bgColor,
+      "&:hover": {
+        backgroundColor: hoverBgColor,
+      },
+    };
   };
 
-  const handleMouseLeaveMenu = (event) => {
-    const relatedTarget = event.relatedTarget;
-    
-    if (
-      !relatedTarget ||
-      !(relatedTarget instanceof Node) ||
-      (
-        (buttonRef.current && !buttonRef.current.contains(relatedTarget)) &&
-        (menuRef.current && !menuRef.current.contains(relatedTarget))
-      )
-    ) {
-      setAnchorEl(null);
-    }
-  };  
-
   return (
-    <Box sx={{ width: 100, height: height }} ref={menuRef} onMouseLeave={handleMouseLeaveMenu}>
+    <Box
+      sx={{ width: 100, height: height }}
+      ref={menuRef}
+      onMouseLeave={handleMouseLeaveMenu}
+    >
       <Button
-        ref={buttonRef}  
+        ref={buttonRef}
         id="skill-button"
         aria-controls={open ? "skill-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
-        onClick={() => {
-          navigate("/student/skill");
-        }}
+        onClick={() => navigate("/student/skill")}
         onMouseEnter={handleMouseEnterMenu}
         sx={{
-          backgroundColor: isActivePath("/student/skill") ? "#fff" : "transparent",
-          color: isActivePath("/student/skill") ? "#4A475C" : "white",
+          ...linkStyles(isActivePath("/student/skill")),
           textDecoration: "none",
-          padding: "1rem",
+          marginTop: "-0.25rem",
+          padding: "1.25rem 1rem",
           borderRadius: "0.5rem",
           fontWeight: "bold",
           textTransform: "none",
           fontSize: "1.25rem",
-          lineHeight: .5,
-          "&:hover": {
-            backgroundColor: isActivePath("/student/skill")
-              ? "#fff"
-              : "rgba(255, 255, 255, 0.2)",
-          },
+          lineHeight: 0.5,
         }}
       >
         Skill
       </Button>
       {open && (
-        <Box sx={{backgroundColor: '#fff', width: 100, position: 'absolute', top: 60, color:'#000', borderRadius: 2}} ref={menuRef}>
+        <Box
+          sx={{
+            backgroundColor: darkMode ? color.gray800 : "#fff",
+            width: 100,
+            position: "absolute",
+            top: 60,
+            color: darkMode ? color.white : "#000",
+            borderRadius: 2,
+          }}
+          ref={menuRef}
+        >
           <List>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/student/readings" onClick={handleMouseLeaveMenu}>
-                <ListItemText primary="Reading" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/student/speakings" onClick={handleMouseLeaveMenu}>
-                <ListItemText primary="Speaking" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/student/writings" onClick={handleMouseLeaveMenu}>
-                <ListItemText primary="Writing" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/student/listenings" onClick={handleMouseLeaveMenu}>
-                <ListItemText primary="Listening" />
-              </ListItemButton>
-            </ListItem>
+            {menuItems.map(({ path, label }) => (
+              <ListItem disablePadding key={path}>
+                <ListItemButton
+                  component={Link}
+                  to={path}
+                  onClick={handleMouseLeaveMenu}
+                  sx={{
+                    ...linkStyles(isActivePath(path)),
+                    padding: "0.5rem 1rem",
+                    borderRadius: "0.5rem",
+                  }}
+                >
+                  <ListItemText primary={label} />
+                </ListItemButton>
+              </ListItem>
+            ))}
           </List>
         </Box>
       )}

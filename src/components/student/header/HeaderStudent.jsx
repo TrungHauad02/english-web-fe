@@ -4,9 +4,12 @@ import { NavLink, useLocation } from "react-router-dom";
 import HeaderTypography from "shared/component/header/HeaderTypography";
 import SkillMenu from "./common/SkillMenu";
 import Profile from "shared/profile/Profile";
-import useColor from "shared/color/Color";
+import useColor from "shared/color/ColorVer2";
 import { useHeaderStudentHandlers } from "./common/HandleHeaderStudent";
 import UserMenu from "./common/UserMenu";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import { useTheme } from "theme/ThemeContext";
 
 const icon = "/icon.png";
 const NAV_LINKS = [
@@ -16,7 +19,9 @@ const NAV_LINKS = [
 ];
 
 function HeaderStudent() {
-  const { HeaderBg } = useColor();
+  const color = useColor();
+  const { darkMode, toggleDarkMode } = useTheme();
+  const location = useLocation();
   const {
     anchorEl,
     openProfileDialog,
@@ -31,44 +36,75 @@ function HeaderStudent() {
     loading,
     avatar,
   } = useHeaderStudentHandlers();
-  const location = useLocation();
 
-  const renderNavLink = (path, label) => (
-    <Button
-      component={NavLink}
-      to={path}
-      sx={{
-        backgroundColor: isActivePath(location, path) ? "#fff" : "transparent",
-        color: isActivePath(location, path) ? "#4A475C" : "white",
-        textDecoration: "none",
-        padding: "0.5rem 1rem",
-        borderRadius: "0.5rem",
-        textTransform: "none",
-        "&:hover": {
-          backgroundColor: isActivePath(location, path)
-            ? "#fff"
-            : "rgba(255, 255, 255, 0.2)",
-        },
-      }}
-    >
-      <HeaderTypography>{label}</HeaderTypography>
-    </Button>
-  );
+  const linkStyles = (isActive, darkMode, color) => {
+    let textColor, bgColor, hoverBgColor;
+
+    if (isActive && darkMode) {
+      // Trường hợp active trong darkmode
+      textColor = color.gray950;
+      bgColor = color.gray200;
+      hoverBgColor = color.gray200;
+    } else if (isActive && !darkMode) {
+      // Trường hợp active trong lightmode
+      textColor = color.white;
+      bgColor = color.gray700;
+      hoverBgColor = color.gray700;
+    } else if (!isActive && darkMode) {
+      // Trường hợp không active trong darkmode
+      textColor = color.white;
+      bgColor = "transparent";
+      hoverBgColor = `${color.gray200}30`;
+    } else {
+      // Trường hợp không active trong lightmode
+      textColor = color.gray950;
+      bgColor = "transparent";
+      hoverBgColor = `${color.gray100}50`;
+    }
+
+    return {
+      color: textColor,
+      backgroundColor: bgColor,
+      "&:hover": {
+        backgroundColor: hoverBgColor,
+      },
+    };
+  };
+
+  const renderNavLink = (path, label) => {
+    const isActive = isActivePath(location, path);
+    const styles = linkStyles(isActive, darkMode, color);
+    return (
+      <Button
+        component={NavLink}
+        to={path}
+        sx={{
+          ...styles,
+          textDecoration: "none",
+          padding: "0.5rem 1rem",
+          borderRadius: "0.5rem",
+          textTransform: "none",
+        }}
+      >
+        <HeaderTypography>{label}</HeaderTypography>
+      </Button>
+    );
+  };
 
   return (
     <Stack
       direction="row"
       justifyContent="space-between"
       sx={{
-        backgroundColor: `${HeaderBg}99`,
-        color: "#fff",
+        backgroundColor: darkMode ? color.teal950 : `${color.teal700}99`,
+        color: darkMode ? color.white : color.black,
         padding: "0.5rem",
         position: "fixed",
         top: 0,
         left: 0,
         right: 0,
         zIndex: 1100,
-        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+        boxShadow: `0px 2px 4px ${darkMode ? color.gray100 : color.gray500}`,
         backdropFilter: "blur(10px)",
       }}
     >
@@ -107,7 +143,18 @@ function HeaderStudent() {
           handleLogout={handleLogout}
           navigate={navigate}
         />
+        <Button
+          onClick={toggleDarkMode}
+          sx={{ color: darkMode ? "#fff" : "#000" }}
+        >
+          {darkMode ? (
+            <DarkModeIcon onClick={toggleDarkMode} />
+          ) : (
+            <LightModeIcon onClick={toggleDarkMode} />
+          )}
+        </Button>
       </Stack>
+
       <Profile open={openProfileDialog} handleClose={handleProfileClose} />
     </Stack>
   );
