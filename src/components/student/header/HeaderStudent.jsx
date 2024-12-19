@@ -1,33 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { Button, Stack, Menu, MenuItem, IconButton, Box } from "@mui/material";
+import React from "react";
+import { Button, Stack, Box } from "@mui/material";
 import { NavLink, useLocation } from "react-router-dom";
 import HeaderTypography from "shared/component/header/HeaderTypography";
-import SkillMenu from "./SkillMenu";
-import Profile from "../../../shared/profile/Profile";
+import SkillMenu from "./common/SkillMenu";
+import Profile from "shared/profile/Profile";
 import useColor from "shared/color/Color";
 import { useHeaderStudentHandlers } from "./common/HandleHeaderStudent";
-import { fetchUserInfo } from "api/user/userService";
+import UserMenu from "./common/UserMenu";
 
 const icon = "/icon.png";
+const NAV_LINKS = [
+  { path: "/student/tests", label: "Test" },
+  { path: "/student/topics", label: "Vocabulary" },
+  { path: "/student/grammars", label: "Grammar" },
+];
 
 function HeaderStudent() {
   const { HeaderBg } = useColor();
-  const [avatar, setAvatar] = useState(null);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const loadUserInfo = async () => {
-      try {
-        const userInfo = await fetchUserInfo();
-        setAvatar(userInfo.avatar || "/header_user.png");
-      } catch (error) {
-        console.error("Failed to fetch user info:", error);
-        setAvatar("/header_user.png");
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadUserInfo();
-  }, []);
   const {
     anchorEl,
     openProfileDialog,
@@ -39,16 +28,39 @@ function HeaderStudent() {
     isActivePath,
     navigate,
     isAuthenticated,
+    loading,
+    avatar,
   } = useHeaderStudentHandlers();
-
   const location = useLocation();
+
+  const renderNavLink = (path, label) => (
+    <Button
+      component={NavLink}
+      to={path}
+      sx={{
+        backgroundColor: isActivePath(location, path) ? "#fff" : "transparent",
+        color: isActivePath(location, path) ? "#4A475C" : "white",
+        textDecoration: "none",
+        padding: "0.5rem 1rem",
+        borderRadius: "0.5rem",
+        textTransform: "none",
+        "&:hover": {
+          backgroundColor: isActivePath(location, path)
+            ? "#fff"
+            : "rgba(255, 255, 255, 0.2)",
+        },
+      }}
+    >
+      <HeaderTypography>{label}</HeaderTypography>
+    </Button>
+  );
 
   return (
     <Stack
-      direction={"row"}
-      justifyContent={"space-between"}
+      direction="row"
+      justifyContent="space-between"
       sx={{
-        backgroundColor: HeaderBg + "99",
+        backgroundColor: `${HeaderBg}99`,
         color: "#fff",
         padding: "0.5rem",
         position: "fixed",
@@ -60,7 +72,7 @@ function HeaderStudent() {
         backdropFilter: "blur(10px)",
       }}
     >
-      <Stack direction={"row"} alignItems={"center"} spacing={5}>
+      <Stack direction="row" alignItems="center" spacing={5}>
         <img
           src={icon}
           alt="icon"
@@ -70,153 +82,31 @@ function HeaderStudent() {
         <HeaderTypography
           variant="h4"
           component="h1"
-          sx={{
-            fontWeight: "bold",
-            fontSize: "2rem",
-            cursor: "pointer",
-          }}
+          sx={{ fontWeight: "bold", fontSize: "2rem", cursor: "pointer" }}
           onClick={() => navigate("/student")}
         >
           H2T English
         </HeaderTypography>
       </Stack>
 
-      <Stack direction={"row"} alignItems={"center"} spacing={2}>
-        <Button
-          component={NavLink}
-          to="/student/topics"
-          sx={{
-            backgroundColor: isActivePath(location, "/student/topics")
-              ? "#fff"
-              : "transparent",
-            color: isActivePath(location, "/student/topics")
-              ? "#4A475C"
-              : "white",
-            textDecoration: "none",
-            padding: "0.5rem 1rem",
-            borderRadius: "0.5rem",
-            textTransform: "none",
-            fontSize: "10rem",
-            "&:hover": {
-              backgroundColor: isActivePath(location, "/student/topics")
-                ? "#fff"
-                : "rgba(255, 255, 255, 0.2)",
-            },
-          }}
-        >
-          <HeaderTypography>Vocabulary</HeaderTypography>
-        </Button>
-        <Button
-          component={NavLink}
-          to="/student/grammars"
-          sx={{
-            backgroundColor: isActivePath(location, "/student/grammars")
-              ? "#fff"
-              : "transparent",
-            color: isActivePath(location, "/student/grammars")
-              ? "#4A475C"
-              : "white",
-            textDecoration: "none",
-            padding: "0.5rem 1rem",
-            borderRadius: "0.5rem",
-            textTransform: "none",
-            "&:hover": {
-              backgroundColor: isActivePath(location, "/student/grammars")
-                ? "#fff"
-                : "rgba(255, 255, 255, 0.2)",
-            },
-          }}
-        >
-          <HeaderTypography>Grammar</HeaderTypography>
-        </Button>
+      <Stack direction="row" alignItems="center" spacing={2}>
+        {NAV_LINKS.map(({ path, label }) => renderNavLink(path, label))}
 
         <Box sx={{ width: 70, height: 40 }}>
           <SkillMenu />
         </Box>
 
-        <Button
-          component={NavLink}
-          to="/student/tests"
-          sx={{
-            backgroundColor: isActivePath(location, "/student/tests")
-              ? "#fff"
-              : "transparent",
-            color: isActivePath(location, "/student/tests")
-              ? "#4A475C"
-              : "white",
-            textDecoration: "none",
-            padding: "0.5rem 1rem",
-            borderRadius: "0.5rem",
-            textTransform: "none",
-            "&:hover": {
-              backgroundColor: isActivePath(location, "/student/tests")
-                ? "#fff"
-                : "rgba(255, 255, 255, 0.2)",
-            },
-          }}
-        >
-          <HeaderTypography>Test</HeaderTypography>
-        </Button>
-
-        <IconButton onClick={handleMenuClick}>
-          <img
-            src={loading ? "/header_user.png" : avatar}
-            alt="User Icon"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/header_user.png";
-            }}
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              objectFit: "cover",
-            }}
-          />
-        </IconButton>
-        <Menu
+        <UserMenu
+          loading={loading}
+          avatar={avatar}
           anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-          disableScrollLock
-          sx={{
-            "& .MuiMenu-paper": {
-              background: "#75718D",
-              padding: ".2rem 1rem",
-              borderRadius: "1.5rem",
-            },
-          }}
-        >
-          <MenuItem
-            onClick={handleProfileOpen}
-            sx={{
-              borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-              color: "white",
-            }}
-          >
-            Profile
-          </MenuItem>
-          <MenuItem
-            onClick={() => navigate("/student/history-test")}
-            sx={{ borderBottom: "3px solid #ffff", color: "white" }}
-          >
-            History Test
-          </MenuItem>
-          {isAuthenticated && (
-            <MenuItem
-              onClick={handleLogout}
-              sx={{
-                color: "#000",
-                fontWeight: "bold",
-                "&:hover": {
-                  color: "#df4242",
-                },
-              }}
-            >
-              Logout
-            </MenuItem>
-          )}
-        </Menu>
+          isAuthenticated={isAuthenticated}
+          handleMenuClick={handleMenuClick}
+          handleMenuClose={handleMenuClose}
+          handleProfileOpen={handleProfileOpen}
+          handleLogout={handleLogout}
+          navigate={navigate}
+        />
       </Stack>
       <Profile open={openProfileDialog} handleClose={handleProfileClose} />
     </Stack>
