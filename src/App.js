@@ -4,15 +4,18 @@ import AuthProvider from "./security/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ErrorBoundary from "shared/errorBoundary/ErrorBoundary";
+import { ThemeProvider } from "@emotion/react";
 
 function App() {
   return (
-    <AuthProvider theme={CustomTheme}>
-      <ErrorBoundary>
-        <AppRoutes />
-      </ErrorBoundary>
-      <ToastContainer />
-    </AuthProvider>
+    <ThemeProvider theme={CustomTheme}>
+      <AuthProvider>
+        <ErrorBoundary>
+          <AppRoutes />
+        </ErrorBoundary>
+        <ToastContainer />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
