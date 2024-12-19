@@ -176,18 +176,16 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest,setQuest
                 questionData
               );
 
-              await Promise.all(
-                (questionData.answers || []).map(async (answer) => {
-                  answer.testQuestionReadingId = id;
-                  if (answer.id.startsWith("add")) {
-                    try {
-                      await createTestReadingAnswer(answer);
-                    } catch (error) {
-                      console.error(`Error adding answer ${answer.id}:`, error);
-                    }
+              for (const answer of questionData.answers || []) {
+                answer.testQuestionReadingId = id;
+                if (answer.id.startsWith("add")) {
+                  try {
+                    await createTestReadingAnswer(answer);
+                  } catch (error) {
+                    console.error(`Error adding answer ${answer.id}:`, error);
                   }
-                })
-              );
+                }
+              }
             }
           }
           toast.success(
@@ -260,15 +258,17 @@ function QuestionReading({ data, handleReading, BooleanDeleteSubmitTest,setQuest
                 )
               );
 
-              await Promise.all(
-                (questionData.answers || []).map(async (answer) => {
+              for (const answer of questionData.answers || []) {
+                await (async () => {
                   if (answer.id.startsWith("add")) {
+                    answer.testQuestionReadingId = questionData.id;
                     await createTestReadingAnswer(answer);
                   } else {
                     await updateTestReadingAnswer(answer.id, answer);
                   }
-                })
-              );
+                })();
+              }
+              
             })
         );
 

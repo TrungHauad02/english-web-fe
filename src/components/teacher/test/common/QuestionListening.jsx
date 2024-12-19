@@ -174,18 +174,17 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest ,set
                 questionData
               );
 
-              await Promise.all(
-                (questionData.answers || []).map(async (answer) => {
-                  answer.testQuestionListeningId = id;
-                  if (answer.id.startsWith("add")) {
-                    try {
-                      await createTestListeningAnswer(answer);
-                    } catch (error) {
-                      console.error(`Error adding answer ${answer.id}:`, error);
-                    }
+              for (const answer of questionData.answers || []) {
+                answer.testQuestionListeningId = id; 
+              
+                if (answer.id.startsWith("add")) {
+                  try {
+                    await createTestListeningAnswer(answer);
+                  } catch (error) {
+                    console.error(`Error adding answer ${answer.id}:`, error);
                   }
-                })
-              );
+                }
+              }
             }
           }
           toast.success(
@@ -249,6 +248,7 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest ,set
               for (const answer of answers) {
                 if (answer.id.startsWith("add")) {
                   try {
+                    answer.testQuestionListeningId = questionData.id;
                     await createTestListeningAnswer(answer);
                   } catch (error) {
                     console.error(`Error creating listening answer ${answer.id}:`, error);
