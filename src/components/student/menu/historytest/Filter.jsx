@@ -3,7 +3,6 @@ import { TextField, Button, MenuItem, Grid, IconButton } from "@mui/material";
 import { Search, Replay } from "@mui/icons-material";
 import { format } from "date-fns";
 import useColor from "shared/color/Color";
-
 const Filter = ({
   filter,
   setFilter,
@@ -17,7 +16,7 @@ const Filter = ({
 }) => {
   const isEndDateDisabled =
     !searchStartDate || new Date(searchStartDate) >= new Date();
-  const { Color2_1 } = useColor();
+  const color = useColor();
 
   const formatStartOfDay = (date) => {
     if (!date) return "";
@@ -142,7 +141,10 @@ const Filter = ({
       <Grid item xs={1}>
         <IconButton
           onClick={handleResetFilter}
-          sx={{ marginTop: ".5rem" }}
+          sx={{
+            marginTop: ".5rem",
+            marginLeft: 4,
+          }}
         >
           <Replay />
         </IconButton>
@@ -153,7 +155,7 @@ const Filter = ({
           variant="contained"
           startIcon={<Search />}
           onClick={handleSearch}
-          sx={{ marginTop: ".5rem", background: Color2_1 }}
+          sx={{ marginTop: ".1rem", background: color.Color2_1 }}
         >
           Search
         </Button>

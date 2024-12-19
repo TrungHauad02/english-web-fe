@@ -6,6 +6,8 @@ import Filter from "./Filter";
 import { getListSubmitTests } from "api/test/submitTest";
 import CustomPagination from "shared/component/pagination/CustomPagination";
 import { useLocation, useNavigate } from "react-router-dom";
+import useColor from "shared/color/ColorVer2";
+import { DarkMode } from "@mui/icons-material";
 
 const CardStyled = styled(Card)(() => ({
   backgroundColor: "#f5f5f5",
@@ -19,7 +21,7 @@ const HistoryTest = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { title, type } = location.state || {};
-
+  const color = useColor();
   const [filter, setFilter] = useState(type || "ALL");
   const [searchText, setSearchText] = useState(title || "");
   const [currentPage, setCurrentPage] = useState(1);
@@ -104,15 +106,27 @@ const HistoryTest = () => {
               fetchTests();
             }}
           />
-          <Grid container spacing={2}>
+          <Grid container spacing={4}>
             {tests.map((test, index) => (
               <Grid item xs={12} sm={6} key={index}>
                 <CardStyled
                   variant="outlined"
+                  sx={{
+                    padding: "1.5rem",
+                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                    lineHeight: "1.8",
+                    transition: "background-color 0.3s ease",
+                    borderRadius: 5,
+                    '&:hover': {
+                      backgroundColor: color.teal700 + "50",
+                      boxShadow: "0px 6px 15px rgba(0, 128, 128, 0.4)",
+
+                    },
+                  }}
                   onClick={() => navigateSubmitTest(test)}
                 >
-                  <Typography variant="h6">{test.testTitle}</Typography>
-                  <Typography>
+                  <Typography variant="h6" sx={{paddingBottom: 1}}>{test.testTitle}</Typography>
+                  <Typography sx={{paddingBottom: 1}}>
                     Date: {new Date(test.submitTime).toLocaleString()}
                   </Typography>
                   <Typography>
@@ -125,11 +139,11 @@ const HistoryTest = () => {
           </Grid>
         </Box>
         <Stack alignItems={"center"} sx={{ marginY: "1rem", width: "100%" }}>
-        <CustomPagination
-          page={currentPage}
-          count={Math.ceil(totalItems / ITEMS_PER_PAGE)}
-          onChange={(event, page) => setCurrentPage(page)} 
-        />
+          <CustomPagination
+            page={currentPage}
+            count={Math.ceil(totalItems / ITEMS_PER_PAGE)}
+            onChange={(event, page) => setCurrentPage(page)}
+          />
         </Stack>
       </Box>
     </>
