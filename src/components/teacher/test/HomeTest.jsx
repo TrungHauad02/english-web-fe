@@ -98,11 +98,12 @@ const TestManagement = () => {
     setOpenDialogDelete(false);
   };
   const handleAgreeDelete = async () => {
+    handleCloseDialogDelete();
     await deleteTest(testDelete.id)
       .then(() => {
         toast.success(`${testDelete.title} deleted successfully!`);
         setVersion((prevVersion) => prevVersion + 1);
-        handleCloseDialogDelete();
+        
       })
       .catch(() => {
         toast.error(`Failed to delete ${testDelete.title}`);

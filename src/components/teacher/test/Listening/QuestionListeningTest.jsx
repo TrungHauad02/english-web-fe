@@ -174,18 +174,17 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest,setQ
                 questionData
               );
 
-              await Promise.all(
-                (questionData.answers || []).map(async (answer) => {
-                  answer.testQuestionListeningId = id;
-                  if (answer.id.startsWith("add")) {
-                    try {
-                      await createTestListeningAnswer(answer);
-                    } catch (error) {
-                      console.error(`Error adding answer ${answer.id}:`, error);
-                    }
+              for (const answer of questionData.answers || []) {
+                answer.testQuestionListeningId = id;
+                if (answer.id.startsWith("add")) {
+                  try {
+                    await createTestListeningAnswer(answer);
+                  } catch (error) {
+                    console.error(`Error adding answer ${answer.id}:`, error);
                   }
-                })
-              );
+                }
+              }
+              
             }
           }
           toast.success(
@@ -244,15 +243,23 @@ function QuestionListening({ data, handleListening, BooleanDeleteSubmitTest,setQ
                 )
               );
 
-              await Promise.all(
-                (questionData.answers || []).map(async (answer) => {
-                  if (answer.id.startsWith("add")) {
-                    await createTestListeningAnswer(answer);
-                  } else {
-                    await updateTestListeningAnswer(answer.id, answer);
-                  }
-                })
-              );
+              for (const answer of questionData.answers || []) {
+              if (answer.id.startsWith("add")) {
+                try {
+                  answer.testQuestionListeningId = questionData.id;
+                  await createTestListeningAnswer(answer);
+                } catch (error) {
+                  console.error(`Error adding answer ${answer.id}:`, error);
+                }
+              } else {
+                try {
+                  await updateTestListeningAnswer(answer.id, answer);
+                } catch (error) {
+                  console.error(`Error updating answer ${answer.id}:`, error);
+                }
+              }
+            }
+
             })
         );
         await Promise.all(
