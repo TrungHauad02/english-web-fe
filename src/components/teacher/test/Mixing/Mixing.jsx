@@ -25,9 +25,7 @@ function Mixing() {
   const [type, setType] = useState("");
   const [questionData, setQuestionData] = useState();
   const [version,setVersion] = useState(0);
-  const [submitTestIds,setSubmitTestIds] = useState([]);
-  
-  
+
   useEffect(() => {
     if (!state || !state.id) {
       navigate("/teacher/test");
@@ -56,50 +54,29 @@ function Mixing() {
 
  
   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
+  const [dialogCallbacks, setDialogCallbacks] = useState(null);
 
-  const [dialogAction, setDialogAction] = useState(null);
-  const handleDialogAction = (action) => {
-    if (action === "cancel") {
-      setDialogAction("cancel"); 
-    } else if (action === "confirm") {
-      setDialogAction("confirm");
-    } 
-    setVersion(version+1);
-    setOpenDialogDeleteSubmitTest(false);
-  };
-  
-  const waitForDialogAction = (getDialogAction, resetDialogAction) => {
+  const confirmDeletion = () => {
     return new Promise((resolve) => {
-      const interval = setInterval(() => {
-        const action = getDialogAction();
-        if (action) {
-          clearInterval(interval); 
-          resolve(action); 
-          resetDialogAction(); 
-        }
-      }, 100);
-    });
-  };
-  const BooleanDeleteSubmitTest = async () => {
-    if (test?.submitTestIds?.length > 0) {
-      setSubmitTestIds(test?.submitTestIds)
       setOpenDialogDeleteSubmitTest(true);
   
-      const dialogResult = await waitForDialogAction(
-        () => dialogAction,
-        () => setDialogAction(null)
-      );
+      const onCloseDialog = (isConfirmed) => {
+        setOpenDialogDeleteSubmitTest(false);
+        resolve(isConfirmed);
+      };
+  
+      setDialogCallbacks({ onCloseDialog });
+    });
+  };
 
-      if (dialogResult === "cancel") {
+  const BooleanDeleteSubmitTest = async () => {
+    if (test.isSubmitTest) {
+      const isConfirmed = await confirmDeletion(test); 
+      if (!isConfirmed) {
         return false; 
       }
-
-
-      console.log("User confirmed the action.");
-      return true; 
+      test.isSubmitTest=false;
     }
-  
-    console.log("No submitTestsId found.");
     return true; 
   };
   
@@ -215,10 +192,9 @@ function Mixing() {
     >
       <DeleteSubmitTestDialog
         open={openDialogDeleteSubmitTest}
-        onClose={handleDialogAction} 
-        submitTestIds={submitTestIds}
-        content={`Are you sure you want to delete ${submitTestIds?.length || 0} history users of this test?`}
-      />
+        testDelete={test}
+        dialogCallbacks={dialogCallbacks}
+      />;
       <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch", }}>
         <Box sx={{ flex: 4, minHeight: 0 }}>
           <InformationTest data={test} BooleanDeleteSubmitTest = {BooleanDeleteSubmitTest}/>
@@ -234,8 +210,6 @@ function Mixing() {
       }}>
       {renderQuestionComponent()}
       </Box>
-   
-  
     </Box>
   );
 }

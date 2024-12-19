@@ -73,30 +73,24 @@ const TestManagement = () => {
   };
   const handleSortChange = (event) => {
     const selectedSortOrder = event.target.value;
-
     setSortOrder(selectedSortOrder);
   };
 
   const handleOpenDialogDelete = async (testDelete) => {
-    if (testDelete?.submitTestIds?.length > 0) {
-      setSubmitTestIds(testDelete?.submitTestIds);
-      setOpenDialogDeleteSubmitTest(true);
-
-      const dialogResult = await waitForDialogAction(
-        () => dialogAction,
-        () => setDialogAction(null)
-      );
-      if (dialogResult === "cancel") {
-        return;
+    if (testDelete.isSubmitTest) {
+      const isConfirmed = await confirmDeletion(testDelete); 
+      if (!isConfirmed) {
+        return; 
       }
+      testDelete.isSubmitTest=false;
     }
-    setTestDelete(testDelete);
     setOpenDialogDelete(true);
   };
 
   const handleCloseDialogDelete = () => {
     setOpenDialogDelete(false);
   };
+
   const handleAgreeDelete = async () => {
     handleCloseDialogDelete();
     await deleteTest(testDelete.id)
@@ -117,7 +111,6 @@ const TestManagement = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setVersion(version + 1);
   };
 
   const handleSearchChange = (event) => {
@@ -167,31 +160,8 @@ const TestManagement = () => {
   //xoá submit test
   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] =
     useState(false);
-  const [submitTestIds, setSubmitTestIds] = useState([]);
-
-  const [dialogAction, setDialogAction] = useState(null);
-  const handleDialogAction = (action) => {
-    if (action === "cancel") {
-      setDialogAction("cancel");
-    } else if (action === "confirm") {
-      setDialogAction("confirm");
-    }
-    setVersion((prevVersion) => prevVersion + 1);
-    setOpenDialogDeleteSubmitTest(false);
-  };
-
-  const waitForDialogAction = (getDialogAction, resetDialogAction) => {
-    return new Promise((resolve) => {
-      const interval = setInterval(() => {
-        const action = getDialogAction();
-        if (action) {
-          clearInterval(interval);
-          resolve(action);
-          resetDialogAction();
-        }
-      }, 100);
-    });
-  };
+  const [dialogCallbacks, setDialogCallbacks] = useState(null);
+  
 
   const handleResetFilter = () => {
     setStatus("ALL");
@@ -200,21 +170,29 @@ const TestManagement = () => {
     setSearchTerm("");
   };
 
-  const handleStatusChange = async (event, test) => {
-    if (test?.submitTestIds?.length > 0) {
-      setSubmitTestIds(test?.submitTestIds);
+  const confirmDeletion = (test) => {
+    return new Promise((resolve) => {
+      setTestDelete(test);
       setOpenDialogDeleteSubmitTest(true);
-      const dialogResult = await waitForDialogAction(
-        () => dialogAction,
-        () => setDialogAction(null)
-      );
+  
+      const onCloseDialog = (isConfirmed) => {
+        setOpenDialogDeleteSubmitTest(false);
+        resolve(isConfirmed);
+      };
+  
+      setDialogCallbacks({ onCloseDialog });
+    });
+  };
+  
 
-      if (dialogResult === "cancel") {
-        toast.info("Action cancelled.");
-        return;
+  const handleStatusChange = async (event, test) => {
+    if (test.isSubmitTest) {
+      const isConfirmed = await confirmDeletion(test); 
+      if (!isConfirmed) {
+        return; 
       }
+      test.isSubmitTest=false;
     }
-
     updateStatus(test.id)
       .then((response) => {
         toast.success(`Status of "${test.title}" updated successfully!`);
@@ -299,12 +277,9 @@ const TestManagement = () => {
       />
       <DeleteSubmitTestDialog
         open={openDialogDeleteSubmitTest}
-        onClose={handleDialogAction}
-        submitTestIds={submitTestIds}
-        content={`Are you sure you want to delete ${
-          submitTestIds?.length || 0
-        } history users of this test?`}
-      />
+        testDelete={testDelete}
+        dialogCallbacks={dialogCallbacks}
+      />;
       <Box sx={{ marginBottom: "2rem" }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={6} md={2} sx={{ display: "flex" }}>

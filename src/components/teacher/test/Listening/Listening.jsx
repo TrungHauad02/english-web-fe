@@ -45,53 +45,31 @@ function ListeningTest() {
 
    //delete submit test 
    const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
+  const [dialogCallbacks, setDialogCallbacks] = useState(null);
 
- 
-   const [dialogAction, setDialogAction] = useState(null);
-   const handleDialogAction = (action) => {
-     if (action === "cancel") {
-       setDialogAction("cancel"); 
-     } else if (action === "confirm") {
-       setDialogAction("confirm");
-    
-     }
-     setVersion(version+1);
-     setOpenDialogDeleteSubmitTest(false);
-   };
-   
-   const waitForDialogAction = (getDialogAction, resetDialogAction) => {
-     return new Promise((resolve) => {
-       const interval = setInterval(() => {
-         const action = getDialogAction();
-         if (action) {
-           clearInterval(interval); 
-           resolve(action); 
-           resetDialogAction(); 
-         }
-       }, 100);
-     });
-   };
-   const BooleanDeleteSubmitTest = async () => {
-     if (submitTestIds?.length > 0) {
-       setOpenDialogDeleteSubmitTest(true);
-   
-       const dialogResult = await waitForDialogAction(
-         () => dialogAction,
-         () => setDialogAction(null)
-       );
-   
-       if (dialogResult === "cancel") {
-      
-         return false; 
-       }
-       setVersion((prev) => prev + 1);
-       console.log("User confirmed the action.");
-       return true; 
-     }
-   
-     console.log("No submitTestsId found.");
-     return true; 
-   };
+  const confirmDeletion = () => {
+    return new Promise((resolve) => {
+      setOpenDialogDeleteSubmitTest(true);
+  
+      const onCloseDialog = (isConfirmed) => {
+        setOpenDialogDeleteSubmitTest(false);
+        resolve(isConfirmed);
+      };
+  
+      setDialogCallbacks({ onCloseDialog });
+    });
+  };
+  const BooleanDeleteSubmitTest = async () => {
+    if (test.isSubmitTest) {
+      const isConfirmed = await confirmDeletion(test); 
+      if (!isConfirmed) {
+        return false; 
+      }
+      test.isSubmitTest=false;
+    }
+    return true; 
+  };
+  
    
  
   
@@ -128,11 +106,10 @@ function ListeningTest() {
         marginTop: "2%",
       }}
     >
-       <DeleteSubmitTestDialog
+         <DeleteSubmitTestDialog
         open={openDialogDeleteSubmitTest}
-        onClose={handleDialogAction} 
-        submitTestIds={submitTestIds}
-        content={`Are you sure you want to delete ${submitTestIds?.length || 0} history users of this test?`}
+        testDelete={test}
+        dialogCallbacks={dialogCallbacks}
       />
       <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch" , }}>
         <Box sx={{ flex: 4, minHeight: 0 }}>

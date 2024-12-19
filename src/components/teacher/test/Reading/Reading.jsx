@@ -16,7 +16,6 @@ function ReadingTest() {
   const [error, setError] = useState(null);
   const [questionData, setQuestionData] = useState(null);
   const [version, setVersion] = useState(0);
-  const [submitTestIds,setSubmitTestIds] = useState([]);
 
   useEffect(() => {
     if (!state || !state.id) {
@@ -28,7 +27,6 @@ function ReadingTest() {
         const data = await getTest(state.id);
         if (data) {
           setTest(data);
-          setSubmitTestIds(data?.submitTestIds);
         } else {
           setTest(null);
         }
@@ -45,53 +43,30 @@ function ReadingTest() {
 
   //delete submit test 
   const [openDialogDeleteSubmitTest, setOpenDialogDeleteSubmitTest] = useState(false);
+  const [dialogCallbacks, setDialogCallbacks] = useState(null);
 
-
-  const [dialogAction, setDialogAction] = React.useState(null);
-  const handleDialogAction = (action) => {
-    if (action === "cancel") {
-      setDialogAction("cancel"); 
-    } else if (action === "confirm") {
-      setDialogAction("confirm");
-    }
-    setVersion((prevData) => (prevData || 0) + 1);
-    setOpenDialogDeleteSubmitTest(false);
-  };
-  
-  const waitForDialogAction = (getDialogAction, resetDialogAction) => {
+  const confirmDeletion = () => {
     return new Promise((resolve) => {
-      const interval = setInterval(() => {
-        const action = getDialogAction();
-        if (action) {
-          clearInterval(interval); 
-          resolve(action); 
-          resetDialogAction(); 
-        }
-      }, 100);
+      setOpenDialogDeleteSubmitTest(true);
+  
+      const onCloseDialog = (isConfirmed) => {
+        setOpenDialogDeleteSubmitTest(false);
+        resolve(isConfirmed);
+      };
+  
+      setDialogCallbacks({ onCloseDialog });
     });
   };
   const BooleanDeleteSubmitTest = async () => {
-    if (submitTestIds?.length > 0) {
-      setOpenDialogDeleteSubmitTest(true);
-  
-      const dialogResult = await waitForDialogAction(
-        () => dialogAction,
-        () => setDialogAction(null)
-      );
-  
-      if (dialogResult === "cancel") {
-     
+    if (test.isSubmitTest) {
+      const isConfirmed = await confirmDeletion(test); 
+      if (!isConfirmed) {
         return false; 
       }
-      console.log("User confirmed the action.");
-      return true; 
+      test.isSubmitTest=false;
     }
-  
-    console.log("No submitTestsId found.");
     return true; 
   };
-  
-
   
   const handleRowClick = async (question) => {
     try {
@@ -128,9 +103,8 @@ function ReadingTest() {
     >
        <DeleteSubmitTestDialog
         open={openDialogDeleteSubmitTest}
-        onClose={handleDialogAction} 
-        submitTestIds={submitTestIds}
-        content={`Are you sure you want to delete ${submitTestIds?.length || 0} history users of this test?`}
+        testDelete={test}
+        dialogCallbacks={dialogCallbacks}
       />
       <Box sx={{ display: "flex", marginBottom: "2%", alignItems: "stretch",}}>
         <Box sx={{ flex: 4, minHeight: 0 }}>

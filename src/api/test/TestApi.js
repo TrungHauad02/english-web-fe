@@ -67,3 +67,18 @@ export function updateStatus(id) {
       throw error;
     });
 }
+export function deleteSubmitTests(id) {
+  return apiClient
+    .delete(`/test/delete-submit-tests/${id}`)
+    .then((response) => {
+      console.log("Submit test deleted successfully");
+      return response.data;
+    })
+    .catch((error) => {
+      console.error(
+        "Error deleting submit test:",
+        error.response?.data || error.message
+      );
+      throw error;
+    });
+}
