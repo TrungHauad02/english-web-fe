@@ -91,6 +91,7 @@ function SkillMenu() {
           textTransform: "none",
           fontSize: "1.25rem",
           lineHeight: 0.5,
+          color: color.white,
         }}
       >
         Skill
@@ -98,11 +99,11 @@ function SkillMenu() {
       {open && (
         <Box
           sx={{
-            backgroundColor: darkMode ? color.gray800 : "#fff",
+            backgroundColor: "#fff",
             width: 100,
             position: "absolute",
             top: 60,
-            color: darkMode ? color.white : "#000",
+            color: "#000",
             borderRadius: 2,
           }}
           ref={menuRef}
