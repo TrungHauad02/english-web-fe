@@ -40,7 +40,7 @@ function UserMenu({
           <AccountCircleIcon
             sx={{
               fontSize: "2rem",
-              color: darkMode ? color.white : color.black,
+              color: color.white,
             }}
           />
         )}
@@ -52,7 +52,7 @@ function UserMenu({
         disableScrollLock
         sx={{
           "& .MuiMenu-paper": {
-            background: darkMode ? color.gray950 : color.gray100,
+            background: color.gray100,
             padding: "0.2rem 1rem",
             borderRadius: "1.5rem",
           },
@@ -61,10 +61,10 @@ function UserMenu({
         <MenuItem
           onClick={handleProfileOpen}
           sx={{
-            borderBottom: `1px solid ${darkMode ? color.white : color.black}`,
-            color: darkMode ? color.white : color.black,
+            borderBottom: `1px solid ${color.black}`,
+            color: color.black,
             "&:hover": {
-              bgcolor: darkMode ? color.gray100 + "20" : color.gray500 + "20",
+              bgcolor: color.gray500 + "20",
             },
           }}
         >
@@ -73,10 +73,10 @@ function UserMenu({
         <MenuItem
           onClick={() => navigate("/student/history-test")}
           sx={{
-            borderBottom: `3px solid ${darkMode ? color.white : color.black}`,
-            color: darkMode ? color.white : color.black,
+            borderBottom: `3px solid ${color.black}`,
+            color: color.black,
             "&:hover": {
-              bgcolor: darkMode ? color.gray100 + "20" : color.gray500 + "20",
+              bgcolor: color.gray500 + "20",
             },
           }}
         >
@@ -86,7 +86,7 @@ function UserMenu({
           <MenuItem
             onClick={handleLogout}
             sx={{
-              color: darkMode ? color.white : color.black,
+              color: color.black,
               fontWeight: "bold",
               "&:hover": {
                 color: color.red,
