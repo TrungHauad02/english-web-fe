@@ -57,7 +57,8 @@ function HeaderStudent() {
       hoverBgColor = `${color.gray200}30`;
     } else {
       // Trường hợp không active trong lightmode
-      textColor = color.gray950;
+      // textColor = color.gray950;
+      textColor = color.white;
       bgColor = "transparent";
       hoverBgColor = `${color.gray100}50`;
     }
@@ -96,15 +97,15 @@ function HeaderStudent() {
       direction="row"
       justifyContent="space-between"
       sx={{
-        backgroundColor: darkMode ? color.teal950 : `${color.teal700}99`,
-        color: darkMode ? color.white : color.black,
+        backgroundColor: `${color.teal700}99`,
+        color: color.white,
         padding: "0.5rem",
         position: "fixed",
         top: 0,
         left: 0,
         right: 0,
         zIndex: 1100,
-        boxShadow: `0px 2px 4px ${darkMode ? color.gray100 : color.gray500}`,
+        boxShadow: `0px 2px 4px ${color.gray500}`,
         backdropFilter: "blur(10px)",
       }}
     >
@@ -143,7 +144,7 @@ function HeaderStudent() {
           handleLogout={handleLogout}
           navigate={navigate}
         />
-        <Button
+        {/* <Button
           onClick={toggleDarkMode}
           sx={{ color: darkMode ? "#fff" : "#000" }}
         >
@@ -152,7 +153,7 @@ function HeaderStudent() {
           ) : (
             <LightModeIcon onClick={toggleDarkMode} />
           )}
-        </Button>
+        </Button> */}
       </Stack>
 
       <Profile open={openProfileDialog} handleClose={handleProfileClose} />
