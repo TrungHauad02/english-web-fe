@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { openDB, saveData, getData } from "./IndexDB";
+import { openDB, saveData, getData, deleteData } from "./IndexDB";
 import { toast } from "react-toastify";
 
 const CountdownTimer = ({ duration, handleSubmit, dbName, storeName, isSubmitting }) => {
@@ -59,6 +59,26 @@ const CountdownTimer = ({ duration, handleSubmit, dbName, storeName, isSubmittin
     initializeTimer();
   }, [dbName, storeName, duration, handleSubmit]);
 
+  useEffect(() => {
+    let isRefresh = false;
+    const handleBeforeUnload = () => {
+      isRefresh = true; 
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return async ()   => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (!isRefresh) {
+        try {
+          await deleteData("MyDatabase", storeName);
+          console.log("Timer data deleted successfully.");
+        } catch (error) {
+          console.error("Error deleting timer data on unmount:", error);
+        }
+      } else {
+        console.log("Refresh detected, data not deleted.");
+      }
+    };
+  }, []);
   useEffect(() => {
     if (timeLeft === null || timeLeft <= 0 || isSubmitting) return;
 
