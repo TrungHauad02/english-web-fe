@@ -26,6 +26,7 @@ function Header() {
         zIndex: 1100,
         boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
         backdropFilter: "blur(10px)",
+        px: 7,
       }}
     >
       <Stack direction={"row"} alignItems={"center"} spacing={5}>
