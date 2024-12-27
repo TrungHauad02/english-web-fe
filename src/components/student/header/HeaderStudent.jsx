@@ -107,6 +107,7 @@ function HeaderStudent() {
         zIndex: 1100,
         boxShadow: `0px 2px 4px ${color.gray500}`,
         backdropFilter: "blur(10px)",
+        px: 7,
       }}
     >
       <Stack direction="row" alignItems="center" spacing={5}>
