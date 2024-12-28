@@ -5,6 +5,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import { handleSignIn } from "./common/HandleSignIn";
 import { useAuth } from "../../security/AuthContext";
+import { clearAllIndexedDB } from "../../components/student/Test/common/IndexDB"
 import useColor from "shared/color/Color";
 
 const SignIn = ({ toggleForm }) => {
@@ -19,6 +20,7 @@ const SignIn = ({ toggleForm }) => {
   const handleSignInClick = async () => {
     try {
       await handleSignIn(email, password, authContext, navigate);
+      await clearAllIndexedDB();
     } catch (error) {
       console.error("Sign-in error:", error);
     }
