@@ -94,3 +94,41 @@ export const deleteData = (dbName, storeName, key) => {
     console.error("Error opening database:", event.target.error);
   };
 };
+export const clearAllIndexedDB = async () => {
+  try {
+    const databases = await indexedDB.databases();
+
+    if (!databases || databases.length === 0) {
+      console.log("No databases found in IndexedDB.");
+      return;
+    }
+    for (const dbInfo of databases) {
+      if (dbInfo.name) {
+        await new Promise((resolve, reject) => {
+          const request = indexedDB.deleteDatabase(dbInfo.name);
+
+          request.onsuccess = () => {
+            console.log(`Database "${dbInfo.name}" deleted successfully.`);
+            resolve();
+          };
+
+          request.onerror = (event) => {
+            console.error(
+              `Failed to delete database "${dbInfo.name}":`,
+              event.target.error
+            );
+            reject(event.target.error);
+          };
+
+          request.onblocked = () => {
+            console.warn(`Deletion of database "${dbInfo.name}" is blocked.`);
+          };
+        });
+      }
+    }
+
+    console.log("All IndexedDB databases cleared successfully.");
+  } catch (error) {
+    console.error("Error clearing IndexedDB:", error);
+  }
+};
